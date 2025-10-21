@@ -1,0 +1,1 @@
+Mecanismo de verificação contra repetição de dados, consolidando versões de conhecimento e mantendo apenas o que evolui.

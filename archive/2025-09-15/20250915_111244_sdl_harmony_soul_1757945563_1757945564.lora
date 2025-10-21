@@ -1,0 +1,21 @@
+{
+  "rank": 8,
+  "alpha": 16.0,
+  "dropout": 0.1,
+  "target_modules": [
+    "q_proj",
+    "v_proj",
+    "k_proj",
+    "o_proj"
+  ],
+  "training_loss": 0.5399999999999999,
+  "validation_acc": 0.8999999999999999,
+  "weights_shape_a": [
+    768,
+    8
+  ],
+  "weights_shape_b": [
+    8,
+    768
+  ]
+}

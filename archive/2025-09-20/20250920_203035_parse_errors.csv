@@ -1,0 +1,4 @@
+file,error
+src/core/START_CLAUDE_SESSION.py,"expected an indented block after 'for' statement on line 71 (<unknown>, line 75)"
+src/core/legacy_adapter.py,"unexpected indent (<unknown>, line 81)"
+src/features/__init__.py,"expected 'except' or 'finally' block (<unknown>, line 72)"

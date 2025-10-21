@@ -1,0 +1,11 @@
+=== DIGILANG TRANSLATION ===
+Original: Story _ substance, structure, style, and the principles of -- MacKee, Robert -- 1st ed, New York, ©1997 -- It Books -- 9780060391683 -- c5688f967da175bbf21d8ffc5079ec08 -- Anna’s Archive.pdf
+Compressed: ~40% reduction
+Date: 2025-08-29 11:03
+==============================
+
+[DIGILANG SYMBOLS ACTIVE]
+[角] character [劾] screenplay [景] scene
+[話] dialogue [動] action [英] hero
+
+

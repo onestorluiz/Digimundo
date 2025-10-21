@@ -1,0 +1,28 @@
+{
+  "session_id": "Te_Encontro_em_Mim__20251009_190912",
+  "screenplay_path": "inputs/examples/Te Encontro em Mim .pdf",
+  "created_at": "2025-10-09T19:09:12.300363",
+  "last_checkpoint": "2025-10-09T19:14:52.143589",
+  "specialists": {
+    "dialogue": {
+      "status": "completed",
+      "started_at": "2025-10-09T19:09:12.514783",
+      "completed_at": "2025-10-09T19:14:52.143585",
+      "quality_score": 5.0,
+      "output_path": "workspace/sessions/Te_Encontro_em_Mim__20251009_190912/outputs/ANALYSIS_DIALOGUE_20251009_191452.html",
+      "error": null,
+      "attempts": 1
+    }
+  },
+  "overall_progress": {
+    "total": 1,
+    "completed": 1,
+    "failed": 0,
+    "pending": 0
+  },
+  "metadata": {
+    "llm_model": "scripturemon-optimized",
+    "deep_context": true,
+    "version": "3.0"
+  }
+}

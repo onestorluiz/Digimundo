@@ -1,0 +1,117 @@
+INFO:__main__:============================================================
+INFO:__main__:INICIANDO MEGA TESTE - 10 ESTRATÉGIAS
+INFO:__main__:============================================================
+INFO:__main__:
+🔬 Testando: 01_hybrid_masterclass
+INFO:__main__:Testing 01_hybrid_masterclass (temp=0.8)...
+INFO:__main__:  📊 Palavras: 599
+INFO:__main__:  ⭐ Score geral: 5.54
+INFO:__main__:  🎯 Profundidade: 5.90
+INFO:__main__:  💎 Riqueza: 5.10
+INFO:__main__:  📍 Especificidade: 5.50
+INFO:__main__:  ⏱️ Tempo: 24.0s
+INFO:__main__:
+🔬 Testando: 02_forensic_analysis
+INFO:__main__:Testing 02_forensic_analysis (temp=0.7)...
+INFO:__main__:  📊 Palavras: 644
+INFO:__main__:  ⭐ Score geral: 3.24
+INFO:__main__:  🎯 Profundidade: 2.60
+INFO:__main__:  💎 Riqueza: 4.34
+INFO:__main__:  📍 Especificidade: 3.00
+INFO:__main__:  ⏱️ Tempo: 23.3s
+INFO:__main__:
+🔬 Testando: 03_story_doctor
+INFO:__main__:Testing 03_story_doctor (temp=0.8)...
+INFO:__main__:  📊 Palavras: 658
+INFO:__main__:  ⭐ Score geral: 5.85
+INFO:__main__:  🎯 Profundidade: 6.40
+INFO:__main__:  💎 Riqueza: 4.46
+INFO:__main__:  📍 Especificidade: 6.50
+INFO:__main__:  ⏱️ Tempo: 27.2s
+INFO:__main__:
+🔬 Testando: 04_quantum_analysis
+INFO:__main__:Testing 04_quantum_analysis (temp=0.9)...
+INFO:__main__:  📊 Palavras: 494
+INFO:__main__:  ⭐ Score geral: 2.22
+INFO:__main__:  🎯 Profundidade: 1.20
+INFO:__main__:  💎 Riqueza: 3.49
+INFO:__main__:  📍 Especificidade: 2.30
+INFO:__main__:  ⏱️ Tempo: 42.5s
+INFO:__main__:
+🔬 Testando: 05_archaeological
+INFO:__main__:Testing 05_archaeological (temp=0.8)...
+INFO:__main__:  📊 Palavras: 442
+INFO:__main__:  ⭐ Score geral: 2.62
+INFO:__main__:  🎯 Profundidade: 1.80
+INFO:__main__:  💎 Riqueza: 4.64
+INFO:__main__:  📍 Especificidade: 1.70
+INFO:__main__:  ⏱️ Tempo: 17.1s
+INFO:__main__:
+🔬 Testando: 06_musical_composition
+INFO:__main__:Testing 06_musical_composition (temp=0.85)...
+INFO:__main__:  📊 Palavras: 402
+INFO:__main__:  ⭐ Score geral: 3.28
+INFO:__main__:  🎯 Profundidade: 2.20
+INFO:__main__:  💎 Riqueza: 4.30
+INFO:__main__:  📍 Especificidade: 3.70
+INFO:__main__:  ⏱️ Tempo: 15.7s
+INFO:__main__:
+🔬 Testando: 07_surgical_precision
+INFO:__main__:Testing 07_surgical_precision (temp=0.75)...
+INFO:__main__:  📊 Palavras: 473
+INFO:__main__:  ⭐ Score geral: 3.04
+INFO:__main__:  🎯 Profundidade: 2.00
+INFO:__main__:  💎 Riqueza: 5.27
+INFO:__main__:  📍 Especificidade: 2.20
+INFO:__main__:  ⏱️ Tempo: 20.7s
+INFO:__main__:
+🔬 Testando: 08_time_traveler
+INFO:__main__:Testing 08_time_traveler (temp=0.9)...
+INFO:__main__:  📊 Palavras: 536
+INFO:__main__:  ⭐ Score geral: 3.77
+INFO:__main__:  🎯 Profundidade: 1.60
+INFO:__main__:  💎 Riqueza: 6.44
+INFO:__main__:  📍 Especificidade: 4.00
+INFO:__main__:  ⏱️ Tempo: 20.6s
+INFO:__main__:
+🔬 Testando: 09_ecosystem
+INFO:__main__:Testing 09_ecosystem (temp=0.85)...
+INFO:__main__:  📊 Palavras: 514
+INFO:__main__:  ⭐ Score geral: 3.24
+INFO:__main__:  🎯 Profundidade: 1.80
+INFO:__main__:  💎 Riqueza: 5.91
+INFO:__main__:  📍 Especificidade: 2.50
+INFO:__main__:  ⏱️ Tempo: 19.4s
+INFO:__main__:
+🔬 Testando: 10_ultimate_synthesis
+INFO:__main__:Testing 10_ultimate_synthesis (temp=0.8)...
+INFO:__main__:  📊 Palavras: 528
+INFO:__main__:  ⭐ Score geral: 3.77
+INFO:__main__:  🎯 Profundidade: 3.40
+INFO:__main__:  💎 Riqueza: 6.23
+INFO:__main__:  📍 Especificidade: 1.80
+INFO:__main__:  ⏱️ Tempo: 23.2s
+INFO:__main__:📄 Relatório salvo: /Users/clubproducoes/Digimundo/scripturemon-ultimate/strategy_tests_v2/MEGA_REPORT_1758782103.md
+
+============================================================
+🚀 MEGA TESTE DE PROFUNDIDADE - 10 ESTRATÉGIAS
+============================================================
+
+============================================================
+📊 RESULTADOS FINAIS
+============================================================
+
+🥇 VENCEDOR: 03_story_doctor
+   Score Total: 5.85
+   Palavras: 658
+
+🏆 TOP 3:
+1. 03_story_doctor
+   Score: 5.85 | Words: 658 | Temp: 0.8
+2. 01_hybrid_masterclass
+   Score: 5.54 | Words: 599 | Temp: 0.8
+3. 08_time_traveler
+   Score: 3.77 | Words: 536 | Temp: 0.9
+
+📁 Resultados salvos em: /Users/clubproducoes/Digimundo/scripturemon-ultimate/strategy_tests_v2
+📄 Relatório completo: MEGA_REPORT_*.md

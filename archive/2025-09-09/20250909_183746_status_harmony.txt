@@ -1,0 +1,26 @@
+Monitoring thread already running
+Failed to export snapshot: Expecting value: line 682 column 27 (char 16391)
+💎 Sistema de memórias cristalizadas inicializado
+============================================================
+📊 SCRIPTUREMON STATUS
+============================================================
+
+🎭 Persona: brutal
+⚙️ Mode: normal
+
+📡 Telepathy: REDIS
+   URL: redis://localhost:6379
+
+🤖 SoulOS: DISABLED
+   Auto-execute: NO
+
+📊 Monitor: ENABLED
+   CPU: 0.0%
+   Memory: 46.08 MB
+
+🧠 Memory Manager: OK
+   Implementation: apps.scripturemon.memory_harmony.MemoryHarmony
+   Probe: pass
+💾 Backup: DISABLED
+
+============================================================

@@ -1,0 +1,1 @@
+# Executor universal de comandos

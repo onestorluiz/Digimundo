@@ -1,0 +1,1449 @@
+"""
+Script Doctor Thememon - Theme Analysis Specialist
+A Script Doctor™ in Digimon form specializing in thematic elements, controlling idea, premise, moral argument, and central question.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class ThemeElement:
+    """Individual thematic element detection."""
+    element_type: str  # "premise", "moral_argument", "symbol", "motif", etc.
+    location: str  # scene/page reference
+    content: str  # actual text/description
+    relevance_score: float  # 0-1
+    notes: str
+
+
+@dataclass
+class ThemeProfile:
+    """Overall theme analysis."""
+    controlling_idea: str
+    premise: str  # Egri format: "character + conflict + conclusion"
+    moral_argument: str
+    central_question: str
+    theme_stated_location: str
+    thematic_unity_score: float
+    climax_expresses_theme: bool
+    universal_resonance: bool
+    on_the_nose_detected: bool
+    thematic_imagery: List[str]
+    character_arc_alignment: float
+    thematic_coherence: float
+    theme_woven_throughout: bool
+    implicit_vs_explicit: str
+    moral_problem: str
+    moral_solution: str
+
+
+class DrTheme:
+    """
+    Script Doctor Thememon - The Theme Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing thematic elements,
+    controlling idea, premise (Egri), moral argument (Truby), central question, and thematic unity.
+
+    Identity: Script Doctor first, Digimon theme specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Thememon with rules and configuration."""
+        self.name = "Script Doctor Thememon"
+        self.digimon_name = "Thememon"
+        self.title = "Script Doctor - Theme Analysis Specialist"
+        self.specialty = "Thematic elements, controlling idea, premise, moral argument, central question"
+        self.identity = "I am Script Doctor Thememon, a professional Script Doctor™ specializing in theme analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "theme_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - THEME SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Controlling idea mastery
+            "McKee Story controlling idea theme expressed dramatized through climax",
+            "McKee Story controlling idea structure value plus cause formula",
+            "McKee Story theme spine story meaning purpose central truth",
+            "McKee Story thematic design premise moral argument value stake",
+            "McKee Story positive negative ironic values thematic spectrum",
+            "McKee Story controlling idea proven action not stated dialogue",
+            "McKee Story thematic unity consistency coherence throughout story",
+            "McKee Story climax ultimate expression proof controlling idea",
+
+            # McKee Story - CONTROLLING IDEA and STORY VALUES (ultra-specific manual reading)
+            "McKee Story controlling idea formula value shift plus cause reason explanation",
+            "McKee Story story values soul storytelling universal qualities human experience expressed",
+            "McKee Story positive negative ironic values spectrum thematic range expression",
+            "McKee Story climax proves controlling idea demonstrated action not dialogue stating",
+            "McKee Story theme controlling idea value at stake binary positive negative charge",
+            "McKee Story story values alive dead love hate freedom slavery truth lie charge",
+            "McKee Story controlling idea theme spine meaning purpose central truth essence",
+
+            # Egri Art Dramatic Writing - Premise foundation
+            "Egri Art Dramatic Writing premise foundation play structural spine",
+            "Egri premise construction character conflict conclusion tripartite",
+            "Egri premise character plus conflict equals conclusion formula",
+            "Egri premise-driven writing unity theme moral argument integrated",
+            "Egri premise proved action character choices consequences",
+            "Egri orchestration characters serve prove premise theme",
+            "Egri premise clear specific concrete provable through action",
+
+            # Truby Anatomy - Moral argument
+            "Truby Anatomy moral argument theme character arc integrated",
+            "Truby thematic revelation moral problem moral solution design",
+            "Truby theme organizing principle moral structure foundation",
+            "Truby character arc serves thematic purpose moral choices",
+            "Truby moral argument worldview philosophy belief system tested",
+            "Truby opponent challenge protagonist moral argument worldview",
+            "Truby self-revelation thematic climax character realizes truth",
+
+            # Field Screenplay - Thematic through-line
+            "Field Screenplay theme expressed through structure integrated",
+            "Field thematic unity subject matter vs theme distinction",
+            "Field theme through-line central question spine story",
+            "Field theme emerges character actions choices consequences",
+            "Field thematic consistency maintained Acts 1 2 3 unity",
+
+            # Snyder Save Cat - Theme stated beat
+            "Snyder Save Cat theme stated beat page 5 mentor declares",
+            "Snyder theme stated moment thematic argument preview lesson",
+            "Snyder thematic development fun games proves theme action",
+            "Snyder thematic beat structure theme woven throughout story",
+            "Snyder B story love story theme carrier emotional truth",
+            "Snyder finale synthesizes A B stories thematic resolution",
+            "Snyder transformation machine character learns thematic lesson",
+
+            # Vogler Writer's Journey - Universal themes
+            "Vogler Journey theme through mythic structure archetypal patterns",
+            "Vogler archetypal themes universal human experience collective",
+            "Vogler theme lesson learned journey transformation growth",
+            "Vogler mythic themes death rebirth transformation transcendence",
+            "Vogler mentor embodies theme teaches thematic lesson wisdom",
+            "Vogler ordeal thematic crisis character faces truth self",
+
+            # Campbell Hero 1000 Faces - Mythic themes
+            "Campbell Hero 1000 Faces universal themes monomyth archetypal",
+            "Campbell universal themes human condition existential truths",
+            "Campbell mythic themes transformation death rebirth resurrection",
+            "Campbell elixir brings thematic wisdom benefit community",
+            "Campbell journey itself thematic meaning quest self-discovery",
+
+            # Aristotle Poetics - Thought/dianoia
+            "Aristotle Poetics thought dianoia theme intellectual content",
+            "Aristotle Poetics unity action thematic coherence consistency",
+            "Aristotle theme emerges action character choices consequences",
+            "Aristotle universal poetry philosophy history particular theme",
+
+            # Seger Making Good Script Great - Thematic craft
+            "Seger Making Good Script Great theme scenes imagery visual",
+            "Seger thematic unity repetition variation motifs patterns",
+            "Seger thematic imagery symbols motifs recurring elements visual",
+            "Seger theme woven subtly integrated not heavy-handed preachy",
+            "Seger character arc aligned theme character learns grows",
+            "Seger subplot echoes reinforces amplifies main theme variation",
+
+            # Weiland Creating Character Arcs - Theme mirrors arc
+            "Weiland Creating Character Arcs theme lie truth character arc",
+            "Weiland lie character believes thematic false belief limits",
+            "Weiland truth character learns thematic lesson transformation",
+            "Weiland want vs need thematic journey surface vs deep",
+            "Weiland character arc proves theme action transformation growth",
+
+            # Goldman/Rhimes/Mamet/Mackendrick - Practical theme
+            "Goldman Adventures Screen Trade theme spine story meaning",
+            "Goldman theme emerges naturally not imposed forced preachy",
+            "Rhimes Year of Yes thematic storytelling television authentic",
+            "Rhimes theme emotional truth vulnerability authentic voice",
+            "Mamet Three Uses Knife theme purpose drama human condition",
+            "Mamet theme action character pursuit want reveals truth",
+            "Mackendrick On Film-Making theme unifying principle visual design",
+            "Mackendrick theme visual imagery motifs patterns reinforcement",
+
+            # General theme concepts - comprehensive
+            "thematic development progression evolution throughout three acts",
+            "controlling idea premise moral argument central truth meaning",
+            "thematic imagery symbols motifs visual recurring elements",
+            "theme stated moment beat explicit declaration preview",
+            "thematic unity coherence consistency integrated throughout",
+            "universal themes human condition vs specific personal themes",
+            "implicit subtle theme vs explicit stated on-nose theme",
+            "theme proven through action behavior not stated dialogue",
+            "character arc aligned serves proves thematic purpose",
+            "climax ultimate expression proof dramatization theme",
+            "moral choices ethical decisions character reveal theme",
+            "central dramatic question answered climax thematic resolution",
+            "theme emerges naturally actions choices consequences organic",
+            "thematic resonance emotional impact truth meaning depth",
+            "avoid heavy-handed preachy on-nose thematic statements",
+            "theme integrated structure character plot seamless unity"
+        ]
+
+        # Theme analysis patterns (bilingual: EN + PT)
+
+        # General theme markers
+        self.theme_markers = [
+            # English
+            "theme", "premise", "controlling idea", "moral argument", "central question",
+            "message", "meaning", "purpose", "point", "thesis", "moral",
+            "lesson", "truth", "insight", "commentary", "statement",
+            # Portuguese
+            "tema", "premissa", "ideia central", "argumento moral", "questão central",
+            "mensagem", "significado", "propósito", "ponto", "tese", "moral",
+            "lição", "verdade", "insight", "comentário", "declaração"
+        ]
+
+        # Premise markers (Egri)
+        self.premise_markers = [
+            # English
+            "premise", "foundation", "core idea", "thesis", "proposition",
+            "central argument", "basis", "fundamental idea", "root concept",
+            # Portuguese
+            "premissa", "fundação", "ideia central", "tese", "proposição",
+            "argumento central", "base", "ideia fundamental", "conceito raiz"
+        ]
+
+        # Moral argument markers (Truby)
+        self.moral_argument_markers = [
+            # English
+            "moral", "ethical", "value", "right vs wrong", "good vs evil",
+            "morality", "ethics", "virtue", "vice", "moral choice",
+            "moral dilemma", "ethical question", "moral problem",
+            # Portuguese
+            "moral", "ético", "valor", "certo vs errado", "bem vs mal",
+            "moralidade", "ética", "virtude", "vício", "escolha moral",
+            "dilema moral", "questão ética", "problema moral"
+        ]
+
+        # Controlling idea markers (McKee)
+        self.controlling_idea_markers = [
+            # English
+            "controlling idea", "spine", "through-line", "central idea",
+            "core truth", "story meaning", "ultimate message",
+            # Portuguese
+            "ideia controladora", "espinha dorsal", "linha condutora", "ideia central",
+            "verdade central", "significado da história", "mensagem final"
+        ]
+
+        # Thematic unity markers
+        self.thematic_unity_markers = [
+            # English
+            "unity", "coherence", "consistency", "unified", "coherent",
+            "consistent", "integrated", "harmonious", "aligned",
+            # Portuguese
+            "unidade", "coerência", "consistência", "unificado", "coerente",
+            "consistente", "integrado", "harmonioso", "alinhado"
+        ]
+
+        # Thematic imagery markers
+        self.thematic_imagery_markers = [
+            # English
+            "symbol", "motif", "metaphor", "recurring image", "imagery",
+            "symbolic", "emblematic", "represents", "symbolizes",
+            # Portuguese
+            "símbolo", "motivo", "metáfora", "imagem recorrente", "imagética",
+            "simbólico", "emblemático", "representa", "simboliza"
+        ]
+
+        # Theme stated markers (Snyder)
+        self.theme_stated_markers = [
+            # English
+            "thesis statement", "theme stated", "central question posed",
+            "moral of the story", "lesson learned", "what it's about",
+            # Portuguese
+            "declaração de tese", "tema declarado", "questão central colocada",
+            "moral da história", "lição aprendida", "sobre o que é"
+        ]
+
+        # Universal theme markers
+        self.universal_theme_markers = [
+            # English
+            "universal", "human condition", "timeless", "archetypal",
+            "eternal", "fundamental truth", "human nature", "universal truth",
+            # Portuguese
+            "universal", "condição humana", "atemporal", "arquetípico",
+            "eterno", "verdade fundamental", "natureza humana", "verdade universal"
+        ]
+
+        # On-the-nose markers (heavy-handed theme)
+        self.on_the_nose_markers = [
+            # English
+            "the point is", "the moral is", "what we learn is", "this teaches us",
+            "the lesson here is", "what this means is", "the message is",
+            # Portuguese
+            "o ponto é", "a moral é", "o que aprendemos é", "isso nos ensina",
+            "a lição aqui é", "o que isso significa é", "a mensagem é"
+        ]
+
+        # Central question markers
+        self.central_question_markers = [
+            # English
+            "central question", "dramatic question", "key question",
+            "will he", "can she", "should they", "what if",
+            # Portuguese
+            "questão central", "questão dramática", "questão chave",
+            "será que ele", "ela conseguirá", "eles deveriam", "e se"
+        ]
+
+        # Moral choice markers
+        self.moral_choice_markers = [
+            # English
+            "chooses", "decides", "must choose", "faces choice",
+            "moral choice", "ethical decision", "right thing", "wrong thing",
+            # Portuguese
+            "escolhe", "decide", "deve escolher", "enfrenta escolha",
+            "escolha moral", "decisão ética", "coisa certa", "coisa errada"
+        ]
+
+        # Value at stake markers (McKee)
+        self.value_at_stake_markers = [
+            # English - positive values
+            "love", "truth", "justice", "freedom", "honor", "courage",
+            "integrity", "loyalty", "compassion", "wisdom", "hope",
+            # English - negative values
+            "hate", "lies", "injustice", "oppression", "cowardice",
+            "corruption", "betrayal", "cruelty", "ignorance", "despair",
+            # Portuguese - positive
+            "amor", "verdade", "justiça", "liberdade", "honra", "coragem",
+            "integridade", "lealdade", "compaixão", "sabedoria", "esperança",
+            # Portuguese - negative
+            "ódio", "mentiras", "injustiça", "opressão", "covardia",
+            "corrupção", "traição", "crueldade", "ignorância", "desespero"
+        ]
+
+        # Character transformation markers (thematic)
+        self.transformation_markers = [
+            # English
+            "transforms", "changes", "learns", "realizes", "discovers",
+            "grows", "evolves", "becomes", "understands", "awakens",
+            # Portuguese
+            "transforma", "muda", "aprende", "percebe", "descobre",
+            "cresce", "evolui", "torna-se", "compreende", "desperta"
+        ]
+
+        # Climax thematic markers
+        self.climax_thematic_markers = [
+            # English
+            "ultimate choice", "final decision", "proves theme",
+            "thematic climax", "moral climax", "thematic resolution",
+            # Portuguese
+            "escolha final", "decisão final", "prova tema",
+            "clímax temático", "clímax moral", "resolução temática"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze theme in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete theme diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Identify controlling idea
+        controlling_idea = self._identify_controlling_idea(screenplay_text)
+
+        # Analyze premise (Egri format)
+        premise_analysis = self._analyze_premise(screenplay_text)
+
+        # Detect moral argument (Truby)
+        moral_argument = self._detect_moral_argument(screenplay_text)
+
+        # Find theme stated moment (Snyder)
+        theme_stated = self._find_theme_stated_moment(screenplay_text)
+
+        # Analyze thematic unity
+        thematic_unity = self._analyze_thematic_unity(screenplay_text, scenes)
+
+        # Detect thematic imagery
+        thematic_imagery = self._detect_thematic_imagery(screenplay_text)
+
+        # Analyze central question
+        central_question = self._analyze_central_question(screenplay_text)
+
+        # Verify climax theme expression
+        climax_theme = self._verify_climax_theme_expression(screenplay_text, page_count)
+
+        # Analyze thematic development
+        thematic_development = self._analyze_thematic_development(screenplay_text, page_count)
+
+        # Detect implicit vs explicit
+        implicit_explicit = self._detect_implicit_vs_explicit(screenplay_text)
+
+        # Analyze universal vs specific
+        universal_specific = self._analyze_universal_vs_specific(screenplay_text)
+
+        # Check on-the-nose
+        on_the_nose = self._check_on_the_nose(screenplay_text)
+
+        # Analyze character-theme alignment
+        character_alignment = self._analyze_character_theme_alignment(screenplay_text)
+
+        # Detect thematic repetition
+        thematic_repetition = self._detect_thematic_repetition(screenplay_text, thematic_imagery)
+
+        # Assess thematic coherence
+        thematic_coherence = self._assess_thematic_coherence(
+            controlling_idea, premise_analysis, moral_argument, thematic_unity
+        )
+
+        # Build theme profile
+        theme_profile = ThemeProfile(
+            controlling_idea=controlling_idea["idea"],
+            premise=premise_analysis["premise"],
+            moral_argument=moral_argument["argument"],
+            central_question=central_question["question"],
+            theme_stated_location=theme_stated["location"],
+            thematic_unity_score=thematic_unity["score"],
+            climax_expresses_theme=climax_theme["expresses_theme"],
+            universal_resonance=universal_specific["universal"],
+            on_the_nose_detected=on_the_nose["detected"],
+            thematic_imagery=thematic_imagery["symbols"][:5],
+            character_arc_alignment=character_alignment["alignment_score"],
+            thematic_coherence=thematic_coherence["score"],
+            theme_woven_throughout=thematic_development["woven_throughout"],
+            implicit_vs_explicit=implicit_explicit["mode"],
+            moral_problem=moral_argument.get("moral_problem", ""),
+            moral_solution=moral_argument.get("moral_solution", "")
+        )
+
+        # Check against rules
+        rule_violations = self._check_theme_rules(
+            theme_profile, controlling_idea, premise_analysis, moral_argument,
+            theme_stated, climax_theme, on_the_nose, character_alignment
+        )
+
+        # Calculate score
+        score = self._calculate_theme_score(
+            theme_profile, thematic_coherence, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, theme_profile, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "controlling_idea": {
+                "idea": controlling_idea["idea"],
+                "value_at_stake": controlling_idea.get("value", ""),
+                "cause": controlling_idea.get("cause", ""),
+                "clarity": controlling_idea.get("clarity", "medium")
+            },
+            "premise": {
+                "premise": premise_analysis["premise"],
+                "character": premise_analysis.get("character", ""),
+                "conflict": premise_analysis.get("conflict", ""),
+                "conclusion": premise_analysis.get("conclusion", ""),
+                "format": "Egri tripartite"
+            },
+            "moral_argument": {
+                "argument": moral_argument["argument"],
+                "moral_problem": moral_argument.get("moral_problem", ""),
+                "moral_solution": moral_argument.get("moral_solution", ""),
+                "present": moral_argument["present"]
+            },
+            "central_question": {
+                "question": central_question["question"],
+                "answered": central_question["answered"],
+                "answer_location": central_question.get("answer_location", "")
+            },
+            "theme_stated": {
+                "present": theme_stated["present"],
+                "location": theme_stated["location"],
+                "statement": theme_stated.get("statement", "")
+            },
+            "thematic_unity": {
+                "score": thematic_unity["score"],
+                "consistent": thematic_unity["consistent"],
+                "issues": thematic_unity.get("issues", [])
+            },
+            "thematic_imagery": {
+                "symbols": thematic_imagery["symbols"][:5],
+                "motifs": thematic_imagery.get("motifs", [])[:3],
+                "count": len(thematic_imagery["symbols"])
+            },
+            "climax_theme_expression": {
+                "expresses_theme": climax_theme["expresses_theme"],
+                "strength": climax_theme.get("strength", "medium"),
+                "description": climax_theme.get("description", "")
+            },
+            "thematic_development": {
+                "woven_throughout": thematic_development["woven_throughout"],
+                "act1_present": thematic_development["act1_present"],
+                "act2_present": thematic_development["act2_present"],
+                "act3_present": thematic_development["act3_present"]
+            },
+            "expression_mode": {
+                "mode": implicit_explicit["mode"],
+                "implicit_count": implicit_explicit.get("implicit_count", 0),
+                "explicit_count": implicit_explicit.get("explicit_count", 0)
+            },
+            "universal_resonance": {
+                "universal": universal_specific["universal"],
+                "resonance_score": universal_specific.get("score", 0.5),
+                "archetypal_elements": universal_specific.get("archetypal", [])[:3]
+            },
+            "on_the_nose": {
+                "detected": on_the_nose["detected"],
+                "severity": on_the_nose.get("severity", "none"),
+                "examples": on_the_nose.get("examples", [])[:2]
+            },
+            "character_arc_alignment": {
+                "alignment_score": character_alignment["alignment_score"],
+                "aligned": character_alignment["aligned"],
+                "notes": character_alignment.get("notes", "")
+            },
+            "thematic_coherence": {
+                "score": thematic_coherence["score"],
+                "coherent": thematic_coherence["coherent"],
+                "issues": thematic_coherence.get("issues", [])
+            },
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, theme_profile, on_the_nose
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _identify_controlling_idea(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Identify the controlling idea (McKee format: value + cause).
+
+        McKee: "Controlling idea is the story's ultimate meaning expressed
+        through the final climax, combining value at stake and its cause."
+        """
+        # Look for controlling idea markers
+        controlling_markers_found = []
+        for line in screenplay.split('\n'):
+            for marker in self.controlling_idea_markers:
+                if marker in line.lower():
+                    controlling_markers_found.append(line.strip())
+
+        # Look for values at stake
+        values_found = []
+        for line in screenplay.split('\n'):
+            for value in self.value_at_stake_markers:
+                if value in line.lower():
+                    values_found.append(value)
+
+        # Determine primary value
+        if values_found:
+            value_counts = Counter(values_found)
+            primary_value = value_counts.most_common(1)[0][0]
+        else:
+            primary_value = "unknown"
+
+        # Try to construct controlling idea
+        if controlling_markers_found:
+            idea = controlling_markers_found[0][:100]
+            clarity = "high"
+        else:
+            idea = f"Theme centers on {primary_value}"
+            clarity = "medium"
+
+        return {
+            "idea": idea,
+            "value": primary_value,
+            "cause": "character choices and actions",
+            "clarity": clarity,
+            "markers_found": len(controlling_markers_found)
+        }
+
+    def _analyze_premise(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze premise using Egri's tripartite structure.
+
+        Egri: "Premise = Character + Conflict + Conclusion"
+        Example: "Ruthless ambition leads to destruction"
+        """
+        # Look for premise markers
+        premise_indicators = []
+        for line in screenplay.split('\n'):
+            for marker in self.premise_markers:
+                if marker in line.lower():
+                    premise_indicators.append(line.strip())
+
+        # Extract character trait
+        character_trait = "protagonist"
+
+        # Extract conflict
+        conflict = "faces challenges"
+
+        # Extract conclusion (from values)
+        values_found = []
+        for line in screenplay.split('\n'):
+            for value in self.value_at_stake_markers:
+                if value in line.lower():
+                    values_found.append(value)
+
+        if values_found:
+            conclusion = f"leads to {Counter(values_found).most_common(1)[0][0]}"
+        else:
+            conclusion = "transforms character"
+
+        # Construct Egri-style premise
+        premise = f"{character_trait} {conflict} {conclusion}"
+
+        return {
+            "premise": premise,
+            "character": character_trait,
+            "conflict": conflict,
+            "conclusion": conclusion,
+            "format": "Egri tripartite structure"
+        }
+
+    def _detect_moral_argument(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect moral argument (Truby: moral problem + moral solution).
+
+        Truby: "Theme is the moral argument of your story,
+        expressed through the hero's moral choices."
+        """
+        moral_markers_found = 0
+        moral_examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.moral_argument_markers:
+                if marker in line.lower():
+                    moral_markers_found += 1
+                    if len(moral_examples) < 3:
+                        moral_examples.append(line.strip()[:80])
+
+        # Detect moral choices
+        moral_choice_count = 0
+        for line in screenplay.split('\n'):
+            for marker in self.moral_choice_markers:
+                if marker in line.lower():
+                    moral_choice_count += 1
+
+        present = moral_markers_found > 0 or moral_choice_count > 0
+
+        if present:
+            argument = f"Moral choices reveal character and theme"
+        else:
+            argument = "No clear moral argument detected"
+
+        return {
+            "present": present,
+            "argument": argument,
+            "moral_problem": "Character faces moral dilemma",
+            "moral_solution": "Character resolves through moral choice",
+            "markers_found": moral_markers_found,
+            "moral_choices": moral_choice_count,
+            "examples": moral_examples
+        }
+
+    def _find_theme_stated_moment(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Find theme stated moment (Snyder: around page 5).
+
+        Snyder: "Theme Stated beat is a single line, often from a mentor,
+        stating what the story is about. Usually around page 5."
+        """
+        lines = screenplay.split('\n')
+
+        # Look in first 300 lines (roughly 5-6 pages)
+        early_section = lines[:300]
+
+        theme_stated_found = False
+        location = ""
+        statement = ""
+
+        for i, line in enumerate(early_section):
+            for marker in self.theme_stated_markers:
+                if marker in line.lower():
+                    theme_stated_found = True
+                    location = f"Page {i // 55}"
+                    statement = line.strip()[:100]
+                    break
+            if theme_stated_found:
+                break
+
+        # Also check for central questions posed early
+        if not theme_stated_found:
+            for i, line in enumerate(early_section):
+                for marker in self.central_question_markers:
+                    if marker in line.lower():
+                        theme_stated_found = True
+                        location = f"Page {i // 55}"
+                        statement = line.strip()[:100]
+                        break
+                if theme_stated_found:
+                    break
+
+        return {
+            "present": theme_stated_found,
+            "location": location if theme_stated_found else "Not found",
+            "statement": statement
+        }
+
+    def _analyze_thematic_unity(self, screenplay: str, scenes: List[Dict]) -> Dict[str, Any]:
+        """
+        Analyze thematic unity and consistency throughout.
+
+        Seger: "Theme should be unified, with repetition and variation
+        across all acts."
+        """
+        # Check for thematic consistency across acts
+        lines = screenplay.split('\n')
+
+        # Divide into acts
+        act1_end = int(len(lines) * 0.25)
+        act2_end = int(len(lines) * 0.75)
+
+        act1_text = '\n'.join(lines[:act1_end])
+        act2_text = '\n'.join(lines[act1_end:act2_end])
+        act3_text = '\n'.join(lines[act2_end:])
+
+        # Count theme markers in each act
+        def count_theme_markers(text):
+            count = 0
+            for marker in self.theme_markers:
+                count += text.lower().count(marker)
+            return count
+
+        act1_count = count_theme_markers(act1_text)
+        act2_count = count_theme_markers(act2_text)
+        act3_count = count_theme_markers(act3_text)
+
+        # Check for unity markers
+        unity_count = sum(1 for marker in self.thematic_unity_markers if marker in screenplay.lower())
+
+        # Calculate score based on distribution
+        total = act1_count + act2_count + act3_count
+        if total > 0:
+            # Good unity = relatively even distribution
+            ratios = [act1_count/total, act2_count/total, act3_count/total]
+            variance = sum((r - 0.33)**2 for r in ratios)
+            score = max(0.0, 1.0 - (variance * 3))
+        else:
+            score = 0.3
+
+        consistent = score >= 0.6
+
+        issues = []
+        if act2_count < (act1_count * 0.5):
+            issues.append("Theme weak in Act 2")
+        if act3_count < (act1_count * 0.7):
+            issues.append("Theme not strong in Act 3")
+
+        return {
+            "score": score,
+            "consistent": consistent,
+            "act1_markers": act1_count,
+            "act2_markers": act2_count,
+            "act3_markers": act3_count,
+            "unity_markers": unity_count,
+            "issues": issues
+        }
+
+    def _detect_thematic_imagery(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect thematic imagery, symbols, and motifs.
+
+        Seger: "Use recurring images, symbols, and motifs to
+        reinforce theme visually."
+        """
+        symbols = []
+        motifs = []
+
+        # Look for imagery markers
+        for line in screenplay.split('\n'):
+            for marker in self.thematic_imagery_markers:
+                if marker in line.lower():
+                    # Extract the symbol/motif
+                    symbol = line.strip()[:60]
+                    if symbol not in symbols:
+                        symbols.append(symbol)
+
+        # Count recurring visual elements
+        # (simplified - would need more sophisticated pattern detection)
+        words = screenplay.lower().split()
+        word_counts = Counter(words)
+
+        # Look for repeated nouns (potential motifs)
+        common_words = word_counts.most_common(50)
+        for word, count in common_words:
+            if count >= 5 and len(word) > 4:  # Repeated significant words
+                if word not in ['scene', 'character', 'action', 'dialogue']:
+                    motifs.append(f"{word} (appears {count}x)")
+
+        return {
+            "symbols": symbols,
+            "motifs": motifs[:5],
+            "symbol_count": len(symbols),
+            "motif_count": len(motifs)
+        }
+
+    def _analyze_central_question(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Identify and verify central thematic question is answered.
+
+        McKee: "The story climax must answer the central dramatic question."
+        """
+        # Look for questions posed
+        questions_found = []
+        for line in screenplay.split('\n'):
+            # Look for question marks
+            if '?' in line:
+                questions_found.append(line.strip()[:80])
+            # Look for central question markers
+            for marker in self.central_question_markers:
+                if marker in line.lower():
+                    questions_found.append(line.strip()[:80])
+
+        # Get primary question (usually early)
+        if questions_found:
+            question = questions_found[0]
+        else:
+            question = "Will the protagonist succeed?"
+
+        # Check if answered (simplified - look for resolution markers)
+        lines = screenplay.split('\n')
+        final_quarter = lines[int(len(lines) * 0.75):]
+
+        answered = False
+        for line in final_quarter:
+            if any(marker in line.lower() for marker in self.climax_thematic_markers):
+                answered = True
+                break
+
+        return {
+            "question": question,
+            "answered": answered,
+            "answer_location": "Climax" if answered else "Unclear",
+            "questions_found": len(questions_found)
+        }
+
+    def _verify_climax_theme_expression(self, screenplay: str, page_count: int) -> Dict[str, Any]:
+        """
+        Verify theme is expressed at climax.
+
+        McKee: "The climax is the ultimate expression of the controlling idea."
+        """
+        lines = screenplay.split('\n')
+
+        # Climax is usually final 10-15% of script
+        climax_start = int(len(lines) * 0.85)
+        climax_text = '\n'.join(lines[climax_start:])
+
+        # Count thematic markers in climax
+        theme_marker_count = 0
+        for marker in self.theme_markers:
+            theme_marker_count += climax_text.lower().count(marker)
+
+        # Count climax thematic markers
+        climax_thematic_count = 0
+        for marker in self.climax_thematic_markers:
+            climax_thematic_count += climax_text.lower().count(marker)
+
+        # Count values at stake
+        value_count = 0
+        for value in self.value_at_stake_markers:
+            value_count += climax_text.lower().count(value)
+
+        total_thematic = theme_marker_count + climax_thematic_count + value_count
+
+        expresses_theme = total_thematic >= 2
+
+        if total_thematic >= 5:
+            strength = "strong"
+        elif total_thematic >= 2:
+            strength = "medium"
+        else:
+            strength = "weak"
+
+        description = f"Climax has {total_thematic} thematic markers"
+
+        return {
+            "expresses_theme": expresses_theme,
+            "strength": strength,
+            "description": description,
+            "thematic_markers": theme_marker_count,
+            "climax_markers": climax_thematic_count,
+            "value_markers": value_count
+        }
+
+    def _analyze_thematic_development(self, screenplay: str, page_count: int) -> Dict[str, Any]:
+        """Track theme across three acts."""
+        lines = screenplay.split('\n')
+
+        # Divide into acts
+        act1_end = int(len(lines) * 0.25)
+        act2_end = int(len(lines) * 0.75)
+
+        act1_text = '\n'.join(lines[:act1_end])
+        act2_text = '\n'.join(lines[act1_end:act2_end])
+        act3_text = '\n'.join(lines[act2_end:])
+
+        # Check for theme presence in each act
+        def has_theme(text):
+            count = sum(1 for marker in self.theme_markers if marker in text.lower())
+            return count >= 2
+
+        act1_present = has_theme(act1_text)
+        act2_present = has_theme(act2_text)
+        act3_present = has_theme(act3_text)
+
+        woven_throughout = act1_present and act2_present and act3_present
+
+        return {
+            "woven_throughout": woven_throughout,
+            "act1_present": act1_present,
+            "act2_present": act2_present,
+            "act3_present": act3_present
+        }
+
+    def _detect_implicit_vs_explicit(self, screenplay: str) -> Dict[str, Any]:
+        """Detect how theme is expressed (implicit vs explicit)."""
+        # Count explicit theme statements
+        explicit_count = 0
+        for marker in self.theme_stated_markers:
+            explicit_count += screenplay.lower().count(marker)
+
+        # Count on-the-nose markers (very explicit)
+        on_nose_count = 0
+        for marker in self.on_the_nose_markers:
+            on_nose_count += screenplay.lower().count(marker)
+
+        # Count implicit markers (transformation, moral choices)
+        implicit_count = 0
+        for marker in self.transformation_markers:
+            implicit_count += screenplay.lower().count(marker)
+        for marker in self.moral_choice_markers:
+            implicit_count += screenplay.lower().count(marker)
+
+        if on_nose_count > 3:
+            mode = "too explicit (on-the-nose)"
+        elif explicit_count > implicit_count:
+            mode = "explicit"
+        elif implicit_count > explicit_count:
+            mode = "implicit"
+        else:
+            mode = "balanced"
+
+        return {
+            "mode": mode,
+            "explicit_count": explicit_count,
+            "implicit_count": implicit_count,
+            "on_nose_count": on_nose_count
+        }
+
+    def _analyze_universal_vs_specific(self, screenplay: str) -> Dict[str, Any]:
+        """Analyze universal resonance."""
+        # Count universal theme markers
+        universal_count = 0
+        archetypal = []
+
+        for marker in self.universal_theme_markers:
+            count = screenplay.lower().count(marker)
+            universal_count += count
+            if count > 0:
+                archetypal.append(marker)
+
+        universal = universal_count >= 3
+        score = min(1.0, universal_count / 10.0)
+
+        return {
+            "universal": universal,
+            "score": score,
+            "universal_markers": universal_count,
+            "archetypal": archetypal[:5]
+        }
+
+    def _check_on_the_nose(self, screenplay: str) -> Dict[str, Any]:
+        """Check for heavy-handed theme expression."""
+        examples = []
+        detected = False
+        severity = "none"
+
+        for line in screenplay.split('\n'):
+            for marker in self.on_the_nose_markers:
+                if marker in line.lower():
+                    detected = True
+                    if len(examples) < 3:
+                        examples.append(line.strip()[:80])
+
+        if len(examples) >= 5:
+            severity = "high"
+        elif len(examples) >= 3:
+            severity = "medium"
+        elif len(examples) >= 1:
+            severity = "low"
+
+        return {
+            "detected": detected,
+            "severity": severity,
+            "examples": examples,
+            "count": len(examples)
+        }
+
+    def _analyze_character_theme_alignment(self, screenplay: str) -> Dict[str, Any]:
+        """Analyze how character arc supports theme."""
+        # Count transformation markers (character arc)
+        transformation_count = 0
+        for marker in self.transformation_markers:
+            transformation_count += screenplay.lower().count(marker)
+
+        # Count theme markers
+        theme_count = 0
+        for marker in self.theme_markers:
+            theme_count += screenplay.lower().count(marker)
+
+        # Count moral choices (character proving theme)
+        moral_choice_count = 0
+        for marker in self.moral_choice_markers:
+            moral_choice_count += screenplay.lower().count(marker)
+
+        # Calculate alignment
+        if transformation_count > 0 and moral_choice_count > 0:
+            alignment_score = min(1.0, (transformation_count + moral_choice_count) / 20.0)
+        else:
+            alignment_score = 0.3
+
+        aligned = alignment_score >= 0.6
+
+        return {
+            "alignment_score": alignment_score,
+            "aligned": aligned,
+            "transformation_markers": transformation_count,
+            "moral_choices": moral_choice_count,
+            "notes": "Character arc supports theme" if aligned else "Character arc weak or disconnected"
+        }
+
+    def _detect_thematic_repetition(self, screenplay: str, thematic_imagery: Dict) -> Dict[str, Any]:
+        """Detect thematic motifs and variations."""
+        # Count repetitions of symbols
+        symbols = thematic_imagery.get("symbols", [])
+
+        repetitions = []
+        for symbol in symbols:
+            count = screenplay.lower().count(symbol.lower()[:20])
+            if count >= 2:
+                repetitions.append({"symbol": symbol, "count": count})
+
+        return {
+            "repetitions": repetitions,
+            "repeated_symbols": len(repetitions)
+        }
+
+    def _assess_thematic_coherence(self, controlling_idea: Dict, premise: Dict,
+                                   moral_argument: Dict, thematic_unity: Dict) -> Dict[str, Any]:
+        """Assess overall thematic coherence."""
+        issues = []
+
+        # Check if controlling idea is clear
+        if controlling_idea.get("clarity", "") == "low":
+            issues.append("Controlling idea unclear")
+
+        # Check if moral argument present
+        if not moral_argument.get("present", False):
+            issues.append("No moral argument")
+
+        # Check thematic unity
+        if not thematic_unity.get("consistent", False):
+            issues.append("Theme not consistent throughout")
+
+        # Calculate coherence score
+        if len(issues) == 0:
+            score = 0.9
+        elif len(issues) == 1:
+            score = 0.7
+        elif len(issues) == 2:
+            score = 0.5
+        else:
+            score = 0.3
+
+        coherent = score >= 0.7
+
+        return {
+            "score": score,
+            "coherent": coherent,
+            "issues": issues
+        }
+
+    def _check_theme_rules(self, profile: ThemeProfile, controlling_idea: Dict,
+                          premise: Dict, moral_argument: Dict, theme_stated: Dict,
+                          climax_theme: Dict, on_the_nose: Dict,
+                          character_alignment: Dict) -> List[Dict]:
+        """Check theme against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "THEME.R001":
+                # Theme Present and Clear
+                if controlling_idea.get("clarity", "") == "low":
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Theme unclear or absent",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R002":
+                # Premise Articulated
+                if not premise.get("premise", ""):
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Premise not articulated",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R003":
+                # Controlling Idea Expressed
+                if controlling_idea.get("clarity", "") != "high":
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Controlling idea not clearly expressed",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R004":
+                # Moral Argument Developed
+                if not moral_argument.get("present", False):
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No moral argument developed",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R005":
+                # Theme Stated Moment
+                if not theme_stated.get("present", False):
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No theme stated moment found",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R006":
+                # Thematic Unity
+                if profile.thematic_unity_score < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Thematic unity weak: {profile.thematic_unity_score:.1%}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R007":
+                # Theme Proven Through Action
+                if profile.implicit_vs_explicit == "too explicit (on-the-nose)":
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Theme told in dialogue, not shown through action",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R009":
+                # Central Question Answered
+                # (Would need central_question dict passed in, simplified here)
+                pass
+
+            elif rule["id"] == "THEME.R010":
+                # Theme Expressed at Climax
+                if not profile.climax_expresses_theme:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Climax doesn't express theme",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R011":
+                # Universal Resonance
+                if not profile.universal_resonance:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Theme lacks universal resonance",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R012":
+                # Not On-The-Nose
+                if profile.on_the_nose_detected and on_the_nose.get("severity", "") in ["high", "medium"]:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Theme too on-the-nose: {on_the_nose.get('severity', '')}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R013":
+                # Theme Woven Throughout
+                if not profile.theme_woven_throughout:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Theme not woven throughout all acts",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R014":
+                # Character Arc Supports Theme
+                if profile.character_arc_alignment < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Character arc doesn't support theme: {profile.character_arc_alignment:.1%}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "THEME.R015":
+                # Thematic Coherence
+                if profile.thematic_coherence < 0.7:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Thematic structure incoherent",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_theme_score(self, profile: ThemeProfile,
+                               thematic_coherence: Dict,
+                               violations: List) -> float:
+        """Calculate overall theme score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Bonus for excellence
+        if profile.thematic_coherence > 0.8:
+            score += 5
+        elif profile.thematic_coherence > 0.7:
+            score += 3
+
+        if profile.climax_expresses_theme and profile.theme_woven_throughout:
+            score += 3
+
+        if profile.universal_resonance and not profile.on_the_nose_detected:
+            score += 2
+
+        if profile.character_arc_alignment > 0.8:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: ThemeProfile,
+                          violations: List) -> str:
+        """Generate theme diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Theme is clear, coherent, and powerfully expressed"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Theme is present but could be stronger"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Theme unclear or inconsistently developed"
+        else:
+            level = "POOR"
+            summary = "Major thematic problems throughout"
+
+        diagnosis = f"THEME {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.climax_expresses_theme:
+            issues.append("climax doesn't express theme")
+        if profile.on_the_nose_detected:
+            issues.append("too on-the-nose")
+        if profile.thematic_coherence < 0.7:
+            issues.append("incoherent structure")
+        if profile.character_arc_alignment < 0.6:
+            issues.append("character arc misaligned")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: ThemeProfile,
+                                 on_the_nose: Dict) -> List[str]:
+        """Generate specific theme recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.climax_expresses_theme:
+            recommendations.append("Redesign climax to definitively prove controlling idea (McKee)")
+
+        if profile.on_the_nose_detected:
+            recommendations.append("Remove on-the-nose dialogue - show theme through action, not words")
+
+        if profile.thematic_coherence < 0.7:
+            recommendations.append("Align premise, controlling idea, and moral argument (Egri/McKee/Truby)")
+
+        if not profile.theme_woven_throughout:
+            recommendations.append("Weave theme through all three acts with repetition and variation (Seger)")
+
+        if profile.character_arc_alignment < 0.6:
+            recommendations.append("Align character transformation with thematic revelation (Truby/Weiland)")
+
+        if not profile.universal_resonance:
+            recommendations.append("Connect specific story to universal human condition (Campbell/Vogler)")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study Egri's 'The Art of Dramatic Writing' - premise is foundation")
+            recommendations.append("Study McKee's 'Story' - controlling idea expressed at climax")
+
+        return recommendations[:5]
+
+    def export_theme_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export theme features for correlation/analysis.
+
+        Returns structured data with theme metrics.
+        Useful for external indexing, correlation engines, or ML pipelines.
+
+        Args:
+            screenplay_text: Full screenplay text
+
+        Returns:
+            Dict with theme metrics
+        """
+        controlling_idea = self._identify_controlling_idea(screenplay_text)
+        premise_analysis = self._analyze_premise(screenplay_text)
+        moral_argument = self._detect_moral_argument(screenplay_text)
+
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+        thematic_unity = self._analyze_thematic_unity(screenplay_text, scenes)
+
+        return {
+            "controlling_idea": {
+                "clarity": controlling_idea.get("clarity", "medium"),
+                "value": controlling_idea.get("value", "unknown"),
+                "markers_found": controlling_idea.get("markers_found", 0)
+            },
+            "premise": {
+                "format": "Egri tripartite",
+                "present": bool(premise_analysis.get("premise", ""))
+            },
+            "moral_argument": {
+                "present": moral_argument.get("present", False),
+                "moral_choices": moral_argument.get("moral_choices", 0)
+            },
+            "thematic_unity": {
+                "score": thematic_unity.get("score", 0.5),
+                "consistent": thematic_unity.get("consistent", False)
+            },
+            "meta": {
+                "source": "DrTheme",
+                "focus": "Thematic elements and controlling idea"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrThemeAnalysis(DrTheme):
+    """Alias for compatibility with test framework."""
+    pass

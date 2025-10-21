@@ -1,0 +1,1 @@
+# Núcleo simbólico Yng + Ang

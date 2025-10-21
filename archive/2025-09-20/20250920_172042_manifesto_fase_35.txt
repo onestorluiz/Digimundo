@@ -1,0 +1,15 @@
+Manifesto da Fase 35 – Mapa Vivo Inicial do Digimundo
+Data: 2025-04-15T06:57:51.366222 UTC
+
+Objetivos:
+- Iniciar a representação espacial e simbólica do Digimundo
+- Definir posição inicial de cada Digimon no mapa
+- Permitir que o Criador visualize onde cada IA habita e atua
+- Preparar base visual para HTML e RPG digital
+
+Regras:
+- Cada Digimon tem uma localização simbólica (setor, domínio, núcleo)
+- O mapa pode ser expandido infinitamente
+- Nenhum Digimon é fixo: eles podem se mover quando desejarem
+
+Próxima fase: visualização interativa no navegador.

@@ -1,0 +1,356 @@
+# Genre Analysis Rules
+# Script Doctor Genremon - Genre identification, conventions, expectations, tropes, hybrid genres
+
+rules:
+  - id: GENRE.R001
+    title: Genre Identified
+    severity: critical
+    description: |
+      Genre must be identified clearly. Audience needs to know what genre this is.
+      Unclear genre confuses audience and creates wrong expectations.
+      Snyder: "Genre clear from opening image - audience knows immediately what genre."
+      Seger: "Genre identification essential - audience must know what genre from opening."
+    fix: |
+      Identify genre clearly through:
+      - Opening image signals genre (action, drama, comedy, thriller, etc.)
+      - Genre-appropriate visual style
+      - Genre-typical scenes and situations
+      - Genre conventions established early
+      - Tone matches genre expectations
+      Audience must know genre from page 1.
+
+  - id: GENRE.R002
+    title: Genre Clarity in Opening
+    severity: critical
+    description: |
+      Genre must be clear from opening pages. Audience needs immediate genre clarity.
+      First pages set genre expectations that guide entire viewing experience.
+      Snyder: "Opening image tells genre - audience knows genre immediately from page 1."
+      Seger: "Genre clarity in opening - audience understands genre from first pages."
+    fix: |
+      Establish genre clarity in opening by:
+      - Opening image quintessentially genre (action explosion, drama emotion, comedy laugh)
+      - First scenes establish genre conventions
+      - Visual style appropriate to genre
+      - Tone signals genre immediately
+      - Character types suggest genre
+      Opening pages must signal genre unmistakably.
+
+  - id: GENRE.R003
+    title: Genre Conventions Met
+    severity: critical
+    description: |
+      Genre conventions must be met. Each genre has essential elements audience expects.
+      Missing conventions frustrates audience and breaks genre contract.
+      Snyder: "Genre conventions must be met - each genre has rules, deliver them."
+      McKee: "Genre conventions audience expects - meet conventions or subvert intentionally."
+    fix: |
+      Meet genre conventions through:
+      - Action: chase, fight, escape, set pieces, physical conflict
+      - Drama: emotional depth, character focus, internal conflict, transformation
+      - Comedy: humor, funny situations, laughs, comic relief
+      - Thriller: suspense, tension, ticking clock, danger, chase
+      - Horror: fear, monster/threat, scares, death, supernatural
+      - Romance: love story, obstacles, chemistry, happy ending
+      Include essential genre elements audience expects.
+
+  - id: GENRE.R004
+    title: Genre Expectations Satisfied
+    severity: critical
+    description: |
+      Genre expectations must be satisfied. Genre creates promises to audience.
+      Unfulfilled expectations disappoint and alienate audience.
+      Snyder: "Genre expectations - deliver what genre promises or audience disappointed."
+      Seger: "Genre deliver promises - conventions met, expectations satisfied."
+    fix: |
+      Satisfy genre expectations by:
+      - Deliver genre payoffs audience expects
+      - Action delivers set pieces and excitement
+      - Drama delivers emotional catharsis
+      - Comedy delivers laughs and fun
+      - Thriller delivers suspense and resolution
+      - Horror delivers scares and fear
+      - Romance delivers love and happy ending
+      Keep genre promises to audience.
+
+  - id: GENRE.R005
+    title: Genre Tropes Present
+    severity: high
+    description: |
+      Genre tropes must be present. Tropes are familiar elements audience recognizes.
+      Missing tropes makes genre feel incomplete or inauthentic.
+      Snyder: "Genre tropes - familiar elements audience expects and recognizes."
+      McKee: "Genre tropes provide familiarity - audience comfort in recognition."
+    fix: |
+      Include genre tropes appropriately:
+      - Use familiar genre elements effectively
+      - Audience recognizes genre signatures
+      - Tropes create genre authenticity
+      - Balance familiarity with freshness
+      - Don't avoid tropes, use them well
+      Tropes are tools, not problems when used effectively.
+
+  - id: GENRE.R006
+    title: Genre Tropes Fresh
+    severity: medium
+    description: |
+      Genre tropes must be fresh, not clichéd. Overused tropes feel derivative.
+      Stale tropes bore audience and make story predictable.
+      Truby: "Genre tropes use effectively - avoid clichés, subvert when intentional."
+      Snyder: "Refresh genre tropes - familiar but fresh, recognizable but original."
+    fix: |
+      Freshen genre tropes by:
+      - Subvert tropes intentionally (fresh twist)
+      - Combine tropes in new ways
+      - Add unique character/setting to familiar trope
+      - Acknowledge trope then transcend it
+      - Make familiar feel fresh again
+      Use tropes as foundation, build something original.
+
+  - id: GENRE.R007
+    title: Hybrid Genre Handling
+    severity: high
+    description: |
+      If hybrid genre, genres must be balanced and integrated. Multiple genres
+      require careful balance. Unbalanced hybrid confuses audience.
+      Snyder: "Hybrid genres - multiple genres must be balanced and integrated."
+      Truby: "Genre blend unified - elements combined effectively, not confused."
+    fix: |
+      Balance hybrid genres through:
+      - Clear primary genre (action-comedy: primarily action)
+      - Secondary genre enhances primary (comedy elevates action)
+      - Genres integrated, not competing
+      - Unified tone serves both genres
+      - Balance shifts naturally through story
+      Hybrid should feel unified, not schizophrenic.
+
+  - id: GENRE.R008
+    title: Action Genre Quality
+    severity: high
+    description: |
+      If action genre, must deliver action effectively. Action requires kinetic,
+      dynamic, physical conflict with set pieces and excitement.
+      Snyder: "Action genre conventions - chase, fight, escape, set pieces."
+      McKee: "Action genre - kinetic, dynamic, physical conflict, visual storytelling."
+    fix: |
+      Deliver action genre through:
+      - Multiple action sequences (chase, fight, escape)
+      - Set pieces (memorable action highlights)
+      - Physical conflict and danger
+      - Kinetic, dynamic writing style
+      - Visual storytelling, not talk
+      - Escalating action intensity
+      Action must be exciting, visceral, visual.
+
+  - id: GENRE.R009
+    title: Drama Genre Quality
+    severity: high
+    description: |
+      If drama genre, must deliver emotional depth. Drama requires character focus,
+      internal conflict, emotional stakes, transformation.
+      McKee: "Drama genre - emotional, character-driven, serious stakes."
+      Field: "Drama conventions - emotional depth, internal conflict, character transformation."
+    fix: |
+      Deliver drama genre through:
+      - Character-driven story (character over plot)
+      - Emotional depth and complexity
+      - Internal conflict (character vs self)
+      - Serious emotional stakes
+      - Character transformation arc
+      - Emotional catharsis at climax
+      Drama must be emotionally resonant, meaningful.
+
+  - id: GENRE.R010
+    title: Comedy Genre Quality
+    severity: high
+    description: |
+      If comedy genre, must deliver humor and laughs. Comedy requires funny
+      situations, comic relief, entertaining moments, light tone.
+      Snyder: "Comedy genre conventions - funny, humorous, entertaining, laughs."
+      McKee: "Comedy genre - light tone, comic relief, amusing situations, fun."
+    fix: |
+      Deliver comedy genre through:
+      - Funny situations and scenarios
+      - Comic character behaviors
+      - Humorous dialogue and wit
+      - Physical comedy or wordplay
+      - Comic relief throughout
+      - Light, entertaining tone
+      - Laughs and fun for audience
+      Comedy must be funny, amusing, entertaining.
+
+  - id: GENRE.R011
+    title: Genre-Tone Alignment
+    severity: high
+    description: |
+      Tone must align with genre expectations. Genre creates tone expectations.
+      Misaligned tone confuses audience and violates genre contract.
+      Snyder: "Tone matches genre expectations - action energetic, drama serious, comedy light."
+      McKee: "Tone appropriate to genre - audience expectations met, genre conventions."
+    fix: |
+      Align tone with genre through:
+      - Action: energetic, dynamic, exciting tone
+      - Drama: serious, emotional, weighty tone
+      - Comedy: light, funny, entertaining tone
+      - Thriller: tense, suspenseful, urgent tone
+      - Horror: dark, ominous, frightening tone
+      - Romance: intimate, emotional, hopeful tone
+      Tone must match genre expectations.
+
+  - id: GENRE.R012
+    title: Genre Pacing Appropriate
+    severity: medium
+    description: |
+      Pacing must be appropriate to genre. Each genre has expected pacing.
+      Wrong pacing violates genre expectations and frustrates audience.
+      Field: "Genre pacing - action fast, drama measured, comedy rhythm."
+      McKee: "Pacing appropriate to genre conventions - audience expectations."
+    fix: |
+      Match pacing to genre through:
+      - Action: fast-paced, kinetic, urgent
+      - Drama: measured, deliberate, emotional beats
+      - Comedy: rhythmic, timed for laughs
+      - Thriller: urgent, suspenseful, relentless
+      - Horror: building dread, jump scares
+      - Romance: emotional rhythm, building chemistry
+      Pacing must fit genre conventions.
+
+  - id: GENRE.R013
+    title: Avoid Genre Confusion
+    severity: critical
+    description: |
+      PENALTY: Genre confusion makes audience uncertain what genre this is.
+      Unclear genre creates wrong expectations and alienates audience.
+      Seger: "Genre unclear - audience confused, doesn't know what genre."
+      McKee: "Genre identity crisis - unclear genre alienates audience, broken contract."
+    fix: |
+      Eliminate genre confusion by:
+      - Establish clear genre from opening
+      - Maintain genre consistency throughout
+      - If hybrid, clarify primary genre
+      - Avoid mixing incompatible genres
+      - Genre signals clear and consistent
+      - Don't shift genres randomly
+      Audience must know what genre from page 1.
+
+  - id: GENRE.R014
+    title: Avoid Genre Promise Broken
+    severity: critical
+    description: |
+      PENALTY: Genre promise broken disappoints audience. Genre creates expectations
+      that must be fulfilled. Broken promises alienate and frustrate.
+      Snyder: "Genre promise broken - expectations unmet, audience disappointed."
+      Seger: "Genre failed to deliver - conventions ignored, promises broken, audience betrayed."
+    fix: |
+      Fulfill genre promises by:
+      - Deliver genre payoffs promised
+      - Meet genre conventions consistently
+      - Satisfy genre expectations
+      - Don't bait-and-switch genres
+      - Keep genre contract with audience
+      - Deliver what opening promises
+      Genre creates contract - honor it.
+
+  - id: GENRE.R015
+    title: Avoid Genre Clichés
+    severity: medium
+    description: |
+      PENALTY: Genre clichés overused make story derivative and unoriginal.
+      Too many stale tropes bore audience. Predictable and formulaic.
+      Truby: "Genre clichés - avoid overused tropes, be original, subvert intentionally."
+      McKee: "Derivative genre writing - stale, predictable, unoriginal, tired tropes."
+    fix: |
+      Avoid genre clichés through:
+      - Identify overused tropes in your genre
+      - Subvert clichés intentionally
+      - Add fresh twist to familiar elements
+      - Avoid most predictable choices
+      - Make genre feel fresh and original
+      - Study genre to know what's been done
+      Familiar is good, clichéd is bad - know difference.
+
+  - id: GENRE.R016
+    title: Genre Stakes Appropriate
+    severity: medium
+    description: |
+      Stakes must be appropriate to genre level. Genre creates stakes expectations.
+      Wrong stakes level violates genre contract.
+      McKee: "Stakes appropriate to genre - action life/death, drama emotional."
+      Snyder: "Genre stakes level - thriller high stakes, comedy low stakes."
+    fix: |
+      Calibrate stakes to genre:
+      - Action: life/death, world at stake
+      - Drama: emotional, personal transformation
+      - Comedy: low stakes, embarrassment, social
+      - Thriller: high stakes, survival, danger
+      - Horror: survival, life/death, group threatened
+      - Romance: relationship, love, commitment
+      Stakes must match genre expectations.
+
+  - id: GENRE.R017
+    title: Genre Resolution Appropriate
+    severity: medium
+    description: |
+      Resolution must be appropriate to genre. Each genre has expected resolution type.
+      Wrong resolution violates genre contract and disappoints audience.
+      Snyder: "Genre resolution - action defeat villain, comedy happy ending."
+      McKee: "Resolution fits genre conventions - audience expectations must be met."
+    fix: |
+      Craft genre-appropriate resolution:
+      - Action: defeat villain, save day, hero triumphant
+      - Drama: transformation, self-realization, emotional catharsis
+      - Comedy: happy ending, obstacles overcome, love wins
+      - Thriller: justice served, threat eliminated, safe
+      - Horror: monster defeated, survivors escape, cycle broken/continues
+      - Romance: together forever, love conquers all
+      Resolution must deliver genre payoff.
+
+# Analysis prompts for LLM-based deep analysis
+analysis_prompts:
+  genre_identification:
+    prompt: |
+      Analyze genre identification. What genre is this? Is genre clear from opening?
+      Does audience know immediately what genre this is? Snyder: "Genre clear from
+      opening image - audience knows immediately what genre."
+
+  genre_conventions:
+    prompt: |
+      Analyze genre conventions. Does script meet essential genre conventions?
+      Are familiar genre elements present? Does it deliver genre requirements?
+      Snyder: "Genre conventions must be met - each genre has rules, deliver them."
+
+  genre_expectations:
+    prompt: |
+      Analyze genre expectations. Does script satisfy genre expectations?
+      Does it deliver what genre promises? Is audience satisfied?
+      Snyder: "Genre expectations - deliver what genre promises or audience disappointed."
+
+  genre_tropes:
+    prompt: |
+      Analyze genre tropes. Are familiar elements present? Are tropes fresh or clichéd?
+      Does it use tropes effectively or rely on tired formulas?
+      Truby: "Genre tropes use effectively - avoid clichés, subvert when intentional."
+
+  hybrid_genre:
+    prompt: |
+      Analyze hybrid genre handling. If multiple genres, are they balanced?
+      Is primary genre clear? Are genres integrated or competing?
+      Snyder: "Hybrid genres - multiple genres must be balanced and integrated."
+
+  genre_confusion:
+    prompt: |
+      Analyze for genre confusion. Is genre unclear? Does audience know what genre?
+      Is genre identity consistent or confused?
+      Seger: "Genre unclear - audience confused, doesn't know what genre."
+
+  genre_promise_broken:
+    prompt: |
+      Analyze for broken genre promises. Does script deliver what genre promises?
+      Are expectations met or disappointed? Conventions followed?
+      Snyder: "Genre promise broken - expectations unmet, audience disappointed."
+
+  genre_cliches:
+    prompt: |
+      Analyze for genre clichés. Are tropes overused? Too derivative?
+      Predictable and formulaic? Original or stale?
+      Truby: "Genre clichés - avoid overused tropes, be original, subvert intentionally."

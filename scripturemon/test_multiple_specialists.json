@@ -1,0 +1,38 @@
+{
+  "dialogue": {
+    "success": true,
+    "time": 142.5281102657318,
+    "examples": 42,
+    "llm_length": 3363,
+    "quality": 1.0,
+    "cores": [
+      "Python Core 1",
+      "Python Core 2",
+      "LLM Core"
+    ]
+  },
+  "character": {
+    "success": true,
+    "time": 111.76044082641602,
+    "examples": 49,
+    "llm_length": 2531,
+    "quality": 1.0,
+    "cores": [
+      "Python Core 1",
+      "Python Core 2",
+      "LLM Core"
+    ]
+  },
+  "structure": {
+    "success": true,
+    "time": 124.04760503768921,
+    "examples": 91,
+    "llm_length": 3271,
+    "quality": 1.0,
+    "cores": [
+      "Python Core 1",
+      "Python Core 2",
+      "LLM Core"
+    ]
+  }
+}

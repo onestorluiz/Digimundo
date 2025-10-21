@@ -1,0 +1,121 @@
+[supervisord]
+nodaemon=true
+user=digimundo
+logfile=/app/logs/supervisord.log
+pidfile=/app/supervisord.pid
+childlogdir=/app/logs
+
+[unix_http_server]
+file=/app/supervisor.sock
+chmod=0700
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix:///app/supervisor.sock
+
+# API Server
+[program:api_server]
+command=python /app/api_server.py
+directory=/app
+autostart=true
+autorestart=true
+startretries=3
+stderr_logfile=/app/logs/api_server.err.log
+stdout_logfile=/app/logs/api_server.out.log
+environment=PYTHONUNBUFFERED="1"
+priority=100
+stopwaitsecs=10
+
+# Model Downloader (runs once at startup)
+[program:model_downloader]
+command=python -c "import ollama; ollama.pull('tinyllama:latest'); ollama.pull('llama3.2:3b'); ollama.pull('llama3.2:latest'); ollama.pull('nomic-embed-text:latest')"
+directory=/app
+autostart=true
+autorestart=false
+startretries=1
+stderr_logfile=/app/logs/model_downloader.err.log
+stdout_logfile=/app/logs/model_downloader.out.log
+priority=10
+
+# Health Monitor
+[program:health_monitor]
+command=python -c "
+import time
+import requests
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger('HealthMonitor')
+
+while True:
+    try:
+        # Check API
+        api_health = requests.get('http://localhost:8000/health', timeout=5)
+        if api_health.status_code == 200:
+            logger.info('API healthy')
+        else:
+            logger.warning(f'API unhealthy: {api_health.status_code}')
+        
+        # Check Ollama
+        ollama_health = requests.get('http://ollama:11434/api/tags', timeout=5)
+        if ollama_health.status_code == 200:
+            logger.info('Ollama healthy')
+        else:
+            logger.warning(f'Ollama unhealthy: {ollama_health.status_code}')
+            
+    except Exception as e:
+        logger.error(f'Health check failed: {e}')
+    
+    time.sleep(60)
+"
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/app/logs/health_monitor.err.log
+stdout_logfile=/app/logs/health_monitor.out.log
+priority=200
+
+# Log Rotator
+[program:log_rotator]
+command=python -c "
+import os
+import time
+import shutil
+from pathlib import Path
+from datetime import datetime
+
+log_dir = Path('/app/logs')
+archive_dir = log_dir / 'archive'
+archive_dir.mkdir(exist_ok=True)
+
+while True:
+    # Check log files every hour
+    time.sleep(3600)
+    
+    for log_file in log_dir.glob('*.log'):
+        # If file is larger than 100MB, rotate it
+        if log_file.stat().st_size > 100 * 1024 * 1024:
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            archive_name = archive_dir / f'{log_file.stem}_{timestamp}{log_file.suffix}'
+            shutil.move(str(log_file), str(archive_name))
+            print(f'Rotated {log_file.name} to {archive_name.name}')
+    
+    # Clean old archives (older than 7 days)
+    for archive in archive_dir.glob('*.log'):
+        if (datetime.now() - datetime.fromtimestamp(archive.stat().st_mtime)).days > 7:
+            archive.unlink()
+            print(f'Deleted old archive: {archive.name}')
+"
+directory=/app
+autostart=true
+autorestart=true
+stderr_logfile=/app/logs/log_rotator.err.log
+stdout_logfile=/app/logs/log_rotator.out.log
+priority=300
+
+# Group all programs
+[group:digimundo]
+programs=api_server,health_monitor,log_rotator
+priority=999

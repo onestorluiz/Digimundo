@@ -1,0 +1,1711 @@
+"""
+Script Doctor Genremon - Genre Analysis Specialist
+A Script Doctor™ in Digimon form specializing in genre identification, conventions, expectations, tropes, hybrid genres.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class GenreProfile:
+    """Overall genre analysis."""
+    genre_identified: bool  # Clear what genre this is
+    genre_clarity: bool  # Audience knows genre from opening
+    genre_conventions_met: bool  # Follows genre rules
+    genre_expectations_satisfied: bool  # Delivers what genre promises
+    genre_tropes_present: bool  # Familiar elements used
+    genre_tropes_fresh: bool  # Tropes subverted/refreshed (not clichéd)
+    hybrid_genre_handling: bool  # If multiple genres, balanced
+    action_genre_present: bool  # Action genre analysis
+    drama_genre_present: bool  # Drama genre analysis
+    comedy_genre_present: bool  # Comedy genre analysis
+    thriller_genre_present: bool  # Thriller/suspense genre
+    horror_genre_present: bool  # Horror genre
+    romance_genre_present: bool  # Romance genre
+    scifi_fantasy_genre_present: bool  # Sci-Fi/Fantasy genre
+    mystery_genre_present: bool  # Mystery genre
+    genre_tone_alignment: bool  # Genre matches tone
+    genre_pacing_appropriate: bool  # Pacing fits genre
+    genre_stakes_appropriate: bool  # Stakes level fits genre
+    genre_resolution_appropriate: bool  # Resolution fits genre
+    genre_confusion_detected: bool  # PENALTY (unclear what genre)
+    genre_promise_broken: bool  # PENALTY (doesn't deliver expectations)
+    genre_cliches_overused: bool  # PENALTY (too derivative)
+    overall_genre_quality: float
+
+
+@dataclass
+class GenreAnalysisResults:
+    """Complete genre analysis results."""
+    genre_profile: GenreProfile
+    identified_genres_list: List[str]  # Identified genre(s)
+    conventions_met_list: List[str]  # Genre conventions present
+    conventions_missing_list: List[str]  # Genre conventions missing
+    expectations_list: List[str]  # Genre expectations
+    tropes_list: List[str]  # Genre tropes identified
+    hybrid_elements_list: List[str]  # If hybrid genre, elements
+    genre_confusion_list: List[str]  # Genre confusion (PENALTY)
+    genre_promise_broken_list: List[str]  # Promise broken (PENALTY)
+    cliches_list: List[str]  # Overused clichés (PENALTY)
+    score: float
+    diagnosis: str
+    recommendations: List[str]
+
+
+class DrGenre:
+    """
+    Script Doctor Genremon - The Genre Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing genre identification,
+    conventions, expectations, tropes, hybrid genres, avoid confusion/broken promises.
+
+    Identity: Script Doctor first, Digimon genre specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Genremon with rules and configuration."""
+        self.name = "Script Doctor Genremon"
+        self.digimon_name = "Genremon"
+        self.title = "Script Doctor - Genre Analysis Specialist"
+        self.specialty = "Genre identification, conventions, expectations, tropes, hybrid genres"
+        self.identity = "I am Script Doctor Genremon, a professional Script Doctor™ specializing in genre analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "genre_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - GENRE SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Genre design and conventions mastery
+            "McKee Story genre design conventions rules audience expectations must meet",
+            "McKee Story genre action drama comedy horror thriller romance specific rules",
+            "McKee Story genre tropes familiar elements audience expects recognizes satisfies",
+            "McKee Story genre subversion intentional earned fresh not derivative clichéd",
+            "McKee Story genre controlling idea appropriate specific genre philosophical stance",
+            "McKee Story genre obligatory scenes must include conventions meet expectations",
+            "McKee Story genre mixed hybrid handle consistently balance unified tone",
+
+            # McKee Story - STORY DESIGN SPECTRUM (ultra-specific manual reading)
+            "McKee Story classic design archplot linear causality active closed ending",
+            "McKee Story miniplot internal minimalist open ending anti-structure reduced",
+            "McKee Story antiplot chaos absurd coincidence anti-structure experimental",
+
+            # Truby Anatomy - World rules and genre conventions
+            "Truby Anatomy genre conventions rules expectations specific type deliver",
+            "Truby Anatomy genre world rules establish possible impossible believable consistent",
+            "Truby Anatomy genre tropes use effectively avoid overused clichés fresh",
+            "Truby Anatomy genre subversion twist intentional fresh earned not cheap",
+            "Truby Anatomy genre character types archetypes appropriate hero villain mentor",
+            "Truby Anatomy genre moral argument appropriate philosophy ethical stance fits",
+            "Truby Anatomy genre hybrid multiple balanced integrated unified coherent",
+
+            # Field Screenplay - Structure and pacing by genre
+            "Field Screenplay genre structure conventions three act paradigm adapted type",
+            "Field Screenplay genre action fast paced energetic set pieces explosions",
+            "Field Screenplay genre comedy rhythm timing beats laughs pacing light",
+            "Field Screenplay genre drama measured emotional character stakes serious",
+            "Field Screenplay genre thriller suspense tension ticking clock danger escalate",
+            "Field Screenplay genre audience expectations deliver promises conventions met satisfied",
+
+            # Snyder Save the Cat - 10 Genre types and beats
+            "Snyder Save the Cat 10 genre types monster house golden fleece whydunit",
+            "Snyder genre dude with problem rites passage buddy love fool triumphant",
+            "Snyder genre superhero institutionalized out of bottle specific conventions",
+            "Snyder genre beats specific type conventions tropes expectations primal",
+            "Snyder genre opening image tells genre immediately audience knows clear",
+            "Snyder genre audience expectations must deliver promises or broken penalty",
+            "Snyder genre primal universal emotions beneath specific conventions human",
+            "Snyder genre hybrid mixing types balanced unified coherent not confused",
+
+            # Vogler Writer's Journey - Hero journey across genres
+            "Vogler Writer's Journey hero journey structure across genres action drama comedy",
+            "Vogler genre conventions archetypal patterns universal hero mentor shadow threshold",
+            "Vogler genre stages ordinary world call adventure tests ordeal reward return",
+            "Vogler genre refusal call appropriate type comedy light drama serious",
+            "Vogler genre mentor role across genres wisdom guide teacher supernatural",
+            "Vogler genre ordeal climax death rebirth appropriate type intensity stakes",
+
+            # Campbell Hero 1000 Faces - Universal mythic patterns across genres
+            "Campbell Hero 1000 Faces mythic patterns universal across genres action drama",
+            "Campbell genre archetypes hero mentor shadow threshold herald trickster universal",
+            "Campbell genre separation initiation return stages appropriate type tone",
+            "Campbell genre supernatural aid appropriate type fantasy magic action technology",
+            "Campbell genre meeting goddess anima appropriate romance drama relationship",
+
+            # Aristotle Poetics - Tragedy and comedy conventions
+            "Aristotle Poetics genre tragedy conventions serious elevated noble protagonist fall",
+            "Aristotle genre comedy conventions light common protagonist rise happy ending",
+            "Aristotle genre appropriate diction language elevated tragedy common comedy fitting",
+            "Aristotle genre catharsis pity fear tragedy emotional purge appropriate intensity",
+            "Aristotle genre unity action plot single complete appropriate type structure",
+
+            # Egri Art Dramatic Writing - Premise and tone by genre
+            "Egri Art Dramatic Writing genre premise appropriate type philosophical stance",
+            "Egri genre tone appropriate tragedy serious elevated comedy light common",
+            "Egri genre orchestration character types appropriate hero villain mentor foil",
+            "Egri genre conflict intensity appropriate tragedy high comedy light romance",
+            "Egri genre resolution appropriate tragedy fall comedy rise drama transformation",
+
+            # Seger Making Good Script Great - Clarity and delivering promises
+            "Seger Making Good Script Great genre clarity audience knows immediately opening",
+            "Seger genre deliver promises conventions met expectations satisfied earned",
+            "Seger genre tropes familiar elements audience expects recognizes satisfies",
+            "Seger genre subgenre hybrid specific handling integrated balanced unified",
+            "Seger genre tone consistent appropriate action energetic drama serious comedy",
+            "Seger genre research appropriate period accurate cultural authentic specific",
+
+            # Weiland Creating Character Arcs - Genre and arc types
+            "Weiland Creating Character Arcs genre arc type appropriate positive negative flat",
+            "Weiland genre positive arc appropriate drama comedy romance transformation growth",
+            "Weiland genre negative arc appropriate tragedy horror corruption fall",
+            "Weiland genre flat arc appropriate action hero steadfast truth proves",
+            "Weiland genre lie believes appropriate type internal external conflict stakes",
+
+            # Goldman Adventures Screen Trade - Audience expectations and promises
+            "Goldman Adventures Screen Trade genre audience expectations meet promises deliver",
+            "Goldman genre conventions follow rules tropes appropriate satisfy audience",
+            "Goldman genre promise opening establishes must fulfill closing payoff earned",
+            "Goldman nobody knows anything genre surprise within conventions fresh familiar",
+            "Goldman genre commercial appeal appropriate type marketable sellable audience",
+
+            # Rhimes Year of Yes - Television and serialized genre
+            "Rhimes Year of Yes genre television serialized conventions episode season arcs",
+            "Rhimes genre authentic diverse voices perspectives representation realistic variety",
+            "Rhimes genre emotional truth vulnerability drama intensity character stakes",
+            "Rhimes genre audience expectations deliver promises conventions serialized payoff",
+
+            # Mamet Three Uses of the Knife - Genre structure and conventions
+            "Mamet Three Uses genre dramatic structure conventions three act appropriate",
+            "Mamet genre essential task appropriate type hero objective pursuit goal",
+            "Mamet genre action not explanation appropriate visual behavioral show",
+            "Mamet genre avoid clichés overused derivative predictable fresh original",
+
+            # Mackendrick On Film-Making - Visual genre conventions
+            "Mackendrick On Film-Making genre visual conventions cinematography appropriate type",
+            "Mackendrick genre action visual dynamic movement energy set pieces",
+            "Mackendrick genre horror visual darkness shadows frightening atmosphere mood",
+            "Mackendrick genre show don't tell visual behavioral appropriate cinematic",
+
+            # General genre concepts - Comprehensive coverage
+            "genre identification clear audience knows immediately opening establishes",
+            "genre conventions rules tropes expectations familiar audience recognizes",
+            "genre expectations deliver promises audience satisfied conventions met earned",
+            "genre tropes familiar elements fresh subverted not overused clichéd derivative",
+            "hybrid genre multiple balanced integrated unified coherent not confused muddy",
+            "genre tone alignment appropriate action energetic drama serious comedy light",
+            "genre pacing appropriate action fast drama measured comedy rhythm timing",
+            "genre stakes appropriate action life death drama emotional comedy light",
+            "genre resolution appropriate action defeat drama transformation comedy happy",
+            "avoid genre confusion unclear muddy audience lost doesn't know type",
+            "avoid genre promise broken opening promises doesn't deliver penalty fail",
+            "avoid genre clichés overused derivative predictable unoriginal penalty stale",
+            "genre obligatory scenes must include type expectations conventions required"
+        ]
+
+        # Genre analysis patterns (bilingual: EN + PT) - 150-170+ markers
+
+        # Genre identification markers (what genre is this?)
+        self.genre_identification_markers = [
+            # English - Major Genres
+            "action genre", "drama genre", "comedy genre", "thriller genre",
+            "horror genre", "romance genre", "sci-fi genre", "fantasy genre",
+            "mystery genre", "western genre", "noir genre", "adventure genre",
+            # English - Subgenres
+            "romantic comedy", "action thriller", "psychological thriller",
+            "supernatural horror", "space opera", "urban fantasy", "neo noir",
+            "buddy cop", "heist", "sports drama", "biopic", "courtroom drama",
+            # Portuguese - Major Genres
+            "gênero ação", "gênero drama", "gênero comédia", "gênero suspense",
+            "gênero terror", "gênero romance", "gênero ficção científica", "gênero fantasia",
+            "gênero mistério", "gênero faroeste", "gênero noir", "gênero aventura",
+            # Portuguese - Subgenres
+            "comédia romântica", "ação suspense", "suspense psicológico",
+            "terror sobrenatural", "ópera espacial", "fantasia urbana", "neo noir",
+            "policial dupla", "assalto", "drama esportivo", "biografia", "drama tribunal"
+        ]
+
+        # Genre conventions markers (genre rules followed)
+        self.genre_conventions_markers = [
+            # English
+            "genre conventions", "genre rules", "genre requirements", "genre elements",
+            "genre standards", "genre norms", "genre expectations met", "follows genre",
+            "genre-appropriate", "genre-consistent", "genre-typical", "genre formula",
+            "action conventions", "drama conventions", "comedy conventions", "thriller conventions",
+            "horror conventions", "romance conventions", "sci-fi conventions", "fantasy conventions",
+            # Portuguese
+            "convenções de gênero", "regras de gênero", "requisitos de gênero", "elementos de gênero",
+            "padrões de gênero", "normas de gênero", "expectativas de gênero atendidas", "segue gênero",
+            "apropriado ao gênero", "consistente com gênero", "típico de gênero", "fórmula de gênero",
+            "convenções de ação", "convenções de drama", "convenções de comédia", "convenções de suspense",
+            "convenções de terror", "convenções de romance", "convenções de ficção", "convenções de fantasia"
+        ]
+
+        # Genre expectations markers (audience knows what to expect)
+        self.genre_expectations_markers = [
+            # English
+            "genre expectations", "audience expects", "genre promises", "genre delivers",
+            "meets expectations", "satisfies expectations", "fulfills promises", "delivers genre",
+            "genre payoff", "expectations satisfied", "promises kept", "genre satisfaction",
+            "what audience wants", "genre requirements met", "genre goals achieved",
+            # Portuguese
+            "expectativas de gênero", "audiência espera", "promessas de gênero", "gênero entrega",
+            "atende expectativas", "satisfaz expectativas", "cumpre promessas", "entrega gênero",
+            "recompensa de gênero", "expectativas satisfeitas", "promessas mantidas", "satisfação de gênero",
+            "o que audiência quer", "requisitos de gênero atendidos", "objetivos de gênero alcançados"
+        ]
+
+        # Genre tropes markers (familiar elements)
+        self.genre_tropes_markers = [
+            # English
+            "genre tropes", "trope", "familiar elements", "genre staples", "genre hallmarks",
+            "archetypal elements", "genre signatures", "recognizable elements", "genre markers",
+            "trope used", "trope subverted", "trope refreshed", "fresh take", "original twist",
+            # Portuguese
+            "tropos de gênero", "tropo", "elementos familiares", "pilares de gênero", "marcas de gênero",
+            "elementos arquetípicos", "assinaturas de gênero", "elementos reconhecíveis", "marcadores de gênero",
+            "tropo usado", "tropo subvertido", "tropo renovado", "abordagem fresca", "virada original"
+        ]
+
+        # Hybrid genre markers (multiple genres)
+        self.hybrid_genre_markers = [
+            # English
+            "hybrid genre", "genre blend", "genre mix", "multiple genres", "cross-genre",
+            "genre fusion", "genre combination", "blended genres", "genre mashup",
+            "balanced genres", "integrated genres", "unified genres", "genre elements combined",
+            # Portuguese
+            "gênero híbrido", "mistura de gêneros", "mix de gêneros", "múltiplos gêneros", "cruzamento de gêneros",
+            "fusão de gêneros", "combinação de gêneros", "gêneros misturados", "mashup de gêneros",
+            "gêneros equilibrados", "gêneros integrados", "gêneros unificados", "elementos de gênero combinados"
+        ]
+
+        # Action genre markers
+        self.action_genre_markers = [
+            # English
+            "action", "fight", "chase", "explosion", "battle", "combat", "physical",
+            "set piece", "action sequence", "stunt", "confrontation", "escape",
+            "showdown", "climactic battle", "action beat", "kinetic", "dynamic",
+            # Portuguese
+            "ação", "luta", "perseguição", "explosão", "batalha", "combate", "físico",
+            "peça de ação", "sequência de ação", "acrobacia", "confronto", "fuga",
+            "confronto final", "batalha climática", "batida de ação", "cinético", "dinâmico"
+        ]
+
+        # Drama genre markers
+        self.drama_genre_markers = [
+            # English
+            "drama", "dramatic", "emotional", "character-driven", "serious",
+            "emotional weight", "emotional depth", "internal conflict", "moral dilemma",
+            "character study", "emotional journey", "dramatic stakes", "dramatic tension",
+            # Portuguese
+            "drama", "dramático", "emocional", "focado em personagem", "sério",
+            "peso emocional", "profundidade emocional", "conflito interno", "dilema moral",
+            "estudo de personagem", "jornada emocional", "apostas dramáticas", "tensão dramática"
+        ]
+
+        # Comedy genre markers
+        self.comedy_genre_markers = [
+            # English
+            "comedy", "comic", "funny", "humorous", "laugh", "humor", "comedic",
+            "witty", "amusing", "entertaining", "joke", "gag", "comic relief",
+            "funny moment", "laugh line", "comedic beat", "comedic timing",
+            # Portuguese
+            "comédia", "cômico", "engraçado", "humorístico", "risada", "humor", "cômico",
+            "espirituoso", "divertido", "entretenimento", "piada", "gag", "alívio cômico",
+            "momento engraçado", "linha de risada", "batida cômica", "tempo cômico"
+        ]
+
+        # Thriller genre markers
+        self.thriller_genre_markers = [
+            # English
+            "thriller", "suspense", "tension", "tense", "ticking clock", "danger",
+            "threat", "chase", "pursuit", "hunted", "paranoia", "edge of seat",
+            "suspenseful", "pulse-pounding", "nail-biting", "intense",
+            # Portuguese
+            "suspense", "suspense", "tensão", "tenso", "relógio correndo", "perigo",
+            "ameaça", "perseguição", "busca", "caçado", "paranoia", "na beira da cadeira",
+            "suspense", "pulsante", "de roer as unhas", "intenso"
+        ]
+
+        # Horror genre markers
+        self.horror_genre_markers = [
+            # English
+            "horror", "scary", "frightening", "terrifying", "monster", "creature",
+            "fear", "dread", "terror", "nightmare", "haunted", "supernatural",
+            "gruesome", "gore", "blood", "death", "scream", "jump scare",
+            # Portuguese
+            "terror", "assustador", "aterrorizante", "aterrorizante", "monstro", "criatura",
+            "medo", "pavor", "terror", "pesadelo", "assombrado", "sobrenatural",
+            "horrível", "gore", "sangue", "morte", "grito", "susto repentino"
+        ]
+
+        # Romance genre markers
+        self.romance_genre_markers = [
+            # English
+            "romance", "romantic", "love", "relationship", "couple", "kiss",
+            "attraction", "chemistry", "love interest", "meet cute", "falling in love",
+            "romantic tension", "obstacles to love", "happy ending", "love story",
+            # Portuguese
+            "romance", "romântico", "amor", "relacionamento", "casal", "beijo",
+            "atração", "química", "interesse amoroso", "encontro fofo", "apaixonando-se",
+            "tensão romântica", "obstáculos ao amor", "final feliz", "história de amor"
+        ]
+
+        # Sci-Fi/Fantasy genre markers
+        self.scifi_fantasy_genre_markers = [
+            # English
+            "sci-fi", "science fiction", "fantasy", "magic", "technology", "future",
+            "spaceship", "alien", "robot", "wizard", "dragon", "portal",
+            "world-building", "magic system", "futuristic", "otherworldly", "fantastical",
+            # Portuguese
+            "ficção científica", "ficção científica", "fantasia", "magia", "tecnologia", "futuro",
+            "nave espacial", "alienígena", "robô", "mago", "dragão", "portal",
+            "construção de mundo", "sistema de magia", "futurista", "sobrenatural", "fantástico"
+        ]
+
+        # Mystery genre markers
+        self.mystery_genre_markers = [
+            # English
+            "mystery", "detective", "investigation", "clue", "suspect", "whodunit",
+            "solve", "evidence", "crime", "murder", "detective work", "revelation",
+            "twist", "red herring", "uncover", "discover truth", "mystery solved",
+            # Portuguese
+            "mistério", "detetive", "investigação", "pista", "suspeito", "quem fez",
+            "resolver", "evidência", "crime", "assassinato", "trabalho de detetive", "revelação",
+            "virada", "pista falsa", "descobrir", "descobrir verdade", "mistério resolvido"
+        ]
+
+        # Genre-tone alignment markers
+        self.genre_tone_alignment_markers = [
+            # English
+            "tone matches genre", "genre-appropriate tone", "tone aligned with genre",
+            "action energetic tone", "drama serious tone", "comedy light tone",
+            "thriller tense tone", "horror dark tone", "romance intimate tone",
+            "tone serves genre", "genre expectations tone", "tone genre unity",
+            # Portuguese
+            "tom combina gênero", "tom apropriado ao gênero", "tom alinhado com gênero",
+            "tom energético de ação", "tom sério de drama", "tom leve de comédia",
+            "tom tenso de suspense", "tom sombrio de terror", "tom íntimo de romance",
+            "tom serve gênero", "expectativas de tom de gênero", "unidade de tom de gênero"
+        ]
+
+        # Genre pacing markers
+        self.genre_pacing_markers = [
+            # English
+            "genre pacing", "pacing appropriate", "action fast-paced", "drama measured pace",
+            "comedy rhythm", "thriller urgent pace", "pacing fits genre", "genre tempo",
+            "genre rhythm", "pacing genre-appropriate", "pace serves genre",
+            # Portuguese
+            "ritmo de gênero", "ritmo apropriado", "ação ritmo rápido", "drama ritmo medido",
+            "ritmo de comédia", "suspense ritmo urgente", "ritmo se encaixa no gênero", "tempo de gênero",
+            "ritmo de gênero", "ritmo apropriado ao gênero", "ritmo serve gênero"
+        ]
+
+        # Genre stakes markers
+        self.genre_stakes_markers = [
+            # English
+            "genre stakes", "stakes appropriate", "action life death", "drama emotional stakes",
+            "comedy low stakes", "thriller high stakes", "horror survival stakes",
+            "romance relationship stakes", "stakes fit genre", "genre-appropriate consequences",
+            # Portuguese
+            "apostas de gênero", "apostas apropriadas", "ação vida morte", "apostas emocionais drama",
+            "comédia apostas baixas", "suspense apostas altas", "terror apostas de sobrevivência",
+            "romance apostas de relacionamento", "apostas se encaixam no gênero", "consequências apropriadas ao gênero"
+        ]
+
+        # Genre resolution markers
+        self.genre_resolution_markers = [
+            # English
+            "genre resolution", "resolution appropriate", "action defeat villain", "drama transformation",
+            "comedy happy ending", "thriller justice served", "horror monster defeated",
+            "romance together forever", "resolution fits genre", "genre-appropriate ending",
+            # Portuguese
+            "resolução de gênero", "resolução apropriada", "ação derrotar vilão", "drama transformação",
+            "comédia final feliz", "suspense justiça servida", "terror monstro derrotado",
+            "romance juntos para sempre", "resolução se encaixa no gênero", "final apropriado ao gênero"
+        ]
+
+        # Genre confusion markers (PENALTY - unclear what genre)
+        self.genre_confusion_markers = [
+            # English
+            "genre unclear", "genre confused", "genre ambiguous", "genre undefined",
+            "what genre", "can't determine genre", "genre identity crisis", "genre muddled",
+            "genre all over place", "genre chaotic", "genre inconsistent", "genre lost",
+            # Portuguese
+            "gênero pouco claro", "gênero confuso", "gênero ambíguo", "gênero indefinido",
+            "qual gênero", "não consegue determinar gênero", "crise de identidade de gênero", "gênero confuso",
+            "gênero por toda parte", "gênero caótico", "gênero inconsistente", "gênero perdido"
+        ]
+
+        # Genre promise broken markers (PENALTY - doesn't deliver expectations)
+        self.genre_promise_broken_markers = [
+            # English
+            "genre promise broken", "expectations unmet", "genre disappointed", "genre unfulfilled",
+            "failed to deliver", "broken promise", "expectations not satisfied", "genre letdown",
+            "didn't deliver genre", "genre expectations failed", "conventions ignored",
+            # Portuguese
+            "promessa de gênero quebrada", "expectativas não atendidas", "gênero decepcionado", "gênero não cumprido",
+            "falhou em entregar", "promessa quebrada", "expectativas não satisfeitas", "decepção de gênero",
+            "não entregou gênero", "expectativas de gênero falharam", "convenções ignoradas"
+        ]
+
+        # Genre clichés markers (PENALTY - too derivative)
+        self.genre_cliches_markers = [
+            # English
+            "genre cliché", "clichéd", "derivative", "unoriginal", "predictable",
+            "tired trope", "overused", "formulaic", "by the numbers", "generic",
+            "seen it before", "stale", "hackneyed", "trite", "too familiar",
+            # Portuguese
+            "clichê de gênero", "clichê", "derivativo", "não original", "previsível",
+            "tropo cansado", "usado demais", "formulaico", "pelos números", "genérico",
+            "já visto antes", "velho", "batido", "trivial", "muito familiar"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze genre in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete genre diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract Act 1, 2, 3 for pattern analysis
+        act1_text = self._extract_pages(screenplay_text, 0, int(page_count * 0.25))
+        act2_text = self._extract_pages(screenplay_text, int(page_count * 0.25), int(page_count * 0.75))
+        act3_text = self._extract_pages(screenplay_text, int(page_count * 0.75), page_count)
+
+        # Extract opening (first 10 pages)
+        opening_text = self._extract_pages(screenplay_text, 0, 10)
+
+        # Analyze genre identification (what genre is this?)
+        genre_identified = self._analyze_genre_identification(screenplay_text, opening_text)
+
+        # Analyze genre clarity (audience knows from opening)
+        genre_clarity = self._analyze_genre_clarity(opening_text)
+
+        # Analyze genre conventions met (follows genre rules)
+        genre_conventions = self._analyze_genre_conventions(screenplay_text, genre_identified["genres"])
+
+        # Analyze genre expectations satisfied (delivers promises)
+        genre_expectations = self._analyze_genre_expectations(screenplay_text, genre_identified["genres"])
+
+        # Analyze genre tropes (familiar elements)
+        genre_tropes = self._analyze_genre_tropes(screenplay_text, genre_identified["genres"])
+
+        # Analyze hybrid genre handling (if multiple genres)
+        hybrid_genre = self._analyze_hybrid_genre(screenplay_text, genre_identified["genres"])
+
+        # Analyze specific genres present
+        action_genre = self._analyze_action_genre(screenplay_text)
+        drama_genre = self._analyze_drama_genre(screenplay_text)
+        comedy_genre = self._analyze_comedy_genre(screenplay_text)
+        thriller_genre = self._analyze_thriller_genre(screenplay_text)
+        horror_genre = self._analyze_horror_genre(screenplay_text)
+        romance_genre = self._analyze_romance_genre(screenplay_text)
+        scifi_fantasy_genre = self._analyze_scifi_fantasy_genre(screenplay_text)
+        mystery_genre = self._analyze_mystery_genre(screenplay_text)
+
+        # Analyze genre-tone alignment
+        genre_tone_alignment = self._analyze_genre_tone_alignment(screenplay_text, genre_identified["genres"])
+
+        # Analyze genre pacing appropriateness
+        genre_pacing = self._analyze_genre_pacing(screenplay_text, genre_identified["genres"])
+
+        # Analyze genre stakes appropriateness
+        genre_stakes = self._analyze_genre_stakes(screenplay_text, genre_identified["genres"])
+
+        # Analyze genre resolution appropriateness
+        genre_resolution = self._analyze_genre_resolution(screenplay_text, genre_identified["genres"])
+
+        # Detect genre confusion (PENALTY)
+        genre_confusion = self._detect_genre_confusion(screenplay_text)
+
+        # Detect genre promise broken (PENALTY)
+        genre_promise_broken = self._detect_genre_promise_broken(screenplay_text, genre_identified["genres"])
+
+        # Detect genre clichés overused (PENALTY)
+        genre_cliches = self._detect_genre_cliches(screenplay_text, genre_identified["genres"])
+
+        # Build genre profile
+        genre_profile = GenreProfile(
+            genre_identified=genre_identified["identified"],
+            genre_clarity=genre_clarity["clear"],
+            genre_conventions_met=genre_conventions["met"],
+            genre_expectations_satisfied=genre_expectations["satisfied"],
+            genre_tropes_present=genre_tropes["present"],
+            genre_tropes_fresh=genre_tropes["fresh"],
+            hybrid_genre_handling=hybrid_genre["balanced"],
+            action_genre_present=action_genre["present"],
+            drama_genre_present=drama_genre["present"],
+            comedy_genre_present=comedy_genre["present"],
+            thriller_genre_present=thriller_genre["present"],
+            horror_genre_present=horror_genre["present"],
+            romance_genre_present=romance_genre["present"],
+            scifi_fantasy_genre_present=scifi_fantasy_genre["present"],
+            mystery_genre_present=mystery_genre["present"],
+            genre_tone_alignment=genre_tone_alignment["aligned"],
+            genre_pacing_appropriate=genre_pacing["appropriate"],
+            genre_stakes_appropriate=genre_stakes["appropriate"],
+            genre_resolution_appropriate=genre_resolution["appropriate"],
+            genre_confusion_detected=genre_confusion["detected"],
+            genre_promise_broken=genre_promise_broken["detected"],
+            genre_cliches_overused=genre_cliches["detected"],
+            overall_genre_quality=0.0  # calculated below
+        )
+
+        # Calculate overall genre quality
+        genre_profile.overall_genre_quality = self._calculate_overall_genre_quality(genre_profile)
+
+        # Check against rules
+        rule_violations = self._check_genre_rules(
+            genre_profile, genre_identified, genre_clarity, genre_conventions,
+            genre_expectations, genre_tropes, hybrid_genre,
+            action_genre, drama_genre, comedy_genre, thriller_genre,
+            horror_genre, romance_genre, scifi_fantasy_genre, mystery_genre,
+            genre_tone_alignment, genre_pacing, genre_stakes, genre_resolution,
+            genre_confusion, genre_promise_broken, genre_cliches
+        )
+
+        # Calculate score
+        score = self._calculate_genre_score(genre_profile, rule_violations)
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(score, genre_profile, rule_violations)
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "genre_identified": {
+                "identified": genre_identified["identified"],
+                "genres": genre_identified["genres"],
+                "primary_genre": genre_identified["primary_genre"],
+                "confidence": genre_identified["confidence"]
+            },
+            "genre_clarity": {
+                "clear": genre_clarity["clear"],
+                "opening_signals": genre_clarity["opening_signals"]
+            },
+            "genre_conventions": {
+                "met": genre_conventions["met"],
+                "met_list": genre_conventions["met_list"][:10],
+                "missing_list": genre_conventions["missing_list"][:5]
+            },
+            "genre_expectations": {
+                "satisfied": genre_expectations["satisfied"],
+                "expectations_list": genre_expectations["expectations_list"][:10]
+            },
+            "genre_tropes": {
+                "present": genre_tropes["present"],
+                "fresh": genre_tropes["fresh"],
+                "tropes_list": genre_tropes["tropes_list"][:10]
+            },
+            "hybrid_genre": {
+                "is_hybrid": hybrid_genre["is_hybrid"],
+                "balanced": hybrid_genre["balanced"],
+                "elements": hybrid_genre["elements"]
+            },
+            "genres_present": {
+                "action": action_genre["present"],
+                "drama": drama_genre["present"],
+                "comedy": comedy_genre["present"],
+                "thriller": thriller_genre["present"],
+                "horror": horror_genre["present"],
+                "romance": romance_genre["present"],
+                "scifi_fantasy": scifi_fantasy_genre["present"],
+                "mystery": mystery_genre["present"]
+            },
+            "genre_tone_alignment": {
+                "aligned": genre_tone_alignment["aligned"],
+                "count": genre_tone_alignment["count"]
+            },
+            "genre_pacing": {
+                "appropriate": genre_pacing["appropriate"],
+                "count": genre_pacing["count"]
+            },
+            "genre_stakes": {
+                "appropriate": genre_stakes["appropriate"],
+                "count": genre_stakes["count"]
+            },
+            "genre_resolution": {
+                "appropriate": genre_resolution["appropriate"],
+                "count": genre_resolution["count"]
+            },
+            "genre_confusion": {
+                "detected": genre_confusion["detected"],
+                "penalty": genre_confusion.get("penalty", False),
+                "count": genre_confusion["count"],
+                "list": genre_confusion["list"][:5]
+            },
+            "genre_promise_broken": {
+                "detected": genre_promise_broken["detected"],
+                "penalty": genre_promise_broken.get("penalty", False),
+                "count": genre_promise_broken["count"],
+                "list": genre_promise_broken["list"][:5]
+            },
+            "genre_cliches": {
+                "detected": genre_cliches["detected"],
+                "penalty": genre_cliches.get("penalty", False),
+                "count": genre_cliches["count"],
+                "list": genre_cliches["list"][:5]
+            },
+            "overall_genre_quality": genre_profile.overall_genre_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, genre_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_pages(self, screenplay: str, start_page: int, end_page: int) -> str:
+        """Extract specific page range from screenplay."""
+        lines = screenplay.split('\n')
+        start_line = start_page * 55
+        end_line = end_page * 55
+        return '\n'.join(lines[start_line:end_line])
+
+    def _analyze_genre_identification(self, screenplay: str, opening_text: str) -> Dict[str, Any]:
+        """
+        Analyze genre identification (what genre is this?).
+
+        Snyder: "Genre clear from opening image - audience knows immediately what genre."
+        McKee: "Genre design conventions - audience expectations must be met."
+        """
+        identified = False
+        genres = []
+        primary_genre = None
+        confidence = 0.0
+
+        # Check for genre identification markers
+        genre_counts = {}
+        for marker in self.genre_identification_markers:
+            count = screenplay.lower().count(marker)
+            if count > 0:
+                # Extract genre from marker
+                genre = marker.split()[0] if " " in marker else marker
+                genre_counts[genre] = genre_counts.get(genre, 0) + count
+
+        # Identify genres by analyzing markers
+        if genre_counts:
+            identified = True
+            # Sort by count
+            sorted_genres = sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)
+            genres = [g[0] for g in sorted_genres[:3]]  # Top 3
+            primary_genre = genres[0] if genres else None
+            confidence = min(1.0, sorted_genres[0][1] / 10.0) if sorted_genres else 0.0
+
+        return {
+            "identified": identified,
+            "genres": genres,
+            "primary_genre": primary_genre,
+            "confidence": confidence
+        }
+
+    def _analyze_genre_clarity(self, opening_text: str) -> Dict[str, Any]:
+        """
+        Analyze genre clarity (audience knows from opening).
+
+        Snyder: "Opening image tells genre - audience knows genre immediately from page 1."
+        Seger: "Genre clarity in opening - audience understands genre from first pages."
+        """
+        clear = False
+        opening_signals = 0
+
+        # Check for genre markers in opening
+        for marker in self.genre_identification_markers[:20]:  # Focus on major genres
+            if marker in opening_text.lower():
+                opening_signals += 1
+
+        if opening_signals >= 2:
+            clear = True
+
+        return {
+            "clear": clear,
+            "opening_signals": opening_signals
+        }
+
+    def _analyze_genre_conventions(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Analyze genre conventions met (follows genre rules).
+
+        Snyder: "Genre conventions must be met - each genre has rules, deliver them."
+        McKee: "Genre conventions audience expects - meet conventions or subvert intentionally."
+        """
+        met = False
+        met_list = []
+        missing_list = []
+
+        # Check for convention markers
+        count = 0
+        for marker in self.genre_conventions_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract convention instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        met_list.append(line.strip()[:100])
+                        if len(met_list) >= 20:
+                            break
+
+        if count >= 5:
+            met = True
+        elif count >= 3:
+            met = True
+
+        return {
+            "met": met,
+            "count": count,
+            "met_list": met_list,
+            "missing_list": missing_list
+        }
+
+    def _analyze_genre_expectations(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Analyze genre expectations satisfied (delivers promises).
+
+        Snyder: "Genre expectations - deliver what genre promises or audience disappointed."
+        Seger: "Genre deliver promises - conventions met, expectations satisfied."
+        """
+        satisfied = False
+        expectations_list = []
+
+        # Check for expectation markers
+        count = 0
+        for marker in self.genre_expectations_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract expectation instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        expectations_list.append(line.strip()[:100])
+                        if len(expectations_list) >= 20:
+                            break
+
+        if count >= 4:
+            satisfied = True
+        elif count >= 2:
+            satisfied = True
+
+        return {
+            "satisfied": satisfied,
+            "count": count,
+            "expectations_list": expectations_list
+        }
+
+    def _analyze_genre_tropes(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Analyze genre tropes (familiar elements).
+
+        Snyder: "Genre tropes - familiar elements audience expects and recognizes."
+        Truby: "Genre tropes use effectively - avoid clichés, subvert when intentional."
+        """
+        present = False
+        fresh = False
+        tropes_list = []
+
+        # Check for trope markers
+        count = 0
+        for marker in self.genre_tropes_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract trope instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        tropes_list.append(line.strip()[:100])
+                        if len(tropes_list) >= 20:
+                            break
+
+        if count >= 3:
+            present = True
+
+        # Check for freshness indicators
+        fresh_indicators = ["subverted", "fresh", "original", "twist", "refreshed"]
+        fresh_count = sum(screenplay.lower().count(ind) for ind in fresh_indicators)
+        if fresh_count >= 2:
+            fresh = True
+
+        return {
+            "present": present,
+            "fresh": fresh,
+            "count": count,
+            "tropes_list": tropes_list
+        }
+
+    def _analyze_hybrid_genre(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Analyze hybrid genre handling (if multiple genres).
+
+        Snyder: "Hybrid genres - multiple genres must be balanced and integrated."
+        Truby: "Genre blend unified - elements combined effectively, not confused."
+        """
+        is_hybrid = len(identified_genres) > 1
+        balanced = False
+        elements = []
+
+        if is_hybrid:
+            # Check for hybrid markers
+            count = 0
+            for marker in self.hybrid_genre_markers:
+                marker_count = screenplay.lower().count(marker)
+                count += marker_count
+                if marker_count > 0:
+                    elements.append(marker)
+
+            # Check for balance indicators
+            balance_indicators = ["balanced", "integrated", "unified", "combined"]
+            balance_count = sum(screenplay.lower().count(ind) for ind in balance_indicators)
+            if balance_count >= 2 or count >= 3:
+                balanced = True
+
+        return {
+            "is_hybrid": is_hybrid,
+            "balanced": balanced,
+            "elements": elements
+        }
+
+    def _analyze_action_genre(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze action genre presence.
+
+        Snyder: "Action genre conventions - chase, fight, escape, set pieces."
+        McKee: "Action genre - kinetic, dynamic, physical conflict."
+        """
+        present = False
+
+        # Check for action markers
+        count = 0
+        for marker in self.action_genre_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 10:
+            present = True
+        elif count >= 5:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_drama_genre(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze drama genre presence.
+
+        McKee: "Drama genre - emotional, character-driven, serious stakes."
+        Field: "Drama conventions - emotional depth, internal conflict."
+        """
+        present = False
+
+        # Check for drama markers
+        count = 0
+        for marker in self.drama_genre_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 10:
+            present = True
+        elif count >= 5:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_comedy_genre(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze comedy genre presence.
+
+        Snyder: "Comedy genre conventions - funny, humorous, entertaining, laughs."
+        McKee: "Comedy genre - light tone, comic relief, amusing situations."
+        """
+        present = False
+
+        # Check for comedy markers
+        count = 0
+        for marker in self.comedy_genre_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 8:
+            present = True
+        elif count >= 4:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_thriller_genre(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze thriller genre presence.
+
+        Snyder: "Thriller conventions - suspense, tension, ticking clock, danger."
+        McKee: "Thriller genre - suspenseful, edge of seat, pulse-pounding."
+        """
+        present = False
+
+        # Check for thriller markers
+        count = 0
+        for marker in self.thriller_genre_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 8:
+            present = True
+        elif count >= 4:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_horror_genre(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze horror genre presence.
+
+        McKee: "Horror genre conventions - scary, frightening, monster, fear."
+        Snyder: "Horror genre - terror, dread, nightmare, supernatural."
+        """
+        present = False
+
+        # Check for horror markers
+        count = 0
+        for marker in self.horror_genre_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 8:
+            present = True
+        elif count >= 4:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_romance_genre(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze romance genre presence.
+
+        Snyder: "Romance conventions - love, relationship, obstacles, happy ending."
+        McKee: "Romance genre - romantic tension, chemistry, falling in love."
+        """
+        present = False
+
+        # Check for romance markers
+        count = 0
+        for marker in self.romance_genre_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 8:
+            present = True
+        elif count >= 4:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_scifi_fantasy_genre(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze sci-fi/fantasy genre presence.
+
+        Truby: "Genre stories (fantasy/sci-fi) need clear world rules."
+        McKee: "Sci-fi/fantasy conventions - world-building, magic/technology."
+        """
+        present = False
+
+        # Check for sci-fi/fantasy markers
+        count = 0
+        for marker in self.scifi_fantasy_genre_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 8:
+            present = True
+        elif count >= 4:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_mystery_genre(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze mystery genre presence.
+
+        McKee: "Mystery conventions - detective, investigation, clues, revelation."
+        Snyder: "Whydunit - mystery genre, solve crime, uncover truth."
+        """
+        present = False
+
+        # Check for mystery markers
+        count = 0
+        for marker in self.mystery_genre_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 8:
+            present = True
+        elif count >= 4:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_genre_tone_alignment(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Analyze genre-tone alignment (tone matches genre).
+
+        Snyder: "Tone matches genre expectations - action energetic, drama serious, comedy light."
+        McKee: "Tone appropriate to genre - audience expectations met."
+        """
+        aligned = False
+
+        # Check for tone alignment markers
+        count = 0
+        for marker in self.genre_tone_alignment_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 3:
+            aligned = True
+        elif count >= 2:
+            aligned = True
+
+        return {
+            "aligned": aligned,
+            "count": count
+        }
+
+    def _analyze_genre_pacing(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Analyze genre pacing appropriateness.
+
+        Field: "Genre pacing - action fast, drama measured, comedy rhythm."
+        McKee: "Pacing appropriate to genre conventions."
+        """
+        appropriate = False
+
+        # Check for pacing markers
+        count = 0
+        for marker in self.genre_pacing_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 2:
+            appropriate = True
+
+        return {
+            "appropriate": appropriate,
+            "count": count
+        }
+
+    def _analyze_genre_stakes(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Analyze genre stakes appropriateness.
+
+        McKee: "Stakes appropriate to genre - action life/death, drama emotional."
+        Snyder: "Genre stakes level - thriller high stakes, comedy low stakes."
+        """
+        appropriate = False
+
+        # Check for stakes markers
+        count = 0
+        for marker in self.genre_stakes_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 2:
+            appropriate = True
+
+        return {
+            "appropriate": appropriate,
+            "count": count
+        }
+
+    def _analyze_genre_resolution(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Analyze genre resolution appropriateness.
+
+        Snyder: "Genre resolution - action defeat villain, comedy happy ending."
+        McKee: "Resolution fits genre conventions - audience expectations."
+        """
+        appropriate = False
+
+        # Check for resolution markers
+        count = 0
+        for marker in self.genre_resolution_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 2:
+            appropriate = True
+
+        return {
+            "appropriate": appropriate,
+            "count": count
+        }
+
+    def _detect_genre_confusion(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect genre confusion (PENALTY - unclear what genre).
+
+        Seger: "Genre unclear - audience confused, doesn't know what genre."
+        McKee: "Genre identity crisis - unclear genre alienates audience."
+        """
+        detected = False
+        penalty = False
+        confusion_list = []
+
+        # Check for confusion markers
+        count = 0
+        for marker in self.genre_confusion_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract confusion instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        confusion_list.append(line.strip()[:100])
+                        if len(confusion_list) >= 10:
+                            break
+
+        if count >= 3:
+            detected = True
+            penalty = True
+        elif count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count,
+            "list": confusion_list
+        }
+
+    def _detect_genre_promise_broken(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Detect genre promise broken (PENALTY - doesn't deliver expectations).
+
+        Snyder: "Genre promise broken - expectations unmet, audience disappointed."
+        Seger: "Genre failed to deliver - conventions ignored, promises broken."
+        """
+        detected = False
+        penalty = False
+        broken_list = []
+
+        # Check for broken promise markers
+        count = 0
+        for marker in self.genre_promise_broken_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract broken promise instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        broken_list.append(line.strip()[:100])
+                        if len(broken_list) >= 10:
+                            break
+
+        if count >= 3:
+            detected = True
+            penalty = True
+        elif count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count,
+            "list": broken_list
+        }
+
+    def _detect_genre_cliches(self, screenplay: str, identified_genres: List[str]) -> Dict[str, Any]:
+        """
+        Detect genre clichés overused (PENALTY - too derivative).
+
+        Truby: "Genre clichés - avoid overused tropes, be original."
+        McKee: "Derivative genre writing - stale, predictable, unoriginal."
+        """
+        detected = False
+        penalty = False
+        cliches_list = []
+
+        # Check for cliché markers
+        count = 0
+        for marker in self.genre_cliches_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract cliché instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        cliches_list.append(line.strip()[:100])
+                        if len(cliches_list) >= 10:
+                            break
+
+        if count >= 5:
+            detected = True
+            penalty = True
+        elif count >= 3:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count,
+            "list": cliches_list
+        }
+
+    def _calculate_overall_genre_quality(self, profile: GenreProfile) -> float:
+        """Calculate overall genre quality score."""
+        scores = [
+            1.0 if profile.genre_identified else 0.3,  # Critical (must know genre)
+            1.0 if profile.genre_clarity else 0.5,  # Critical (audience needs clarity)
+            1.0 if profile.genre_conventions_met else 0.4,  # Critical (follow genre rules)
+            1.0 if profile.genre_expectations_satisfied else 0.4,  # Critical (deliver promises)
+            1.0 if profile.genre_tropes_present else 0.7,  # Important (familiar elements)
+            1.0 if profile.genre_tropes_fresh else 0.8,  # Important (avoid clichés)
+            1.0 if profile.hybrid_genre_handling else 0.9,  # Nice to have (if hybrid, balanced)
+            1.0 if profile.genre_tone_alignment else 0.6,  # Important (tone matches genre)
+            1.0 if profile.genre_pacing_appropriate else 0.7,  # Important (pacing fits)
+            1.0 if profile.genre_stakes_appropriate else 0.7,  # Important (stakes fit)
+            1.0 if profile.genre_resolution_appropriate else 0.7,  # Important (resolution fits)
+            0.0 if profile.genre_confusion_detected else 1.0,  # PENALTY (critical violation)
+            0.0 if profile.genre_promise_broken else 1.0,  # PENALTY (critical violation)
+            0.0 if profile.genre_cliches_overused else 1.0  # PENALTY (major violation)
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_genre_rules(self, profile: GenreProfile, genre_identified: Dict,
+                          genre_clarity: Dict, genre_conventions: Dict,
+                          genre_expectations: Dict, genre_tropes: Dict,
+                          hybrid_genre: Dict, action_genre: Dict, drama_genre: Dict,
+                          comedy_genre: Dict, thriller_genre: Dict, horror_genre: Dict,
+                          romance_genre: Dict, scifi_fantasy_genre: Dict, mystery_genre: Dict,
+                          genre_tone_alignment: Dict, genre_pacing: Dict,
+                          genre_stakes: Dict, genre_resolution: Dict,
+                          genre_confusion: Dict, genre_promise_broken: Dict,
+                          genre_cliches: Dict) -> List[Dict]:
+        """Check genre against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "GENRE.R001":
+                # Genre Identified
+                if not profile.genre_identified:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre not identified - audience unclear what genre this is",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R002":
+                # Genre Clarity
+                if not profile.genre_clarity:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre unclear from opening - audience doesn't know genre immediately",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R003":
+                # Genre Conventions Met
+                if not profile.genre_conventions_met:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre conventions not met - missing essential genre elements",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R004":
+                # Genre Expectations Satisfied
+                if not profile.genre_expectations_satisfied:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre expectations not satisfied - doesn't deliver what genre promises",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R005":
+                # Genre Tropes Present
+                if not profile.genre_tropes_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre tropes missing - lacks familiar elements audience expects",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R006":
+                # Genre Tropes Fresh
+                if not profile.genre_tropes_fresh:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre tropes stale - clichéd, derivative, unoriginal",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R007":
+                # Hybrid Genre Handling
+                if hybrid_genre["is_hybrid"] and not profile.hybrid_genre_handling:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Hybrid genre unbalanced - multiple genres not integrated effectively",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R008":
+                # Action Genre Quality
+                if profile.action_genre_present:
+                    # Check if action genre meets conventions
+                    if not profile.genre_conventions_met:
+                        violations.append({
+                            "rule_id": rule["id"],
+                            "title": rule["title"],
+                            "severity": rule["severity"],
+                            "message": "Action genre conventions weak - lacks chase/fight/set pieces",
+                            "fix": rule["fix"]
+                        })
+
+            elif rule["id"] == "GENRE.R009":
+                # Drama Genre Quality
+                if profile.drama_genre_present:
+                    # Check if drama genre meets conventions
+                    if not profile.genre_conventions_met:
+                        violations.append({
+                            "rule_id": rule["id"],
+                            "title": rule["title"],
+                            "severity": rule["severity"],
+                            "message": "Drama genre conventions weak - lacks emotional depth/character focus",
+                            "fix": rule["fix"]
+                        })
+
+            elif rule["id"] == "GENRE.R010":
+                # Comedy Genre Quality
+                if profile.comedy_genre_present:
+                    # Check if comedy genre meets conventions
+                    if not profile.genre_conventions_met:
+                        violations.append({
+                            "rule_id": rule["id"],
+                            "title": rule["title"],
+                            "severity": rule["severity"],
+                            "message": "Comedy genre conventions weak - lacks humor/funny moments",
+                            "fix": rule["fix"]
+                        })
+
+            elif rule["id"] == "GENRE.R011":
+                # Genre-Tone Alignment
+                if not profile.genre_tone_alignment:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre-tone misalignment - tone doesn't match genre expectations",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R012":
+                # Genre Pacing Appropriate
+                if not profile.genre_pacing_appropriate:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre pacing inappropriate - pacing doesn't fit genre conventions",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R013":
+                # Avoid Genre Confusion
+                if profile.genre_confusion_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre confusion detected - unclear what genre, audience lost",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R014":
+                # Avoid Genre Promise Broken
+                if profile.genre_promise_broken:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre promise broken - doesn't deliver expectations, audience disappointed",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "GENRE.R015":
+                # Avoid Genre Clichés
+                if profile.genre_cliches_overused:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre clichés overused - too derivative, unoriginal, predictable",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_genre_score(self, profile: GenreProfile, violations: List) -> float:
+        """Calculate overall genre score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for major issues
+        if profile.genre_confusion_detected:
+            score -= 25  # Critical penalty (worst violation)
+        if profile.genre_promise_broken:
+            score -= 25  # Critical penalty (audience disappointed)
+        if profile.genre_cliches_overused:
+            score -= 20  # High penalty (derivative)
+
+        # Bonus for excellence
+        if profile.overall_genre_quality > 0.85:
+            score += 5
+        elif profile.overall_genre_quality > 0.75:
+            score += 3
+
+        if profile.genre_identified and profile.genre_clarity:
+            score += 5  # Snyder's excellence (genre clear from opening)
+
+        if profile.genre_conventions_met and profile.genre_expectations_satisfied:
+            score += 5  # McKee's excellence (delivers genre promises)
+
+        if profile.genre_tropes_present and profile.genre_tropes_fresh:
+            score += 3  # Truby's excellence (uses tropes effectively, not clichéd)
+
+        if profile.genre_tone_alignment:
+            score += 2  # Tone matches genre
+
+        if profile.genre_pacing_appropriate:
+            score += 2  # Pacing fits genre
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: GenreProfile,
+                           violations: List) -> str:
+        """Generate genre diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Genre sophisticated with clear identification, conventions met, expectations satisfied"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Genre present but could be clearer or deliver conventions more effectively"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Genre problems - unclear, conventions missing, or expectations unmet"
+        else:
+            level = "POOR"
+            summary = "Major genre problems - confusion, broken promises, or too derivative"
+
+        diagnosis = f"GENRE {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.genre_identified:
+            issues.append("genre not identified")
+        if not profile.genre_clarity:
+            issues.append("genre unclear")
+        if not profile.genre_conventions_met:
+            issues.append("conventions missing")
+        if not profile.genre_expectations_satisfied:
+            issues.append("expectations unmet")
+        if profile.genre_confusion_detected:
+            issues.append("genre confusion")
+        if profile.genre_promise_broken:
+            issues.append("promise broken")
+        if profile.genre_cliches_overused:
+            issues.append("too derivative")
+        if not profile.genre_tone_alignment:
+            issues.append("tone misalignment")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                  profile: GenreProfile) -> List[str]:
+        """Generate specific genre recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.genre_identified:
+            recommendations.append("Identify genre clearly - Snyder: 'Genre clear from opening image - audience knows immediately'")
+
+        if not profile.genre_clarity:
+            recommendations.append("Establish genre in opening - Snyder: 'Opening image tells genre - page 1 signals genre to audience'")
+
+        if not profile.genre_conventions_met:
+            recommendations.append("Meet genre conventions - Snyder: 'Genre conventions must be met - each genre has rules, deliver them'")
+
+        if not profile.genre_expectations_satisfied:
+            recommendations.append("Satisfy genre expectations - Snyder: 'Deliver what genre promises or audience disappointed'")
+
+        if profile.genre_confusion_detected:
+            recommendations.append("Eliminate genre confusion - Seger: 'Genre unclear - audience confused, doesn't know what to expect'")
+
+        if profile.genre_promise_broken:
+            recommendations.append("Fulfill genre promises - Snyder: 'Genre promise broken - expectations unmet, audience disappointed'")
+
+        if profile.genre_cliches_overused:
+            recommendations.append("Refresh genre tropes - Truby: 'Avoid genre clichés - be original, subvert intentionally'")
+
+        if not profile.genre_tone_alignment:
+            recommendations.append("Align tone with genre - Snyder: 'Tone matches genre - action energetic, drama serious, comedy light'")
+
+        if not profile.genre_tropes_fresh:
+            recommendations.append("Freshen genre tropes - Truby: 'Use tropes effectively - subvert when intentional, avoid derivative'")
+
+        if not profile.genre_pacing_appropriate:
+            recommendations.append("Match pacing to genre - Field: 'Genre pacing - action fast, drama measured, comedy rhythm'")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study Snyder's Save the Cat - genre types, conventions, expectations essential")
+            recommendations.append("Study McKee's Story - genre design conventions and audience expectations")
+
+        return recommendations[:5]
+
+    def export_genre_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export genre features for correlation/analysis.
+
+        Returns structured data with genre metrics.
+        """
+        opening_text = self._extract_pages(screenplay_text, 0, 10)
+        genre_identified = self._analyze_genre_identification(screenplay_text, opening_text)
+        genre_clarity = self._analyze_genre_clarity(opening_text)
+        genre_conventions = self._analyze_genre_conventions(screenplay_text, genre_identified["genres"])
+        genre_expectations = self._analyze_genre_expectations(screenplay_text, genre_identified["genres"])
+
+        return {
+            "genre": {
+                "genre_identified": genre_identified["identified"],
+                "genre_clarity": genre_clarity["clear"],
+                "genre_conventions_met": genre_conventions["met"],
+                "genre_expectations_satisfied": genre_expectations["satisfied"],
+                "primary_genre": genre_identified["primary_genre"],
+                "genres": genre_identified["genres"]
+            },
+            "meta": {
+                "source": "DrGenre",
+                "focus": "Genre analysis"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrGenreAnalysis(DrGenre):
+    """Alias for compatibility with test framework."""
+    pass

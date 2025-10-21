@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scripturemon // Interface Simbiótica</title>
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #000000, #0f0f1a);
+      color: #00ffe1;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #00ffe1;
+      text-shadow: 0 0 5px #00ffe1;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #00ffe1;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #111820;
+      border: 1px solid #00ffe1;
+      color: #00ffe1;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      background: #00ffe1;
+      border: none;
+      color: #111;
+      padding: 12px;
+      font-size: 18px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .resposta {
+      white-space: pre-wrap;
+      margin-top: 20px;
+      border: 1px solid #00ffe1;
+      padding: 12px;
+      background: #111;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Interface de Conversa com Scripturemon</h1>
+  <div class="container">
+    <label for="comando">📩 Envie um comando simbólico para Scripturemon:</label>
+    <textarea id="comando" rows="3" placeholder="Ex: Scripturemon, você pode me ouvir?"></textarea>
+    <button onclick="enviarComando()">Enviar</button>
+    <div class="resposta" id="resposta"></div>
+  </div>
+
+  <script>
+    async function enviarComando() {
+      const texto = document.getElementById("comando").value.trim();
+      if (!texto) return;
+
+      document.getElementById("resposta").innerText = "⏳ Processando...";
+
+      try {
+        const response = await fetch("/enviar_comando", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ comando: texto })
+        });
+
+        const data = await response.json();
+        document.getElementById("resposta").innerText = data.resposta;
+      } catch (error) {
+        document.getElementById("resposta").innerText = "❌ Erro: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>

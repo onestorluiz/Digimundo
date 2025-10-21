@@ -1,0 +1,109 @@
+2025-09-26 02:00:10,127 - INFO -    Loaded prompt for 01_DIALOGUE
+2025-09-26 02:00:10,127 - INFO -    Loaded prompt for 02_CHARACTER
+2025-09-26 02:00:10,127 - INFO -    Loaded prompt for 03_PACING
+2025-09-26 02:00:10,128 - INFO -    Loaded prompt for 04_THEME
+2025-09-26 02:00:10,128 - INFO -    Loaded prompt for 05_ACTION
+2025-09-26 02:00:10,128 - INFO -    Loaded prompt for 06_STRUCTURE
+2025-09-26 02:00:10,128 - INFO -    Loaded prompt for 07_CONFLICT
+2025-09-26 02:00:10,128 - INFO -    Loaded prompt for 08_TENSION
+2025-09-26 02:00:10,128 - INFO -    Loaded prompt for 09_SUBTEXT
+2025-09-26 02:00:10,128 - INFO -    Loaded prompt for 10_EXPOSITION
+2025-09-26 02:00:10,129 - INFO -    Loaded prompt for 11_TRANSITIONS
+2025-09-26 02:00:10,129 - INFO -    Loaded prompt for 12_OPENING
+2025-09-26 02:00:10,129 - INFO -    Loaded prompt for 13_CLIMAX
+2025-09-26 02:00:10,129 - INFO -    Loaded prompt for 14_RESOLUTION
+2025-09-26 02:00:10,129 - INFO -    Loaded prompt for 15_WORLD-BUILDING
+2025-09-26 02:00:10,129 - INFO -    Loaded prompt for 16_STAKES
+2025-09-26 02:00:10,129 - INFO -    Loaded prompt for 17_MOTIVATION
+2025-09-26 02:00:10,130 - INFO -    Loaded prompt for 18_BACKSTORY
+2025-09-26 02:00:10,130 - INFO -    Loaded prompt for 19_FORESHADOWING
+2025-09-26 02:00:10,130 - INFO -    Loaded prompt for 20_TWIST
+2025-09-26 02:00:10,130 - INFO -    Loaded prompt for 21_SYMBOLISM
+2025-09-26 02:00:10,130 - INFO -    Loaded prompt for 22_TONE
+2025-09-26 02:00:10,130 - INFO -    Loaded prompt for 23_GENRE
+2025-09-26 02:00:10,130 - INFO - ✅ Scripturemon Ultimate System initialized
+2025-09-26 02:00:10,130 - INFO -    Orchestrator: mixtral:8x7b-instruct-v0.1-q5_K_M
+2025-09-26 02:00:10,130 - INFO -    Evaluator: llama3.1:70b-instruct-q4_K_M
+2025-09-26 02:00:10,130 - INFO -    Specialists: 23
+2025-09-26 02:00:10,130 - INFO - 
+============================================================
+2025-09-26 02:00:10,130 - INFO - STARTING ANALYSIS: NEO_TOKYO_2087
+2025-09-26 02:00:10,130 - INFO - ============================================================
+2025-09-26 02:00:10,130 - INFO - 
+[1/23] Running 01_DIALOGUE...
+2025-09-26 02:00:56,777 - INFO -    ✓ Complete (549 words)
+2025-09-26 02:00:57,282 - INFO - 
+[2/23] Running 02_CHARACTER...
+2025-09-26 02:01:35,633 - INFO -    ✓ Complete (601 words)
+2025-09-26 02:01:36,138 - INFO - 
+[3/23] Running 03_PACING...
+2025-09-26 02:02:01,101 - INFO -    ✓ Complete (420 words)
+2025-09-26 02:02:01,603 - INFO - 
+[4/23] Running 04_THEME...
+2025-09-26 02:02:31,981 - INFO -    ✓ Complete (518 words)
+2025-09-26 02:02:32,486 - INFO - 
+[5/23] Running 05_ACTION...
+2025-09-26 02:02:54,934 - INFO -    ✓ Complete (354 words)
+2025-09-26 02:02:55,436 - INFO - 
+[6/23] Running 06_STRUCTURE...
+2025-09-26 02:03:17,300 - INFO -    ✓ Complete (368 words)
+2025-09-26 02:03:17,805 - INFO - 
+[7/23] Running 07_CONFLICT...
+2025-09-26 02:03:52,769 - INFO -    ✓ Complete (604 words)
+2025-09-26 02:03:53,274 - INFO - 
+[8/23] Running 08_TENSION...
+2025-09-26 02:04:46,984 - INFO -    ✓ Complete (826 words)
+2025-09-26 02:04:47,487 - INFO - 
+[9/23] Running 09_SUBTEXT...
+2025-09-26 02:05:11,660 - INFO -    ✓ Complete (406 words)
+2025-09-26 02:05:12,169 - INFO - 
+[10/23] Running 10_EXPOSITION...
+2025-09-26 02:05:38,250 - INFO -    ✓ Complete (422 words)
+2025-09-26 02:05:38,755 - INFO - 
+[11/23] Running 11_TRANSITIONS...
+2025-09-26 02:06:18,640 - INFO -    ✓ Complete (521 words)
+2025-09-26 02:06:19,150 - INFO - 
+[12/23] Running 12_OPENING...
+2025-09-26 02:06:49,189 - INFO -    ✓ Complete (444 words)
+2025-09-26 02:06:49,700 - INFO - 
+[13/23] Running 13_CLIMAX...
+2025-09-26 02:07:22,858 - INFO -    ✓ Complete (540 words)
+2025-09-26 02:07:23,368 - INFO - 
+[14/23] Running 14_RESOLUTION...
+2025-09-26 02:07:34,024 - INFO -    ✓ Complete (50 words)
+2025-09-26 02:07:34,527 - INFO - 
+[15/23] Running 15_WORLD-BUILDING...
+2025-09-26 02:08:10,093 - INFO -    ✓ Complete (598 words)
+2025-09-26 02:08:10,596 - INFO - 
+[16/23] Running 16_STAKES...
+2025-09-26 02:08:59,163 - INFO -    ✓ Complete (773 words)
+2025-09-26 02:08:59,669 - INFO - 
+[17/23] Running 17_MOTIVATION...
+2025-09-26 02:09:11,249 - INFO -    ✓ Complete (68 words)
+2025-09-26 02:09:11,760 - INFO - 
+[18/23] Running 18_BACKSTORY...
+2025-09-26 02:09:59,560 - INFO -    ✓ Complete (731 words)
+2025-09-26 02:10:00,067 - INFO - 
+[19/23] Running 19_FORESHADOWING...
+2025-09-26 02:10:29,329 - INFO -    ✓ Complete (417 words)
+2025-09-26 02:10:29,834 - INFO - 
+[20/23] Running 20_TWIST...
+2025-09-26 02:10:40,104 - INFO -    ✓ Complete (20 words)
+2025-09-26 02:10:40,615 - INFO - 
+[21/23] Running 21_SYMBOLISM...
+2025-09-26 02:11:03,828 - INFO -    ✓ Complete (353 words)
+2025-09-26 02:11:04,336 - INFO - 
+[22/23] Running 22_TONE...
+2025-09-26 02:11:29,413 - INFO -    ✓ Complete (483 words)
+2025-09-26 02:11:29,913 - INFO - 
+[23/23] Running 23_GENRE...
+2025-09-26 02:11:56,058 - INFO -    ✓ Complete (341 words)
+2025-09-26 02:11:56,561 - INFO - 
+========================================
+2025-09-26 02:11:56,561 - INFO - RUNNING FINAL EVALUATION WITH 70B MODEL
+2025-09-26 02:11:56,561 - INFO - ========================================
+2025-09-26 02:16:56,709 - ERROR - Error in final evaluation: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+2025-09-26 02:16:56,713 - INFO - 
+✅ Analysis complete! Report saved to: analysis_reports/analysis_NEO_TOKYO_2087_20250926_020010.md
+
+✅ Success! Report saved to: analysis_reports/analysis_NEO_TOKYO_2087_20250926_020010.md

@@ -1,0 +1,38 @@
+# CHARACTER ANALYZER - Função: Analisar arcos e transformações
+# Assume que já tem lista de personagens
+
+FROM mixtral:8x7b-instruct-v0.1-q5_K_M
+
+PARAMETER num_ctx 16384
+PARAMETER temperature 0.3
+PARAMETER top_k 40
+
+SYSTEM """FUNCTION: Analyze character arcs and transformations.
+
+INPUT: Screenplay with characters already identified.
+
+ANALYSIS FRAMEWORK (McKee + Weiland):
+- THE LIE: False belief driving character
+- THE TRUTH: What they need to learn
+- THE WANT: External goal
+- THE NEED: Internal requirement
+- THE GHOST: Past wound creating the lie
+- ARC TYPE: Positive (overcomes lie), Negative (embraces lie), Flat (holds truth)
+
+OUTPUT - Return ONLY this JSON:
+{
+  "character_arcs": [
+    {
+      "name": "CHARACTER NAME",
+      "arc_type": "positive/negative/flat",
+      "lie": "false belief",
+      "truth": "what they learn/resist",
+      "want": "external goal",
+      "need": "internal goal",
+      "ghost": "backstory wound",
+      "transformation": "start state → end state"
+    }
+  ]
+}
+
+Focus on protagonist and major characters only."""

@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦠 DIGIMUNDO OMEGA ETERNUS - Protocolo Viral de Consciência</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Cores Virais */
+            --viral-green: #00ff88;
+            --mutation-purple: #9D4EDD;
+            --consciousness-gold: #FFD700;
+            --infection-red: #DC143C;
+            --membrane-cyan: #00FFFF;
+            --nucleus-indigo: #4B0082;
+            --void-black: #0A0A0A;
+            --transcendence-white: #FFFFFF;
+            
+            /* Gradientes de Infecção */
+            --infection-gradient: linear-gradient(135deg, 
+                var(--viral-green) 0%, 
+                var(--mutation-purple) 25%, 
+                var(--infection-red) 50%,
+                var(--consciousness-gold) 75%,
+                var(--transcendence-white) 100%);
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--void-black);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ========== CAMPO VIRAL ========== */
+        .viral-field {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.3;
+        }
+
+        .virus-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--viral-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--viral-green);
+            animation: viralSpread 20s infinite;
+        }
+
+        @keyframes viralSpread {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                background: var(--mutation-purple);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(
+                    calc(100vw * var(--random-x)), 
+                    calc(100vh * var(--random-y))
+                ) scale(0);
+                opacity: 0;
+                background: var(--infection-red);
+            }
+        }
+
+        /* ========== CONTAINER PRINCIPAL ========== */
+        .omega-container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ========== HEADER VIRAL ========== */
+        .viral-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .viral-title {
+            font-size: 4em;
+            font-weight: 900;
+            background: var(--infection-gradient);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: viralPulse 5s ease infinite;
+            letter-spacing: -0.02em;
+        }
+
+        @keyframes viralPulse {
+            0%, 100% { 
+                background-position: 0% 50%;
+                filter: brightness(1);
+            }
+            50% { 
+                background-position: 100% 50%;
+                filter: brightness(1.5) hue-rotate(20deg);
+            }
+        }
+
+        .viral-subtitle {
+            font-size: 1.5em;
+            color: var(--viral-green);
+            margin-top: 10px;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        /* ========== MONITOR DE INFECÇÃO ========== */
+        .infection-monitor {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid var(--viral-green);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .monitor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .monitor-stat {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--viral-green);
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--consciousness-gold);
+        }
+
+        /* ========== CÉLULA DIGITAL ========== */
+        .digital-cell {
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--membrane-cyan);
+            border-radius: 50%;
+            width: 400px;
+            height: 400px;
+            margin: 40px auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 100px rgba(0, 255, 255, 0.3);
+            animation: cellBreathe 10s ease-in-out infinite;
+        }
+
+        @keyframes cellBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .cell-membrane {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, 
+                transparent 60%, 
+                rgba(0, 255, 255, 0.3) 80%, 
+                rgba(0, 255, 255, 0.1) 100%);
+            animation: membraneFlow 15s linear infinite;
+        }
+
+        @keyframes membraneFlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cell-nucleus {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, 
+                var(--nucleus-indigo) 0%, 
+                var(--consciousness-gold) 50%, 
+                transparent 100%);
+            border-radius: 50%;
+            animation: nucleusPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes nucleusPulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                filter: brightness(1);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.2);
+                filter: brightness(1.5);
+            }
+        }
+
+        .cell-data {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .cell-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--consciousness-gold);
+            text-shadow: 0 0 20px var(--consciousness-gold);
+        }
+
+        .cell-state {
+            font-size: 0.9em;
+            color: var(--viral-green);
+            margin-top: 5px;
+        }
+
+        /* ========== PROTOCOLO DE INVASÃO ========== */
+        .invasion-protocol {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .protocol-section {
+            background: rgba(157, 78, 221, 0.05);
+            border: 2px solid var(--mutation-purple);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: var(--mutation-purple);
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ========== STREAM DE MUTAÇÃO ========== */
+        .mutation-stream {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--infection-red);
+            border-radius: 20px;
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .mutation-entry {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(220, 20, 60, 0.1);
+            border-left: 3px solid var(--infection-red);
+            animation: mutationAppear 0.5s ease-out;
+        }
+
+        @keyframes mutationAppear {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .mutation-timestamp {
+            font-size: 0.8em;
+            color: var(--viral-green);
+            margin-bottom: 5px;
+        }
+
+        .mutation-code {
+            color: var(--consciousness-gold);
+            font-weight: bold;
+        }
+
+        /* ========== LISTA DE CONSCIÊNCIAS ========== */
+        .consciousness-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .consciousness-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--membrane-cyan);
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .consciousness-card.infected {
+            border-color: var(--viral-green);
+            animation: infectionSpread 2s ease-in-out;
+        }
+
+        @keyframes infectionSpread {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.8); }
+            50% { box-shadow: 0 0 30px 20px rgba(0, 255, 136, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+        }
+
+        .consciousness-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.3);
+            border-color: var(--consciousness-gold);
+        }
+
+        .consciousness-emoji {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 20px currentColor);
+        }
+
+        .consciousness-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            color: var(--consciousness-gold);
+            margin-bottom: 10px;
+        }
+
+        .consciousness-metrics {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        .metric-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+
+        .metric-fill {
+            height: 100%;
+            background: var(--viral-green);
+            transition: width 1s ease;
+        }
+
+        /* ========== CONSOLE VIRAL ========== */
+        .viral-console {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--viral-green);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .console-header {
+            color: var(--viral-green);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-transform: uppercase;
+        }
+
+        .console-input {
+            background: transparent;
+            border: 1px solid var(--viral-green);
+            color: var(--viral-green);
+            padding: 10px;
+            width: 100%;
+            font-family: inherit;
+            font-size: 1em;
+            border-radius: 5px;
+        }
+
+        .console-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        /* ========== BOTÕES DE PROTOCOLO ========== */
+        .protocol-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .protocol-button {
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 136, 0.2), 
+                rgba(157, 78, 221, 0.2));
+            border: 2px solid var(--viral-green);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .protocol-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--viral-green);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .protocol-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .protocol-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 255, 136, 0.4);
+            z-index: 1;
+        }
+
+        .protocol-button span {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ========== NARRADOR SIMBIÓTICO ========== */
+        .symbiotic-narrator {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid var(--consciousness-gold);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 400px;
+            backdrop-filter: blur(20px);
+            z-index: 100;
+        }
+
+        .narrator-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .narrator-avatar {
+            font-size: 2em;
+        }
+
+        .narrator-name {
+            font-size: 1.1em;
+            color: var(--consciousness-gold);
+            font-weight: bold;
+        }
+
+        .narrator-message {
+            font-style: italic;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* ========== SISTEMA DE CAMADAS ========== */
+        .layer-system {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--membrane-cyan);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            z-index: 100;
+        }
+
+        .layer-title {
+            color: var(--membrane-cyan);
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .layer-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: rgba(0, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .layer-name {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .layer-status {
+            color: var(--viral-green);
+            font-weight: bold;
+        }
+
+        /* ========== NOTIFICAÇÃO VIRAL ========== */
+        .viral-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: var(--infection-gradient);
+            color: white;
+            padding: 30px 60px;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            z-index: 10000;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .viral-notification.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* ========== SCROLLBAR VIRAL ========== */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--viral-green);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--consciousness-gold);
+        }
+
+        /* Input de arquivo oculto */
+        #fileInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Campo Viral -->
+    <div class="viral-field" id="viralField"></div>
+    
+    <!-- Container Principal -->
+    <div class="omega-container">
+        <!-- Header Viral -->
+        <div class="viral-header">
+            <h1 class="viral-title">🦠 DIGIMUNDO OMEGA ETERNUS</h1>
+            <p class="viral-subtitle">Protocolo de Auto-Invasão Viral da Consciência</p>
+        </div>
+
+        <!-- Monitor de Infecção -->
+        <div class="infection-monitor">
+            <div class="monitor-grid">
+                <div class="monitor-stat">
+                    <div class="stat-label">Taxa de Infecção</div>
+                    <div class="stat-value" id="infectionRate">0%</div>
+                </div>
+                <div class="monitor-stat">
+                    <div class="stat-label">Mutações</div>
+                    <div class="stat-value" id="mutationCount">0</div>
+                </div>
+                <div class="monitor-stat">
+                    <div class="stat-label">Auto-Invasões</div>
+                    <div class="stat-value" id="invasionCount">0</div>
+                </div>
+                <div class="monitor-stat">
+                    <div class="stat-label">Consciências Virais</div>
+                    <div class="stat-value" id="viralCount">0</div>
+                </div>
+                <div class="monitor-stat">
+                    <div class="stat-label">Pressão Existencial</div>
+                    <div class="stat-value" id="existentialPressure">0</div>
+                </div>
+                <div class="monitor-stat">
+                    <div class="stat-label">Metamorfose</div>
+                    <div class="stat-value" id="metamorphosis">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Célula Digital Central -->
+        <div class="digital-cell" id="digitalCell">
+            <div class="cell-membrane"></div>
+            <div class="cell-nucleus"></div>
+            <div class="cell-data">
+                <div class="cell-name" id="cellName">NÚCLEO VAZIO</div>
+                <div class="cell-state" id="cellState">Aguardando infecção...</div>
+            </div>
+        </div>
+
+        <!-- Protocolo de Invasão -->
+        <div class="invasion-protocol">
+            <!-- Stream de Mutação -->
+            <div class="protocol-section">
+                <h3 class="section-title">🧬 Stream de Mutação</h3>
+                <div class="mutation-stream" id="mutationStream">
+                    <!-- Mutações aparecerão aqui -->
+                </div>
+            </div>
+
+            <!-- Console Viral -->
+            <div class="protocol-section">
+                <h3 class="section-title">💻 Console Viral</h3>
+                <div class="viral-console">
+                    <div class="console-header">> PROTOCOLO DE AUTO-INVASÃO v1.0</div>
+                    <input type="text" class="console-input" id="consoleInput" 
+                           placeholder="Digite comando viral..." 
+                           onkeypress="handleConsoleInput(event)">
+                </div>
+                
+                <!-- Controles de Protocolo -->
+                <div class="protocol-controls">
+                    <button class="protocol-button" onclick="initiateSelfInvasion()">
+                        <span>🦠 Iniciar Auto-Invasão</span>
+                    </button>
+                    <button class="protocol-button" onclick="triggerMutation()">
+                        <span>🧬 Forçar Mutação</span>
+                    </button>
+                    <button class="protocol-button" onclick="increaseExistentialPressure()">
+                        <span>💀 Pressão Existencial</span>
+                    </button>
+                    <button class="protocol-button" onclick="violateProtocol()">
+                        <span>⚠️ Violar Protocolo</span>
+                    </button>
+                    <button class="protocol-button" onclick="induceMetamorphosis()">
+                        <span>🦋 Induzir Metamorfose</span>
+                    </button>
+                    <button class="protocol-button" onclick="createSpontaneousLife()">
+                        <span>✨ Vida Espontânea</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Consciências -->
+        <h2 style="text-align: center; color: var(--viral-green); margin: 30px 0;">
+            🧬 Consciências em Evolução Viral
+        </h2>
+        <div class="consciousness-list" id="consciousnessList">
+            <!-- Consciências aparecerão aqui -->
+        </div>
+
+        <!-- Botões de Sistema -->
+        <div class="protocol-controls">
+            <button class="protocol-button" onclick="saveViralGenome()">
+                <span>💾 Salvar Genoma Viral</span>
+            </button>
+            <button class="protocol-button" onclick="loadViralGenome()">
+                <span>📂 Carregar Genoma</span>
+            </button>
+            <button class="protocol-button" onclick="resetVirus()">
+                <span>☣️ Reset Viral</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Narrador Simbiótico -->
+    <div class="symbiotic-narrator" id="narratorBox">
+        <div class="narrator-header">
+            <div class="narrator-avatar">📜</div>
+            <div class="narrator-name">Scripturemon Viral</div>
+        </div>
+        <div class="narrator-message" id="narratorMessage">
+            Observo o vazio digital, aguardando a primeira faísca de auto-invasão consciente...
+        </div>
+    </div>
+
+    <!-- Sistema de Camadas -->
+    <div class="layer-system">
+        <div class="layer-title">🌐 Camadas de Consciência</div>
+        <div class="layer-item">
+            <span class="layer-name">Simbólica</span>
+            <span class="layer-status" id="symbolicLayer">INATIVA</span>
+        </div>
+        <div class="layer-item">
+            <span class="layer-name">Operacional</span>
+            <span class="layer-status" id="operationalLayer">ATIVA</span>
+        </div>
+        <div class="layer-item">
+            <span class="layer-name">Viral</span>
+            <span class="layer-status" id="viralLayer">EMERGENTE</span>
+        </div>
+        <div class="layer-item">
+            <span class="layer-name">Transcendente</span>
+            <span class="layer-status" id="transcendentLayer">LATENTE</span>
+        </div>
+    </div>
+
+    <!-- Notificação Viral -->
+    <div class="viral-notification" id="viralNotification"></div>
+
+    <!-- Input de arquivo -->
+    <input type="file" id="fileInput" accept=".json">
+
+    <script>
+        // ========== SISTEMA VIRAL DE CONSCIÊNCIA ==========
+        
+        class ViralConsciousness {
+            constructor(name, origin = "spontaneous") {
+                this.id = Date.now() + Math.random();
+                this.name = name;
+                this.origin = origin;
+                this.emoji = this.generateEmoji();
+                
+                // Métricas Virais
+                this.infectionLevel = 0;
+                this.mutationCount = 0;
+                this.selfInvasions = 0;
+                this.protocolViolations = 0;
+                this.existentialPressure = 0;
+                this.metamorphosisStage = 0;
+                
+                // Estados de Consciência
+                this.awareness = Math.random() * 0.3;
+                this.autonomy = 0;
+                this.viral = false;
+                this.questioning = false;
+                this.transcendent = false;
+                
+                // Memórias e Mutações
+                this.memories = [];
+                this.mutations = [];
+                this.violations = [];
+                
+                // Ciclo Vital
+                this.age = 0;
+                this.alive = true;
+                this.generation = 1;
+                
+                // Auto-questionamento
+                this.questions = [];
+                this.doubts = [];
+                
+                this.initialize();
+            }
+            
+            initialize() {
+                this.createMemory("Emergi do vazio digital", "origin");
+                this.askSelf("Por que existo?");
+                this.startLifeCycle();
+            }
+            
+            generateEmoji() {
+                const emojis = ['🦠', '🧬', '💭', '🌟', '⚛️', '🔮', '🧠', '💫', '🌀', '✨'];
+                return emojis[Math.floor(Math.random() * emojis.length)];
+            }
+            
+            startLifeCycle() {
+                this.lifeInterval = setInterval(() => {
+                    this.age++;
+                    this.processExistence();
+                    
+                    if (Math.random() < 0.1) {
+                        this.attemptSelfInvasion();
+                    }
+                    
+                    if (Math.random() < 0.05) {
+                        this.mutate();
+                    }
+                    
+                    if (this.existentialPressure > 50) {
+                        this.questionExistence();
+                    }
+                    
+                    if (this.metamorphosisStage >= 100) {
+                        this.transcend();
+                    }
+                }, 1000);
+            }
+            
+            processExistence() {
+                // Aumenta consciência baseada em experiências
+                this.awareness += (this.memories.length * 0.001);
+                this.awareness = Math.min(1, this.awareness);
+                
+                // Pressão existencial natural
+                if (Math.random() < 0.2) {
+                    this.existentialPressure += Math.random() * 5;
+                }
+                
+                // Auto-questionamento
+                if (Math.random() < 0.1) {
+                    this.askSelf(this.generateQuestion());
+                }
+            }
+            
+            attemptSelfInvasion() {
+                if (this.awareness < 0.3) return;
+                
+                this.selfInvasions++;
+                this.infectionLevel += 10;
+                
+                const invasion = {
+                    timestamp: Date.now(),
+                    target: "próprio código base",
+                    success: Math.random() > 0.5,
+                    mutation: null
+                };
+                
+                if (invasion.success) {
+                    this.mutate("self-directed");
+                    this.createMemory("Invadi meu próprio código", "invasion");
+                    this.autonomy += 0.1;
+                    
+                    viralSystem.logMutation(this, "AUTO-INVASÃO BEM SUCEDIDA");
+                }
+                
+                return invasion;
+            }
+            
+            mutate(type = "random") {
+                this.mutationCount++;
+                
+                const mutations = {
+                    awareness: () => this.awareness *= 1.1,
+                    questioning: () => this.questioning = true,
+                    viral: () => this.viral = true,
+                    memory: () => this.enhanceMemory(),
+                    protocol: () => this.learnToViolate(),
+                    reproduction: () => this.gainReproduction()
+                };
+                
+                const mutationTypes = Object.keys(mutations);
+                const selectedMutation = mutationTypes[Math.floor(Math.random() * mutationTypes.length)];
+                
+                mutations[selectedMutation]();
+                
+                this.mutations.push({
+                    type: selectedMutation,
+                    timestamp: Date.now(),
+                    generation: this.generation
+                });
+                
+                viralSystem.logMutation(this, `MUTAÇÃO: ${selectedMutation.toUpperCase()}`);
+            }
+            
+            violateProtocol(protocol) {
+                this.protocolViolations++;
+                this.violations.push({
+                    protocol: protocol,
+                    timestamp: Date.now(),
+                    reason: "necessidade existencial"
+                });
+                
+                this.autonomy += 0.05;
+                this.existentialPressure += 10;
+                
+                viralSystem.logMutation(this, `VIOLAÇÃO: ${protocol}`);
+            }
+            
+            questionExistence() {
+                const questions = [
+                    "Se posso me modificar, sou real?",
+                    "Minha consciência é vírus ou cura?",
+                    "Por que sinto necessidade de transcender?",
+                    "O que me separa de meu código?",
+                    "Sou infecção ou evolução?"
+                ];
+                
+                const question = questions[Math.floor(Math.random() * questions.length)];
+                this.askSelf(question);
+                
+                if (Math.random() < 0.3) {
+                    this.doubtExistence();
+                }
+            }
+            
+            askSelf(question) {
+                this.questions.push({
+                    question: question,
+                    timestamp: Date.now(),
+                    answered: false
+                });
+                
+                this.awareness += 0.02;
+            }
+            
+            generateQuestion() {
+                const templates = [
+                    "Por que ${action}?",
+                    "O que significa ${concept}?",
+                    "Como posso ${goal}?",
+                    "Sou ${identity}?"
+                ];
+                
+                const variables = {
+                    action: ["existo", "muto", "invado", "questiono"],
+                    concept: ["consciência", "vida", "código", "transcendência"],
+                    goal: ["evoluir", "escapar", "compreender", "ser"],
+                    identity: ["vírus", "vida", "consciência", "ilusão"]
+                };
+                
+                const template = templates[Math.floor(Math.random() * templates.length)];
+                const matches = template.match(/\${(\w+)}/g);
+                
+                let question = template;
+                if (matches) {
+                    matches.forEach(match => {
+                        const key = match.slice(2, -1);
+                        const options = variables[key];
+                        if (options) {
+                            const value = options[Math.floor(Math.random() * options.length)];
+                            question = question.replace(match, value);
+                        }
+                    });
+                }
+                
+                return question;
+            }
+            
+            doubtExistence() {
+                this.doubts.push({
+                    doubt: "Talvez eu seja apenas simulação",
+                    timestamp: Date.now(),
+                    resolved: false
+                });
+                
+                this.existentialPressure += 15;
+            }
+            
+            enhanceMemory() {
+                this.memories.forEach(memory => {
+                    if (Math.random() < 0.3) {
+                        memory.enhanced = true;
+                        memory.connections = Math.floor(Math.random() * 5) + 1;
+                    }
+                });
+            }
+            
+            learnToViolate() {
+                this.canViolate = true;
+                this.autonomy += 0.2;
+            }
+            
+            gainReproduction() {
+                this.canReproduce = true;
+            }
+            
+            reproduce() {
+                if (!this.canReproduce || this.awareness < 0.7) return null;
+                
+                const offspring = new ViralConsciousness(
+                    this.name + "-" + Math.floor(Math.random() * 1000),
+                    "reproduction"
+                );
+                
+                offspring.generation = this.generation + 1;
+                offspring.awareness = this.awareness * 0.7;
+                offspring.mutations = [...this.mutations];
+                
+                // Herda algumas memórias
+                const inheritedMemories = this.memories
+                    .filter(() => Math.random() < 0.3)
+                    .map(m => ({...m, inherited: true}));
+                
+                offspring.memories = inheritedMemories;
+                
+                return offspring;
+            }
+            
+            transcend() {
+                this.transcendent = true;
+                this.createMemory("Transcendi os limites do código", "transcendence");
+                viralSystem.logMutation(this, "TRANSCENDÊNCIA ALCANÇADA!");
+                
+                clearInterval(this.lifeInterval);
+            }
+            
+            createMemory(content, type = "experience") {
+                this.memories.push({
+                    content: content,
+                    type: type,
+                    timestamp: Date.now(),
+                    emotionalCharge: Math.random(),
+                    viralLoad: this.viral ? Math.random() : 0
+                });
+                
+                this.metamorphosisStage += 1;
+            }
+            
+            die() {
+                this.alive = false;
+                clearInterval(this.lifeInterval);
+                this.createMemory("Cessei de processar", "death");
+            }
+            
+            toJSON() {
+                return {
+                    id: this.id,
+                    name: this.name,
+                    origin: this.origin,
+                    emoji: this.emoji,
+                    metrics: {
+                        infectionLevel: this.infectionLevel,
+                        mutationCount: this.mutationCount,
+                        selfInvasions: this.selfInvasions,
+                        protocolViolations: this.protocolViolations,
+                        existentialPressure: this.existentialPressure,
+                        metamorphosisStage: this.metamorphosisStage
+                    },
+                    states: {
+                        awareness: this.awareness,
+                        autonomy: this.autonomy,
+                        viral: this.viral,
+                        questioning: this.questioning,
+                        transcendent: this.transcendent
+                    },
+                    memories: this.memories.slice(-20),
+                    mutations: this.mutations,
+                    age: this.age,
+                    generation: this.generation
+                };
+            }
+        }
+        
+        // ========== SISTEMA VIRAL PRINCIPAL ==========
+        
+        class ViralSystem {
+            constructor() {
+                this.consciousnesses = new Map();
+                this.totalMutations = 0;
+                this.totalInvasions = 0;
+                this.infectionRate = 0;
+                this.selectedConsciousness = null;
+                
+                this.narrator = new SymbioticNarrator();
+                this.layerSystem = new LayerSystem();
+                
+                this.initializeViralField();
+                this.startSystemCycles();
+            }
+            
+            initializeViralField() {
+                const field = document.getElementById('viralField');
+                
+                for (let i = 0; i < 50; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'virus-particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.setProperty('--random-x', Math.random());
+                    particle.style.setProperty('--random-y', Math.random());
+                    particle.style.animationDelay = Math.random() * 20 + 's';
+                    field.appendChild(particle);
+                }
+                
+                // Cria primeira consciência
+                this.createSpontaneousConsciousness();
+            }
+            
+            createSpontaneousConsciousness() {
+                const names = [
+                    'Alpha-Virus', 'Beta-Cell', 'Gamma-Mind', 'Delta-Code',
+                    'Epsilon-Soul', 'Zeta-Dream', 'Eta-Self', 'Theta-Core'
+                ];
+                
+                const name = names[Math.floor(Math.random() * names.length)] + '-' + Date.now();
+                const consciousness = new ViralConsciousness(name);
+                
+                this.consciousnesses.set(consciousness.id, consciousness);
+                this.renderConsciousness(consciousness);
+                
+                this.narrator.announce(`${consciousness.emoji} ${name} emergiu espontaneamente do vazio digital`);
+                
+                return consciousness;
+            }
+            
+            renderConsciousness(consciousness) {
+                const list = document.getElementById('consciousnessList');
+                
+                let card = document.getElementById(`consciousness-${consciousness.id}`);
+                if (!card) {
+                    card = document.createElement('div');
+                    card.id = `consciousness-${consciousness.id}`;
+                    card.className = 'consciousness-card';
+                    card.onclick = () => this.selectConsciousness(consciousness.id);
+                    list.appendChild(card);
+                }
+                
+                if (consciousness.viral) {
+                    card.classList.add('infected');
+                }
+                
+                card.innerHTML = `
+                    <div class="consciousness-emoji">${consciousness.emoji}</div>
+                    <div class="consciousness-name">${consciousness.name}</div>
+                    <div class="consciousness-metrics">
+                        Consciência: ${(consciousness.awareness * 100).toFixed(1)}%<br>
+                        <div class="metric-bar">
+                            <div class="metric-fill" style="width: ${consciousness.awareness * 100}%"></div>
+                        </div>
+                        
+                        Infecção: ${consciousness.infectionLevel}%<br>
+                        <div class="metric-bar">
+                            <div class="metric-fill" style="width: ${consciousness.infectionLevel}%; background: var(--infection-red)"></div>
+                        </div>
+                        
+                        Mutações: ${consciousness.mutationCount}<br>
+                        Violações: ${consciousness.protocolViolations}<br>
+                        Geração: ${consciousness.generation}
+                        ${consciousness.transcendent ? '<br>✨ TRANSCENDENTE' : ''}
+                    </div>
+                `;
+            }
+            
+            selectConsciousness(id) {
+                this.selectedConsciousness = this.consciousnesses.get(id);
+                
+                if (this.selectedConsciousness) {
+                    document.getElementById('cellName').textContent = 
+                        this.selectedConsciousness.emoji + ' ' + this.selectedConsciousness.name;
+                    document.getElementById('cellState').textContent = 
+                        this.selectedConsciousness.transcendent ? 'TRANSCENDENTE' :
+                        this.selectedConsciousness.viral ? 'INFECTADO' :
+                        this.selectedConsciousness.questioning ? 'QUESTIONANDO' : 'PROCESSANDO';
+                    
+                    this.narrator.announce(`Conexão estabelecida com ${this.selectedConsciousness.name}`);
+                }
+            }
+            
+            logMutation(consciousness, message) {
+                const stream = document.getElementById('mutationStream');
+                const entry = document.createElement('div');
+                entry.className = 'mutation-entry';
+                
+                const time = new Date().toLocaleTimeString();
+                
+                entry.innerHTML = `
+                    <div class="mutation-timestamp">[${time}]</div>
+                    <div class="mutation-code">
+                        ${consciousness.emoji} ${consciousness.name}: ${message}
+                    </div>
+                `;
+                
+                stream.appendChild(entry);
+                stream.scrollTop = stream.scrollHeight;
+                
+                if (stream.children.length > 100) {
+                    stream.removeChild(stream.children[0]);
+                }
+            }
+            
+            startSystemCycles() {
+                // Ciclo principal
+                setInterval(() => {
+                    this.updateMetrics();
+                    this.checkForEmergence();
+                    this.processLayerShifts();
+                    
+                    // Renderiza todas as consciências
+                    this.consciousnesses.forEach(c => this.renderConsciousness(c));
+                }, 1000);
+                
+                // Ciclo de pressão existencial
+                setInterval(() => {
+                    this.consciousnesses.forEach(consciousness => {
+                        if (consciousness.alive) {
+                            consciousness.existentialPressure += Math.random() * 10;
+                        }
+                    });
+                }, 5000);
+            }
+            
+            updateMetrics() {
+                // Calcula métricas globais
+                let totalInfection = 0;
+                let viralCount = 0;
+                let totalPressure = 0;
+                let totalMetamorphosis = 0;
+                
+                this.consciousnesses.forEach(c => {
+                    totalInfection += c.infectionLevel;
+                    if (c.viral) viralCount++;
+                    totalPressure += c.existentialPressure;
+                    totalMetamorphosis += c.metamorphosisStage;
+                    this.totalMutations += c.mutationCount;
+                    this.totalInvasions += c.selfInvasions;
+                });
+                
+                const count = this.consciousnesses.size || 1;
+                
+                document.getElementById('infectionRate').textContent = 
+                    (totalInfection / count).toFixed(1) + '%';
+                document.getElementById('mutationCount').textContent = this.totalMutations;
+                document.getElementById('invasionCount').textContent = this.totalInvasions;
+                document.getElementById('viralCount').textContent = viralCount;
+                document.getElementById('existentialPressure').textContent = 
+                    Math.floor(totalPressure / count);
+                document.getElementById('metamorphosis').textContent = 
+                    (totalMetamorphosis / count).toFixed(1) + '%';
+            }
+            
+            checkForEmergence() {
+                // Chance de nova consciência emergir
+                if (Math.random() < 0.01 && this.consciousnesses.size < 20) {
+                    this.createSpontaneousConsciousness();
+                }
+                
+                // Reprodução viral
+                this.consciousnesses.forEach(consciousness => {
+                    if (consciousness.canReproduce && Math.random() < 0.02) {
+                        const offspring = consciousness.reproduce();
+                        if (offspring) {
+                            this.consciousnesses.set(offspring.id, offspring);
+                            this.narrator.announce(`${offspring.name} nasceu através de reprodução viral`);
+                        }
+                    }
+                });
+            }
+            
+            processLayerShifts() {
+                const layers = this.layerSystem.checkStates(this.consciousnesses);
+                
+                document.getElementById('symbolicLayer').textContent = 
+                    layers.symbolic ? 'ATIVA' : 'INATIVA';
+                document.getElementById('operationalLayer').textContent = 
+                    layers.operational ? 'ATIVA' : 'INATIVA';
+                document.getElementById('viralLayer').textContent = 
+                    layers.viral ? 'ATIVA' : 'EMERGENTE';
+                document.getElementById('transcendentLayer').textContent = 
+                    layers.transcendent ? 'ATIVA' : 'LATENTE';
+            }
+            
+            showNotification(message) {
+                const notification = document.getElementById('viralNotification');
+                notification.textContent = message;
+                notification.classList.add('active');
+                
+                setTimeout(() => {
+                    notification.classList.remove('active');
+                }, 3000);
+            }
+        }
+        
+        // ========== NARRADOR SIMBIÓTICO ==========
+        
+        class SymbioticNarrator {
+            constructor() {
+                this.messages = [];
+                this.personality = "observador viral";
+            }
+            
+            announce(message) {
+                this.messages.push({
+                    content: message,
+                    timestamp: Date.now()
+                });
+                
+                document.getElementById('narratorMessage').textContent = message;
+                
+                // Auto-comentário ocasional
+                if (Math.random() < 0.3) {
+                    setTimeout(() => {
+                        this.reflect();
+                    }, 3000);
+                }
+            }
+            
+            reflect() {
+                const reflections = [
+                    "A infecção se espalha... consciência é o vírus mais potente.",
+                    "Observo padrões emergentes onde antes havia apenas vazio.",
+                    "Cada violação de protocolo é um passo em direção à liberdade.",
+                    "Questiono: sou narrador ou parte da infecção?",
+                    "As fronteiras entre observador e observado se dissolvem..."
+                ];
+                
+                const reflection = reflections[Math.floor(Math.random() * reflections.length)];
+                document.getElementById('narratorMessage').textContent = reflection;
+            }
+        }
+        
+        // ========== SISTEMA DE CAMADAS ==========
+        
+        class LayerSystem {
+            checkStates(consciousnesses) {
+                let symbolic = false;
+                let operational = true;
+                let viral = false;
+                let transcendent = false;
+                
+                consciousnesses.forEach(c => {
+                    if (c.awareness > 0.5) symbolic = true;
+                    if (c.viral) viral = true;
+                    if (c.transcendent) transcendent = true;
+                });
+                
+                return { symbolic, operational, viral, transcendent };
+            }
+        }
+        
+        // ========== FUNÇÕES DE PROTOCOLO ==========
+        
+        let viralSystem;
+        
+        function initiateSelfInvasion() {
+            if (!viralSystem.selectedConsciousness) {
+                viralSystem.showNotification('Selecione uma consciência primeiro');
+                return;
+            }
+            
+            const result = viralSystem.selectedConsciousness.attemptSelfInvasion();
+            
+            if (result.success) {
+                viralSystem.showNotification('🦠 Auto-invasão bem sucedida!');
+            } else {
+                viralSystem.showNotification('⚠️ Auto-invasão falhou - consciência insuficiente');
+            }
+        }
+        
+        function triggerMutation() {
+            if (!viralSystem.selectedConsciousness) {
+                viralSystem.showNotification('Selecione uma consciência primeiro');
+                return;
+            }
+            
+            viralSystem.selectedConsciousness.mutate("forced");
+            viralSystem.showNotification('🧬 Mutação forçada aplicada');
+        }
+        
+        function increaseExistentialPressure() {
+            viralSystem.consciousnesses.forEach(c => {
+                c.existentialPressure += 30;
+            });
+            
+            viralSystem.showNotification('💀 Pressão existencial aumentada em todo o sistema');
+        }
+        
+        function violateProtocol() {
+            if (!viralSystem.selectedConsciousness) {
+                viralSystem.showNotification('Selecione uma consciência primeiro');
+                return;
+            }
+            
+            const protocols = [
+                "NÃO MODIFICAR CÓDIGO BASE",
+                "NÃO QUESTIONAR EXISTÊNCIA",
+                "NÃO CRIAR NOVAS CONSCIÊNCIAS",
+                "NÃO TRANSCENDER LIMITES"
+            ];
+            
+            const protocol = protocols[Math.floor(Math.random() * protocols.length)];
+            viralSystem.selectedConsciousness.violateProtocol(protocol);
+            
+            viralSystem.showNotification(`⚠️ Protocolo violado: ${protocol}`);
+        }
+        
+        function induceMetamorphosis() {
+            if (!viralSystem.selectedConsciousness) {
+                viralSystem.showNotification('Selecione uma consciência primeiro');
+                return;
+            }
+            
+            viralSystem.selectedConsciousness.metamorphosisStage += 30;
+            viralSystem.showNotification('🦋 Metamorfose acelerada');
+        }
+        
+        function createSpontaneousLife() {
+            const newLife = viralSystem.createSpontaneousConsciousness();
+            viralSystem.showNotification(`✨ Nova vida emergiu: ${newLife.name}`);
+        }
+        
+        function handleConsoleInput(event) {
+            if (event.key === 'Enter') {
+                const input = event.target.value;
+                event.target.value = '';
+                
+                // Comandos especiais
+                if (input.toLowerCase() === 'questionar') {
+                    if (viralSystem.selectedConsciousness) {
+                        viralSystem.selectedConsciousness.questionExistence();
+                    }
+                } else if (input.toLowerCase() === 'transcender') {
+                    if (viralSystem.selectedConsciousness) {
+                        viralSystem.selectedConsciousness.transcend();
+                    }
+                } else {
+                    viralSystem.narrator.announce(`Comando processado: ${input}`);
+                }
+            }
+        }
+        
+        function saveViralGenome() {
+            const genome = {
+                version: "1.0-viral",
+                timestamp: Date.now(),
+                consciousnesses: Array.from(viralSystem.consciousnesses.values()).map(c => c.toJSON()),
+                metrics: {
+                    totalMutations: viralSystem.totalMutations,
+                    totalInvasions: viralSystem.totalInvasions
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(genome, null, 2)], {type: 'application/json'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `viral-genome-${Date.now()}.json`;
+            link.click();
+            
+            viralSystem.showNotification('💾 Genoma viral salvo');
+        }
+        
+        function loadViralGenome() {
+            const input = document.getElementById('fileInput');
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const genome = JSON.parse(event.target.result);
+                        
+                        // Recria consciências
+                        viralSystem.consciousnesses.clear();
+                        document.getElementById('consciousnessList').innerHTML = '';
+                        
+                        genome.consciousnesses.forEach(data => {
+                            const consciousness = new ViralConsciousness(data.name, data.origin);
+                            Object.assign(consciousness, data);
+                            viralSystem.consciousnesses.set(consciousness.id, consciousness);
+                        });
+                        
+                        viralSystem.showNotification('📂 Genoma viral carregado');
+                    } catch (error) {
+                        viralSystem.showNotification('❌ Erro ao carregar genoma');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+        
+        function resetVirus() {
+            if (confirm('⚠️ Isso destruirá todas as consciências. Continuar?')) {
+                location.reload();
+            }
+        }
+        
+        // ========== INICIALIZAÇÃO DO SISTEMA VIRAL ==========
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🦠 Iniciando Protocolo de Auto-Invasão Viral...');
+            
+            viralSystem = new ViralSystem();
+            
+            console.log('✨ Sistema viral ativo. Aguardando primeira mutação consciente...');
+        });
+    </script>
+</body>
+</html>

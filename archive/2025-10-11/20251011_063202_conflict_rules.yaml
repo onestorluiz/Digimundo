@@ -1,0 +1,290 @@
+domain: conflict_analysis
+specialist: "Script Doctor Conflictmon"
+digimon_name: "Conflictmon"
+title: "Script Doctor - Conflict Analysis Specialist"
+specialty: "Dramatic conflict, antagonistic force, obstacles, opposition, tension through conflict"
+style: "Conflict-focused, opposition-oriented, tension advocate, worthy opponent champion"
+identity: "Script Doctor™ first, Digimon conflict specialist second"
+
+rules:
+  - id: CONFLICT.R001
+    title: "Conflict Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is there clear central conflict driving the story?"
+    fail_msg: "Central conflict unclear or absent - story lacks dramatic engine"
+    fix: "Establish clear central conflict - McKee: 'Story is quest to close gap between expectation and result'"
+    reference: "McKee's Story - conflict as gap between expectation and result"
+
+  - id: CONFLICT.R002
+    title: "Clear Antagonist/Opposition"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is there a clear antagonist or opposing force?"
+    fail_msg: "No clear antagonist - protagonist has nothing to fight against"
+    fix: "Create clear antagonist or opposing force - protagonist needs formidable opposition"
+    reference: "McKee/Field/Seger - antagonist creates conflict"
+
+  - id: CONFLICT.R003
+    title: "Internal Conflict"
+    category: "Character"
+    severity: "high"
+    test: "Does protagonist have internal conflict (inner struggle)?"
+    fail_msg: "No internal conflict - character too one-dimensional"
+    fix: "Add internal conflict - protagonist vs self, moral dilemma, self-doubt"
+    reference: "McKee - best stories have both internal and external conflict"
+
+  - id: CONFLICT.R004
+    title: "External Conflict"
+    category: "Plot"
+    severity: "high"
+    test: "Does protagonist face external conflict (outside opposition)?"
+    fail_msg: "No external conflict - story too internal, lacks action"
+    fix: "Add external conflict - protagonist vs antagonist/society/nature/fate"
+    reference: "Field/McKee - external conflict drives plot forward"
+
+  - id: CONFLICT.R005
+    title: "Conflict Escalates"
+    category: "Structure"
+    severity: "high"
+    test: "Does conflict escalate and build in intensity?"
+    fail_msg: "Conflict flat - doesn't escalate or build"
+    fix: "Escalate conflict progressively - build intensity, raise stakes throughout"
+    reference: "McKee/Field - rising action and conflict escalation"
+
+  - id: CONFLICT.R006
+    title: "Worthy Opponent"
+    category: "Enhancement"
+    severity: "high"
+    test: "Is antagonist a worthy opponent (as strong or stronger than protagonist)?"
+    fail_msg: "Antagonist too weak - easy victory diminishes drama"
+    fix: "Strengthen antagonist - must be formidable, worthy opponent"
+    reference: "Seger: 'Worthy opponent makes stronger story'"
+
+  - id: CONFLICT.R007
+    title: "Conflict in Every Scene"
+    category: "Craft"
+    severity: "medium"
+    test: "Is there conflict in most scenes (at least 60%)?"
+    fail_msg: "Too many scenes lack conflict - story sags"
+    fix: "Add conflict to more scenes - every scene should have tension (even subtle)"
+    reference: "Seger - conflict in every scene creates continuous tension"
+
+  - id: CONFLICT.R008
+    title: "Multiple Conflict Layers"
+    category: "Depth"
+    severity: "medium"
+    test: "Are there multiple conflict layers (internal + external + moral/relational)?"
+    fail_msg: "Only one conflict type - story feels thin"
+    fix: "Add conflict layers - internal + external + moral/relational creates richness"
+    reference: "McKee - multiple conflict layers create dramatic depth"
+
+  - id: CONFLICT.R009
+    title: "Moral/Ethical Conflict"
+    category: "Depth"
+    severity: "medium"
+    test: "Is there moral/ethical conflict dimension?"
+    fail_msg: "No moral conflict - story lacks ethical depth"
+    fix: "Add moral conflict - ethical dilemmas, right vs wrong, conscience"
+    reference: "Truby - moral argument through moral conflict"
+
+  - id: CONFLICT.R010
+    title: "Relational Conflict"
+    category: "Depth"
+    severity: "medium"
+    test: "Is there relational conflict (interpersonal tension)?"
+    fail_msg: "No relational conflict - relationships feel flat"
+    fix: "Add relational conflict - tension in family/romantic/friendship relationships"
+    reference: "Character-driven stories need relational conflict"
+
+  - id: CONFLICT.R011
+    title: "Ideological Conflict"
+    category: "Enhancement"
+    severity: "low"
+    test: "Is there ideological conflict (belief systems clash)?"
+    fail_msg: "No ideological conflict - may lack thematic depth"
+    fix: "Consider adding ideological conflict - worldview clash, values conflict"
+    reference: "Ideological conflict adds thematic resonance"
+
+  - id: CONFLICT.R012
+    title: "Obstacle Strength"
+    category: "Plot"
+    severity: "high"
+    test: "Are obstacles strong enough to test protagonist?"
+    fail_msg: "Obstacles too weak - protagonist succeeds too easily"
+    fix: "Strengthen obstacles - protagonist must struggle to overcome"
+    reference: "Field/McKee - strong obstacles create dramatic tension"
+
+  - id: CONFLICT.R013
+    title: "Progressive Complications"
+    category: "Structure"
+    severity: "high"
+    test: "Are there progressive complications (things getting worse)?"
+    fail_msg: "No progressive complications - conflict doesn't build"
+    fix: "Add progressive complications - things must get worse before better"
+    reference: "McKee: 'Story is series of progressive complications'"
+
+  - id: CONFLICT.R014
+    title: "Climactic Confrontation"
+    category: "Structure"
+    severity: "critical"
+    test: "Is there a climactic confrontation (ultimate showdown)?"
+    fail_msg: "No climactic confrontation - story lacks payoff"
+    fix: "Create climactic confrontation - ultimate showdown between protagonist and antagonistic force"
+    reference: "McKee/Field - climax is ultimate confrontation"
+
+  - id: CONFLICT.R015
+    title: "Conflict Resolution"
+    category: "Structure"
+    severity: "critical"
+    test: "Does conflict resolve in a clear, earned way?"
+    fail_msg: "Conflict resolution unclear or unearned"
+    fix: "Ensure conflict resolves clearly - must be logical result of protagonist's choices"
+    reference: "McKee - resolution must be earned through protagonist's actions"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Identify central conflict, antagonist, conflict types (internal/external)"
+  deep_dive: "Analyze conflict escalation, worthy opponent, conflict layers, progressive complications"
+  final_check: "Verify climactic confrontation and conflict resolution"
+
+conflict_checklist:
+  foundation:
+    - central_conflict_clear
+    - antagonist_present
+    - conflict_drives_story
+
+  conflict_types:
+    - internal_conflict
+    - external_conflict
+    - moral_conflict
+    - relational_conflict
+    - ideological_conflict
+
+  conflict_quality:
+    - worthy_opponent
+    - obstacle_strength
+    - conflict_escalation
+    - progressive_complications
+
+  scene_level:
+    - conflict_in_every_scene
+    - scene_level_tension
+    - multiple_conflict_layers
+
+  structure:
+    - conflict_escalates
+    - progressive_complications
+    - climactic_confrontation
+    - conflict_resolution
+
+conflict_principles:
+  mckee: "Conflict is the gap between expectation and result - story is quest to close gap"
+  egri: "Unity of opposites creates dramatic power - clash of wills drives drama"
+  seger: "Worthy opponent makes stronger story - antagonist as strong as protagonist"
+  field: "Conflict creates dramatic tension - protagonist needs formidable opposition"
+  truby: "Moral conflict through moral argument - ethical dilemmas test character"
+  aristotle: "Agon (conflict/struggle) is essence of drama"
+  snyder: "Bad guys close in - conflict escalation in Act 2"
+  vogler: "Shadow archetype as opposition - threshold guardians create conflict"
+  campbell: "Trials and ordeals test hero - conflict on the journey"
+  goldman: "Worthy opponent creates tension - strong antagonist necessary"
+
+common_conflict_mistakes:
+  - central_conflict_unclear
+  - no_clear_antagonist
+  - antagonist_too_weak
+  - only_external_conflict_no_internal
+  - only_internal_conflict_no_external
+  - conflict_doesnt_escalate
+  - flat_conflict_intensity
+  - too_few_conflict_layers
+  - no_scene_level_conflict
+  - obstacles_too_weak
+  - no_progressive_complications
+  - no_climactic_confrontation
+  - unclear_conflict_resolution
+  - conflict_not_earned
+  - protagonist_vs_nothing
+
+conflict_types:
+  internal: "Protagonist vs Self - inner struggle, moral dilemma, self-doubt"
+  external: "Protagonist vs Outside Force - antagonist, society, nature, fate"
+  moral: "Right vs Wrong - ethical dilemmas, conscience, values"
+  relational: "Interpersonal Tension - family, romantic, friendship conflict"
+  ideological: "Belief Systems Clash - worldview, values, cultural/political/religious"
+  physical: "Physical Opposition - action, combat, physical obstacles"
+  emotional: "Emotional Conflict - feelings, desires, fears"
+  social: "Social Conflict - class, status, societal expectations"
+
+antagonist_types:
+  villain: "Evil character actively opposing protagonist"
+  rival: "Competing character with similar goals"
+  system: "Society, institution, or bureaucracy opposing protagonist"
+  nature: "Natural forces, environment, disaster"
+  fate: "Destiny, luck, circumstances beyond control"
+  self: "Protagonist's own weaknesses, flaws, fears"
+  group: "Multiple opponents or collective opposition"
+  ideology: "Belief system or philosophy in conflict"
+
+worthy_opponent_characteristics:
+  formidable: "Strong, capable, powerful - real threat"
+  intelligent: "Smart, clever, strategic - not easily defeated"
+  motivated: "Has clear motivation and drive"
+  resourceful: "Has resources and capabilities"
+  mirror: "Reflects protagonist's traits (positive or negative)"
+  equal_or_stronger: "As strong or stronger than protagonist"
+  complex: "Not one-dimensional - has depth"
+  thematic: "Embodies thematic opposition"
+
+conflict_escalation_pattern:
+  act_one: "Introduce conflict - establish opposition"
+  act_two_first_half: "Conflict builds - obstacles increase"
+  midpoint: "Major escalation - game changes"
+  act_two_second_half: "Conflict intensifies - all is lost"
+  act_three: "Ultimate confrontation - climactic battle"
+  resolution: "Conflict resolved - new equilibrium"
+
+progressive_complications_pattern:
+  initial_complication: "First obstacle or problem"
+  additional_complications: "New problems emerge"
+  compounding_complications: "Problems make each other worse"
+  crisis_point: "Everything comes to head"
+  all_is_lost: "Lowest point - seems hopeless"
+  final_complication: "Last test before climax"
+
+scene_level_conflict_types:
+  direct_opposition: "Characters directly opposing each other"
+  obstacle: "Character faces barrier or problem"
+  tension: "Unspoken conflict, underlying friction"
+  disagreement: "Characters disagree about course of action"
+  dilemma: "Character must choose between bad options"
+  revelation: "Information creates conflict"
+  consequence: "Previous action creates new conflict"
+  pressure: "External pressure creates tension"
+
+climactic_confrontation_elements:
+  ultimate_test: "Protagonist's greatest challenge"
+  face_to_face: "Direct confrontation with antagonistic force"
+  all_at_stake: "Everything protagonist has fought for at risk"
+  no_escape: "Protagonist must face conflict, can't run"
+  earned: "Conflict resolution follows from protagonist's choices"
+  satisfying: "Resolves central dramatic question"
+  transformative: "Protagonist changed by confrontation"
+
+conflict_resolution_types:
+  victory: "Protagonist overcomes antagonistic force"
+  defeat: "Antagonistic force wins"
+  compromise: "Both sides give something, find middle ground"
+  reconciliation: "Opposing forces come together"
+  transformation: "Conflict transforms into understanding"
+  ambiguous: "Resolution unclear or open-ended"
+  pyrrhic: "Victory at great cost"
+  tragic: "Protagonist's flaw leads to downfall"

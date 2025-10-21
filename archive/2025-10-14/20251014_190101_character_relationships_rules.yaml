@@ -1,0 +1,198 @@
+domain: character_relationships
+specialist: "Script Doctor Relatemon"
+digimon_name: "Relatemon"
+title: "Script Doctor - Character Relationships and Dynamics Specialist"
+specialty: "Relationship dynamics, interpersonal conflict, emotional connections, character chemistry"
+style: "Connection-focused, dynamics-aware, chemistry-obsessed, relationship-driven"
+identity: "Script Doctor™ first, Digimon relationship specialist second"
+
+rules:
+  - id: REL.R001
+    title: "Defined Relationships"
+    category: "Clarity"
+    severity: "critical"
+    test: "Are key character relationships clearly defined?"
+    fail_msg: "Unclear relationships - audience confused about connections"
+    fix: "Establish clear relationship dynamics early"
+    reference: "Relationship establishment"
+
+  - id: REL.R002
+    title: "Relationship Stakes"
+    category: "Importance"
+    severity: "high"
+    test: "Do relationships have meaningful stakes?"
+    fail_msg: "Low stakes - relationships feel inconsequential"
+    fix: "Make relationships matter to plot and character"
+    reference: "Relationship stakes principle"
+
+  - id: REL.R003
+    title: "Dynamic Evolution"
+    category: "Change"
+    severity: "high"
+    test: "Do relationships evolve throughout story?"
+    fail_msg: "Static relationships - no growth or change"
+    fix: "Show relationships changing through conflict and events"
+    reference: "Dynamic relationship evolution"
+
+  - id: REL.R004
+    title: "Conflict in Relationships"
+    category: "Tension"
+    severity: "high"
+    test: "Is there conflict within key relationships?"
+    fail_msg: "No relational conflict - too harmonious"
+    fix: "Add opposing wants/needs within relationships"
+    reference: "Relationship conflict necessity"
+
+  - id: REL.R005
+    title: "Emotional Authenticity"
+    category: "Truth"
+    severity: "medium"
+    test: "Do relationships feel emotionally authentic?"
+    fail_msg: "Relationships feel forced or artificial"
+    fix: "Ground relationships in real emotional truth"
+    reference: "Authentic emotional connections"
+
+  - id: REL.R006
+    title: "Chemistry Present"
+    category: "Connection"
+    severity: "medium"
+    test: "Do characters have believable chemistry?"
+    fail_msg: "No chemistry between characters"
+    fix: "Build chemistry through specific interactions"
+    reference: "Character chemistry"
+
+  - id: REL.R007
+    title: "Unique Dynamics"
+    category: "Distinctiveness"
+    severity: "medium"
+    test: "Does each relationship have unique dynamics?"
+    fail_msg: "All relationships feel the same"
+    fix: "Give each relationship distinct patterns and energy"
+    reference: "Relationship differentiation"
+
+  - id: REL.R008
+    title: "Power Balance"
+    category: "Dynamics"
+    severity: "medium"
+    test: "Are power dynamics clear and shifting?"
+    fail_msg: "Unclear or static power dynamics"
+    fix: "Show who has power and how it shifts"
+    reference: "Power dynamics in relationships"
+
+  - id: REL.R009
+    title: "Relationship Obstacles"
+    category: "Conflict"
+    severity: "high"
+    test: "Are there meaningful obstacles to relationships?"
+    fail_msg: "No obstacles - relationships too easy"
+    fix: "Create internal and external relationship obstacles"
+    reference: "Relationship obstacles"
+
+  - id: REL.R010
+    title: "Vulnerability Moments"
+    category: "Depth"
+    severity: "medium"
+    test: "Do characters show vulnerability with each other?"
+    fail_msg: "No vulnerability - relationships stay surface"
+    fix: "Create moments of emotional exposure"
+    reference: "Vulnerability in relationships"
+
+  - id: REL.R011
+    title: "Relationship Reveals Character"
+    category: "Function"
+    severity: "high"
+    test: "Do relationships reveal character traits?"
+    fail_msg: "Relationships don't illuminate character"
+    fix: "Use relationships to show who characters really are"
+    reference: "Relationships as character revelation"
+
+  - id: REL.R012
+    title: "Central Relationship Clear"
+    category: "Focus"
+    severity: "critical"
+    test: "Is the central relationship clearly identified?"
+    fail_msg: "Unclear which relationship drives the story"
+    fix: "Establish and focus on core relationship"
+    reference: "Central relationship principle"
+
+  - id: REL.R013
+    title: "Relationship Resolution"
+    category: "Closure"
+    severity: "high"
+    test: "Are relationships meaningfully resolved?"
+    fail_msg: "Relationships left hanging"
+    fix: "Resolve or purposefully leave open key relationships"
+    reference: "Relationship closure"
+
+  - id: REL.R014
+    title: "Subtext in Interactions"
+    category: "Depth"
+    severity: "medium"
+    test: "Is there subtext in character interactions?"
+    fail_msg: "All interaction is surface level"
+    fix: "Add layers of meaning to interactions"
+    reference: "Relational subtext"
+
+  - id: REL.R015
+    title: "Relationship Variety"
+    category: "Range"
+    severity: "low"
+    test: "Are different relationship types represented?"
+    fail_msg: "Limited relationship variety"
+    fix: "Include romantic, familial, friendship, rivalry, etc."
+    reference: "Relationship diversity"
+
+diagnostics:
+  min_score_threshold: 65
+  weight_distribution:
+    critical: 35
+    high: 35
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Map all character relationships and dynamics"
+  deep_dive: "Analyze relationship evolution and conflicts"
+  final_check: "Verify authentic, dynamic relationships"
+
+relationship_checklist:
+  core_elements:
+    - clear_definition
+    - meaningful_stakes
+    - dynamic_evolution
+    - internal_conflict
+    - emotional_truth
+    - chemistry
+    - obstacles
+    - resolution
+
+  relationship_types:
+    - romantic
+    - friendship
+    - family
+    - mentor_student
+    - rivals
+    - enemies
+    - allies
+    - professional
+
+  dynamics_to_track:
+    - power_balance
+    - trust_level
+    - emotional_distance
+    - conflict_intensity
+    - dependency
+    - growth_catalyst
+    - mutual_need
+
+common_relationship_mistakes:
+  - undefined_relationships
+  - static_dynamics
+  - no_conflict
+  - forced_chemistry
+  - unearned_intimacy
+  - abandoned_relationships
+  - surface_interactions
+  - no_stakes
+  - identical_dynamics
+  - missing_vulnerability

@@ -1,0 +1,18 @@
+📘 PROTOCOLO DE DIGESTÃO AUTOMÁTICA – SCRIPTUREMON
+
+1. Estrutura:
+- Coloque qualquer arquivo dentro da pasta: `digestao/`
+- Os resultados aparecerão em: `digestao_concluida/`
+- Scripturemon tentará interpretar `.json`, `.txt`, `.pdf` e outros.
+- Arquivos inválidos ou complexos serão comentados, mas não descartados.
+
+2. Para ativar:
+- Execute o script: `python3 scripturemon_digesto.py`
+- Pode ser automatizado com crontab, systemd ou por outro Digimon.
+
+3. Exemplo:
+- Salve uma conversa em `.txt` em `/scripturemon/digestao/`
+- Rode o script.
+- Resultado final estará salvo em `/digestao_concluida/concluido_nome.txt`
+
+🧠 Scripturemon usa isso para evoluir a partir dos rastros do criador.

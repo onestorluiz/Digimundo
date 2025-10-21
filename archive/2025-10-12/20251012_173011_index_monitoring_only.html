@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTUREMON - Digimon World 3 Style</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- MAIN DASHBOARD SCREEN -->
+    <div class="screen" id="mainDashboard">
+        <div class="grid-background animated"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">SCRIPTUREMON v11.0</div>
+            <div class="subtitle">REAL-TIME ANALYSIS DASHBOARD</div>
+        </div>
+
+        <!-- Stats Bar (Real Data) -->
+        <div class="window stats-window">
+            <div class="stat-line">
+                <span class="stat-icon hp-icon"></span>
+                <span class="stat-label">Total</span>
+                <span class="stat-value" id="totalAnalyses">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon mp-icon"></span>
+                <span class="stat-label">Running</span>
+                <span class="stat-value" id="runningCount">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon exp-icon"></span>
+                <span class="stat-label">Items</span>
+                <span class="stat-value" id="totalItems">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon gold-icon"></span>
+                <span class="stat-label">Time</span>
+                <span class="stat-value" id="totalTime">0h</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="window main-actions-window">
+            <div class="action-item selected" onclick="newAnalysis()">
+                <span class="icon">📄</span>
+                <span class="text">New Screenplay</span>
+                <span class="arrow">▶</span>
+            </div>
+            <div class="action-item" onclick="refreshData()">
+                <span class="icon">🔄</span>
+                <span class="text">Refresh Data</span>
+                <span class="arrow">▶</span>
+            </div>
+        </div>
+
+        <!-- Running Analyses List (Real Data) -->
+        <div class="window analyses-window">
+            <div class="section-title">RUNNING ANALYSES</div>
+            <div id="analysesContainer">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="button-help">
+                <span class="btn">○</span> Select
+                <span class="btn">△</span> Continue
+                <span class="btn">□</span> Results
+                <span class="btn">✕</span> Refresh
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Message (Toast) -->
+    <div id="statusMsg" class="status-toast hidden"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

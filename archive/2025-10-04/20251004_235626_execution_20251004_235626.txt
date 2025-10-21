@@ -1,0 +1,25 @@
+ANÁLISE MULTI-AUTOR
+================================================================================
+
+Roteiro: SONHOS SEM LEMBRANÇAS T.3.pdf
+Especialidade: dialogue
+Data: 04/10/2025 23:56:26
+
+Autores processados: 13/13
+Tempo total: 3431.6s (57.2 min)
+Output total: 51,888 chars
+
+AUTORES:
+  - ARISTOTLE: 519 chars
+  - CAMPBELL: 7,235 chars
+  - COWGILL: 5,614 chars
+  - DIALOGUE: 5,478 chars
+  - EGRI: 5,847 chars
+  - FIELD: 497 chars
+  - MCKEE: 502 chars
+  - MCKEE_CHARACTER: 4,781 chars
+  - MCKEE_DIALOGUE: 4,047 chars
+  - SEGER: 5,854 chars
+  - SNYDER: 3,835 chars
+  - TRUBY: 7,178 chars
+  - VOGLER: 501 chars

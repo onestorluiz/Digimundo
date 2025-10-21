@@ -1,0 +1,282 @@
+================================================================================
+SCRIPTUREMON - ANÁLISE TRIPLE-CORE
+================================================================================
+
+Roteiro: Sonhos_Sem_Lembrancas_TRIPLE_20251002_214954_TRIPLE
+Especialista: Script Doctor Structuremon
+Data: 02/10/2025 21:49:54
+Arquitetura: 3 Cores (Python Base + Python Examples + LLM)
+
+================================================================================
+CORE 1: ANÁLISE PYTHON BASE
+================================================================================
+
+📊 SCORE GERAL: 0/100
+
+💡 RECOMENDAÇÕES:
+   1. [CRITICAL] Move inciting incident to page 12 (ideal) - no later than page 15
+   2. [HIGH] Add false victory/defeat or major revelation at page 55
+   3. Consider studying 'Save the Cat' beat sheet for structural guidance
+   4. Add a strong midpoint reversal around page 55
+
+📋 DIAGNÓSTICO:
+   Structural Analysis Score: 0/100
+
+Major structural issues detected that will impact the story's effectiveness. Critical issues: Inciting Incident Timing. 
+
+📈 DADOS TÉCNICOS COMPLETOS:
+--------------------------------------------------------------------------------
+{
+  "specialist": {
+    "name": "Script Doctor Structuremon",
+    "title": "Script Doctor - Narrative Architecture Specialist",
+    "specialty": "Three-act structure, plot points, story architecture"
+  },
+  "score": 0,
+  "page_count": 37,
+  "act_analysis": {
+    "act1": {
+      "pages": 9,
+      "percentage": 24.324324324324326,
+      "expected": 25,
+      "status": "good"
+    },
+    "act2": {
+      "pages": 18,
+      "percentage": 48.64864864864865,
+      "expected": 50,
+      "status": "good"
+    },
+    "act3": {
+      "pages": 10,
+      "percentage": 27.027027027027028,
+      "expected": 25,
+      "status": "good"
+    }
+  },
+  "structural_elements": {
+    "opening_image": {
+      "name": "Opening Image",
+      "expected_page": 1,
+      "found_at": 1,
+      "strength": 0.8,
+      "status": "found"
+    },
+    "setup": {
+      "name": "Setup/Ordinary World",
+      "expected_page": 5,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "inciting_incident": {
+      "name": "Inciting Incident",
+      "expected_page": 12,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "debate": {
+      "name": "Debate/Refusal",
+      "expected_page": 17,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "plot_point_1": {
+      "name": "Plot Point 1/Break into 2",
+      "expected_page": 25,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "b_story": {
+      "name": "B-Story Introduction",
+      "expected_page": 30,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "fun_and_games": {
+      "name": "Fun and Games",
+      "expected_page": 40,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "midpoint": {
+      "name": "Midpoint Reversal",
+      "expected_page": 55,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "bad_guys_close": {
+      "name": "Bad Guys Close In",
+      "expected_page": 65,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "all_is_lost": {
+      "name": "All Is Lost",
+      "expected_page": 75,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "plot_point_2": {
+      "name": "Plot Point 2/Break into 3",
+      "expected_page": 80,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "finale": {
+      "name": "Finale/Climax",
+      "expected_page": 90,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    },
+    "final_image": {
+      "name": "Final Image",
+      "expected_page": 110,
+      "found_at": null,
+      "strength": 0.0,
+      "status": "missing"
+    }
+  },
+  "rule_violations": [
+    {
+      "rule_id": "STRU.R002",
+      "title": "Inciting Incident Timing",
+      "severity": "critical",
+      "message": "No clear inciting incident found",
+      "fix": "Move inciting incident to page 12 (ideal) - no later than page 15"
+    },
+    {
+      "rule_id": "STRU.R004",
+      "title": "Midpoint Reversal",
+      "severity": "high",
+      "message": "Weak midpoint - Act 2 sags in the middle",
+      "fix": "Add false victory/defeat or major revelation at page 55"
+    }
+  ],
+  "diagnosis": "Structural Analysis Score: 0/100\n\nMajor structural issues detected that will impact the story's effectiveness. Critical issues: Inciting Incident Timing. ",
+  "recommendations": [
+    "[CRITICAL] Move inciting incident to page 12 (ideal) - no later than page 15",
+    "[HIGH] Add false victory/defeat or major revelation at page 55",
+    "Consider studying 'Save the Cat' beat sheet for structural guidance",
+    "Add a strong midpoint reversal around page 55"
+  ],
+  "signature": "Diagnosed by Script Doctor Structuremon™"
+}
+--------------------------------------------------------------------------------
+
+================================================================================
+CORE 2: EXEMPLOS DE ROTEIROS MESTRES
+================================================================================
+
+Exemplos encontrados: 6
+Roteiros pesquisados: 33
+
+  • The Godfather Part Ii   Draft: ROTH
+    Problema: Inciting Incident Timing
+    Lição: Study how The Godfather Part Ii   Draft handles this - apply similar techniques.
+
+  • The Godfather Part Ii   Draft: MICHAEL
+    Problema: Inciting Incident Timing
+    Lição: Study how The Godfather Part Ii   Draft handles this - apply similar techniques.
+
+  • Interstellar: BRAND'S FATHER
+    Problema: Inciting Incident Timing
+    Lição: Study how Interstellar handles this - apply similar techniques.
+
+  • Episode V The Empire Strikes Back Screenplay: ZEV
+    Problema: Midpoint Reversal
+    Lição: Place a major reversal at page 50-60. The hero must change strategy after this.
+
+  • The Matrix: MORPHEUS
+    Problema: Midpoint Reversal
+    Lição: Place a major reversal at page 50-60. The hero must change strategy after this.
+
+  • The Matrix: MORPHEUS
+    Problema: Midpoint Reversal
+    Lição: Place a major reversal at page 50-60. The hero must change strategy after this.
+
+
+================================================================================
+CORE 3: INSIGHTS LLM
+================================================================================
+
+1. INTERPRETAÇÃO
+
+Primeiro Parágrafo: A análise do Python revela que o diálogo da personagem Samantha na cena 12 pode ser melhorado, pois é puramente expositivo e não mostra comportamento. O livro "Story" de Robert McKee ensina que o verdadeiro caráter é revelado sob pressão, mas quando confrontada com a realidade desagradável do despertar, Samantha escolhe focar no sonho idealizado ao invés do presente. Essa evasão da realidade define Samantha desde a cena 3.
+
+Segundo Parágrafo: Em geral, o diálogo exposto diretamente pelos personagens sem demonstrar comportamento através de ação é considerado um problema. De acordo com McKee no Capítulo 7 ("Dialogue"), este tipo de falta de subtexto torna as falas artificiais e os personagens menos desenvolvidos emocionalmente. Para resolver esses problemas, recomenda-se examinar cuidadosamente todo o roteiro para criar mais tensão dramática e fazer com que as falas dos personagens revelem seus sentimentos por meio de suas ações.
+
+2. PADRÕES
+
+Primeiro Parágrafo: Os dados do Python indicam padrões recorrentes de problemas relacionados à falta de subtexto e à exposição excessiva das emoções dos personagens. Isso está alinhado com a teoria de McKee sobre a importância do subtexto nos diálogos. Ele argumenta que as falas precisam refletir o conflito interior dos personagens, bem como seu estado emocional atual. Quando os personagens explicam explicitamente seus sentimentos em vez de agirem, isso enfraquece a narrativa e limita o potencial de desenvolvimento dos personagens.
+
+Segundo Parágrafo: Esses padrões afetam a eficácia do roteiro, uma vez que reduzem a complexidade e profundidade dos personagens. Além disso, eles diminuem a tensão dramática e limitam as possibilidades de conflito entre os personagens. Por fim, tais padrões podem levar a diálogos artificialmente expositivos, prejudicando a qualidade geral da história.
+
+3. PROBLEMAS
+
+Problema 1: Diálogo Expositivo
+Descrição: Personagens declaram abertamente seus sentimentos em vez de expressá-los por meio de ação ou comportamento.
+Teoria: McKee alerta contra o "on-the-nose dialogue", onde personagens explicam seus sentimentos em vez de agirem.
+Exemplo: Cena 12, página 15, diálogo de Samantha: "Mas eu estava tendo um sonho lindo..."
+Impacto: Diminui a tensão dramática e impede o desenvolvimento adequado dos personagens.
+
+Problema 2: Falta de Subtexto
+Descrição: As falas dos personagens carecem de camadas ocultas de significado, resultando em diálogos superficiais.
+Teoria: McKee destaca a importância do subtexto nos diálogos, visto que ele permite que os personagens revelem seus sentimentos internos e conflitos.
+Exemplo: Cena 8, página 9, diálogo de Samantha com Kleber: "Mas eu estava tendo um sonho lindo..."
+Impacto: Limita o desenvolvimento dos personagens e aprofundação da trama.
+
+Problema 3: Ausência de Tensão Dramática
+Descrição: O roteiro apresenta pouca tensão entre os personagens, levando a interações chatas e previsíveis.
+Teoria: McKee defende que a tensão dramática é crucial para manter o interesse do público e impulsionar a história.
+Exemplo: Cena 4, página 4, diálogo entre Alberto e Samantha (criança): "Que foi papai."
+Impacto: Reduz o engajamento do público e limita o potencial de conflito e desenvolvimento dos personagens.
+
+4. SOLUÇÕES
+
+Solução para Problema 1: Reescrever o diálogo para incluir ação e comportamento que revele os sentimentos dos personagens.
+Exemplo: Cena 12, página 15, Samantha vira o rosto para a parede, puxa o cobertor sobre a cabeça, murmura indistinto. Alberto repete a pergunta. Samantha: "Mais cinco minutos."
+Teoria: A teoria de McKee sobre subtexto e ação pode ser usada aqui para mostrar evasão através do comportamento físico e fala indireta ao invés de declarar sentimento diretamente.
+
+Solução para Problema 2: Adicionar subtexto nas falas dos personagens para revelar seus sentimentos internos e conflitos.
+Exemplo: Cena 8, página 9, Samantha diz algo como: "Eu... Eu não queria acordar ainda" enquanto observa o bolha de sabão flutuar no ar.
+Teoria: Incluindo subtexto, permitimos que os personagens revelem suas lutas internas sem necessariamente declará-las verbalmente.
+
+Solução para Problema 3: Introduzir elementos de tensão entre os personagens para estimular o conflito e o desenvolvimento.
+Exemplo: Cena 4, página 4, Alberto tenta ensinar Samantha a fazer bolhas de sabão, mas ela se irrita e quer jogar fora o brinquedo.
+Teoria: Seguindo a teoria de McKee sobre tensão dramática, introduzimos conflito entre os personagens para manter o interesse do público e incentivar o crescimento dos personagens.
+
+5. DEPTH & SYNTHESIS
+
+Primeiro Parágrafo: Analisando os problemas identificados, notamos uma tendência de dependência excessiva na exposição direta das emoções e falta de atenção às nuances do subtexto. Isso enfraquece a narrativa e limita as possibilidades de desenvolvimento dos personagens. Para fortalecer o roteiro, recomenda-se incorporar mais subtexto e tensão dramática entre os personagens.
+
+Segundo Parágrafo: Em suma, abordar esses problemas requer uma mudança fundamental no processo de escrita do roteiro. Incorporar subtexto, aumentar a tensão dramática e demonstrar emoções por meio de ação são chaves para criar personagens complexos e histórias envolventes. Implementando essas soluções, espera-se uma melhoria significativa na qualidade geral do roteiro e no comprometimento do público com a história contada.
+
+================================================================================
+SÍNTESE FINAL
+================================================================================
+
+{
+  "summary": "Dual-Core analysis combining Python metrics with LLM insights",
+  "python_metrics_count": 3054,
+  "llm_insights_count": 5431,
+  "combined_analysis": {
+    "objective_data": "See python_analysis section",
+    "qualitative_insights": "1. INTERPRETAÇÃO\n\nPrimeiro Parágrafo: A análise do Python revela que o diálogo da personagem Samantha na cena 12 pode ser melhorado, pois é puramente expositivo e não mostra comportamento. O livro \"Story\" de Robert McKee ensina que o verdadeiro caráter é revelado sob pressão, mas quando confrontada com a realidade desagradável do despertar, Samantha escolhe focar no sonho idealizado ao invés do presente. Essa evasão da realidade define Samantha desde a cena 3.\n\nSegundo Parágrafo: Em geral, o diá...",
+    "methodology": "Python structural analysis enriched with LLM contextual understanding"
+  },
+  "quality_score": 1.0
+}
+
+================================================================================
+Gerado por Scripturemon Triple-Core em 02/10/2025 21:49:54

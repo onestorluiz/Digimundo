@@ -1,0 +1,15 @@
+{
+  "ecosystem_version": "1.0",
+  "regras_path": "/Users/clubproducoes/Digimundo/claude_code/🔥REGRAS_UCHIMON_REVOLUCIONARIAS🔥.md",
+  "auto_load_enabled": true,
+  "systems_to_integrate": [
+    "scripturemon-ultimate",
+    "claude_code",
+    "genjutsu_processes",
+    "memory_system",
+    "archive_manager"
+  ],
+  "load_frequency_minutes": 5,
+  "compliance_check_enabled": true,
+  "digimundo_signature_required": true
+}

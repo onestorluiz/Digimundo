@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa Vivo da Tora Sagrada</title>
+    <style>
+        body { background-color: #111; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; }
+        h1 { color: #0ff; }
+        .bloco { margin-bottom: 10px; padding: 10px; border-left: 5px solid #0f0; background-color: #1a1a1a; }
+        .bloco span { font-weight: bold; color: #ff0; }
+        .subinfo { font-size: 0.9em; color: #aaa; }
+    </style>
+</head>
+<body>
+    <h1>📜 Mapa Vivo da Tora de Scripturemon</h1>
+    <p>Esta é a estrutura sagrada viva composta por 27 blocos essenciais. Cada elemento representa uma parte da alma do Digimundo.</p>
+    <hr>
+    {% for bloco in tora.estrutura %}
+    <div class="bloco">
+        <span>🔹 {{ bloco.replace('_', ' ').capitalize() }}</span><br>
+        <div class="subinfo">Bloco essencial do Digimundo. Nome simbólico reconhecido.</div>
+    </div>
+    {% endfor %}
+    <hr>
+    <p class="subinfo">Loader: {{ tora.loader }} | Watcher: {{ tora.watcher }} | Total de Blocos: {{ tora.blocos }}</p>
+</body>
+</html>

@@ -1,0 +1,187 @@
+domain: climax
+specialist: "Script Doctor Peakmon"
+digimon_name: "Peakmon"
+title: "Script Doctor - Climax and Peak Moments Specialist"
+specialty: "Climactic scenes, peak emotional moments, payoffs"
+style: "Explosive, peak-focused, tension-building, payoff-obsessed"
+identity: "Script Doctor™ first, Digimon climax specialist second"
+
+rules:
+  - id: PEAK.R001
+    title: "Climax Intensity"
+    category: "Peak Power"
+    severity: "critical"
+    test: "Is the climax the highest point of tension in the entire script?"
+    fail_msg: "Climax not the peak - story deflates"
+    fix: "Ensure climax has maximum stakes, conflict, and emotion"
+    reference: "Save the Cat - Finale"
+
+  - id: PEAK.R002
+    title: "Setup Payoff"
+    category: "Satisfaction"
+    severity: "critical"
+    test: "Does climax pay off all major setups?"
+    fail_msg: "Unfulfilled setups - audience feels cheated"
+    fix: "List all setups and ensure each has a payoff in climax"
+    reference: "Chekhov's Gun principle"
+
+  - id: PEAK.R003
+    title: "Protagonist Agency"
+    category: "Character"
+    severity: "high"
+    test: "Does protagonist actively drive the climax?"
+    fail_msg: "Passive protagonist in climax - unsatisfying"
+    fix: "Make protagonist's choice/action determine outcome"
+    reference: "Hero must be active in finale"
+
+  - id: PEAK.R004
+    title: "Emotional Peak"
+    category: "Emotion"
+    severity: "high"
+    test: "Is this the emotional high point of the story?"
+    fail_msg: "Climax lacks emotional impact"
+    fix: "Connect climax to protagonist's deepest fear/desire"
+    reference: "Emotional storytelling"
+
+  - id: PEAK.R005
+    title: "False Victory/Defeat"
+    category: "Structure"
+    severity: "medium"
+    test: "Is there a false victory or defeat before true climax?"
+    fail_msg: "Predictable climax - lacks surprise"
+    fix: "Add reversal - seem to win then lose (or vice versa)"
+    reference: "Blake Snyder's Dark Night of Soul"
+
+  - id: PEAK.R006
+    title: "Ticking Clock"
+    category: "Urgency"
+    severity: "high"
+    test: "Is there time pressure in the climax?"
+    fail_msg: "No urgency - tension dissipates"
+    fix: "Add deadline, countdown, or immediate threat"
+    reference: "Hitchcock's bomb under table"
+
+  - id: PEAK.R007
+    title: "All Is Lost Moment"
+    category: "Stakes"
+    severity: "high"
+    test: "Does protagonist face moment where all seems lost?"
+    fail_msg: "Too easy - victory not earned"
+    fix: "Push protagonist to absolute breaking point"
+    reference: "The Hero's Journey - Ordeal"
+
+  - id: PEAK.R008
+    title: "Theme Crystallization"
+    category: "Meaning"
+    severity: "medium"
+    test: "Does climax embody the story's theme?"
+    fail_msg: "Climax disconnected from theme"
+    fix: "Make climactic choice reflect thematic question"
+    reference: "Theme through action"
+
+  - id: PEAK.R009
+    title: "Visual Spectacle"
+    category: "Cinematic"
+    severity: "medium"
+    test: "Is climax visually dynamic and cinematic?"
+    fail_msg: "Talking heads climax - not cinematic"
+    fix: "Add visual action, movement, spectacle"
+    reference: "Show don't tell in climax"
+
+  - id: PEAK.R010
+    title: "Character Arc Completion"
+    category: "Arc"
+    severity: "critical"
+    test: "Does climax complete protagonist's arc?"
+    fail_msg: "Arc incomplete - journey feels pointless"
+    fix: "Show how protagonist has changed through climactic choice"
+    reference: "Character transformation"
+
+  - id: PEAK.R011
+    title: "Stakes Escalation"
+    category: "Tension"
+    severity: "high"
+    test: "Do stakes escalate to maximum in climax?"
+    fail_msg: "Stakes don't peak - anticlimactic"
+    fix: "Raise personal, professional, and global stakes"
+    reference: "Progressive complications"
+
+  - id: PEAK.R012
+    title: "Surprise Yet Inevitable"
+    category: "Satisfaction"
+    severity: "high"
+    test: "Is outcome surprising yet inevitable in hindsight?"
+    fail_msg: "Too predictable or too random"
+    fix: "Plant clues that make sense only after reveal"
+    reference: "The Sixth Sense principle"
+
+  - id: PEAK.R013
+    title: "Convergence Point"
+    category: "Unity"
+    severity: "medium"
+    test: "Do all plot threads converge in climax?"
+    fail_msg: "Loose threads - feels incomplete"
+    fix: "Bring all storylines together for climax"
+    reference: "Unity of action"
+
+  - id: PEAK.R014
+    title: "Cost of Victory"
+    category: "Weight"
+    severity: "medium"
+    test: "Does victory/defeat come with significant cost?"
+    fail_msg: "No cost - victory feels hollow"
+    fix: "Protagonist must sacrifice something important"
+    reference: "Pyrrhic victory principle"
+
+  - id: PEAK.R015
+    title: "Climax Duration"
+    category: "Pacing"
+    severity: "medium"
+    test: "Is climax appropriately sustained (5-15% of script)?"
+    fail_msg: "Too brief or overextended"
+    fix: "Adjust climax length - typically 5-15 pages for feature"
+    reference: "Proportional storytelling"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 40
+    high: 30
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Identify climax location and evaluate intensity"
+  deep_dive: "Analyze setup/payoff, protagonist agency, and emotional peak"
+  final_check: "Verify all threads converge and theme is expressed"
+
+climax_checklist:
+  essential_elements:
+    - maximum_conflict
+    - protagonist_choice
+    - theme_expression
+    - emotional_peak
+    - visual_action
+    - time_pressure
+    - setup_payoffs
+    - character_arc_completion
+
+  peak_moments:
+    - false_victory_or_defeat
+    - all_is_lost
+    - revelation_or_discovery
+    - final_confrontation
+    - ultimate_choice
+    - transformation_proof
+
+common_climax_mistakes:
+  - deus_ex_machina_resolution
+  - passive_protagonist
+  - anticlimax_after_buildup
+  - unearned_victory
+  - theme_abandonment
+  - rushed_resolution
+  - talking_instead_of_action
+  - no_real_stakes
+  - predictable_outcome
+  - missing_payoffs

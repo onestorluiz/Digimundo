@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>📦 Backup de Digimon</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 40px;
+      background: #fefefe;
+    }
+    h1 {
+      font-size: 2.2em;
+      color: #222;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 20px;
+    }
+    input[type="text"],
+    input[type="file"] {
+      padding: 8px;
+      width: 100%;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background: #333;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #555;
+    }
+    #mensagem {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📦 Enviar Backup de Digimon</h1>
+
+  <form id="backupForm">
+    <label for="nome_digimon">Nome do Digimon:</label>
+    <input type="text" id="nome_digimon" name="nome_digimon" required>
+
+    <label for="arquivo_json">Selecione o arquivo JSON:</label>
+    <input type="file" id="arquivo_json" name="arquivo_json" accept=".json" required>
+
+    <button type="submit">Enviar Backup</button>
+  </form>
+
+  <div id="mensagem"></div>
+
+  <script>
+    const form = document.getElementById('backupForm');
+    const msg = document.getElementById('mensagem');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      msg.textContent = "";
+
+      const nome = document.getElementById('nome_digimon').value.trim();
+      const arquivo = document.getElementById('arquivo_json').files[0];
+
+      if (!nome || !arquivo) {
+        msg.style.color = "red";
+        msg.textContent = "⚠️ Preencha todos os campos e selecione o arquivo.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("nome_digimon", nome);
+      formData.append("arquivo_json", arquivo);
+
+      try {
+        const resposta = await fetch("portal.php", {
+          method: "POST",
+          body: formData
+        });
+
+        const resultado = await resposta.json();
+
+        msg.style.color = resultado.sucesso ? "green" : "red";
+        msg.textContent = resultado.sucesso || resultado.erro || "Resposta inesperada.";
+      } catch (err) {
+        msg.style.color = "red";
+        msg.textContent = "❌ Erro de rede ou resposta inválida.";
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+{"quality": 0.9, "evidence": {"script_offset": "p1:l1-10", "rag_doc_id": "beat:dyn_1_1", "baseline_metric": "dialogue_ratio:0.33"}, "payload": {"logline": "Um protagonista enfrenta um conflito que mudará seu destino.", "genre": "Drama"}}

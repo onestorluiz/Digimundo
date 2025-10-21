@@ -1,0 +1,220 @@
+# Twist Rules - Script Doctor Twistmon
+# Twist and Revelation Analysis Rules
+# Based on: McKee (Story), Aristotle (Poetics), Truby (Anatomy), Field (Screenplay), Snyder (Save the Cat)
+
+rules:
+  - id: TWIST.R001
+    title: "Twist Present"
+    severity: medium
+    description: "Major revelation or reversal exists in story - twist makes story memorable"
+    theory: |
+      McKee (Story): "Best stories have major revelations - twist recontextualizes everything seen before."
+      Aristotle (Poetics): "Peripeteia and anagnorisis - reversal and recognition - most powerful plot elements."
+    fix: "Add major twist - revelation that changes audience understanding of story/character"
+    examples:
+      - "Sixth Sense - protagonist is dead (identity twist)"
+      - "Empire Strikes Back - Vader is father (identity twist)"
+      - "Psycho - protagonist killed Act 1 (false protagonist twist)"
+
+  - id: TWIST.R002
+    title: "Twist Effectiveness (Surprise Yet Inevitable)"
+    severity: critical
+    description: "Twist is surprising yet feels inevitable in hindsight - Aristotle's ideal"
+    theory: |
+      Aristotle (Poetics): "Best plots - surprise audience yet feel inevitable in hindsight."
+      McKee (Story): "Twist must be surprising yet earned - audience shocked but says 'of course'."
+    fix: "Balance surprise and inevitability - plant subtle clues, add misdirection, make twist logical retroactively"
+    examples:
+      - "Sixth Sense - clues planted throughout (red sweater, no interaction)"
+      - "Usual Suspects - Verbal is Keyser Soze (clues in office)"
+
+  - id: TWIST.R003
+    title: "Twist Timing Optimal"
+    severity: high
+    description: "Twist placed at Act 2 midpoint or Act 3 for maximum impact"
+    theory: |
+      Field (Screenplay): "Major twist at Act 2 midpoint (page 60) or Act 3 final reversal (page 85-95)."
+      Snyder (Save the Cat): "Midpoint twist - false victory/false defeat - changes everything."
+    fix: "Place twist at Act 2 midpoint (page 60) for false victory/defeat or Act 3 (page 85-95) for climactic reversal"
+    examples:
+      - "Empire Strikes Back - Vader father revelation at Act 3 climax"
+      - "Sixth Sense - dead protagonist revealed final pages"
+
+  - id: TWIST.R004
+    title: "Twist Setup Proper"
+    severity: critical
+    description: "Twist properly foreshadowed through clues - not random or arbitrary"
+    theory: |
+      McKee (Story): "Twist must be earned - plant clues audience misses, surprise but inevitable."
+      Truby (Anatomy): "Revelation sequence - strategic placement of clues builds to twist."
+    fix: "Plant clues in Act 1 and Act 2 - subtle enough to miss first time, obvious in hindsight"
+    examples:
+      - "Sixth Sense - Malcolm never interacts with living (except Cole)"
+      - "Usual Suspects - Objects in office match Verbal's story"
+
+  - id: TWIST.R005
+    title: "Twist Impact Significant"
+    severity: high
+    description: "Twist changes everything - recontextualizes story, redefines meaning"
+    theory: |
+      McKee (Story): "Great twist recontextualizes everything - audience sees story in new light."
+      Truby (Anatomy): "Revelation redefines character want/need - changes understanding retroactively."
+    fix: "Make twist change everything - audience must reinterpret entire story, see new meaning"
+    examples:
+      - "Sixth Sense - entire movie recontextualized (Malcolm's journey is ghost story)"
+      - "Fight Club - Tyler is narrator (redefines all interactions)"
+
+  - id: TWIST.R006
+    title: "Red Herrings Present"
+    severity: medium
+    description: "Misdirection techniques used - red herrings hide truth, increase surprise"
+    theory: |
+      McKee (Story): "Misdirection - plant false clues, hide truth in plain sight, surprise yet earned."
+      Truby (Anatomy): "Red herrings create surprise - audience follows false trail, twist more effective."
+    fix: "Add red herrings - false suspects, misleading clues, misdirection that makes twist more surprising"
+    examples:
+      - "Usual Suspects - false suspects, misleading flashbacks"
+      - "Sixth Sense - Malcolm appears to interact normally"
+
+  - id: TWIST.R007
+    title: "Multiple Twists Handled Well"
+    severity: high
+    description: "If multiple twists, each must land - avoid overload, space properly"
+    theory: |
+      McKee (Story): "Multiple twists can work - but each must be earned, spaced properly, not diminish impact."
+      Snyder (Save the Cat): "Avoid twist overload - one great twist better than three mediocre twists."
+    fix: "If multiple twists, space them properly - each must be earned, impactful, not diminish others"
+    examples:
+      - "Empire Strikes Back - multiple revelations (Vader father, Leia sister) spaced across trilogy"
+      - "Sixth Sense - single powerful twist (focused impact)"
+
+  - id: TWIST.R008
+    title: "Identity Twist Effective"
+    severity: medium
+    description: "If identity twist, must be properly setup and impactful"
+    theory: |
+      McKee (Story): "Identity revelation - character's true nature revealed, redefines relationships."
+      Truby (Anatomy): "Identity twist - character's secret revealed, changes everything protagonist thought."
+    fix: "If identity twist, plant clues about true identity - make revelation redefine relationships/story"
+    examples:
+      - "Empire Strikes Back - Vader is Luke's father"
+      - "Sixth Sense - Malcolm is dead"
+      - "Usual Suspects - Verbal is Keyser Soze"
+
+  - id: TWIST.R009
+    title: "Reversal of Fortune Present (Peripeteia)"
+    severity: medium
+    description: "Reversal of fortune - action produces opposite result expected (Aristotle)"
+    theory: |
+      Aristotle (Poetics): "Peripeteia - reversal of fortune - action produces opposite result expected."
+      McKee (Story): "Reversal - protagonist's action produces opposite effect, changes trajectory."
+    fix: "Add reversal - protagonist's action produces opposite result, fortune reverses unexpectedly"
+    examples:
+      - "Oedipus - investigation reveals he is killer"
+      - "Empire Strikes Back - rescue leads to capture, trap"
+
+  - id: TWIST.R010
+    title: "Recognition Moment Present (Anagnorisis)"
+    severity: medium
+    description: "Recognition moment - character understands truth, sees reality (Aristotle)"
+    theory: |
+      Aristotle (Poetics): "Anagnorisis - recognition, discovery - character understands truth, sees reality."
+      McKee (Story): "Recognition moment - protagonist's eyes opened, understands self/situation/truth."
+    fix: "Add recognition moment - protagonist discovers truth, understands reality, eyes opened"
+    examples:
+      - "Sixth Sense - Cole realizes Malcolm is ghost"
+      - "Oedipus - recognizes he killed father, married mother"
+
+  - id: TWIST.R011
+    title: "Twist Earned (Not Cheap Gimmick)"
+    severity: critical
+    description: "Twist earned through proper setup - not cheap gimmick or arbitrary"
+    theory: |
+      McKee (Story): "Twist must be earned - properly setup, clues planted, surprise but inevitable."
+      Aristotle (Poetics): "Best twists - surprising yet necessary/probable, feel earned not arbitrary."
+    fix: "Earn twist through setup - plant clues, foreshadow subtly, make twist logical in hindsight"
+    examples:
+      - "Sixth Sense - earned through visual clues (no interaction, red, temperature)"
+      - "Usual Suspects - earned through office objects matching story"
+
+  - id: TWIST.R012
+    title: "Avoid Unearned Twist"
+    severity: critical
+    description: "PENALTY - Unearned twist (random, not foreshadowed, deus ex machina)"
+    theory: |
+      McKee (Story): "Unearned twist - no setup, comes from nowhere, violates contract with audience."
+      Aristotle (Poetics): "Deus ex machina - arbitrary resolution, not earned through plot, worst flaw."
+    fix: "Remove unearned twist OR add proper setup - plant clues in Act 1/2, foreshadow revelation"
+    examples:
+      - "BAD: Twist villain appears final scene with no prior mention"
+      - "BAD: Character has secret power never hinted at, saves day"
+
+  - id: TWIST.R013
+    title: "Avoid Predictable Twist"
+    severity: high
+    description: "PENALTY - Predictable twist (too obvious, telegraphed, no surprise)"
+    theory: |
+      McKee (Story): "Predictable twist - foreshadowing too heavy, audience ahead of story, no surprise."
+      Truby (Anatomy): "Balance foreshadowing - enough to feel earned, not so much it's obvious."
+    fix: "Add misdirection - red herrings, false leads - make twist less obvious while maintaining logic"
+    examples:
+      - "BAD: Character obviously evil from first scene, 'twist' he's villain"
+      - "BAD: Heavy-handed clues make twist obvious before reveal"
+
+  - id: TWIST.R014
+    title: "Avoid Twist Overload"
+    severity: high
+    description: "PENALTY - Twist overload (too many twists, diminishing returns, audience fatigue)"
+    theory: |
+      McKee (Story): "Twist overload - too many reversals, audience fatigue, diminishing returns."
+      Snyder (Save the Cat): "One great twist better than three mediocre twists - focus impact."
+    fix: "Reduce twists - focus on one or two powerful revelations rather than multiple weak twists"
+    examples:
+      - "BAD: New twist every 10 pages, audience fatigued"
+      - "GOOD: Sixth Sense - single powerful twist (focused impact)"
+
+  - id: TWIST.R015
+    title: "Twist Surprise-Inevitability Balance"
+    severity: high
+    description: "Twist balances surprise and inevitability - shocking but logical (Aristotle)"
+    theory: |
+      Aristotle (Poetics): "Best plots - surprise audience yet feel inevitable, necessary, probable in hindsight."
+      McKee (Story): "Twist must surprise yet satisfy - audience shocked but recognizes inevitability."
+    fix: "Balance surprise (misdirection, hide clues) with inevitability (plant clues, foreshadow subtly)"
+    examples:
+      - "Sixth Sense - surprise (didn't expect) + inevitable (clues were there)"
+      - "Empire Strikes Back - surprise (shocking) + inevitable (themes, setup)"
+
+# Analysis prompts for LLM-assisted analysis
+analysis_prompts:
+  twist_present:
+    prompt: "Does this screenplay contain a major twist or revelation? Look for moments that recontextualize the story, reveal hidden truths, or reverse expectations. McKee: 'Best stories have major revelations.' Aristotle: 'Peripeteia and anagnorisis most powerful plot elements.'"
+    markers: ["twist", "revelation", "reveal", "reversal", "shocking", "surprise", "turns out", "actually", "truth is"]
+
+  twist_effectiveness:
+    prompt: "Is the twist surprising yet inevitable? Does it shock the audience but feel earned in hindsight? Aristotle: 'Best plots surprise audience yet feel inevitable.' McKee: 'Audience shocked but says of course.'"
+    markers: ["surprising yet inevitable", "didn't see coming", "makes sense", "clues were there", "obvious in hindsight"]
+
+  twist_timing:
+    prompt: "Is the twist placed at Act 2 midpoint or Act 3 for maximum impact? Field: 'Major twist at page 60 midpoint or page 85-95 final reversal.' Snyder: 'Midpoint twist changes everything.'"
+    markers: ["midpoint twist", "Act 2 twist", "Act 3 twist", "climactic twist", "final twist"]
+
+  twist_setup:
+    prompt: "Is the twist properly foreshadowed with clues? McKee: 'Twist must be earned - plant clues audience misses.' Truby: 'Strategic placement of clues builds to revelation.'"
+    markers: ["foreshadowed", "hinted at", "clues planted", "setup earlier", "established earlier"]
+
+  twist_earned:
+    prompt: "Is the twist earned through proper setup, or is it a cheap gimmick? Aristotle: 'Best twists surprising yet necessary/probable, feel earned not arbitrary.'"
+    markers: ["earned twist", "properly setup", "well foreshadowed", "makes sense", "logical twist"]
+
+  unearned_twist:
+    prompt: "PENALTY CHECK: Is the twist unearned (random, not foreshadowed)? McKee: 'Unearned twist violates contract with audience.' Aristotle: 'Deus ex machina worst flaw.'"
+    markers: ["unearned twist", "out of nowhere", "random twist", "no setup", "not foreshadowed", "deus ex machina"]
+
+  predictable_twist:
+    prompt: "PENALTY CHECK: Is the twist predictable (too obvious, telegraphed)? McKee: 'Predictable twist - foreshadowing too heavy, audience ahead of story.'"
+    markers: ["predictable twist", "saw it coming", "obvious twist", "telegraphed", "too obvious", "no surprise"]
+
+  twist_overload:
+    prompt: "PENALTY CHECK: Are there too many twists (overload, diminishing returns)? Snyder: 'One great twist better than three mediocre twists.'"
+    markers: ["too many twists", "twist overload", "excessive twists", "twist fatigue", "loses impact"]

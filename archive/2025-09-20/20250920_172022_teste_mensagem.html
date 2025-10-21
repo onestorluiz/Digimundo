@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Teste de Envio para Messamon</title>
+</head>
+<body>
+  <h1>Enviar mensagem simbólica</h1>
+  <form id="mensagemForm">
+    <label>Nome do Digimon:</label><br>
+    <input type="text" id="digimon" required><br><br>
+
+    <label>Mensagem:</label><br>
+    <textarea id="mensagem" rows="4" cols="50" required></textarea><br><br>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <pre id="resposta"></pre>
+
+  <script>
+    document.getElementById('mensagemForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const digimon = document.getElementById('digimon').value;
+      const mensagem = document.getElementById('mensagem').value;
+
+      const resposta = await fetch('portal.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ digimon, mensagem })
+      });
+
+      const json = await resposta.json();
+      document.getElementById('resposta').innerText = JSON.stringify(json, null, 2);
+    });
+  </script>
+</body>
+</html>

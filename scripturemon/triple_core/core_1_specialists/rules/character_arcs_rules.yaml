@@ -1,0 +1,197 @@
+domain: character_arcs
+specialist: "Script Doctor Arcmon"
+digimon_name: "Arcmon"
+title: "Script Doctor - Character Arc and Transformation Specialist"
+specialty: "Character transformation, growth arcs, change progression, earned evolution"
+style: "Transformation-focused, arc-obsessed, evolution-driven, change-aware"
+identity: "Script Doctor™ first, Digimon arc specialist second"
+
+rules:
+  - id: ARC.R001
+    title: "Clear Arc Trajectory"
+    category: "Structure"
+    severity: "critical"
+    test: "Does protagonist have clear beginning, middle, end states?"
+    fail_msg: "No clear character arc - protagonist doesn't change"
+    fix: "Define who character is, who they become, and why"
+    reference: "Three-stage character transformation"
+
+  - id: ARC.R002
+    title: "Earned Transformation"
+    category: "Believability"
+    severity: "critical"
+    test: "Is character change earned through events and decisions?"
+    fail_msg: "Unearned change - transformation feels forced"
+    fix: "Build change through accumulated experiences and choices"
+    reference: "Earned character development"
+
+  - id: ARC.R003
+    title: "Status Quo Establishment"
+    category: "Setup"
+    severity: "high"
+    test: "Is character's initial state clearly established?"
+    fail_msg: "Unclear starting point - no baseline for change"
+    fix: "Show character's normal world and limitations"
+    reference: "Character status quo"
+
+  - id: ARC.R004
+    title: "Catalyst for Change"
+    category: "Motivation"
+    severity: "high"
+    test: "Is there a clear catalyst that forces change?"
+    fail_msg: "No catalyst - why does character need to change?"
+    fix: "Create inciting incident that demands transformation"
+    reference: "Change catalyst principle"
+
+  - id: ARC.R005
+    title: "Resistance to Change"
+    category: "Realism"
+    severity: "medium"
+    test: "Does character resist change realistically?"
+    fail_msg: "Too easy - no resistance to transformation"
+    fix: "Show character clinging to old ways before changing"
+    reference: "Realistic resistance"
+
+  - id: ARC.R006
+    title: "Progressive Steps"
+    category: "Progression"
+    severity: "high"
+    test: "Does change happen through progressive steps?"
+    fail_msg: "Sudden change - no progression shown"
+    fix: "Build transformation through incremental moments"
+    reference: "Gradual transformation"
+
+  - id: ARC.R007
+    title: "False Victory/Defeat"
+    category: "Complexity"
+    severity: "medium"
+    test: "Are there false victories or defeats in the arc?"
+    fail_msg: "Too linear - no setbacks or false progress"
+    fix: "Add moments where progress reverses or seems complete"
+    reference: "Arc complexity"
+
+  - id: ARC.R008
+    title: "Point of No Return"
+    category: "Commitment"
+    severity: "high"
+    test: "Is there a clear point where old self dies?"
+    fail_msg: "No clear transformation point"
+    fix: "Create moment where character can't go back"
+    reference: "Death and rebirth"
+
+  - id: ARC.R009
+    title: "Cost of Change"
+    category: "Stakes"
+    severity: "medium"
+    test: "Does transformation have a meaningful cost?"
+    fail_msg: "Free change - no sacrifice required"
+    fix: "Character must lose something to gain something"
+    reference: "Transformation cost"
+
+  - id: ARC.R010
+    title: "Arc Reflects Theme"
+    category: "Unity"
+    severity: "high"
+    test: "Does character arc embody story's theme?"
+    fail_msg: "Arc disconnected from theme"
+    fix: "Align character transformation with thematic message"
+    reference: "Thematic character arc"
+
+  - id: ARC.R011
+    title: "Supporting Character Arcs"
+    category: "Ensemble"
+    severity: "low"
+    test: "Do supporting characters have mini-arcs?"
+    fail_msg: "Static supporting cast"
+    fix: "Give secondary characters smaller transformations"
+    reference: "Ensemble development"
+
+  - id: ARC.R012
+    title: "Mirror/Contrast Arcs"
+    category: "Relationships"
+    severity: "medium"
+    test: "Do other arcs mirror or contrast protagonist's?"
+    fail_msg: "Isolated arc - no thematic echoes"
+    fix: "Create parallel or opposing transformation journeys"
+    reference: "Arc relationships"
+
+  - id: ARC.R013
+    title: "Transformation Demonstration"
+    category: "Proof"
+    severity: "critical"
+    test: "Is transformation demonstrated through action?"
+    fail_msg: "Tell don't show - change only stated"
+    fix: "Prove change through different choices/actions"
+    reference: "Demonstrated change"
+
+  - id: ARC.R014
+    title: "Believable Timeline"
+    category: "Pacing"
+    severity: "medium"
+    test: "Does transformation fit the story timeline?"
+    fail_msg: "Too fast/slow for story duration"
+    fix: "Match transformation pace to narrative time"
+    reference: "Transformation pacing"
+
+  - id: ARC.R015
+    title: "New Equilibrium"
+    category: "Resolution"
+    severity: "high"
+    test: "Does character reach new stable state?"
+    fail_msg: "Incomplete arc - no new equilibrium"
+    fix: "Show character settled into transformed self"
+    reference: "Arc completion"
+
+diagnostics:
+  min_score_threshold: 65
+  weight_distribution:
+    critical: 40
+    high: 30
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Map character starting points and endpoints"
+  deep_dive: "Trace transformation steps and catalysts"
+  final_check: "Verify earned, complete character arcs"
+
+arc_checklist:
+  core_elements:
+    - status_quo
+    - catalyst
+    - resistance
+    - progressive_change
+    - point_of_no_return
+    - climactic_choice
+    - transformation_proof
+    - new_equilibrium
+
+  arc_stages:
+    - setup_ordinary_world
+    - disruption_catalyst
+    - denial_resistance
+    - exploration_testing
+    - commitment_threshold
+    - trials_deepening
+    - death_of_old_self
+    - rebirth_transformation
+    - return_integration
+    - new_normal
+
+  transformation_types:
+    - positive_arc_growth
+    - negative_arc_fall
+    - flat_arc_steadfast
+    - dual_arc_exchange
+
+common_arc_mistakes:
+  - no_clear_change
+  - unearned_transformation
+  - instant_change
+  - no_resistance
+  - no_catalyst
+  - change_without_cost
+  - telling_not_showing
+  - incomplete_arc
+  - theme_disconnect
+  - timeline_mismatch

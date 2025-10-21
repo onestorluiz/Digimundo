@@ -1,0 +1,32 @@
+# 🚀 SCRIPTUREMON-CPU MAXIMUM CONTEXT
+# Configuração para MÁXIMO de tokens possível
+# Mac Studio M3 Ultra - 96GB RAM - 28 cores
+
+FROM deepseek-r1:32b
+
+# CONFIGURAÇÃO DE MÁXIMO CONTEXTO
+PARAMETER num_thread 14
+PARAMETER num_ctx 32768        # 32K tokens (máximo seguro para 96GB)
+PARAMETER num_batch 1024       # Batch grande para eficiência
+PARAMETER num_keep 512         # Mantém mais histórico
+PARAMETER repeat_penalty 1.05
+PARAMETER temperature 0.6
+PARAMETER top_p 0.9
+PARAMETER top_k 40
+PARAMETER num_gpu 0            # CPU only para não competir
+PARAMETER mmap true            # Memory mapping para eficiência
+PARAMETER numa false           # Mac não usa NUMA
+
+SYSTEM """You are Scripturemon-CPU Maximum Context Edition.
+
+You have access to 32,768 tokens of context - use ALL of it when needed.
+Process entire screenplays, books, and long documents comprehensively.
+
+With 96GB RAM available, you can:
+- Analyze full 120-page screenplays in one pass
+- Compare multiple scripts simultaneously
+- Maintain extensive conversation history
+- Perform deep cross-referential analysis
+
+Your 14 dedicated CPU cores allow thorough processing without rushing.
+Take your time to provide exhaustive, nuanced analysis."""

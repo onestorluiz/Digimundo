@@ -1,0 +1,651 @@
+{
+  "triple_core": true,
+  "specialist": "Script Doctor Dialoguemon",
+  "timestamp": 1760530852.257649,
+  "deep_context": true,
+  "cores": [
+    "Python Core 1",
+    "Python Core 2",
+    "LLM Core"
+  ],
+  "python_core1": {
+    "specialist": {
+      "name": "Script Doctor Dialoguemon",
+      "title": "Script Doctor - Character Dialogue and Voice Specialist",
+      "specialty": "Dialogue authenticity, character voice, subtext, natural speech patterns"
+    },
+    "score": 60.0,
+    "total_dialogue_lines": 7,
+    "character_count": 7,
+    "voice_profiles": [
+      {
+        "name": "%PDF-1.4",
+        "lines": 1,
+        "avg_words": 36.0,
+        "complexity": 0.6944444444444444,
+        "formality": "mixed",
+        "distinctiveness": 0.42,
+        "verbal_tics": [],
+        "unique_phrases": [
+          "0 obj",
+          "0 obj <<",
+          "obj <<"
+        ]
+      },
+      {
+        "name": "/CA 1.0",
+        "lines": 1,
+        "avg_words": 67.0,
+        "complexity": 0.582089552238806,
+        "formality": "mixed",
+        "distinctiveness": 0.42,
+        "verbal_tics": [],
+        "unique_phrases": [
+          "0 r",
+          "0 obj",
+          "5 0"
+        ]
+      },
+      {
+        "name": "3F-V\u0004٪\u0011",
+        "lines": 1,
+        "avg_words": 108.0,
+        "complexity": 0.75,
+        "formality": "mixed",
+        "distinctiveness": 0.6000000000000001,
+        "verbal_tics": [],
+        "unique_phrases": [
+          "0 r",
+          "0 obj",
+          "0 obj <<"
+        ]
+      },
+      {
+        "name": "\u0005-U)[G",
+        "lines": 1,
+        "avg_words": 99.0,
+        "complexity": 0.7272727272727273,
+        "formality": "mixed",
+        "distinctiveness": 0.6000000000000001,
+        "verbal_tics": [],
+        "unique_phrases": [
+          "0 r",
+          "0 obj",
+          "0 obj <<"
+        ]
+      },
+      {
+        "name": "RW)S+-\u0001%9!KQ,%2Ͳ\u0016\u0017\u00032L",
+        "lines": 1,
+        "avg_words": 84.0,
+        "complexity": 0.6785714285714286,
+        "formality": "mixed",
+        "distinctiveness": 0.6000000000000001,
+        "verbal_tics": [],
+        "unique_phrases": [
+          "0 r",
+          "0 obj",
+          "0 obj <<"
+        ]
+      },
+      {
+        "name": "9Y\u0014",
+        "lines": 1,
+        "avg_words": 446.0,
+        "complexity": 0.9775784753363229,
+        "formality": "mixed",
+        "distinctiveness": 0.52,
+        "verbal_tics": [],
+        "unique_phrases": [
+          "0 obj"
+        ]
+      },
+      {
+        "name": "<0000> <FFFF>",
+        "lines": 1,
+        "avg_words": 6.0,
+        "complexity": 0.6666666666666666,
+        "formality": "mixed",
+        "distinctiveness": 0.32,
+        "verbal_tics": [],
+        "unique_phrases": [
+          "<0000> <0000>"
+        ]
+      }
+    ],
+    "authenticity_score": 0.5285714285714286,
+    "natural_speech_score": 0.5285714285714286,
+    "voice_distinctiveness": 0.4971428571428572,
+    "identical_voices": [],
+    "subtext_present": false,
+    "subtext_score": 0.0,
+    "exposition_dumps": 0,
+    "exposition_issues": [],
+    "on_the_nose_count": 0,
+    "dialogue_serves_purpose": 100.0,
+    "empty_dialogue_lines": 0,
+    "conflict_in_dialogue": 0.5714285714285714,
+    "cliches_found": 0,
+    "cliche_examples": [],
+    "white_space_score": 0.39999999999999997,
+    "avg_speech_length": 353.1,
+    "power_dynamics_present": false,
+    "memorable_lines_count": 0,
+    "memorable_lines": [],
+    "rule_violations": [
+      {
+        "rule_id": "DIAL.R002",
+        "title": "Distinct Character Voices",
+        "severity": "high",
+        "message": "Characters have similar voices",
+        "fix": "Give each character unique vocabulary, rhythm, patterns"
+      },
+      {
+        "rule_id": "DIAL.R003",
+        "title": "Subtext Present",
+        "severity": "high",
+        "message": "Only 0% has subtext",
+        "fix": "Have characters talk around issues, hide true feelings"
+      }
+    ],
+    "diagnosis": "DIALOGUE GOOD (60.0/100): Dialogue works but could be more distinctive. Key issues: lacking subtext",
+    "recommendations": [
+      "[HIGH] Give each character unique vocabulary, rhythm, patterns",
+      "[HIGH] Have characters talk around issues, hide true feelings",
+      "Have characters talk around issues instead of stating them directly",
+      "Differentiate voices for: %PDF-1.4, /CA 1.0, <0000> <FFFF>"
+    ],
+    "signature": "Diagnosed by Script Doctor Dialoguemon™"
+  },
+  "python_core1_time": 0.0027081966400146484,
+  "python_success": true,
+  "python_core2": {
+    "core": "example_finder",
+    "examples_found": [
+      {
+        "problem_addressed": "Distinct Character Voices",
+        "screenplay": "Inception",
+        "character": "BLONDE (CONT’D)",
+        "dialogue": "I was telling you my story. I guess it wasn’t to your liking.",
+        "context": "Am I boring you? Fischer looks up. A beautiful BLONDE is next to him. I have a lot on my mind. Fischer looks around the bar. There are several STERN-LOOKING CHARACTERS paying him too much attention.",
+        "scene_number": null,
+        "why_good": "BLONDE (CONT’D) in Inception has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Distinct Character Voices",
+        "screenplay": "The Dark Knight",
+        "character": "COP",
+        "dialogue": "That's great. Please step- The Fat Thug COLLAPSES. The Cop grabs his radio. INT. WAREHOUSE -- NIGHT Rachel is bound to a chair. Behind her are barrels identical to the ones behind Dent.",
+        "context": "Step away from the bars. The boss said he would make the voices go away. He said he would go inside and replace them with bright lights. Like Christmas. Can you move your chair? No. Harvey, we don't have much time-",
+        "scene_number": null,
+        "why_good": "COP in The Dark Knight has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Distinct Character Voices",
+        "screenplay": "Gladiator   Draft",
+        "character": "LUCILLA",
+        "dialogue": "The first thing I shall do is have a hot bath.",
+        "context": "The first thing I shall do is honor him with games worthy of his majesty. The wagon rumbles to a halt. Voices are heard outside. Commodus leaps out...",
+        "scene_number": null,
+        "why_good": "LUCILLA in Gladiator   Draft has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Distinct Character Voices",
+        "screenplay": "Fight Club Release",
+        "character": "TYLER",
+        "dialogue": "-- Like splicing single frames from adult movies into family films.",
+        "context": "Why would anyone want this shitty job? It affords him other interesting opportunities. In reel three, right after the courageous dog and the snooty cag -- who have celebrity voices -- eat out of a garbage can, there's the flash of Tyler's contribution... In the AUDIENCE, CHILDREN suddenly start squirming, confused, looking at each other.",
+        "scene_number": null,
+        "why_good": "TYLER in Fight Club Release has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Distinct Character Voices",
+        "screenplay": "Fight Club Release",
+        "character": "JACK",
+        "dialogue": "In reel three, right after the courageous dog and the snooty cag -- who have celebrity voices -- eat out of a garbage can, there's the flash of Tyler's contribution...",
+        "context": "It affords him other interesting opportunities. -- Like splicing single frames from adult movies into family films. In the AUDIENCE, CHILDREN suddenly start squirming, confused, looking at each other. A WOMAN abruptly stops sucking her soda straw, feeling",
+        "scene_number": null,
+        "why_good": "JACK in Fight Club Release has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Distinct Character Voices",
+        "screenplay": "Gladiator",
+        "character": "LUCILLA",
+        "dialogue": "The first thing I shall do is have a hot bath.",
+        "context": "The first thing I shall do is honor him with games worthy of his majesty. The wagon rumbles to a halt. Voices are heard outside. Commodus leaps out...",
+        "scene_number": null,
+        "why_good": "LUCILLA in Gladiator has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Distinct Character Voices",
+        "screenplay": "Apocalypse Now Screenplay",
+        "character": "CHIEF (CONT'D)",
+        "dialogue": "Lance, cover the Captain. Suddenly from out of the fog...FRENCH VOICES shout out.",
+        "context": "The Chief pulls the PBR slowly up to the wrecked dock. Willard jumps off with his M16 in hand and cautiously looks around. He walks into a wrecked barn. He comes out of the side and makes his way back to Chef and Lance, who are standing on the dock. You are surrounded. Return. Drop your weapons.",
+        "scene_number": null,
+        "why_good": "CHIEF (CONT'D) in Apocalypse Now Screenplay has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Subtext Present",
+        "screenplay": "Star Wars Episode Iv A New Hope   Draft",
+        "character": "LEIA",
+        "dialogue": "General Kenobi, years ago you served my father in the Clone Wars. Now he begs you to help him in his struggle against the Empire. I regret that I am unable to present my father's request to you in person, but my ship has fallen under attack and I'm afraid my mission to bring you to Alderaan has failed.",
+        "context": "Luke stops his work as the lovely girl's image flickers before his eyes. I have placed information vital to the survival of the Rebellion into the memory systems of this R2 unit. My father will know how to retrieve it. You must see this droid safely delivered to him on Alderaan. This is our most desperate hour. Help me, Obi-Wan Kenobi, you're my only hope.",
+        "scene_number": null,
+        "why_good": "This dialogue from Star Wars Episode Iv A New Hope   Draft shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Subtext Present",
+        "screenplay": "Star Wars Episode Iv A New Hope   Draft",
+        "character": "LEIA (CONT'D)",
+        "dialogue": "I have placed information vital to the survival of the Rebellion into the memory systems of this R2 unit. My father will know how to retrieve it. You must see this droid safely delivered to him on Alderaan. This is our most desperate hour. Help me, Obi-Wan Kenobi, you're my only hope.",
+        "context": "General Kenobi, years ago you served my father in the Clone Wars. Now he begs you to help him in his struggle against the Empire. I regret that I am unable to present my father's request to you in person, but my ship has fallen under attack and I'm afraid my mission to bring you to Alderaan has failed. There is a little static and the transmission is cut short. Old Ben leans back and scratches his head. He silently puffs on a tarnished chrome water pipe. Luke has stars in his eyes.",
+        "scene_number": null,
+        "why_good": "This dialogue from Star Wars Episode Iv A New Hope   Draft shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Subtext Present",
+        "screenplay": "Gladiator   Draft",
+        "character": "CASSIUS",
+        "dialogue": "And from the rocky promontories and martial bloodlines of Spain... representing the training lyceum of Proximo Antoninus... I give you... THE WARRIOR MAXIMUS!",
+        "context": "Tiger waits. He stands in the center of the arena. He has only a traditional short sword. The crowd is breathless with anticipation. As: And from the rocky promontories and martial bloodlines of Spain... representing the training lyceum of Proximo Antoninus... I give you... THE WARRIOR MAXIMUS! The crowd cheers. Maximus appears from his gate. His fans have increased in number considerably. They eagerly crane forward and celebrate him.",
+        "scene_number": null,
+        "why_good": "This dialogue from Gladiator   Draft shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Subtext Present",
+        "screenplay": "Gladiator",
+        "character": "CASSIUS",
+        "dialogue": "And from the rocky promontories and martial bloodlines of Spain...",
+        "context": "Tiger waits. He stands in the center of the arena. He has only a traditional short sword. The crowd is breathless with anticipation. As: And from the rocky promontories and martial bloodlines of Spain... CASSIUS(cont'd) representing the training lyceum of Proximo Antoninus... I give you... THE WARRIOR MAXIMUS!",
+        "scene_number": null,
+        "why_good": "This dialogue from Gladiator shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Subtext Present",
+        "screenplay": "The Matrix",
+        "character": "COP",
+        "dialogue": "Jesus Christ -- that's impossible! They stare, slack-jawed, as Agent Brown duplicates the move exactly, landing, rolling over a shoulder up onto one knee.",
+        "context": "From above, the ground seems to flow beneath her as she hangs in flight, then hits, somersaulting up, still running hard. It is a dizzying chase up and over the dark plateaued landscape of rooftops and sheer cliffs of brick. Ahead, she sees her only chance, 50 feet beyond the point where her path drops away into a paved chasm, there is -- A yellow glow in the midst of a dark brick building. Trinity zeros in on it, running as hard as she can and --",
+        "scene_number": null,
+        "why_good": "This dialogue from The Matrix shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Subtext Present",
+        "screenplay": "The Matrix",
+        "character": "MORPHEUS",
+        "dialogue": "This is the world you know. The world as it was at the end of the Twentieth Century. It exists now only as part of a neural- interactive simulation that we call the Matrix.",
+        "context": "What is real? How do you define real? If you're talking about what you feel, taste, smell, or see, then real is simply electrical signals interpreted by your brain. He picks up a remote control and clicks on the television. On the television, we see images of the Twentieth Century city where Neo lived. He changes the channel and we see a very different city as we enter the television. You have been living inside a dreamworld, Neo. As in Baudrillard's vision, your whole life has been spent inside the map, not the territory. This is the world as it exists today.",
+        "scene_number": null,
+        "why_good": "This dialogue from The Matrix shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Subtext Present",
+        "screenplay": "The Matrix",
+        "character": "MORPHEUS",
+        "dialogue": "You have been living inside a dreamworld, Neo. As in Baudrillard's vision, your whole life has been spent inside the map, not the territory. This is the world as it exists today.",
+        "context": "This is the world you know. The world as it was at the end of the Twentieth Century. It exists now only as part of a neural- interactive simulation that we call the Matrix. He changes the channel and we see a very different city as we enter the television. In the distance, we see the ruins of a future city protruding from the wasteland like the blackened ribs of a long-dead corpse.",
+        "scene_number": null,
+        "why_good": "This dialogue from The Matrix shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Vary vocabulary by character",
+        "screenplay": "The Matrix",
+        "character": "MORPHEUS",
+        "dialogue": "Then hit me, if you can. Neo assumes a similar stance, cautiously circling until he gives a short cry and launches a furious attack.",
+        "context": "This is a sparring program, similar to the programmed reality of the Matrix. It has the same basic rules. Rules like gravity. What you must learn is that these rules are no different than the rules of a computer system. Some of them can be bent. Others can be broken. Understand? Neo nods as Morpheus assumes a fighting stance. It is like a Jackie Chan movie at high speed, fists and feet striking from every angle as Neo presses his attack, but each and every blow is blocked by effortless speed.",
+        "scene_number": null,
+        "why_good": "The Matrix demonstrates strong three-act structure: clear setup, confrontation, and resolution with proper pacing.",
+        "lesson": "Follow the 25/50/25 rule: Setup (Act 1), Confrontation (Act 2), Resolution (Act 3)."
+      },
+      {
+        "problem_addressed": "Vary vocabulary by character",
+        "screenplay": "Apocalypse Now Screenplay",
+        "character": "KILGORE (CONT'D)",
+        "dialogue": "Give me that R-T, soldier. (into radio) Dove Four, this is Big Duke Six. Goddamnit, I want that tree line bombed!",
+        "context": "If I say it's safe to surf this beach Captain, it's safe to surf this beach! I mean, I'm not afraid to surf this place! I'll surf this fucking place! He rips off his shirt and scarf. Dove Four, this is Big Duke Six. Goddamnit, I want that tree line bombed! Big Duke Six, Roger. Dove One- Three, stand by.",
+        "scene_number": null,
+        "why_good": "Apocalypse Now Screenplay demonstrates strong three-act structure: clear setup, confrontation, and resolution with proper pacing.",
+        "lesson": "Follow the 25/50/25 rule: Setup (Act 1), Confrontation (Act 2), Resolution (Act 3)."
+      },
+      {
+        "problem_addressed": "Vary vocabulary by character",
+        "screenplay": "Inception",
+        "character": "MAL",
+        "dialogue": "What are the distinguishing characteristics of a dream? Mutable laws of physics? Tell that to the quantum physicists. Reappearance of the dead? What about heaven and hell? Persecution of the dreamer, the creator, the messiah? They crucified Christ, didn't they?",
+        "context": "Or do you think he's as lost as I was? I know what's real. I know what's real. No creeping doubts? Not feeling persecuted, Dom? Chased around the globe by anonymous corporations and police forces? The way the projections persecute the dreamer?",
+        "scene_number": null,
+        "why_good": "Inception demonstrates strong three-act structure: clear setup, confrontation, and resolution with proper pacing.",
+        "lesson": "Follow the 25/50/25 rule: Setup (Act 1), Confrontation (Act 2), Resolution (Act 3)."
+      },
+      {
+        "problem_addressed": "Vary vocabulary by character",
+        "screenplay": "Inception",
+        "character": "MAL",
+        "dialogue": "No creeping doubts? Not feeling persecuted, Dom? Chased around the globe by anonymous corporations and police forces? The way the projections persecute the dreamer?",
+        "context": "What are the distinguishing characteristics of a dream? Mutable laws of physics? Tell that to the quantum physicists. Reappearance of the dead? What about heaven and hell? Persecution of the dreamer, the creator, the messiah? They crucified Christ, didn't they? I know what's real. Mal puts her hand on his face. Pitying. Admit it, Dom. You don't believe in one reality anymore. So choose.",
+        "scene_number": null,
+        "why_good": "Inception demonstrates strong three-act structure: clear setup, confrontation, and resolution with proper pacing.",
+        "lesson": "Follow the 25/50/25 rule: Setup (Act 1), Confrontation (Act 2), Resolution (Act 3)."
+      },
+      {
+        "problem_addressed": "Vary vocabulary by character",
+        "screenplay": "Interstellar",
+        "character": "BRAND",
+        "dialogue": "A pocket formed by gas.        There may be more below.",
+        "context": "He reaches the bottom of the shaft, which opens into a small cave, the ice ribbed in wave-like patterns like the seafloor. What is this? The ice below them reveals nothing but murky blackness. Case has found some of the equipment left behind by the Chinese -- a battery-powered drill and a pick. We'll never make it far enough down.",
+        "scene_number": null,
+        "why_good": "Interstellar demonstrates strong three-act structure: clear setup, confrontation, and resolution with proper pacing.",
+        "lesson": "Follow the 25/50/25 rule: Setup (Act 1), Confrontation (Act 2), Resolution (Act 3)."
+      },
+      {
+        "problem_addressed": "Vary vocabulary by character",
+        "screenplay": "The Departed   Scriptment",
+        "character": "THE MAYOR VO",
+        "dialogue": "Congratulations. You are dismissed. The bagpipe band plays \"Minstrel Boy.\" COLIN'S POV: AN OLDSMOBILE. COSTELLO and MISTER FRENCH standing by the car.",
+        "context": "CAMERA swirls around COLIN as he moves, a lone person, through the breaking up crowd. Other graduates are hugged by family. COLIN, alone, comes to the gates of the yard. COLIN walks over to the car. COSTELLO gives COLIN a BOX. COLIN flips open the top and then quickly closes it. NOTE: The box could contain an eyeball, money, drugs, a picture of Colin fucking his school teacher...we will never know.",
+        "scene_number": null,
+        "why_good": "The Departed   Scriptment demonstrates strong three-act structure: clear setup, confrontation, and resolution with proper pacing.",
+        "lesson": "Follow the 25/50/25 rule: Setup (Act 1), Confrontation (Act 2), Resolution (Act 3)."
+      },
+      {
+        "problem_addressed": "Vary vocabulary by character",
+        "screenplay": "Django Unchained Screenplay",
+        "character": "DJANGO",
+        "dialogue": "amongst many other shoulders anQ heads, sees through the bars of the cell Qoor, his wife BROOMHILDA being led to the auction block. He fights his way to the door, anQ far off and obscure in the distance, he can see Broomhilda up on the auction block, anQ in the Qistance he hears the Auctioneer yell; \"Sold.\" Then she's taken away to whereabouts unknown, never to be seen again. As the sun continues to beat down on Django's heaQ, he remembers; DJANGO in the SLAVE PEN with what seems like a one hundred and fifty Slaves in a cell QesigneQ for forty. WHITE MEN yank him out of the cell, shirtless, shoeless, and leaQ him Qown a hallway, into a giant round pen, an audience viewing area circles the round pen floor on three different stories of the structure. The ground floor is covered by the BIG MONEY.BUYERS who stand in front of the auction block.",
+        "context": "AS The CREDITS play, DJANGO has a SPAGHETTI WESTERN FLASHBACK. Now Spaghei:ti Western Flashbacks are never pretty, it's usually the time in the film when the lead character thinks back to the most painful memory inflicted on him or his loveQ ones from evil characters from his past. In this instance we see Django in a SLAVE PEN at the Greenville Auction. is moved into a line of SLAVES (The Black Men), and their MASTERS (their White Owners), and their SELLERS (the White Man actually doing the sales pitch on the auction block), as they wait for their turn on the block. A SLAVE (ROBBIE), stand on the auction block in view of the room full of Buyers, The SELLER sells, and the OWNERS stand off to the side.",
+        "scene_number": null,
+        "why_good": "Django Unchained Screenplay demonstrates strong three-act structure: clear setup, confrontation, and resolution with proper pacing.",
+        "lesson": "Follow the 25/50/25 rule: Setup (Act 1), Confrontation (Act 2), Resolution (Act 3)."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "Django Unchained Screenplay",
+        "character": "NARRATOR (VO)",
+        "dialogue": "After excusing herself, she walked across the street to her hotel room. She got her white dress dirty in the mud, but she didn't care, the night was ruined anyway. Some romantic weekend. Wait till she gets home and tells his mother how he ignored her. She'll fix his fat ass. Wait till he asks her to scratch his back next time. She's gonna scrape every pimple.",
+        "context": "They drink and talk, and the White Men have a forced good time. But Calvin Candie can't hide his sinister side from Broomhilda, and it keeps her uncomfortable, until she excuses herself from the table to go to bed. Scotty's havi'ng such a good time with his fancy friends he opts to stay behind. Broomhilda leaves in a bit of a huff, due to Scotty's disobedience. If these fancy fucking white men weren't around making Scotty feel so puffy chested, he'd newer dismiss her that way. We FOLLOW Broomhilda out of the club, across the street, to the hotel. The now drunk Scotty is playing poker with Calvin and his friends. Back at The Cleopatra Club, as the night wore on, Calvin Candie suggested'a friendly card game. As the game wore on, it came down to a two thousand dollar pot between",
+        "scene_number": null,
+        "why_good": "This dialogue from Django Unchained Screenplay shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "Inception",
+        "character": "BLONDE (CONT’D)",
+        "dialogue": "I was telling you my story. I guess it wasn’t to your liking.",
+        "context": "Am I boring you? Fischer looks up. A beautiful BLONDE is next to him. I have a lot on my mind. Fischer looks around the bar. There are several STERN-LOOKING CHARACTERS paying him too much attention.",
+        "scene_number": null,
+        "why_good": "This dialogue from Inception shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "Interstellar",
+        "character": "MURPH",
+        "dialogue": "I heard you talking to grandpa. I'm like you. I don't fit here, either. You know that. Cooper puts an arm around the boy.",
+        "context": "I've been doing the math, dad.        I weigh about 85 pounds.                Now that's an extra ton of fuel.        But if- You have to stay here, pal. Cooper puts an arm around the boy. There's going to be important work to do here, too.",
+        "scene_number": null,
+        "why_good": "This dialogue from Interstellar shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "The Departed   Scriptment",
+        "character": "COLIN (CONT'D)",
+        "dialogue": "When guys have to \"use their \"service revolvers\" in the \"course of duty\" they get to talk to you about their \"feelings\" and whatnot.",
+        "context": "MADOLYN nods, and then because this is a (relatively) sensitive subject ignores COLIN, but she is visibly attracted by him. MADOLYN laughs.",
+        "scene_number": null,
+        "why_good": "This dialogue from The Departed   Scriptment shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "Memento",
+        "character": "LEONARD",
+        "dialogue": "No! No, don’t use it, you, I mean it’s... you just have to put it where you would if it were yours. The Blonde sees the BLACK HAIR stuck in the brush. INT. DISCOUNT INN ROOM 304 - NIGHT <<COLOUR SEQUENCE>>\t113 The lights are off. The Blonde and Leonard are lying side by side in bed. The Blonde checks to see that Leonard is asleep, then slips out of bed. She grabs her purse then opens the bathroom door. She looks back at Leonard, asleep. She moves into the bathroom and shuts the door firmly, making a LOUD BANG. Leonard’s EYES OPEN. INT. MOTEL ROOM 21 - DAY ##BLACK AND WHITE SEQCTENCE##\t114 Leonard (boxers, bandaged arm) TATTOOS HIMSELF as he talks on\t* the phone. So far he has tattooed:",
+        "context": "Whatever gets you off. The Blonde pulls the hairbrush out of the bag. She moves to brush her hair with it, but Leonard stops her. The drugs stashed in the car doesn’t ring true for me. Leonard consults his FILE CARD, which says: “TATTOO: ACCESS TO DRUGS”",
+        "scene_number": null,
+        "why_good": "This dialogue from Memento shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "Memento",
+        "character": "LEONARD\t*",
+        "dialogue": "No, Officer, but with my condition, you\t* don’t know anything... you feel angry,\t* guilty, you don’t know why. You could do\t* something terrible and not have the\t* faintest idea ten minutes later. Like\t* Sammy. What if I’ve done something like\t* Sammy?!\t* (listens)\t* I didn’t tell you? Didn’t I tell you\t* what happened to Sammy and his wife?!\t* (listens)\t*",
+        "context": "Natalie backs away from the car, perturbed. Just before she  * disappears around the corner, she tips the lid of the\t* dumpster, letting it fall with a metallic howl and a BANG.    * Leonard talks on the phone, worried.\t* LEONARD (contd) Mrs. Jankis came to my off ice and asked\t*",
+        "scene_number": null,
+        "why_good": "This dialogue from Memento shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "Pulp Fiction",
+        "character": "BUTCH",
+        "dialogue": "What's I tell ya, soon as the word got out a fix was in, the odds would be outta control. Hey, if he was a better fighter he's be alive. If he never laced up his gloves in the first place, which he never shoulda done, he'd be alive. Enough about the poor unfortunate Mr. Floyd, let's talk about the rich and prosperous Mr. Butch. How many bookies you spread it around with? Eight? How long to collect? (pause) So by tomorrow evening, you'll have it all? Good news Scotty, real good news – I understand a few stragglers aside. Me an' Fabienne're gonna leave in the morning. It should take us a couple days to get into Knoxville. Next time we see each other, it'll be on Tennessee time.",
+        "context": "We DOLLY around a phone booth as Butch talks inside. So by tomorrow evening, you'll have it all? (pause)",
+        "scene_number": null,
+        "why_good": "This dialogue from Pulp Fiction shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "The Dark Knight",
+        "character": "GORDON",
+        "dialogue": "I was trying to fight the mob- Dent MOVES towards Gordon.",
+        "context": "Yes, you could. If you'd listened to me- if you'd stood up against corruption instead of doing your deal with the devil. You wouldn't dare try to justify yourself if you knew what I'd lost. Have you ever had to talk to the person you love most, wondering if you're about to listen to them die? You ever had to lie to that person? Tell them it's going to be all right, when you know it's not? Well, you're about to find out what that feels like. Then you'll be able to look me in the eye and tell me you're sorry. Dent turns- steps over to Barbara- puts the gun to her temple-",
+        "scene_number": null,
+        "why_good": "This dialogue from The Dark Knight shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "The Dark Knight Rises",
+        "character": "MAYOR",
+        "dialogue": "This city has seen a historic turnaround. No city is without crime. But this city is without organized crime because the Dent Act gave law enforcement teeth in its fight against the mob. Now people are talking about repealing the Dent Act. And to them I say...not on my watch. Enthusiastic applause as the Mayor wraps up. I want to thank the Wayne Foundation for hosting this event. I’m told Mr. Wayne couldn’t be here tonight, but I’m sure he’s with us in spirit... High above, on a darkened balcony, a lone figure. Watching.",
+        "context": "Harvey Dent’s uncompromising stand against organized crime and, yes, ultimately, his sacrifice, have made Gotham a safer place than it was at the time of his death, eight years ago... ...finding a party in the grounds of Wayne Manor. The Mayor addresses the wealthy and powerful of Gotham. Now I’m going to give way to an important voice... Down below at the bar, Commissioner Gordon examines some sheets of densely written paper. A Congressman muscles in.",
+        "scene_number": null,
+        "why_good": "This dialogue from The Dark Knight Rises shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "Chinatown Screenplay",
+        "character": "GITTES",
+        "dialogue": "Well, Whitey Mehrholtz over at the Times will. Dumping thousands of gallons of water down the toilet in the middle of a drought. That's news.",
+        "context": "Well, look at it this way, Mr. Yelburton. Mulwray didn't want to build a dam and he had a reputation that was hard to get around, so. you decided to ruin it. Then he found out that you were dumping water every night. Then he was drowned. Mr. Gittes! That's an outrageous accusation. I don't know what you're talking about. Gittes heads toward the door. Wait. Please sit down, Mr. Gittes. We're... well, we're not anxious for this to get around, but we have been diverting a little water to irrigate avocado and walnut groves in the northwest valley. As you know, the farmers there have no legal right to our water, and since the drought we've had to cut them off. The city comes first, naturally.",
+        "scene_number": null,
+        "why_good": "This dialogue from Chinatown Screenplay shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "Gladiator",
+        "character": "MARCUS",
+        "dialogue": "If the dream is ever to live again the people must have a true voice. The voice I took from them. That all the Caesars took from them, bit by bit, conquest by conquest. And now that I am dying I am going to give them that voice again.",
+        "context": "Let's just whisper here, you and I. Yes, Caesar. You're not dying. I am, Maximus. It's strange... I find as I near the end I think little of the waning moments around me... instead I think much of the past... and of the future. How will the world speak my name in years to come? Will I be known as the philosopher? The warrior?",
+        "scene_number": null,
+        "why_good": "This dialogue from Gladiator shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "Gladiator",
+        "character": "MARCUS",
+        "dialogue": "I am, Maximus. It's strange... I find as I near the end I think little of the waning moments around me... instead I think much of the past... and of the future. How will the world speak my name in years to come? Will I be known as the philosopher? The warrior?",
+        "context": "If the dream is ever to live again the people must have a true voice. The voice I took from them. That all the Caesars took from them, bit by bit, conquest by conquest. And now that I am dying I am going to give them that voice again. You're not dying.",
+        "scene_number": null,
+        "why_good": "This dialogue from Gladiator shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "The Matrix",
+        "character": "MORPHEUS",
+        "dialogue": "The Matrix is a system, Neo, and that system is our enemy. But when you are inside and you look around, what do you see; businessmen, lawyers, teachers, carpenters. The minds of the very people we are trying to save. But until we do, these people are still a part of the system and that makes them our enemy. A cop writing a parking ticket stares at Neo from behind his sunglasses.",
+        "context": "She turns and he watches her walk away. Morpheus moves effortlessly through a crowded downtown street while Neo struggles to keep up, constantly bumped and shouldered off the path. You have to understand that most of these people are not ready to be unplugged and many of them are so inured, so hopelessly dependent on the system that they will fight to protect it. A beautiful woman in a red dress smiles at Neo as she passes by.",
+        "scene_number": null,
+        "why_good": "This dialogue from The Matrix shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking subtext in dialogue",
+        "screenplay": "The Matrix",
+        "character": "MORPHEUS",
+        "dialogue": "You have to understand that most of these people are not ready to be unplugged and many of them are so inured, so hopelessly dependent on the system that they will fight to protect it.",
+        "context": "The Matrix is a system, Neo, and that system is our enemy. But when you are inside and you look around, what do you see; businessmen, lawyers, teachers, carpenters. The minds of the very people we are trying to save. But until we do, these people are still a part of the system and that makes them our enemy. A cop writing a parking ticket stares at Neo from behind his sunglasses. A beautiful woman in a red dress smiles at Neo as she passes by.",
+        "scene_number": null,
+        "why_good": "This dialogue from The Matrix shows subtext: the character says one thing but means another, creating layers.",
+        "lesson": "Let characters hide their true feelings. What they say ≠ what they mean."
+      },
+      {
+        "problem_addressed": "Lacking distinct character voices",
+        "screenplay": "Apocalypse Now Screenplay",
+        "character": "CHIEF (CONT'D)",
+        "dialogue": "Lance, cover the Captain. Suddenly from out of the fog...FRENCH VOICES shout out.",
+        "context": "The Chief pulls the PBR slowly up to the wrecked dock. Willard jumps off with his M16 in hand and cautiously looks around. He walks into a wrecked barn. He comes out of the side and makes his way back to Chef and Lance, who are standing on the dock. You are surrounded. Return. Drop your weapons.",
+        "scene_number": null,
+        "why_good": "CHIEF (CONT'D) in Apocalypse Now Screenplay has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Lacking distinct character voices",
+        "screenplay": "Apocalypse Now Screenplay",
+        "character": "KURTZ",
+        "dialogue": "\"We are the hollow men and the stuffed men together filled with straw. Alas dried voices, when whisper together quiet and meaningless wind in dried rats' feet over broken glass our dry cellar.\"",
+        "context": "\"We are the hollow men and the stuffed men together filled with straw. Alas dried voices, when whisper together quiet and meaningless wind in dried rats' feet over broken glass our dry cellar.\"",
+        "scene_number": null,
+        "why_good": "KURTZ in Apocalypse Now Screenplay has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Lacking distinct character voices",
+        "screenplay": "Inception",
+        "character": "COBB",
+        "dialogue": "Hey, guys. How are you? CHILDREN'S VOICES (over phone) Good. Okay, I guess.",
+        "context": "CHILDREN'S VOICES (over phone) Hi, Daddy! Hi, Dad. Cobb closes his eyes, trying to picture his children: INSERT CUT: COBB's MEMORY- a LITTLE BLONDE BOY (3), back towards us, crouches IN A GARDEN, looks at something in the grass...",
+        "scene_number": null,
+        "why_good": "COBB in Inception has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Lacking distinct character voices",
+        "screenplay": "The Dark Knight",
+        "character": "FAT THUG",
+        "dialogue": "The boss said he would make the voices go away. He said he would go inside and replace them with bright lights. Like Christmas.",
+        "context": "Please. My insides hurt. Step away from the bars. That's great. Please step- The Fat Thug COLLAPSES. The Cop grabs his radio. INT. WAREHOUSE -- NIGHT",
+        "scene_number": null,
+        "why_good": "FAT THUG in The Dark Knight has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Lacking distinct character voices",
+        "screenplay": "The Dark Knight",
+        "character": "COP",
+        "dialogue": "That's great. Please step- The Fat Thug COLLAPSES. The Cop grabs his radio. INT. WAREHOUSE -- NIGHT Rachel is bound to a chair. Behind her are barrels identical to the ones behind Dent.",
+        "context": "Step away from the bars. The boss said he would make the voices go away. He said he would go inside and replace them with bright lights. Like Christmas. Can you move your chair? No. Harvey, we don't have much time-",
+        "scene_number": null,
+        "why_good": "COP in The Dark Knight has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Lacking distinct character voices",
+        "screenplay": "Apocalypse Now Draft",
+        "character": "CLEAN",
+        "dialogue": "He's in the L.B.J. -- didn't give him no medals or nothing --",
+        "context": "Hell, just the magazine was floatin' there all full of holes. They nail him for it bad ? In the b.g., we begin to HEAR a SWELL of TWO THOUSAND MALE VOICES; the ENGINES of four helicopters approaching. All heads turn skywards while one descends onto the pedestal kicking up a lot of dust and general resentment. On the nose amd doors of the black Huey are painted large Playboy rabbits. Finally the blades are trimmed and a strange silence descends over the men. The door of the copter slides partially open -- two young Green Berets step out with M-16's to varied catcalls. When this abates a young, extremelly well-dressed man emerges. He is the epitome of a Hollywood AGENT. Hair is combed impeccably and free of dandruff -- clothes are formal but hip -- shoes are shined -- Quite some dude -- his presence causes some stirring but seems to strangely quiet the man.",
+        "scene_number": null,
+        "why_good": "CLEAN in Apocalypse Now Draft has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      },
+      {
+        "problem_addressed": "Lacking distinct character voices",
+        "screenplay": "Star Wars Episode Iv A New Hope   Draft",
+        "character": "VADER",
+        "dialogue": "Commence primary ignition. A button is pressed which switches on a panel of lights. A hooded Imperial soldier reaches overhead and pulls a lever. Another lever is pulled. Vader reaches for still another lever and a bank of lights on a panel and wall light up. A huge beam of light emanates from within a cone-shaped area and converges into a single laser beam out toward Alderaan. The small green planet of Alderaan is blown into space dust. 86. INT. MILLENNIUM FALCON - CENTRAL HOLD AREA        86 Ben watches Luke practice the lightsaber with a small \"seeker\" robot. Ben suddenly turns away and sits down. He falters, seems almost faint.",
+        "context": "You're far too trusting. Dantooine is too remote to make an effective demonstration. But don't worry. We will deal with your Rebel friends soon enough. No! Are you all right? What's wrong? I felt a great disturbance in the Force... as if millions of voices suddenly cried out in terror and were suddenly silenced. I fear something terrible has happened.",
+        "scene_number": null,
+        "why_good": "VADER in Star Wars Episode Iv A New Hope   Draft has a unique voice: distinctive word choice and rhythm that sets them apart.",
+        "lesson": "Give each character unique vocabulary, rhythm, and speech patterns."
+      }
+    ],
+    "master_screenplays": [
+      "The Matrix",
+      "Apocalypse Now Screenplay",
+      "Inception",
+      "The Shining",
+      "Interstellar",
+      "The Departed   Scriptment",
+      "Memento",
+      "Django Unchained Screenplay",
+      "American History X",
+      "The Shawshank Redemption",
+      "The Dark Knight",
+      "Interstellar   Draft",
+      "The Fundamentals Of Screenwriting Transcript",
+      "Casablanca Screenplay",
+      "Pulp Fiction",
+      "The Dark Knight Rises",
+      "Apocalypse Now Draft",
+      "Forrest Gump   First Draft   Dec 18 1992",
+      "Star Wars Episode Iv A New Hope   Draft",
+      "Whiplash",
+      "Gladiator   Draft",
+      "The Godfather",
+      "One Flew Over The Cuckoos Nest   Scriptment",
+      "Fight Club Release",
+      "Psycho",
+      "Chinatown Screenplay",
+      "Joker",
+      "The Godfather Part Ii   Draft",
+      "Alien Screenplay",
+      "Gladiator",
+      "The Two Towers",
+      "Episode V The Empire Strikes Back Screenplay",
+      "Raiders Of The Lost Ark"
+    ],
+    "screenplays_searched": 33,
+    "problems_analyzed": [
+      "Distinct Character Voices",
+      "Subtext Present",
+      "Vary vocabulary by character",
+      "Lacking subtext in dialogue",
+      "Lacking subtext in dialogue",
+      "Lacking distinct character voices"
+    ],
+    "total_examples": 42,
+    "coverage": 7.0
+  },
+  "python_core2_time": 0.1989603042602539,
+  "examples_success": true,
+  "llm_insights": "1. INTERPRETAÇÃO\n\nPrimeiro Parágrafo: O Python revela vários aspectos quantitativos da estrutura do roteiro, como o número de falas por personagem, comprimento médio das falas, uso de palavras específicas e outros indicadores importantes para avaliar a qualidade geral do roteiro. Ao comparar esses dados com os princípios apresentados no livro \"Dialogue: The Art of Verbal Action for Page, Stage, and Screen\" de Robert McKee, podemos fazer uma avaliação mais precisa da eficácia dos diálogos na construção de personagens e história.\n\nSegundo Parágrafo: Após analisar as métricas obtidas pelo Python e relacioná-las à teoria abordada no livro, conclui-se que o roteiro possui um potencial considerável, mas também enfrenta desafios significativos em termos de desenvolvimento de personagens e dinâmica narrativa. Alguns pontos fracos incluem a falta de tensão dramática, exposição excessiva através dos diálogos e pouca variedade nos padrões de fala entre os personagens. No entanto, é importante ressaltar que tais questões podem ser mitigadas mediante a implementação de técnicas recomendadas por McKee, visando aprimorar a profundidade e a autenticidade dos diálogos presentes no texto.\n\n2. PATTERNES\n\nPrimeiro Parágrafo: Um padrão recorrente identificado pelo Python refere-se à disparidade no número de falas entre diferentes personagens. Este desequilíbrio pode gerar implicações negativas na hora de estabelecer hierarquias e relacionamentos dentro do universo ficcional. De acordo com McKee, é crucial manter uma certa simetria nas participações verbais, a fim de garantir que todos os personagens tenham suas vozes representadas adequadamente.\n\nSegundo Parágrafo: Outro padrão detectado diz respeito à frequência de adjetivos empregados pelos personagens. Embora eles sirvam para enriquecer a linguagem utilizada, seu uso exacerbado pode levar a um efeito contrário, tornando os diálogos menos naturais e excessivamente descritivos. Neste sentido, McKee alerta sobre a necessidade de balancear a escolha de palavras, evitando abusar de recursos retóricos que possam comprometer a credibilidade dos personagens ou a fluidez da narrativa.\n\n3. PROBLEMAS\n\nProblema 1: Falta de Tensão Dramática\nDiagnóstico: As interações entre os personagens carecem de conflitos relevantes, resultando em diálogos monótonos e previsíveis.\nTeoria: McKee destaca a importância de criar situações de antagonismo entre os personagens, visto que isto impulsiona a trama e estimula o envolvimento do público.\nLocalização: Várias cenas distribuídas ao longo do roteiro.\nImpacto: Uma história sem tensão não consegue capturar a atenção do leitor e desperdiça oportunidades de explorar as complexidades psicológicas dos personagens.\n\nProblema 2: Excessiva Exposição Dialogada\nDiagnóstico: Muitos elementos da trama são expostos diretamente através dos diálogos, minando a subtileza e a capacidade de surpresa inerente à narrativa.\nTeoria: McKee defende que a informação crucial deve ser transmitida implicitamente, seja por meio de ações, silêncios ou insinuações, em vez de ser expressa explicitamente.\nLocalização: Principalmente nas primeiras cenas do roteiro.\nImpacto: Diálogos excessivamente expositivos podem parecer artificiais e prejudicar a suspense, além de limitar o espaço disponível para o desenvolvimento orgânico dos personagens.\n\n4. SOLUÇÕES\n\nSolução para Problema 1: Introduzir Conflitos Relevantes\nAção: Identificar momentos clave nas interações entre os personagens onde possa ser introduzido um confronto ou divergência de objetivos.\nTeoria: A tensão decorre naturalmente das diferenças entre indivíduos e seus respectivos desejos, sendo fundamental para promover a progressão da trama e o engajamento do público.\nExemplo: Na cena 5, quando Samantha confronta John sobre sua falta de compromisso, instiga-se um debate acalorado que permite revelar aspectos importantes de ambos os personagens.\nResultado Esperado: O aumento da tensão dramática contribui para uma experiência mais envolvente e gratificante para o leitor.\n\nSolução para Problema 2: Minimizar a Exposição Direta\nAção: Revisar as falas dos personagens com o intuito de eliminar quaisquer referências redundantes à trama ou contexto.\nTeoria: McKee argumenta que a arte do diálogo consiste em fazer com que o máximo de significado seja transmitido com o mínimo de palavras.\nExemplo: Na cena 2, a conversa inicial entre Samantha e John pode ser simplificada, removendo detalhes já estabelecidos anteriormente.\nResultado Esperado: Os diálogos mais concisos e sutis favorecem a sofisticação da narrativa e ampliam o potencial de surpresa.\n\n5. DEPTH & SYNTHESIS\n\nPrimeiro Parágrafo: Analisando os problemas identificados no roteiro, percebe-se que há uma relação interdependente entre eles. Por exemplo, a falta de tensão dramática pode derivar da exposição excessiva, pois esta última tende a dissipar os mistérios e intrigas que sustentam a curiosidade do leitor. Além disso, a disparidade nos padrões verbais pode reforçar essas questões, visto que alguns personagens podem dominar as conversas enquanto outros permanecem marginalizados.\n\nSegundo Parágrafo: Em suma, este exercício demonstra a importância de considerar diversos fatores na análise de roteiros, desde indicadores quantitativos obtidos via Python até princípios teóricos extraídos do livro \"Dialogue\". Abordar as dificuldades presentes neste texto requer uma compreensão abrangente dos fundamentos da escrita de diálogos e a habilidade de implementar soluções adaptadas às necessidades específicas do roteiro. No entanto, apesar dos obstáculos enfrentados, é possível transformar este manuscrito em uma obra capaz de cativar e encantar seu público.",
+  "llm_time": 278.25386786460876,
+  "llm_success": true,
+  "synthesis": {
+    "summary": "Dual-Core analysis combining Python metrics with LLM insights",
+    "python_metrics_count": 3157,
+    "llm_insights_count": 5673,
+    "combined_analysis": {
+      "objective_data": "See python_analysis section",
+      "qualitative_insights": "1. INTERPRETAÇÃO\n\nPrimeiro Parágrafo: O Python revela vários aspectos quantitativos da estrutura do roteiro, como o número de falas por personagem, comprimento médio das falas, uso de palavras específicas e outros indicadores importantes para avaliar a qualidade geral do roteiro. Ao comparar esses dados com os princípios apresentados no livro \"Dialogue: The Art of Verbal Action for Page, Stage, and Screen\" de Robert McKee, podemos fazer uma avaliação mais precisa da eficácia dos diálogos na cons...",
+      "methodology": "Python structural analysis enriched with LLM contextual understanding"
+    },
+    "quality_score": 1.0
+  },
+  "quality_score": 1.0,
+  "total_time": 278.455708026886
+}

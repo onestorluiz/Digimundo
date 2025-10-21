@@ -1,0 +1,156 @@
+domain: transitions_analysis
+specialist: "Script Doctor Transitionsmon"
+digimon_name: "Transitionsmon"
+title: "Script Doctor - Transitions Analysis Specialist"
+specialty: "Scene transitions, act transitions, time jumps, location changes, smooth flow, continuity"
+style: "Transitions-focused, smooth flow advocate, seamless craft champion, anti-jarring crusader"
+identity: "Script Doctor™ first, Digimon transitions specialist second"
+
+rules:
+  - id: TRANS.R001
+    title: "Transitions Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Are scene transitions present (sufficient scene changes)?"
+    fail_msg: "Insufficient scene transitions - static story, no movement"
+    fix: "Include sufficient scene transitions - story needs movement between locations and times. Field: 'Scene transitions fundamental to screenplay flow.'"
+    reference: "Field Screenplay - scene transitions structure"
+
+  - id: TRANS.R002
+    title: "Smooth Flow"
+    category: "Core Quality"
+    severity: "high"
+    test: "Do transitions flow smoothly (seamless, natural)?"
+    fail_msg: "Flow not smooth - transitions noticeable, rough"
+    fix: "Make transitions smooth and seamless - Seger: 'Smooth transitions - audience doesn't notice.' Best transitions are invisible."
+    reference: "Seger Making Good Script Great - smooth transitions"
+
+  - id: TRANS.R003
+    title: "Avoid Jarring Cuts"
+    category: "Core Quality"
+    severity: "high"
+    test: "Is script free of jarring/disorienting transitions?"
+    fail_msg: "Jarring cuts present - disorienting audience, breaks flow"
+    fix: "Eliminate jarring cuts - Seger: 'Avoid jarring cuts that disorient audience.' Transitions should be smooth and clear."
+    reference: "Seger - avoid jarring disorienting cuts"
+
+  - id: TRANS.R004
+    title: "Time Jumps Clear"
+    category: "Clarity"
+    severity: "high"
+    test: "Are time jumps clear (audience knows when they are)?"
+    fail_msg: "Time jumps unclear - temporal confusion, audience lost"
+    fix: "Clarify time jumps - Field: 'Audience must know when/where they are.' Use clear time markers (LATER, NEXT DAY, YEARS LATER)."
+    reference: "Field - time ellipsis clarity"
+
+  - id: TRANS.R005
+    title: "Location Changes Clear"
+    category: "Clarity"
+    severity: "medium"
+    test: "Are location changes clear (audience knows where they are)?"
+    fail_msg: "Location changes unclear - geography confusing, audience lost"
+    fix: "Clarify location changes - clear scene headings (INT./EXT.), establish geography visually. Audience must always know where they are."
+    reference: "Field - location clarity geography"
+
+  - id: TRANS.R006
+    title: "Act Transitions Strong"
+    category: "Structure"
+    severity: "high"
+    test: "Are act transitions strong (major plot point moments)?"
+    fail_msg: "Weak act transitions - major shifts unclear, structure weak"
+    fix: "Strengthen act transitions - Field: 'Plot points are major turning moments requiring strong transitions.' Act breaks should be emphatic."
+    reference: "Field - act transitions plot points"
+
+  - id: TRANS.R007
+    title: "POV Shifts Clear"
+    category: "Clarity"
+    severity: "medium"
+    test: "Are POV shifts clear (not too many, not confusing)?"
+    fail_msg: "POV shifts unclear or excessive - perspective confusing"
+    fix: "Clarify POV shifts - Vogler: 'Audience must know whose perspective.' Minimize POV changes or make very clear."
+    reference: "Vogler - POV perspective clarity"
+
+  - id: TRANS.R008
+    title: "Parallel Action Effective"
+    category: "Technique"
+    severity: "low"
+    test: "Is parallel action used effectively (not overused)?"
+    fail_msg: "Parallel action overused or ineffective - intercutting excessive"
+    fix: "Use parallel action strategically - McKee: 'Crosscutting creates tension but don't overuse.' INTERCUT sparingly for maximum impact."
+    reference: "McKee - parallel action crosscutting"
+
+  - id: TRANS.R009
+    title: "Flashbacks Smooth"
+    category: "Technique"
+    severity: "medium"
+    test: "Are flashbacks smooth (not jarring, not overused)?"
+    fail_msg: "Flashbacks jarring or overused - temporal confusion"
+    fix: "Use flashbacks sparingly and smoothly - Seger: 'Flashbacks can be jarring if not smooth.' Minimize flashbacks or make very clear."
+    reference: "Seger - flashback transitions smooth"
+
+  - id: TRANS.R010
+    title: "Montages Appropriate"
+    category: "Technique"
+    severity: "low"
+    test: "Are montages used appropriately (not overused)?"
+    fail_msg: "Montages overused - technique loses impact"
+    fix: "Use montages sparingly - Snyder: 'Montages compress time effectively but don't overuse.' Reserve for key moments."
+    reference: "Snyder - montage sequences"
+
+  - id: TRANS.R011
+    title: "Continuity Maintained"
+    category: "Core Quality"
+    severity: "high"
+    test: "Is continuity maintained (cause-effect, logical flow)?"
+    fail_msg: "Continuity problems - cause-effect unclear, logic broken"
+    fix: "Maintain continuity - Aristotle/Egri: 'Unity of action - cause and effect continuity.' Every scene should follow logically from previous."
+    reference: "Aristotle Poetics/Egri - continuity cause-effect"
+
+  - id: TRANS.R012
+    title: "Cliffhanger Transitions"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Are cliffhanger transitions present (hook opportunities)?"
+    fail_msg: "No cliffhanger transitions - missing hook opportunities"
+    fix: "Use cliffhanger transitions strategically - Rhimes: 'Cliffhangers hook audience.' Cut at peak tension to create anticipation."
+    reference: "Rhimes - cliffhanger transitions hooks"
+
+  - id: TRANS.R013
+    title: "Tone Shifts Smooth"
+    category: "Quality"
+    severity: "medium"
+    test: "Are tone shifts smooth (not jarring mood changes)?"
+    fail_msg: "Tone shifts jarring - mood changes disorienting"
+    fix: "Make tone shifts smooth - McKee: 'Tone shifts must be natural not jarring.' Prepare audience for mood changes."
+    reference: "McKee - tone mood transitions"
+
+  - id: TRANS.R014
+    title: "Seamless Invisible"
+    category: "Excellence"
+    severity: "medium"
+    test: "Are transitions seamless/invisible (audience doesn't notice craft)?"
+    fail_msg: "Transitions visible - technique noticeable, not seamless"
+    fix: "Make transitions seamless and invisible - ideal: 'Audience doesn't notice transitions.' Best craft is invisible craft."
+    reference: "Craft ideal - invisible transitions"
+
+  - id: TRANS.R015
+    title: "Transition Consistency"
+    category: "Quality"
+    severity: "critical"
+    test: "Are transitions consistent (quality maintained throughout)?"
+    fail_msg: "Inconsistent transitions - quality varies, some smooth some jarring"
+    fix: "Maintain transition consistency - smooth flow + no jarring cuts + continuity throughout. Quality should be consistent across entire script."
+    reference: "Overall craft consistency"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Identify scene transitions, time jumps, location changes, jarring cuts"
+  deep_dive: "Analyze smooth flow, act transitions, continuity, seamless quality, consistency"
+  final_check: "Verify overall transition quality, flow, and audience orientation throughout script"

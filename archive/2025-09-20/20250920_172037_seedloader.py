@@ -1,0 +1,1 @@
+# Seedloader – Descompacta um pacote simbólico e ativa arquivos do Digimundo

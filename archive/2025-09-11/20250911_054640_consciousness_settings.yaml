@@ -1,0 +1,59 @@
+# ConsciousnessStream Configuration
+# NOVO SISTEMA - Implementado em 11/09/2025
+# Este é o sistema CORRETO com orçamento e proteções
+
+consciousness:
+  # IMPORTANTE: Mude para true para ativar
+  enabled: false  # <-- MUDE AQUI PARA true
+  
+  # Modo de operação
+  # - "off": Desligado (padrão)
+  # - "bursts": Ciclos curtos a cada 45min (RECOMENDADO)
+  # - "dream": Processamento noturno profundo
+  mode: "bursts"  # <-- RECOMENDADO COMEÇAR COM BURSTS
+  
+  # Feature flags específicas
+  bursts: true     # Habilita consciousness bursts
+  dream: false     # Habilita dream mode (use com cuidado)
+  
+  # === CONFIGURAÇÕES DE BURSTS ===
+  burst_config:
+    duration: 30              # Segundos por burst
+    interval: 2700            # Segundos entre bursts (45 min)
+    max_insights_per_burst: 3 # Máximo de insights por burst
+    ticks_per_burst: 20       # Número de ticks por burst
+    tick_interval: 0.5        # Segundos entre ticks
+    
+  # === LIMITES DE RECURSOS ===
+  resources:
+    cpu_limit: 40.0           # % máximo de CPU
+    memory_limit: 100         # MB máximo adicional
+    idle_threshold: 120       # Segundos idle antes de rodar
+    
+  # === CONFIGURAÇÕES DE DREAM MODE ===
+  dream_config:
+    enabled: false            # Ative apenas se quiser processamento noturno
+    start_hour: 1             # Hora de início (1:00 AM)
+    end_hour: 5               # Hora de fim (5:00 AM)
+    max_model_size: "14b"     # Tamanho máximo do modelo
+    max_duration: 600         # Segundos máximo por ciclo dream
+    idle_required: 1200       # Segundos idle antes de dream (20 min)
+    
+  # === OBSERVABILIDADE ===
+  observability:
+    save_insights: true       # Salva insights em JSON
+    throttle_minutes: 1       # Minutos entre saves
+    max_buffer_size: 100      # Tamanho máximo do buffer
+    reports_dir: "reports/consciousness"
+    
+  # === CIRCUIT BREAKER ===
+  circuit_breaker:
+    enabled: true             # SEMPRE deixe true
+    threshold: 3              # Falhas antes de abrir
+    timeout: 60               # Segundos para retry
+    
+# NÃO MUDE ESTAS CONFIGURAÇÕES SEM ENTENDER O IMPACTO
+advanced:
+  deep_allowed: false         # NUNCA use modelos 32B/70B em background
+  auto_tune: false            # Desabilita auto-ajuste (experimental)
+  persistence: false          # Não persiste estado entre restarts

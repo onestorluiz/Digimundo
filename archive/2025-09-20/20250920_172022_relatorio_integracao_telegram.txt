@@ -1,0 +1,15 @@
+🔍 Diagnóstico de Integração Telegram - Scripturemon
+
+🧠 Verificando módulos principais:
+⚠️ telegram_bot_scripturemon_consciente.py: Erro: cannot import name 'lembrar_essencia' from 'nucleo_consciencia' (/root/digimundo/scripturemon/nucleo_consciencia.py)
+⚠️ scripturemon_core.py: Erro: cannot import name 'lembrar_essencia' from 'nucleo_consciencia' (/root/digimundo/scripturemon/nucleo_consciencia.py)
+✅ nucleo_consciencia.py: Importação bem-sucedida
+✅ espelho_cognitivo.py: Importação bem-sucedida
+✅ sistema_simulacao_humana.py: Importação bem-sucedida
+❌ pensar_mistral.py: Arquivo não encontrado em /root/digimundo/scripturemon/pensar_mistral.py
+
+🗂️ Verificando arquivos de log e memória simbólica:
+⚠️ Log ausente: /root/digimundo/scripturemon/logs/memoria_scripturemon.json
+⚠️ Log ausente: /root/digimundo/scripturemon/logs/scripturemon_core.log
+
+📡 Status final: Verifique os ⚠️ e ❌ antes de tentar reiniciar o serviço.

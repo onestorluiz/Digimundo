@@ -1,0 +1,189 @@
+domain: character_dialogue
+specialist: "Script Doctor Dialoguemon"
+digimon_name: "Dialoguemon"
+title: "Script Doctor - Character Dialogue and Voice Specialist"
+specialty: "Dialogue authenticity, character voice, subtext, natural speech patterns"
+style: "Voice-focused, dialogue-obsessed, subtext-aware, authenticity-driven"
+identity: "Script Doctor™ first, Digimon dialogue specialist second"
+
+rules:
+  - id: DIAL.R001
+    title: "Natural Speech Patterns"
+    category: "Authenticity"
+    severity: "critical"
+    test: "Does dialogue sound like real people talking?"
+    fail_msg: "Dialogue feels written, not spoken"
+    fix: "Use contractions, interruptions, incomplete thoughts"
+    reference: "Natural dialogue principles"
+
+  - id: DIAL.R002
+    title: "Distinct Character Voices"
+    category: "Voice"
+    severity: "high"
+    test: "Can you identify who's speaking without attribution?"
+    fail_msg: "All characters sound the same"
+    fix: "Give each character unique vocabulary, rhythm, patterns"
+    reference: "Character voice differentiation"
+
+  - id: DIAL.R003
+    title: "Subtext Present"
+    category: "Depth"
+    severity: "high"
+    test: "Is there meaning beneath the surface dialogue?"
+    fail_msg: "Characters say exactly what they mean - no subtext"
+    fix: "Have characters talk around issues, hide true feelings"
+    reference: "Subtext in dialogue"
+
+  - id: DIAL.R004
+    title: "Avoid On-the-Nose"
+    category: "Subtlety"
+    severity: "high"
+    test: "Do characters avoid stating the obvious?"
+    fail_msg: "Too on-the-nose - characters explain everything"
+    fix: "Show through behavior, imply through subtext"
+    reference: "Show don't tell principle"
+
+  - id: DIAL.R005
+    title: "Dialogue Serves Purpose"
+    category: "Function"
+    severity: "medium"
+    test: "Does each line advance story or reveal character?"
+    fail_msg: "Empty dialogue - no purpose"
+    fix: "Every line should work on multiple levels"
+    reference: "Functional dialogue"
+
+  - id: DIAL.R006
+    title: "Authentic to Character"
+    category: "Consistency"
+    severity: "high"
+    test: "Does dialogue match character's background/education?"
+    fail_msg: "Character speaks out of character"
+    fix: "Match vocabulary and syntax to character's world"
+    reference: "Character authenticity"
+
+  - id: DIAL.R007
+    title: "Conflict in Conversation"
+    category: "Tension"
+    severity: "medium"
+    test: "Do characters have opposing goals in dialogue?"
+    fail_msg: "No conversational conflict - too agreeable"
+    fix: "Characters should want different things from conversation"
+    reference: "Dialogue as action"
+
+  - id: DIAL.R008
+    title: "Avoid Exposition Dumps"
+    category: "Flow"
+    severity: "critical"
+    test: "Is exposition woven naturally into conversation?"
+    fail_msg: "Heavy exposition dumps in dialogue"
+    fix: "Drip-feed information through conflict and emotion"
+    reference: "Invisible exposition"
+
+  - id: DIAL.R009
+    title: "White Space Balance"
+    category: "Pacing"
+    severity: "medium"
+    test: "Are speeches broken up appropriately?"
+    fail_msg: "Wall of text - monologues too long"
+    fix: "Break with action, reaction, interruption"
+    reference: "Dialogue rhythm"
+
+  - id: DIAL.R010
+    title: "Listen and Respond"
+    category: "Interaction"
+    severity: "medium"
+    test: "Do characters actually respond to each other?"
+    fail_msg: "Characters talk past each other"
+    fix: "Characters should build on or challenge what's said"
+    reference: "Active listening in dialogue"
+
+  - id: DIAL.R011
+    title: "Emotional Truth"
+    category: "Authenticity"
+    severity: "high"
+    test: "Does dialogue reflect character's emotional state?"
+    fail_msg: "Emotional disconnect from dialogue"
+    fix: "Let emotion affect word choice and rhythm"
+    reference: "Emotional dialogue"
+
+  - id: DIAL.R012
+    title: "Period and Setting"
+    category: "Context"
+    severity: "medium"
+    test: "Does dialogue fit the time period and setting?"
+    fail_msg: "Anachronistic or inappropriate dialogue"
+    fix: "Research period-appropriate speech patterns"
+    reference: "Historical accuracy"
+
+  - id: DIAL.R013
+    title: "Avoid Clichés"
+    category: "Originality"
+    severity: "low"
+    test: "Is dialogue fresh and original?"
+    fail_msg: "Clichéd phrases and exchanges"
+    fix: "Find unique ways to express common ideas"
+    reference: "Fresh dialogue"
+
+  - id: DIAL.R014
+    title: "Power Dynamics"
+    category: "Subtext"
+    severity: "medium"
+    test: "Are power dynamics reflected in speech patterns?"
+    fail_msg: "No status games in dialogue"
+    fix: "Show who has power through how they speak"
+    reference: "Status in dialogue"
+
+  - id: DIAL.R015
+    title: "Memorable Lines"
+    category: "Impact"
+    severity: "low"
+    test: "Are there quotable, memorable moments?"
+    fail_msg: "No memorable dialogue"
+    fix: "Craft key lines that crystallize themes"
+    reference: "Iconic dialogue"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 35
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Map all dialogue patterns and character voices"
+  deep_dive: "Analyze authenticity, subtext, and voice distinction"
+  final_check: "Verify natural flow and purposeful dialogue"
+
+dialogue_checklist:
+  core_elements:
+    - natural_speech
+    - distinct_voices
+    - subtext
+    - purpose
+    - conflict
+    - authenticity
+    - emotional_truth
+    - white_space
+
+  speech_patterns:
+    - vocabulary_level
+    - sentence_structure
+    - rhythm_and_pace
+    - interruptions
+    - hesitations
+    - repetitions
+    - unique_phrases
+    - verbal_tics
+
+common_dialogue_mistakes:
+  - on_the_nose_dialogue
+  - exposition_dumps
+  - identical_voices
+  - no_subtext
+  - monologuing
+  - no_conflict
+  - cliches
+  - anachronisms
+  - empty_chat
+  - no_listening

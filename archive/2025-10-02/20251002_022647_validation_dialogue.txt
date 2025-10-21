@@ -1,0 +1,103 @@
+
+================================================================================
+🎓 SCRIPT DOCTOR GRADUATION VALIDATION REPORT
+================================================================================
+
+Specialist: dialogue
+Analysis Length: 0 characters
+Screenplay: sonhos_sem_lembrancas_t3.txt
+Date: 2025-10-01 23:47:05
+
+================================================================================
+FINAL DECISION: ❌ NOT APPROVED
+================================================================================
+
+Classification: FAILING
+Tier: D
+Final Score: 0.0%
+
+Requirements Met:
+  ❌ Technical Criteria
+  ❌ Specificity Threshold (60%)
+  ❌ Depth Threshold (60%)
+  ❌ Final Score (65%)
+
+================================================================================
+LAYER 1: TECHNICAL CRITERIA (Pass/Fail)
+================================================================================
+
+Status: ❌ FAILED
+
+  ✅ LLM executou sem erros
+  ❌ Análise com mínimo de 2000 caracteres
+  ✅ Estrutura V4.1 com pelo menos 3/5 seções
+  ✅ Python synthesis quality score ≥ 0.9
+  ✅ Tempo de execução < 5 minutos
+
+================================================================================
+LAYER 2: SPECIFICITY SCORE
+================================================================================
+
+Final Score: 0.00 / 1.00 (0.0%)
+Status: ❌ FAILED (threshold: 0.60)
+
+Components:
+  • scene_citations: 0 found (score: 0.00, weight: 30%)
+  • dialogue_quotes: 0 found (score: 0.00, weight: 40%)
+  • character_names: 0 found (score: 0.00, weight: 20%)
+  • base_bonus: score 0.10 (weight: 10%)
+
+Penalties:
+  • Placeholders: -0.50 (0 found)
+  • Genericity: 0.00
+
+================================================================================
+LAYER 3: DEPTH SCORE
+================================================================================
+
+Final Score: 0.00 / 1.00 (0.0%)
+Status: ❌ FAILED (threshold: 0.60)
+
+Components:
+  • Expertise: 0.00 (weight: 35%)
+  • Theory Application: 0.00 (weight: 25%)
+  • Interconnections: 0.00 (weight: 20%)
+  • Actionability: 0.00 (weight: 20%)
+
+================================================================================
+FINAL SCORE BREAKDOWN
+================================================================================
+
+Technical (20%):    0.00
+Specificity (40%):  0.00
+Depth (40%):        0.00
+
+Weighted Score:     0.00
+Percentage:         0.0%
+
+================================================================================
+FEEDBACK
+================================================================================
+
+✅ STRENGTHS:
+   (none identified)
+
+❌ WEAKNESSES:
+   • Insufficient scene citations
+   • Lacks dialogue quotes
+   • Insufficient use of character names
+   • Lacks specialist expertise
+   • Cites theory but doesn't apply it
+   • Missing DEPTH & SYNTHESIS section
+   • Solutions are too vague
+
+💡 RECOMMENDATIONS:
+   • Add more specific scene references (current: 0, minimum: 3, recommended: 5+)
+   • Include exact dialogue quotes from screenplay (current: 0, minimum: 2, recommended: 4+)
+   • Use specific character names more (current: 0, minimum: 5, recommended: 10+)
+   • Focus more on dialogue-specific analysis
+   • Connect theoretical concepts to specific screenplay examples
+   • Add DEPTH & SYNTHESIS section connecting problems
+   • Make solutions more specific with concrete rewrites/changes
+
+================================================================================

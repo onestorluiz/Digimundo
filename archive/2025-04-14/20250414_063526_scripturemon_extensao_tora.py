@@ -1,0 +1,1 @@
+# Conexão entre Torah simbólica e o templo central

@@ -1,0 +1,320 @@
+# Tone and Atmosphere Analysis Rules
+# Script Doctor Tonemon - Tone establishment, consistency, mood, atmosphere, voice, genre alignment
+
+rules:
+  - id: TONE.R001
+    title: Tone Established in Opening
+    severity: critical
+    description: |
+      Tone must be established clearly in opening pages. Audience needs to know
+      emotional expectations immediately. Opening sets tone that carries through story.
+      McKee: "Tone must be established early - opening pages set emotional expectations."
+      Seger: "Tone established in opening - audience knows emotional environment immediately."
+    fix: |
+      Establish tone clearly in opening 10 pages through:
+      - Action description style (sparse/poetic/visual)
+      - Scene selection and atmosphere
+      - Character introduction style
+      - Dialogue rhythm and content
+      - Visual imagery and mood
+      Opening pages must signal emotional environment immediately.
+
+  - id: TONE.R002
+    title: Tone Consistency Throughout
+    severity: critical
+    description: |
+      Tone must be maintained consistently throughout story. Random shifts confuse audience
+      and undermine emotional engagement. Tone provides unified emotional experience.
+      McKee: "Tone consistency - maintained throughout story, not shifting randomly."
+      Field: "Tone consistency Act 1-2-3 - unified emotional environment throughout."
+    fix: |
+      Maintain tone consistency by:
+      - Consistent action description style
+      - Unified atmosphere across acts
+      - Voice remains distinctive throughout
+      - Emotional environment stable
+      - Genre expectations met consistently
+      Any tonal shifts must be intentional, earned, and controlled.
+
+  - id: TONE.R003
+    title: Mood and Atmosphere Established
+    severity: high
+    description: |
+      Mood and atmosphere create emotional environment that permeates story.
+      Audience must feel emotional climate throughout. Atmosphere affects engagement.
+      McKee: "Atmosphere - emotional environment permeates story, affects audience."
+      Mackendrick: "Atmosphere visual design - cinematography creates emotional environment."
+    fix: |
+      Establish strong mood/atmosphere through:
+      - Visual design and cinematography notes
+      - Setting descriptions create emotional environment
+      - Sound and music suggestions
+      - Lighting and color palette implications
+      - Sensory details that evoke feeling
+      Atmosphere should be palpable, affecting every scene.
+
+  - id: TONE.R004
+    title: Atmosphere Quality
+    severity: medium
+    description: |
+      Atmosphere must be high quality, supporting story effectively. Weak atmosphere
+      fails to engage audience emotionally. Strong atmosphere enriches experience.
+      McKee: "Atmosphere quality - emotional environment must support story powerfully."
+    fix: |
+      Improve atmosphere quality through:
+      - Rich sensory details in action description
+      - Evocative visual imagery
+      - Sound design implications
+      - Setting details that create mood
+      - Consistent emotional environment
+      Atmosphere should be sophisticated, not generic.
+
+  - id: TONE.R005
+    title: Writer's Voice Consistency
+    severity: high
+    description: |
+      Writer's voice must be distinctive and consistent throughout. Voice is authorial
+      style, personal approach, unique perspective. Inconsistent voice feels amateurish.
+      Goldman: "Voice distinctive - writer's personal, authentic, professional craft."
+      McKee: "Voice - writer's distinctive style, authorial choice, personal approach."
+    fix: |
+      Develop consistent writer's voice through:
+      - Distinctive action description style
+      - Personal word choices and rhythms
+      - Unique perspective on scenes
+      - Authorial personality evident
+      - Professional craft maintained
+      Voice should be recognizable, authentic, personal.
+
+  - id: TONE.R006
+    title: Tone-Genre Alignment
+    severity: high
+    description: |
+      Tone must align with genre expectations. Comedy needs light tone, drama needs
+      serious tone, thriller needs tense tone. Misaligned tone confuses audience.
+      Snyder: "Tone genre expectations - comedy light, drama serious, thriller tense."
+      McKee: "Tone appropriate genre - audience expectations met, genre conventions."
+    fix: |
+      Align tone with genre by:
+      - Comedy: light, humorous, entertaining tone
+      - Drama: serious, emotional, weighty tone
+      - Thriller: tense, suspenseful, urgent tone
+      - Horror: dark, ominous, frightening tone
+      - Action: energetic, dynamic, exciting tone
+      Research genre conventions and meet audience expectations.
+
+  - id: TONE.R007
+    title: Tonal Shifts Controlled
+    severity: medium
+    description: |
+      If tone shifts, shifts must be intentional, earned, and controlled. Jarring
+      shifts disorient audience. Earned shifts enhance story progression.
+      McKee: "Tonal shifts controlled - intentional, earned, not jarring shifts."
+      Truby: "Tonal modulation - tone evolves intentionally with story progression."
+    fix: |
+      Control tonal shifts through:
+      - Intentional design, not accidental
+      - Earned through story progression
+      - Signaled subtly in advance
+      - Serve story purpose clearly
+      - Not jarring or disorienting
+      Shifts should feel natural, inevitable, purposeful.
+
+  - id: TONE.R008
+    title: Dark Tone Consistency
+    severity: medium
+    description: |
+      If dark tone is present, must be consistent throughout. Dark tone requires
+      serious, grave, somber atmosphere maintained. Inconsistent dark tone fails.
+      McKee: "Dark tone consistent - serious, grave, somber atmosphere maintained."
+    fix: |
+      Maintain dark tone consistency through:
+      - Serious atmosphere throughout
+      - Grave emotional weight sustained
+      - Somber mood consistent
+      - No inappropriate lightness
+      - Heavy atmosphere maintained
+      Dark tone must commit fully, not waver.
+
+  - id: TONE.R009
+    title: Light Tone Consistency
+    severity: medium
+    description: |
+      If light tone is present, must be consistent throughout. Light tone requires
+      comic, humorous, entertaining atmosphere maintained. Inconsistent light tone fails.
+      Snyder: "Light tone consistent - comic, humorous, entertaining atmosphere maintained."
+    fix: |
+      Maintain light tone consistency through:
+      - Comic atmosphere throughout
+      - Humorous moments sustained
+      - Entertaining quality consistent
+      - No inappropriate darkness
+      - Fun atmosphere maintained
+      Light tone must commit fully, not turn heavy.
+
+  - id: TONE.R010
+    title: Dramatic Tone Quality
+    severity: medium
+    description: |
+      If dramatic tone is present, must have emotional weight and importance.
+      Weak dramatic tone lacks impact. Strong dramatic tone engages deeply.
+      McKee: "Dramatic tone - serious atmosphere, emotional weight, importance."
+    fix: |
+      Strengthen dramatic tone through:
+      - Emotional weight in action description
+      - Serious atmosphere throughout
+      - Important stakes evident
+      - Significant consequences clear
+      - Deep emotional engagement
+      Dramatic tone must feel weighty, consequential, important.
+
+  - id: TONE.R011
+    title: Comic Tone Quality
+    severity: medium
+    description: |
+      If comic tone is present, must sustain humor effectively. Weak comic tone
+      fails to amuse. Strong comic tone entertains consistently.
+      Snyder: "Comic tone - humorous, funny, entertaining atmosphere."
+    fix: |
+      Strengthen comic tone through:
+      - Consistent humor throughout
+      - Funny situations and dialogue
+      - Entertaining atmosphere sustained
+      - Comic perspective maintained
+      - Playful quality consistent
+      Comic tone must deliver laughs consistently.
+
+  - id: TONE.R012
+    title: Avoid Inconsistent Tone
+    severity: critical
+    description: |
+      PENALTY: Inconsistent tone shifts randomly, creating jarring experience.
+      Tone whiplash confuses and alienates audience. Worst tonal violation.
+      McKee: "Inconsistent tone - shifts randomly, jarring, confusing audience."
+      Truby: "Tone inconsistency undermines thematic unity, audience disorientation."
+    fix: |
+      Eliminate inconsistent tone by:
+      - Identifying all random tone shifts
+      - Choosing unified tone for story
+      - Removing jarring shifts
+      - Maintaining consistent atmosphere
+      - If shifts needed, make intentional/earned
+      Story needs ONE clear tone, maintained throughout.
+
+  - id: TONE.R013
+    title: Avoid Tone-Deaf Moments
+    severity: critical
+    description: |
+      PENALTY: Tone-deaf moments use inappropriate tone for situation.
+      Wrong emotional notes alienate audience. Insensitive tone fails.
+      Seger: "Tone-deaf moments - inappropriate tone, wrong emotional notes."
+      McKee: "Tone must fit situation - inappropriate tone alienates audience."
+    fix: |
+      Eliminate tone-deaf moments by:
+      - Identifying inappropriate tonal choices
+      - Matching tone to situation gravity
+      - Avoiding comedy in tragedy (unless intentional)
+      - Avoiding lightness in serious moments
+      - Respecting emotional reality of scenes
+      Tone must fit situation appropriately, sensitively.
+
+  - id: TONE.R014
+    title: Avoid Unclear Tone
+    severity: critical
+    description: |
+      PENALTY: Unclear tone leaves audience confused about emotional expectations.
+      Audience needs emotional roadmap. Vague tone creates disengagement.
+      Seger: "Unclear tone - audience confused, doesn't know emotional expectations."
+      McKee: "Tone must be clear - audience needs emotional roadmap from opening."
+    fix: |
+      Clarify tone by:
+      - Establishing tone clearly in opening
+      - Consistent tonal signals throughout
+      - Clear genre indicators
+      - Unified atmospheric choices
+      - Distinctive voice from start
+      Audience must know emotional environment immediately.
+
+  - id: TONE.R015
+    title: Voice-Tone Unity
+    severity: medium
+    description: |
+      Writer's voice and tone must be unified. Voice is authorial style, tone is
+      emotional environment. Both must work together harmoniously.
+      Goldman: "Voice-tone unity - writer's style and emotional environment aligned."
+      McKee: "Voice and tone unified - authorial style serves emotional environment."
+    fix: |
+      Achieve voice-tone unity by:
+      - Writer's style supports emotional environment
+      - Action description style matches tone
+      - Personal voice enhances atmosphere
+      - Distinctive approach serves story
+      - Consistent authorial presence
+      Voice and tone should feel inseparable, harmonious.
+
+  - id: TONE.R016
+    title: Genre-Appropriate Atmosphere
+    severity: medium
+    description: |
+      Atmosphere must be appropriate to genre conventions. Each genre has expected
+      atmospheric qualities that audience expects. Meeting expectations engages.
+      Snyder: "Genre atmosphere - each genre has expected emotional environment."
+    fix: |
+      Create genre-appropriate atmosphere:
+      - Horror: dark, ominous, frightening atmosphere
+      - Comedy: light, fun, entertaining atmosphere
+      - Drama: serious, emotional, weighty atmosphere
+      - Thriller: tense, suspenseful, urgent atmosphere
+      - Romance: intimate, emotional, hopeful atmosphere
+      Study genre conventions and deliver expected atmosphere.
+
+# Analysis prompts for LLM-based deep analysis
+analysis_prompts:
+  tone_establishment:
+    prompt: |
+      Analyze tone establishment in opening pages. Is tone clear immediately?
+      Does opening signal emotional environment effectively? Does audience know
+      what to expect emotionally? McKee: "Tone must be established early - opening
+      pages set emotional expectations."
+
+  tone_consistency:
+    prompt: |
+      Analyze tone consistency throughout story. Is tone maintained across acts?
+      Are there random, jarring shifts? Is emotional environment unified?
+      McKee: "Tone consistency - maintained throughout story, not shifting randomly."
+
+  mood_atmosphere:
+    prompt: |
+      Analyze mood and atmosphere. Is emotional environment established clearly?
+      Does atmosphere permeate story? Is mood palpable, affecting scenes?
+      McKee: "Atmosphere - emotional environment permeates story, affects audience."
+
+  voice_consistency:
+    prompt: |
+      Analyze writer's voice. Is voice distinctive and consistent? Is authorial
+      style personal and authentic? Is professional craft evident?
+      Goldman: "Voice distinctive - writer's personal, authentic, professional craft."
+
+  tone_genre_alignment:
+    prompt: |
+      Analyze tone-genre alignment. Does tone match genre expectations? Comedy light,
+      drama serious, thriller tense? Does tone serve genre effectively?
+      Snyder: "Tone genre expectations - comedy light, drama serious, thriller tense."
+
+  inconsistent_tone:
+    prompt: |
+      Analyze for inconsistent tone. Does tone shift randomly? Are shifts jarring?
+      Does tone confuse audience? Is tone chaotic or disjointed?
+      McKee: "Inconsistent tone - shifts randomly, jarring, confusing audience."
+
+  tone_deaf_moments:
+    prompt: |
+      Analyze for tone-deaf moments. Is tone inappropriate for situations?
+      Does tone miss emotional mark? Are there insensitive tonal choices?
+      Seger: "Tone-deaf moments - inappropriate tone, wrong emotional notes."
+
+  unclear_tone:
+    prompt: |
+      Analyze for unclear tone. Is audience confused about tone? Is emotional
+      environment vague? Does tone lack establishment or clarity?
+      McKee: "Tone must be clear - audience needs emotional roadmap from opening."

@@ -1,0 +1,168 @@
+TÍTULO: O ÚLTIMO CÓDIGO
+
+FADE IN:
+
+EXT. SÃO FRANCISCO - DISTRITO FINANCEIRO - DIA
+
+Arranha-céus de vidro refletem o sol da manhã. O trânsito flui como um rio mecânico.
+
+INT. TECHCORP - SALA DE SERVIDORES - CONTÍNUO
+
+MAYA CHEN (32), desenvolvedora sênior, olhos cansados mas determinados, digita freneticamente em seu laptop. Ao seu redor, LEDs piscam em servidores que ocupam toda a sala.
+
+MAYA
+(para si mesma)
+Vamos lá... só mais uma linha...
+
+A tela mostra: "COMPILAÇÃO COMPLETA - 0 ERROS"
+
+Maya sorri, aliviada. Mas então...
+
+ALARME soa. Luzes vermelhas piscam.
+
+VOZ DO SISTEMA (V.O.)
+Violação de segurança detectada. 
+Iniciando protocolo de contenção.
+
+MAYA
+(sussurrando, assustada)
+Não... não agora.
+
+Ela pega rapidamente um pen drive, copia arquivos. As portas começam a se trancar automaticamente.
+
+INT. TECHCORP - CORREDOR - CONTÍNUO
+
+Maya corre pelo corredor. SEGURANÇAS convergem de todas as direções.
+
+SEGURANÇA 1
+(gritando)
+Pare onde está!
+
+Maya não para. Ela conhece estes corredores melhor que ninguém.
+
+INT. TECHCORP - ESCADARIA DE EMERGÊNCIA - CONTÍNUO
+
+Maya desce as escadas correndo, três degraus por vez. Seu telefone vibra.
+
+MAYA
+(atendendo, ofegante)
+Alex?
+
+ALEX (V.O.)
+(urgente)
+Maya, eles sabem. Saia de lá AGORA!
+
+MAYA
+Já estou indo. O código está seguro.
+
+ALEX (V.O.)
+Encontre-me no lugar de sempre. 
+Temos que tornar isso público antes que--
+
+A ligação cai. Maya olha para o telefone - "SEM SINAL".
+
+EXT. TECHCORP - SAÍDA DE EMERGÊNCIA - DIA
+
+Maya irrompe pela porta. A luz do sol a cega momentaneamente.
+
+MAYA
+(determinada)
+O mundo precisa saber a verdade.
+
+Ela desaparece na multidão da cidade.
+
+FADE TO BLACK.
+
+TÍTULO: "72 HORAS ANTES"
+
+FADE IN:
+
+INT. APARTAMENTO DE MAYA - NOITE
+
+Maya está em seu home office, cercada por monitores. Código rola nas telas como uma cachoeira digital.
+
+MAYA
+(ao telefone)
+Pai, eu sei que você não entende o que 
+eu faço, mas... descobri algo importante.
+
+PAI DE MAYA (V.O.)
+(preocupado)
+Maya, você não está se metendo em 
+problemas, está?
+
+MAYA
+(pausa)
+Não, pai. Está tudo bem.
+
+Ela desliga. Olha para a tela principal onde um arquivo está aberto:
+"PROJECT_MINDBRIDGE_CLASSIFIED.doc"
+
+MAYA (V.O.)
+(narrando)
+Dizem que a curiosidade matou o gato.
+Mas foi a curiosidade que me salvou.
+Ou me condenou. Ainda não sei.
+
+MONTAGEM - MAYA DESCOBRINDO A VERDADE
+
+-- Maya analisando linhas de código
+-- Documentos classificados aparecendo na tela
+-- Sua expressão mudando de curiosidade para horror
+-- Ela cobrindo a boca, chocada
+
+INT. APARTAMENTO DE MAYA - MADRUGADA
+
+Maya está exausta mas não consegue parar. ALEX RIVERA (28), hacker e melhor amigo de Maya, aparece em uma videochamada.
+
+ALEX
+Maya, você precisa dormir.
+
+MAYA
+Alex, você não entende. Este código...
+ele pode controlar qualquer dispositivo
+conectado à internet. Qualquer um.
+
+ALEX
+(sério)
+Você tem provas?
+
+Maya mostra a tela para ele.
+
+MAYA
+Tenho o código fonte. Mas preciso de 
+mais tempo para documentar tudo.
+
+ALEX
+Você tem 72 horas no máximo antes 
+que percebam o que você descobriu.
+
+MAYA
+(determinada)
+Então é melhor eu trabalhar rápido.
+
+CUT TO:
+
+EXT. SÃO FRANCISCO - VISTA AÉREA - AMANHECER
+
+A cidade desperta. Mas nas sombras digitais, uma guerra está prestes a começar.
+
+NARRADOR (V.O.)
+Em um mundo onde a informação é poder,
+a verdade é a arma mais perigosa.
+
+FADE OUT.
+
+FIM DO PRIMEIRO ATO
+
+---
+
+ANÁLISE ESTRUTURAL DO ROTEIRO:
+
+GÊNERO: Thriller Tecnológico
+TEMA: Verdade vs. Poder Corporativo
+PROTAGONISTA: Maya Chen - Desenvolvedora corajosa
+ANTAGONISTA: TechCorp (implícito)
+CONFLITO: Maya deve expor um código perigoso antes que seja tarde
+STAKES: Controle global através da tecnologia
+TONE: Suspense, Urgência, Paranoia moderna

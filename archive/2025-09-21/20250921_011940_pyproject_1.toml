@@ -1,0 +1,12 @@
+[project]
+name = "scripturemon-champion-refactored"
+version = "0.3.0"
+description = "Refatoração minimalista e robusta do Scripturemon Champion (std-lib only)"
+requires-python = ">=3.10"
+readme = "README.md"
+authors = [{name = "Nestor Luiz"}, {name = "Scripturemon (refactor)"}]
+license = { text = "Proprietary (provided by Nestor Luiz for refactoring)" }
+dependencies = []
+
+[project.scripts]
+scripturemon = "scripturemon_champion.cli:main"

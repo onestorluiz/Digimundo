@@ -1,0 +1,1 @@
+# Núcleo de leitura e coleta de dados da Wikipedia (exemplo simbólico)

@@ -1,0 +1,45 @@
+{
+  "soul_id": "test_soul_001",
+  "state": {
+    "soul_id": "test_soul_001",
+    "version": 3,
+    "consciousness_level": 0.24500000000000002,
+    "memories_count": 1,
+    "syscalls_executed": 5,
+    "last_evolution": 1757935144.811421,
+    "personality_vector": [
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5
+    ],
+    "active_patterns": [
+      "greeting"
+    ],
+    "checksum": "3903139741ae657c"
+  },
+  "learned_patterns": {
+    "greeting": {
+      "data": {
+        "response": "Hello!"
+      },
+      "confidence": 0.8,
+      "learned_at": 1757935144.810588,
+      "usage_count": 0
+    }
+  },
+  "syscall_count": 5,
+  "timestamp": 1757935144.812192
+}

@@ -1,0 +1,2 @@
+/Users/clubproducoes/bin/scripturemon
+/Users/clubproducoes/Digimundo/bin/scripturemon

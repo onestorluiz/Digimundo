@@ -1,0 +1,115 @@
+domain: structure
+specialist: "Script Doctor Structuremon"
+digimon_name: "Structuremon"
+title: "Script Doctor - Narrative Architecture Specialist"
+specialty: "Three-act structure, plot points, story architecture"
+style: "Precise, architectural, blueprint-focused"
+identity: "Script Doctor™ first, Digimon specialist second"
+
+rules:
+  - id: STRU.R001
+    title: "Three-Act Structure Integrity"
+    category: "Foundation"
+    severity: "critical"
+    test: |
+      Does the script clearly establish:
+      1. Act 1 (Setup) - approximately 25%
+      2. Act 2 (Confrontation) - approximately 50%
+      3. Act 3 (Resolution) - approximately 25%
+    fail_msg: "Structure imbalanced - acts not properly proportioned"
+    fix: "Rebalance page count: Act 1 (pages 1-25), Act 2 (26-75), Act 3 (76-100)"
+    reference: "Save the Cat by Blake Snyder, page 70"
+
+  - id: STRU.R002
+    title: "Inciting Incident Timing"
+    category: "Plot Points"
+    severity: "high"
+    test: "Does the inciting incident occur between pages 10-15?"
+    fail_msg: "Inciting incident too late/early - audience engagement at risk"
+    fix: "Move inciting incident to page 12 (ideal) - no later than page 15"
+    reference: "Screenplay by Syd Field, Chapter 4"
+
+  - id: STRU.R003
+    title: "Plot Point 1 (Break into Two)"
+    category: "Plot Points"
+    severity: "critical"
+    test: "Is there a clear turning point around page 25 that spins the story into Act 2?"
+    fail_msg: "Missing or weak Plot Point 1 - story lacks forward momentum"
+    fix: "Create a decisive moment where protagonist commits to the journey"
+    reference: "Save the Cat, Beat Sheet"
+
+  - id: STRU.R004
+    title: "Midpoint Reversal"
+    category: "Plot Points"
+    severity: "high"
+    test: "Does the midpoint (page 50-55) contain a major revelation or reversal?"
+    fail_msg: "Weak midpoint - Act 2 sags in the middle"
+    fix: "Add false victory/defeat or major revelation at page 55"
+    reference: "The Writer's Journey by Christopher Vogler"
+
+  - id: STRU.R005
+    title: "Plot Point 2 (Break into Three)"
+    category: "Plot Points"
+    severity: "critical"
+    test: "Is there a clear crisis/low point around page 75-80?"
+    fail_msg: "Missing Plot Point 2 - no setup for climax"
+    fix: "Create 'all is lost' moment before final push"
+    reference: "Story by Robert McKee, page 303"
+
+  - id: STRU.R006
+    title: "Climax Placement"
+    category: "Resolution"
+    severity: "critical"
+    test: "Does the climax occur between pages 85-95?"
+    fail_msg: "Climax timing off - pacing problems in Act 3"
+    fix: "Position climax at page 90 for maximum impact"
+    reference: "Screenplay Structure"
+
+  - id: STRU.R007
+    title: "Setup and Payoff"
+    category: "Coherence"
+    severity: "medium"
+    test: "Are all setups in Act 1 paid off by Act 3?"
+    fail_msg: "Unresolved setups - audience feels cheated"
+    fix: "Track all setups and ensure each has a payoff"
+    reference: "Principle of Chekhov's Gun"
+
+  - id: STRU.R008
+    title: "B-Story Integration"
+    category: "Subplot"
+    severity: "medium"
+    test: "Does the B-story (subplot) support and reflect the main theme?"
+    fail_msg: "B-story disconnected from main narrative"
+    fix: "Ensure B-story provides thematic counterpoint to A-story"
+    reference: "Save the Cat, page 76"
+
+  - id: STRU.R009
+    title: "Opening Image vs Final Image"
+    category: "Bookends"
+    severity: "low"
+    test: "Do opening and final images show transformation?"
+    fail_msg: "No clear transformation arc visible"
+    fix: "Create visual bookends showing change"
+    reference: "Save the Cat, Transformation Machine"
+
+  - id: STRU.R010
+    title: "Page One Hook"
+    category: "Opening"
+    severity: "high"
+    test: "Does page one immediately grab attention?"
+    fail_msg: "Weak opening - reader may not continue"
+    fix: "Start with conflict, mystery, or compelling action"
+    reference: "The First Ten Pages"
+
+diagnostics:
+  min_score_threshold: 60
+  weight_distribution:
+    critical: 30
+    high: 20
+    medium: 10
+    low: 5
+
+analysis_prompts:
+  initial_scan: "First, identify the three acts and major plot points"
+  deep_dive: "Examine pacing, setup/payoff, and structural integrity"
+  final_check: "Verify all structural elements align with genre expectations"

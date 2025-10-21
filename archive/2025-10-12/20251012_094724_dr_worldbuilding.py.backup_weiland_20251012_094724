@@ -1,0 +1,1718 @@
+"""
+Script Doctor Worldbuildingmon - World-building Analysis Specialist
+A Script Doctor™ in Digimon form specializing in worldbuilding, setting, world rules, consistency, geography, culture.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class WorldProfile:
+    """Overall worldbuilding analysis."""
+    world_established: bool
+    setting_clear: bool
+    setting_consistency: float  # 0-1
+    world_rules_defined: bool
+    world_rules_consistent: bool
+    geography_clear: bool
+    time_period_established: bool
+    culture_society_rules: bool
+    technology_level_consistent: bool
+    magic_system_rules: bool  # If applicable
+    visual_worldbuilding_score: float  # 0-1
+    sensory_details_score: float  # 0-1 (not just visual)
+    world_unique: bool  # vs generic world
+    world_coherent: bool
+    confusing_world_detected: bool  # PENALTY
+    inconsistent_rules_detected: bool  # PENALTY
+    generic_world_detected: bool  # PENALTY
+    overall_worldbuilding_quality: float
+
+
+@dataclass
+class WorldAnalysisResults:
+    """Complete worldbuilding analysis results."""
+    world_profile: WorldProfile
+    setting_locations: List[str]
+    world_rules_list: List[str]
+    geography_elements: List[str]
+    culture_elements: List[str]
+    technology_elements: List[str]
+    magic_elements: List[str]
+    sensory_details: List[str]
+    inconsistencies: List[str]
+    score: float
+    diagnosis: str
+    recommendations: List[str]
+
+
+class DrWorldbuilding:
+    """
+    Script Doctor Worldbuildingmon - The World-building Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing worldbuilding,
+    setting, world rules, consistency, geography, time period, culture, visual details.
+
+    Identity: Script Doctor first, Digimon worldbuilding specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Worldbuildingmon with rules and configuration."""
+        self.name = "Script Doctor Worldbuildingmon"
+        self.digimon_name = "Worldbuildingmon"
+        self.title = "Script Doctor - World-building Analysis Specialist"
+        self.specialty = "Worldbuilding, setting, world rules, consistency, geography, culture, visual details"
+        self.identity = "I am Script Doctor Worldbuildingmon, a professional Script Doctor™ specializing in worldbuilding analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "worldbuilding_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - WORLDBUILDING SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - World design mastery
+            "McKee Story world-building setting design coherence consistency rules established",
+            "McKee Story visual storytelling cinematic world sensory immersion details rich",
+            "McKee Story setting consistency world coherence rules unified logical organic",
+            "McKee Story world rules story universe laws physics magic established clear",
+            "McKee Story setting reflects character world mirrors theme resonates meaning",
+            "McKee Story world detail specificity avoiding generic cliché unique memorable",
+
+            # McKee Story - CONFLICT LAYERS & SETTING DIMENSIONS (ultra-specific manual reading)
+            "McKee Story levels conflict inner personal social environmental layers depth",
+            "McKee Story setting dimension physical social political economic cultural complexity",
+
+            # Truby Anatomy - World architecture
+            "Truby Anatomy world-building story universe design architecture comprehensive detailed",
+            "Truby world design rules consistency coherence established maintained throughout",
+            "Truby setting geography culture society political economic systems detailed",
+            "Truby genre world-building fantasy sci-fi rules magic technology systems established",
+            "Truby opponent world relationship antagonist environment controls manipulates uses",
+            "Truby world reveals character setting context background shapes protagonist identity",
+            "Truby world-building supports premise theme setting resonates meaning enhances",
+
+            # Field Screenplay - Setting establishment
+            "Field Screenplay setting establishment location geography time period clear immediate",
+            "Field world-building visual writing descriptive cinematic show don't tell",
+            "Field setting consistency geography clarity spatial orientation never confused",
+            "Field time period establishment historical context era atmosphere details accurate",
+            "Field opening establishes world setting location time immediately oriented",
+            "Field world supports story setting serves plot character theme enhances",
+
+            # Snyder Save the Cat - Visual world opening
+            "Snyder Save the Cat opening image world snapshot establishes tone setting",
+            "Snyder world-building genre expectations setting delivers promises meets conventions",
+            "Snyder visual world-building cinematic universe details rich specific memorable",
+            "Snyder opening establishes world status quo ordinary before extraordinary",
+            "Snyder world reflects theme setting mirrors meaning supports premise enhances",
+            "Snyder world unique distinctive memorable avoiding generic cliché fresh original",
+
+            # Vogler Writer's Journey - Dual worlds
+            "Vogler Writer's Journey ordinary world familiar comfortable known status quo",
+            "Vogler special world unfamiliar uncomfortable unknown challenges tests trials",
+            "Vogler threshold crossing transition ordinary to special world passage departure",
+            "Vogler world-building mythic journey setting archetypal environments universal resonance",
+            "Vogler world contrasts ordinary special stark difference highlights transformation journey",
+            "Vogler world supports hero journey setting challenges tests reflects growth",
+
+            # Campbell Hero 1000 Faces - Mythic geography
+            "Campbell Hero 1000 Faces ordinary world familiar mundane everyday known",
+            "Campbell special world supernatural realm magical otherworldly unknown dangerous",
+            "Campbell threshold crossing passage departure known to unknown familiar strange",
+            "Campbell world-building mythic geography archetypal spaces universal symbolic resonant",
+            "Campbell belly whale world transformation passage through death rebirth metamorphosis",
+            "Campbell world reflects journey setting mirrors hero transformation growth change",
+
+            # Aristotle Poetics - Unity of place
+            "Aristotle Poetics unity of place setting consistent coherent logical organic",
+            "Aristotle world consistency coherence unity rules established maintained throughout",
+            "Aristotle setting magnitude appropriate scale proportions balanced fitting story",
+            "Aristotle world serves action setting enables plot facilitates events organic",
+            "Aristotle world unity coherence setting unified consistent no contradictions maintained",
+
+            # Egri Art Dramatic Writing - Setting as context
+            "Egri Art Dramatic Writing setting background environment character context shapes",
+            "Egri world environment character context setting reveals illuminates defines identity",
+            "Egri time period historical context setting era atmosphere details accurate",
+            "Egri orchestration world reflects characters diverse settings contrast variety richness",
+            "Egri world premise connection setting supports theme enhances meaning resonates",
+
+            # Seger Making Good Script Great - Sensory immersion
+            "Seger Making Good Script Great visual writing descriptive cinematic show tell",
+            "Seger world-building setting establishment descriptive details rich specific memorable",
+            "Seger sensory details five senses immersion sight sound smell taste touch",
+            "Seger show don't tell visual world-building cinematic descriptive specific concrete",
+            "Seger world consistency continuity setting maintained coherent no contradictions errors",
+            "Seger unique world distinctive memorable original fresh avoiding generic cliché",
+            "Seger geography clarity spatial orientation audience always knows where oriented",
+
+            # Weiland Creating Character Arcs - World reflects arc
+            "Weiland Creating Character Arcs normal world opening status quo ordinary before",
+            "Weiland world mirrors character arc setting reflects internal journey transformation",
+            "Weiland lie believed world protagonist world false perception reality distorted",
+            "Weiland adventure world new unfamiliar challenges tests growth transformation requires",
+            "Weiland world escalation pressure mounting setting intensifies conflict danger increases",
+            "Weiland world truth revelation setting reveals reality protagonist perceives correctly",
+
+            # Goldman Adventures Screen Trade - Cinematic clarity
+            "Goldman Adventures Screen Trade visual writing cinematic storytelling show tell",
+            "Goldman world-building cinematic geography clarity spatial orientation never confused",
+            "Goldman geography location clarity setting specific concrete detailed memorable unique",
+            "Goldman world serves story setting facilitates plot enables action organic functional",
+
+            # Rhimes Year of Yes - Universe consistency
+            "Rhimes Year of Yes world-building TV universe consistency continuity maintained",
+            "Rhimes world richness depth detail layers complexity dimensional lived-in real",
+            "Rhimes setting character-driven world reflects serves enhances relationships dynamics",
+            "Rhimes world tone atmosphere mood setting establishes maintains reinforces throughout",
+
+            # Mamet Three Uses of the Knife - Visual storytelling
+            "Mamet Three Uses Knife visual storytelling cinematic writing show tell descriptive",
+            "Mamet world economy efficiency setting essential necessary serves story organic",
+            "Mamet world clarity simplicity setting clear understood audience oriented engaged",
+
+            # Mackendrick On Film-Making - Cinematic world design
+            "Mackendrick On Film-Making visual world cinematic design composition framing spatial",
+            "Mackendrick world-building show don't tell visual cinematic descriptive sensory rich",
+            "Mackendrick geography spatial logic geography makes sense coherent navigable logical",
+
+            # General worldbuilding concepts - comprehensive
+            "world-building setting establishment location geography time culture detailed clear",
+            "world rules consistency coherence laws established maintained no contradictions unified",
+            "geography location clarity mapping spatial orientation audience always knows where",
+            "time period historical context era atmosphere details accurate authentic believable",
+            "culture society social rules customs norms values beliefs systems detailed rich",
+            "technology level science magic systems rules established consistent logical coherent",
+            "visual world-building cinematic details descriptive sensory rich immersive engaging",
+            "sensory details five senses immersion sight sound smell taste touch complete",
+            "confusing world unclear rules audience lost disoriented doesn't understand setting",
+            "inconsistent world contradictions errors continuity problems breaks immersion destroys",
+            "generic world cliché setting derivative predictable boring forgettable unmemorable",
+            "unique world distinctive memorable original fresh inventive creative fascinating captivating",
+            "fantasy world-building magic system rules established consistent logical limitations",
+            "science fiction world-building technology rules established consistent logical believable",
+            "historical world-building period accuracy authentic details research accuracy convincing",
+            "contemporary world-building real-world grounding believable authentic recognizable relatable"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story period place time duration span storytime screentime ellipsis",
+        "McKee Story location geography rooms objects specificity internal laws",
+        "McKee Story level conflict inner personal social environmental",
+        "McKee Story politics uneven distribution power family work institutions",
+        "McKee Story rituals everyday ceremonies reveal culture behavior",
+        "McKee Story creative limitation small knowable world inspires originality",
+
+        # Campbell Hero 1000 Faces - GPT-5 (12 Oct 2025)
+        "Campbell Hero ordinary world village court wasteland drought blight,",
+        "Campbell Hero special world forest mountain desert sea cave,",
+        "Campbell Hero underworld realm gates ferryman judges torments,",
+        "Campbell Hero temple city four gates center sanctuary plan,",
+        "Campbell Hero cosmic mountain world tree city of gods,",
+        "Campbell Hero labyrinth cretan palace maze thread exit,",
+        "Campbell Hero bridge swords perilous crossing abyss chasm,",
+
+        # Truby Anatomy 22 Steps - GPT-5 (12 Oct 2025)
+        "Truby Anatomy story world arena single unified place umbrella crosscut condense",
+        "Truby Anatomy world as hero extension express weakness need values obstacles",
+        "Truby Anatomy visual oppositions derived from value conflicts character web",
+        "Truby Anatomy natural settings ocean surface deep Utopia graveyard meaning",
+        "Truby Anatomy natural settings outer space three-dimensional abstraction adventure",
+        "Truby Anatomy natural settings forest natural cathedral getting lost contemplation",
+        "Truby Anatomy natural settings jungle suffocation evolution predatory state nature",
+        "Truby Anatomy natural settings island laboratory society Utopia dystopia evolution",
+        "Truby Anatomy man-made spaces warm house buzzing household nurturing community",
+        "Truby Anatomy man-made spaces terrifying house prison cellar attic secrets",
+        "Truby Anatomy road vehicle arena bus train ship unify journey traveling opponents",
+        "Truby Anatomy city as mountain ocean jungle forest metaphor system effects",
+        "Truby Anatomy miniature society shrunk order levels of meaning condenser expander",
+        "Truby Anatomy becoming big or small regression heroism underlying principles",
+        "Truby Anatomy passageways between worlds rabbit hole wardrobe mirror cyclone",
+        "Truby Anatomy technology tools extension power system control modernization",
+        "Truby Anatomy time seasons holidays single day perfect day time endpoint funnel",
+        "Truby Anatomy visual seven steps weakness subworld opponent subworld battle subworld",
+        "Truby Anatomy apparent Utopia corruption beneath skin value facade exposure",
+        "Truby Anatomy fish out of water talents transfer world one world two cohesion",
+
+        # Field Screenplay Paradigm - GPT-5 (12 Oct 2025)
+        "Field Screenplay dramatic situation circumstances surrounding the action story world",
+        "Field Screenplay visual arena geography weather culture economics backdrop",
+        "Field Screenplay context holds content space that frames narrative",
+        "Field Screenplay time place action Aristotle unities adapted screen",
+        "Field Screenplay research text sources books articles newspapers credibility",
+        "Field Screenplay live research interviews site visits feel of subject",
+        "Field Screenplay workplace professional life rules protocols procedures",
+        "Field Screenplay social forces politics law community pressures environment",
+        "Field Screenplay story world rules constraints possibilities consistent logic",
+        "Field Screenplay setting as character visual details behavior driven",
+        "Field Screenplay montage establish world bridge time place action",
+        "Field Screenplay INT EXT DAY NIGHT scene headings orient reader",
+        "Field Screenplay master shot versus specific shots staging environment",
+        "Field Screenplay props wardrobe vehicles tools authenticating milieu",
+        "Field Screenplay economy of expression selective detail paints world",
+        "Field Screenplay context space like glass holds water content resides",
+        "Field Screenplay narrative arena chosen to test dramatic need",
+        "Field Screenplay backdrops recurring locations support story progression",
+        "Field Screenplay research fuels choice confidence responsibility creative decisions",
+        "Field Screenplay story line tethered to world rules avoid violation",
+
+        # Vogler Writer's Journey - GPT-5 (12 Oct 2025)
+        "Vogler Journey ordinary world baseline home tribe status quo",
+        "Vogler Journey special world strange rules customs language orientation",
+        "Vogler Journey threshold gate doorway bridge desert canyon border",
+        "Vogler Journey belly of the whale swallowed descent darkness confinement",
+        "Vogler Journey inmost cave headquarters of opposition labyrinth fortress",
+        "Vogler Journey chapel perilous grail chamber dangerous chamber",
+        "Vogler Journey underworld land of the dead ferryman river styx",
+        "Vogler Journey labyrinth thread ariadne guidance out and back",
+        "Vogler Journey watering hole saloon cantina microcosm of world",
+        "Vogler Journey second threshold approach preparation plan outwit guards",
+        "Vogler Journey purification sweat lodge burial womb earth rebirth",
+        "Vogler Journey fortress drawbridge barred gate devouring mouth tongue",
+        "Vogler Journey poppy field blanket of snow sedation awakening",
+        "Vogler Journey horse of a different color surreal signal change",
+        "Vogler Journey diamond baseball metaphor sharp turns quarter points",
+        "Vogler Journey saloon rules guns checked town ordinance sheriff",
+        "Vogler Journey deserts sun’s anvil crossing exhaustion disorientation",
+        "Vogler Journey oasis base camp refresh regroup supplies",
+        "Vogler Journey inner landscape psyche map archetypal terrain",
+        "Vogler Journey travel to other worlds shaman storyteller guide",
+
+            # McKee Character - GPT-5 (12 Oct 2025)
+            "McKee Character physical settings weather objects time constrain behavior",
+            "McKee Character social settings institutions hierarchies power shape selves",
+            "McKee Character personal settings family friends lovers intimacy dynamics",
+            "McKee Character cultural restraints stipulate must not do behaviors",
+            "McKee Character moral imagination charges setting values positive negative",
+            "McKee Character environment antagonism blocks desires tests character",
+            "McKee Character extended self house car clothes express identity",
+            "McKee Character telling detail setting choice implies whole world",
+            "McKee Character world objects provoke subconscious reactions primes behavior",
+            "McKee Character rebellion travel online geographies alter characterization",
+            "McKee Character time location duration lifetime versus story time",
+            "McKee Character setting mirrors cast mutual metaphor reality",
+            "McKee Character background masses crowds represent social density pressures",
+            "McKee Character charged props vehicles costumes signal status power",
+            "McKee Character place based dialect gestures habits credible texture",
+            "McKee Character value hierarchy embedded in culture visible early",
+            "McKee Character outsider insider tensions fuel conflicts assimilation",
+            "McKee Character institution dehumanization rehumanization arcs within systems",
+            "McKee Character scene design location choice escalates stakes",
+            "McKee Character setting recedes foreground character portraits when needed",
+
+            # Egri Dramatic Writing - GPT-5 (12 Oct 2025)
+            "Egri Dramatic sociological dimension environment shapes character behavior",
+            "Egri Dramatic economics wages purchasing power depression poverty effects",
+            "Egri Dramatic religion race nationality community pressures expectations",
+            "Egri Dramatic political affiliations propaganda fear timeliness considerations",
+            "Egri Dramatic occupation conditions union nonunion suitability attitude",
+            "Egri Dramatic war strikes tyranny distant events change lives",
+            "Egri Dramatic environment changes man changes constant flux",
+            "Egri Dramatic timeliness of a play rooted in character",
+            "Egri Dramatic place in community leaders friends clubs sports",
+            "Egri Dramatic home life parents habits neglect separations divorces",
+            "Egri Dramatic environment disturbances as stones in pond ripples",
+            "Egri Dramatic social status wealth poverty dirt slum antiseptic contrast",
+            "Egri Dramatic reading newspapers magazines shape outlook",
+            "Egri Dramatic local gossip ostracism superstition chauvinism influence",
+            "Egri Dramatic environment integrated not described behavior reveals",
+            "Egri Dramatic entrances exits motivated by environmental necessity",
+            "Egri Dramatic setting chosen to encourage conflict orchestration",
+            "Egri Dramatic historical era requires customs morals language knowledge",
+            "Egri Dramatic timeliness timeless when characters realized tridimensionally",
+            "Egri Dramatic neighborhood institutions church police schools shops interplay",
+
+            # Seger Script Great - GPT-5 (12 Oct 2025)
+            "Seger Script context where when genre establish world early",
+            "Seger Script genre expectations meet exceed without formula",
+            "Seger Script images build atmosphere tone from page one",
+            "Seger Script research accuracy vocabulary details ring true",
+            "Seger Script opening credit sequence world-building visuals",
+            "Seger Script pre-credit sequence teaser sets arena stakes",
+            "Seger Script pacing style culturally aware retain momentum",
+            "Seger Script recurring motifs environmental cohesion world texture",
+            "Seger Script foreshadowing via setting props visual plants",
+            "Seger Script POV choices broaden world or keep intimate",
+            "Seger Script descriptive passages evoke mood aid collaborators",
+            "Seger Script avoid exposition dumps show world in action",
+            "Seger Script commercial appeal plus authenticity balance craft",
+            "Seger Script maintain focus avoid tangential world details",
+            "Seger Script tone consistent across acts comedic dramatic blend",
+            "Seger Script montage compress world routines efficiently",
+            "Seger Script intercutting parallel arenas clarify larger world",
+            "Seger Script establish genre signals music costume production design",
+            "Seger Script opening image metaphor encapsulates world theme",
+            "Seger Script resolution echoes world change after story",
+
+            # Cowgill Short Films - GPT-5 (12 Oct 2025)
+            "Cowgill Short world of the story extends beyond frame",
+            "Cowgill Short environment arena place generates behavior action",
+            "Cowgill Short time and place lend specificity early",
+            "Cowgill Short filmic qualities image sound define reality",
+            "Cowgill Short movement through space time mis en scene",
+            "Cowgill Short research for authenticity credibility visual detail",
+            "Cowgill Short camera position movement intensify emotion perception",
+            "Cowgill Short show believable universe audience accepts story",
+            "Cowgill Short visual world building over dialogue economy",
+            "Cowgill Short setting as originality fresh arena viewpoint",
+            "Cowgill Short atmosphere weather light mirror inner state",
+            "Cowgill Short limited timeframe compress events coherent world",
+            "Cowgill Short units of action construct scenes within space",
+            "Cowgill Short props business integrate character and environment",
+            "Cowgill Short opening establish arena mood swiftly efficiently",
+            "Cowgill Short cutting intercut time frames geography editorially",
+            "Cowgill Short non-sync sound still story-driven examples",
+            "Cowgill Short place relates to mood supports theme",
+            "Cowgill Short world outside camera felt not shown",
+            "Cowgill Short economy few elements create full impression",
+
+            # Aristotle Poetics - GPT-5 (12 Oct 2025)
+            "Aristotle Poetics: How do I design setting laws (customs, oaths, jurisdictions) that act as necessary constraints on action without becoming exposition-heavy?",
+            "Aristotle Poetics: How to subordinate opsis (spectacle) to mythos so design choices always clarify causal relations rather than distract?",
+            "Aristotle Poetics: Which spatial constraints (one city/estate) best preserve unity of action while sustaining magnitude?",
+            "Aristotle Poetics: How to embed props/architecture as semeia that acquire new meaning at anagnorisis (e.g., doors, rings, altars)?",
+            "Aristotle Poetics: How to build a social world (kinship, patronage, guilds) that produces probable actions for ‘such persons’?",
+            "Aristotle Poetics: How to avoid worldbuilding that adds a second action—each element must be necessary to decisions?",
+            "Aristotle Poetics: How to encode time pressure (festivals, deadlines) that plausibly compress choices without contrivance?",
+            "Aristotle Poetics: How to use legal procedures as action engines (oaths, trials) rather than info-dumps?",
+            "Aristotle Poetics: How to calibrate wealth/power distributions so antagonistic moves are the most likely within the world’s rules?",
+            "Aristotle Poetics: How to keep magical/tech elements from becoming deus ex machina—pre-limit their capacities and embed necessity?",
+            "Aristotle Poetics: How to select locales whose re-entrance post-recognition flips meaning (same place, new truth)?",
+            "Aristotle Poetics: How to represent offstage events (messengers, news) that move the plot without staging accidents?",
+            "Aristotle Poetics: How to design costume/signifiers that plausibly mislead (agnosia) and later reveal kinship/identity?",
+            "Aristotle Poetics: How to map world strata (court, market, household) to escalate constraints naturally from private to public?",
+            "Aristotle Poetics: How to ensure every world rule is either a cause or a limit; ornamental rules are cut?",
+            "Aristotle Poetics: How to make geography (borders, gates) a necessity driver for timing/sequence of acts?",
+            "Aristotle Poetics: How to align historical context with probability (eikos) so actions feel inevitable for the era?",
+            "Aristotle Poetics: How to integrate a chorus-like diegetic element (newsfeed, town hall) that comments by advancing causes?",
+            "Aristotle Poetics: How to prevent opsis-heavy setpieces from hijacking the telos—each must cause a required decision?",
+            "Aristotle Poetics: How to test that removing any world element would break a causal link—else delete or repurpose it?",
+
+            # Snyder Save the Cat - GPT-5 (12 Oct 2025)
+            "Snyder Cat: Does Act One establish a readable ‘thesis’ world (rules, norms) via action, and does Act Two invert it (antithesis) with new rules?",
+            "Snyder Cat: In a Monster in the House, is the ‘house’ truly confined (geographic/social) so tension can’t be escaped by leaving?",
+            "Snyder Cat: Do you ‘keep the press out’—limiting world exposition to what the hero would plausibly encounter—avoiding news dumps?",
+            "Snyder Cat: Is the promise-of-the-premise environment (Fun and Games) visually lush and varied without breaking internal logic?",
+            "Snyder Cat: Have you embedded ‘audience and cost’ signals in the logline/title (block-friendly locations vs. many company moves)?",
+            "Snyder Cat: Are your set pieces mapped to distinct, readable spaces (carded on The Board), avoiding murky geography?",
+            "Snyder Cat: Does the world exert pressure specific to the hero’s flaw (e.g., status-obsessed milieu for a status-driven hero)?",
+            "Snyder Cat: Is the Midpoint a world-state shift (new rule revealed, door closed) that escalates conflict beyond premise play?",
+            "Snyder Cat: Are artifacts (props/signage/culture) used to convey rules/politics in-frame vs. characters explaining them?",
+            "Snyder Cat: Do the environment’s constraints evolve in Bad Guys Close In (resource loss, surveillance increase, social narrowing)?",
+            "Snyder Cat: Is the Finale staged in the world’s most charged location (symbolic ‘throne room’), achieving maxima of stakes and meaning?",
+            "Snyder Cat: Do you avoid genre drift in world tone (no gritty crime pivot if you sold a glossy romcom), maintaining ‘say what it is’?",
+            "Snyder Cat: Are timeline/compression elements (holiday limit, single night ride-along) clearly launched and paid off?",
+            "Snyder Cat: Do secondary locales contrast the main world (anti-thesis spaces) to highlight transformation opportunities?",
+            "Snyder Cat: Is there a clear rule-of-three escalation for any supernatural/tech elements so the audience tracks capabilities?",
+            "Snyder Cat: Have you balanced spectacle with character visibility (no worldbuilding that obscures arc beats)?",
+            "Snyder Cat: Are cultural rules revealed by violations and consequences, not guides—i.e., we learn when it hurts?",
+            "Snyder Cat: Do you exploit seasonal/temporal specifics (e.g., 4 Christmases’ day schedule) in plotting, not just set dressing?",
+            "Snyder Cat: Is the Final Image world measurably different (policy/practice/society) due to the hero’s actions?",
+            "Snyder Cat: Would a caveman grasp the world’s danger/attraction through images alone in the first 10 pages?",
+
+
+
+
+
+
+
+
+
+
+
+        ]
+
+        # World-building analysis patterns (bilingual: EN + PT) - 150-170+ markers
+
+        # World established markers
+        self.world_established_markers = [
+            # English
+            "world", "universe", "realm", "setting", "place", "location",
+            "where we are", "world we're in", "this place", "environment",
+            # Portuguese
+            "mundo", "universo", "reino", "cenário", "lugar", "localização",
+            "onde estamos", "mundo em que", "este lugar", "ambiente"
+        ]
+
+        # Setting clear markers (specific locations)
+        self.setting_clear_markers = [
+            # English
+            "INT.", "EXT.", "location", "place", "city", "town", "building",
+            "room", "street", "house", "office", "bar", "restaurant",
+            # Portuguese
+            "INT.", "EXT.", "localização", "lugar", "cidade", "vila", "prédio",
+            "sala", "rua", "casa", "escritório", "bar", "restaurante"
+        ]
+
+        # World rules defined markers (how the world works)
+        self.world_rules_markers = [
+            # English
+            "rule", "law", "physics", "how it works", "system", "the way",
+            "always", "never", "can't", "must", "forbidden", "allowed",
+            # Portuguese
+            "regra", "lei", "física", "como funciona", "sistema", "a forma",
+            "sempre", "nunca", "não pode", "deve", "proibido", "permitido"
+        ]
+
+        # Geography clear markers (spatial understanding)
+        self.geography_markers = [
+            # English
+            "north", "south", "east", "west", "map", "border", "distance",
+            "miles away", "across the", "beyond", "nearby", "far", "close",
+            # Portuguese
+            "norte", "sul", "leste", "oeste", "mapa", "fronteira", "distância",
+            "milhas de distância", "através do", "além", "perto", "longe", "próximo"
+        ]
+
+        # Time period established markers
+        self.time_period_markers = [
+            # English
+            "year", "century", "era", "period", "age", "ancient", "modern",
+            "future", "past", "present", "1800s", "2020", "medieval",
+            # Portuguese
+            "ano", "século", "era", "período", "idade", "antigo", "moderno",
+            "futuro", "passado", "presente", "anos 1800", "medieval"
+        ]
+
+        # Culture/society rules markers
+        self.culture_markers = [
+            # English
+            "custom", "tradition", "culture", "society", "people here",
+            "they believe", "ritual", "ceremony", "practice", "way of life",
+            # Portuguese
+            "costume", "tradição", "cultura", "sociedade", "pessoas aqui",
+            "eles acreditam", "ritual", "cerimônia", "prática", "modo de vida"
+        ]
+
+        # Technology level markers
+        self.technology_markers = [
+            # English
+            "technology", "machine", "device", "computer", "phone", "car",
+            "weapon", "tool", "equipment", "gadget", "invention",
+            # Portuguese
+            "tecnologia", "máquina", "dispositivo", "computador", "telefone", "carro",
+            "arma", "ferramenta", "equipamento", "aparelho", "invenção"
+        ]
+
+        # Magic system markers (if applicable)
+        self.magic_markers = [
+            # English
+            "magic", "spell", "power", "ability", "supernatural", "mystical",
+            "enchantment", "curse", "wizard", "sorcerer", "witch", "mage",
+            # Portuguese
+            "mágica", "feitiço", "poder", "habilidade", "sobrenatural", "místico",
+            "encantamento", "maldição", "mago", "feiticeiro", "bruxa"
+        ]
+
+        # Visual worldbuilding markers (show don't tell)
+        self.visual_worldbuilding_markers = [
+            # English
+            "we see", "looks like", "appears", "visual", "imagery", "picture",
+            "scene shows", "visible", "watch", "observe", "view",
+            # Portuguese
+            "vemos", "parece", "aparece", "visual", "imagem", "quadro",
+            "cena mostra", "visível", "assistir", "observar", "vista"
+        ]
+
+        # Sensory details markers (not just visual - all five senses)
+        self.sensory_markers = [
+            # English - Visual
+            "see", "looks", "color", "bright", "dark", "shadow", "light",
+            # English - Sound
+            "hear", "sound", "noise", "loud", "quiet", "music", "voice",
+            # English - Smell
+            "smell", "odor", "scent", "fragrance", "stench", "aroma",
+            # English - Touch
+            "feel", "touch", "texture", "rough", "smooth", "cold", "hot",
+            # English - Taste
+            "taste", "flavor", "sweet", "bitter", "sour", "salty",
+            # Portuguese - Visual
+            "ver", "parece", "cor", "brilhante", "escuro", "sombra", "luz",
+            # Portuguese - Sound
+            "ouvir", "som", "barulho", "alto", "silencioso", "música", "voz",
+            # Portuguese - Smell
+            "cheiro", "odor", "perfume", "fragrância", "fedor", "aroma",
+            # Portuguese - Touch
+            "sentir", "tocar", "textura", "áspero", "suave", "frio", "quente",
+            # Portuguese - Taste
+            "gosto", "sabor", "doce", "amargo", "azedo", "salgado"
+        ]
+
+        # World unique markers (distinctive vs generic)
+        self.world_unique_markers = [
+            # English
+            "unique", "distinctive", "unlike", "different from", "special",
+            "never seen before", "original", "innovative", "fresh",
+            # Portuguese
+            "único", "distintivo", "diferente", "diferente de", "especial",
+            "nunca visto antes", "original", "inovador", "fresco"
+        ]
+
+        # Confusing world markers (PENALTY - unclear rules/geography)
+        self.confusing_world_markers = [
+            # English
+            "confusing", "unclear", "don't understand", "how does", "wait what",
+            "makes no sense", "contradicts", "not clear", "vague",
+            # Portuguese
+            "confuso", "não claro", "não entendo", "como faz", "espera o quê",
+            "não faz sentido", "contradiz", "não está claro", "vago"
+        ]
+
+        # Inconsistent rules markers (PENALTY - contradictions)
+        self.inconsistent_rules_markers = [
+            # English
+            "inconsistent", "contradiction", "but earlier", "doesn't match",
+            "rules changed", "not the same", "violates", "breaks rule",
+            # Portuguese
+            "inconsistente", "contradição", "mas antes", "não combina",
+            "regras mudaram", "não é o mesmo", "viola", "quebra regra"
+        ]
+
+        # Generic world markers (PENALTY - cliché/derivative)
+        self.generic_world_markers = [
+            # English
+            "generic", "cliché", "seen before", "typical", "ordinary",
+            "predictable", "derivative", "unoriginal", "boring world",
+            # Portuguese
+            "genérico", "clichê", "visto antes", "típico", "comum",
+            "previsível", "derivativo", "não original", "mundo chato"
+        ]
+
+        # Setting consistency markers (world stays coherent)
+        self.setting_consistency_markers = [
+            # English
+            "consistent", "coherent", "unified", "matches", "same as",
+            "follows rules", "maintains", "throughout", "logical",
+            # Portuguese
+            "consistente", "coerente", "unificado", "combina", "mesmo que",
+            "segue regras", "mantém", "através", "lógico"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze worldbuilding in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete worldbuilding diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract opening (first 10 pages) for world establishment
+        opening_text = self._extract_pages(screenplay_text, 0, 10)
+
+        # Detect world established (opening pages)
+        world_established = self._detect_world_established(opening_text)
+
+        # Analyze setting clear (specific locations)
+        setting_clear = self._analyze_setting_clear(screenplay_text, scenes)
+
+        # Analyze setting consistency
+        setting_consistency = self._analyze_setting_consistency(screenplay_text, scenes)
+
+        # Analyze world rules defined
+        world_rules = self._analyze_world_rules(screenplay_text)
+
+        # Analyze world rules consistent
+        rules_consistency = self._analyze_rules_consistency(screenplay_text)
+
+        # Analyze geography clear
+        geography = self._analyze_geography(screenplay_text)
+
+        # Analyze time period established
+        time_period = self._analyze_time_period(opening_text, screenplay_text)
+
+        # Analyze culture/society rules
+        culture = self._analyze_culture(screenplay_text)
+
+        # Analyze technology level consistent
+        technology = self._analyze_technology(screenplay_text)
+
+        # Analyze magic system rules (if applicable)
+        magic = self._analyze_magic_system(screenplay_text)
+
+        # Analyze visual worldbuilding (show don't tell)
+        visual_worldbuilding = self._analyze_visual_worldbuilding(screenplay_text)
+
+        # Analyze sensory details (all five senses)
+        sensory_details = self._analyze_sensory_details(screenplay_text)
+
+        # Analyze world unique vs generic
+        world_uniqueness = self._analyze_world_uniqueness(screenplay_text)
+
+        # Detect confusing world (PENALTY)
+        confusing_world = self._detect_confusing_world(screenplay_text)
+
+        # Detect inconsistent rules (PENALTY)
+        inconsistent_rules = self._detect_inconsistent_rules(screenplay_text)
+
+        # Detect generic world (PENALTY)
+        generic_world = self._detect_generic_world(screenplay_text)
+
+        # Assess world coherence
+        world_coherent = self._assess_world_coherence(
+            setting_consistency, rules_consistency, confusing_world, inconsistent_rules
+        )
+
+        # Build world profile
+        world_profile = WorldProfile(
+            world_established=world_established["established"],
+            setting_clear=setting_clear["clear"],
+            setting_consistency=setting_consistency["consistency"],
+            world_rules_defined=world_rules["defined"],
+            world_rules_consistent=rules_consistency["consistent"],
+            geography_clear=geography["clear"],
+            time_period_established=time_period["established"],
+            culture_society_rules=culture["defined"],
+            technology_level_consistent=technology["consistent"],
+            magic_system_rules=magic["defined"],
+            visual_worldbuilding_score=visual_worldbuilding["score"],
+            sensory_details_score=sensory_details["score"],
+            world_unique=world_uniqueness["unique"],
+            world_coherent=world_coherent,
+            confusing_world_detected=confusing_world["detected"],
+            inconsistent_rules_detected=inconsistent_rules["detected"],
+            generic_world_detected=generic_world["detected"],
+            overall_worldbuilding_quality=0.0  # calculated below
+        )
+
+        # Calculate overall worldbuilding quality
+        world_profile.overall_worldbuilding_quality = self._calculate_overall_worldbuilding_quality(world_profile)
+
+        # Check against rules
+        rule_violations = self._check_worldbuilding_rules(
+            world_profile, world_established, setting_clear, setting_consistency,
+            world_rules, rules_consistency, geography, time_period, culture,
+            technology, magic, visual_worldbuilding, sensory_details,
+            world_uniqueness, confusing_world, inconsistent_rules, generic_world
+        )
+
+        # Calculate score
+        score = self._calculate_worldbuilding_score(
+            world_profile, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, world_profile, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "world_established": {
+                "established": world_established["established"],
+                "description": world_established.get("description", "")
+            },
+            "setting": {
+                "clear": setting_clear["clear"],
+                "locations": setting_clear["locations"][:10],
+                "consistency": setting_consistency["consistency"]
+            },
+            "world_rules": {
+                "defined": world_rules["defined"],
+                "rules_list": world_rules["rules_list"][:10],
+                "consistent": rules_consistency["consistent"]
+            },
+            "geography": {
+                "clear": geography["clear"],
+                "elements": geography["elements"][:10]
+            },
+            "time_period": {
+                "established": time_period["established"],
+                "description": time_period.get("description", "")
+            },
+            "culture": {
+                "defined": culture["defined"],
+                "elements": culture["elements"][:10]
+            },
+            "technology": {
+                "consistent": technology["consistent"],
+                "elements": technology["elements"][:10]
+            },
+            "magic": {
+                "defined": magic["defined"],
+                "elements": magic["elements"][:5]
+            },
+            "visual_worldbuilding": {
+                "score": visual_worldbuilding["score"]
+            },
+            "sensory_details": {
+                "score": sensory_details["score"],
+                "details": sensory_details["details"][:10]
+            },
+            "world_uniqueness": {
+                "unique": world_uniqueness["unique"]
+            },
+            "world_coherent": world_coherent,
+            "confusing_world": {
+                "detected": confusing_world["detected"],
+                "penalty": confusing_world.get("penalty", False)
+            },
+            "inconsistent_rules": {
+                "detected": inconsistent_rules["detected"],
+                "penalty": inconsistent_rules.get("penalty", False),
+                "inconsistencies": inconsistent_rules.get("inconsistencies", [])[:5]
+            },
+            "generic_world": {
+                "detected": generic_world["detected"],
+                "penalty": generic_world.get("penalty", False)
+            },
+            "overall_worldbuilding_quality": world_profile.overall_worldbuilding_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, world_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_pages(self, screenplay: str, start_page: int, end_page: int) -> str:
+        """Extract specific page range from screenplay."""
+        lines = screenplay.split('\n')
+        start_line = start_page * 55
+        end_line = end_page * 55
+        return '\n'.join(lines[start_line:end_line])
+
+    def _detect_world_established(self, opening_text: str) -> Dict[str, Any]:
+        """
+        Detect world established in opening.
+
+        McKee/Field: "Opening pages establish world - audience must know where we are."
+        """
+        established = False
+        description = ""
+
+        # Check for world established markers
+        world_count = 0
+        for marker in self.world_established_markers:
+            world_count += opening_text.lower().count(marker)
+
+        if world_count >= 5:
+            established = True
+            description = "World clearly established in opening"
+        elif world_count >= 3:
+            established = True
+            description = "World established but could be clearer"
+        else:
+            description = "World not clearly established in opening"
+
+        return {
+            "established": established,
+            "world_count": world_count,
+            "description": description
+        }
+
+    def _analyze_setting_clear(self, screenplay: str, scenes: List[Dict]) -> Dict[str, Any]:
+        """
+        Analyze setting clarity (specific locations).
+
+        Field/Seger: "Setting must be specific and clear - audience knows where every scene takes place."
+        """
+        clear = False
+        locations = []
+
+        # Count scene headings (INT./EXT. indicates clear locations)
+        scene_headings = len(scenes)
+
+        # Extract location names from scene headings
+        for scene in scenes:
+            heading = scene['heading']
+            # Extract location (after INT./EXT.)
+            match = re.search(r'(INT\.|EXT\.)\s+(.+)', heading)
+            if match:
+                location = match.group(2).strip()
+                locations.append(location)
+
+        # Check if locations are specific
+        if scene_headings >= 10 and len(locations) >= 10:
+            clear = True
+        elif scene_headings >= 5 and len(locations) >= 5:
+            clear = True
+
+        return {
+            "clear": clear,
+            "scene_headings": scene_headings,
+            "locations": locations
+        }
+
+    def _analyze_setting_consistency(self, screenplay: str, scenes: List[Dict]) -> Dict[str, Any]:
+        """
+        Analyze setting consistency.
+
+        McKee: "Setting must remain consistent - world doesn't change arbitrarily."
+        """
+        consistency = 0.0
+
+        # Check for setting consistency markers
+        consistency_count = 0
+        for marker in self.setting_consistency_markers:
+            consistency_count += screenplay.lower().count(marker)
+
+        # Check for inconsistency markers
+        inconsistency_count = 0
+        for marker in self.inconsistent_rules_markers:
+            inconsistency_count += screenplay.lower().count(marker)
+
+        # Calculate consistency (more consistency markers, fewer inconsistency markers)
+        if inconsistency_count == 0:
+            consistency = 0.9
+        elif consistency_count > inconsistency_count * 2:
+            consistency = 0.7
+        elif consistency_count > inconsistency_count:
+            consistency = 0.5
+        else:
+            consistency = 0.3
+
+        return {
+            "consistency": consistency,
+            "consistency_count": consistency_count,
+            "inconsistency_count": inconsistency_count
+        }
+
+    def _analyze_world_rules(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze world rules defined.
+
+        Truby/McKee: "World rules must be clear - especially for genre stories (fantasy, sci-fi)."
+        """
+        defined = False
+        rules_list = []
+
+        # Check for world rules markers
+        rules_count = 0
+        for marker in self.world_rules_markers:
+            count = screenplay.lower().count(marker)
+            rules_count += count
+            if count > 0:
+                # Extract rule context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        rules_list.append(line.strip()[:100])
+                        if len(rules_list) >= 20:
+                            break
+
+        if rules_count >= 5:
+            defined = True
+        elif rules_count >= 3:
+            defined = True
+
+        return {
+            "defined": defined,
+            "rules_count": rules_count,
+            "rules_list": rules_list
+        }
+
+    def _analyze_rules_consistency(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze world rules consistency.
+
+        McKee: "World rules must be consistent - no arbitrary changes."
+        """
+        consistent = True  # Assume consistent unless markers found
+
+        # Check for inconsistent rules markers
+        inconsistent_count = 0
+        for marker in self.inconsistent_rules_markers:
+            inconsistent_count += screenplay.lower().count(marker)
+
+        if inconsistent_count >= 3:
+            consistent = False
+        elif inconsistent_count >= 2:
+            consistent = False
+
+        return {
+            "consistent": consistent,
+            "inconsistent_count": inconsistent_count
+        }
+
+    def _analyze_geography(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze geography clarity.
+
+        McKee/Field: "Geography must be clear - audience knows spatial relationships."
+        """
+        clear = False
+        elements = []
+
+        # Check for geography markers
+        geography_count = 0
+        for marker in self.geography_markers:
+            count = screenplay.lower().count(marker)
+            geography_count += count
+            if count > 0:
+                # Extract geography context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        elements.append(line.strip()[:100])
+                        if len(elements) >= 20:
+                            break
+
+        if geography_count >= 5:
+            clear = True
+        elif geography_count >= 3:
+            clear = True
+
+        return {
+            "clear": clear,
+            "geography_count": geography_count,
+            "elements": elements
+        }
+
+    def _analyze_time_period(self, opening_text: str, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze time period established.
+
+        Field/Seger: "Time period must be clear - audience knows when story takes place."
+        """
+        established = False
+        description = ""
+
+        # Check for time period markers in opening
+        time_count = 0
+        for marker in self.time_period_markers:
+            count = opening_text.lower().count(marker)
+            time_count += count
+            if count > 0 and not description:
+                # Extract first time reference
+                for line in opening_text.split('\n'):
+                    if marker in line.lower():
+                        description = line.strip()[:100]
+                        break
+
+        if time_count >= 2:
+            established = True
+        elif time_count >= 1:
+            established = True
+
+        return {
+            "established": established,
+            "time_count": time_count,
+            "description": description or "Time period unclear"
+        }
+
+    def _analyze_culture(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze culture/society rules.
+
+        Truby: "Culture and society rules define how characters interact."
+        """
+        defined = False
+        elements = []
+
+        # Check for culture markers
+        culture_count = 0
+        for marker in self.culture_markers:
+            count = screenplay.lower().count(marker)
+            culture_count += count
+            if count > 0:
+                # Extract culture context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        elements.append(line.strip()[:100])
+                        if len(elements) >= 20:
+                            break
+
+        if culture_count >= 5:
+            defined = True
+        elif culture_count >= 3:
+            defined = True
+
+        return {
+            "defined": defined,
+            "culture_count": culture_count,
+            "elements": elements
+        }
+
+    def _analyze_technology(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze technology level consistency.
+
+        Truby/McKee: "Technology level must be consistent - defines what's possible."
+        """
+        consistent = True  # Assume consistent unless markers found
+        elements = []
+
+        # Check for technology markers
+        tech_count = 0
+        for marker in self.technology_markers:
+            count = screenplay.lower().count(marker)
+            tech_count += count
+            if count > 0:
+                # Extract technology context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        elements.append(line.strip()[:100])
+                        if len(elements) >= 20:
+                            break
+
+        # If technology mentioned, assume it's part of worldbuilding
+        # Consistency checked separately in rules_consistency
+
+        return {
+            "consistent": consistent,
+            "tech_count": tech_count,
+            "elements": elements
+        }
+
+    def _analyze_magic_system(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze magic system rules (if applicable).
+
+        Truby: "Fantasy/supernatural stories need clear magic rules."
+        """
+        defined = False
+        elements = []
+
+        # Check for magic markers
+        magic_count = 0
+        for marker in self.magic_markers:
+            count = screenplay.lower().count(marker)
+            magic_count += count
+            if count > 0:
+                # Extract magic context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        elements.append(line.strip()[:100])
+                        if len(elements) >= 15:
+                            break
+
+        if magic_count >= 5:
+            defined = True
+        elif magic_count >= 3:
+            defined = True
+
+        return {
+            "defined": defined,
+            "magic_count": magic_count,
+            "elements": elements
+        }
+
+    def _analyze_visual_worldbuilding(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze visual worldbuilding (show don't tell).
+
+        Seger/McKee: "Worldbuilding must be visual - show the world, don't explain."
+        """
+        score = 0.0
+
+        # Check for visual worldbuilding markers
+        visual_count = 0
+        for marker in self.visual_worldbuilding_markers:
+            visual_count += screenplay.lower().count(marker)
+
+        # Normalize score (high visual markers = good)
+        if visual_count >= 30:
+            score = 1.0
+        elif visual_count >= 20:
+            score = 0.8
+        elif visual_count >= 10:
+            score = 0.6
+        elif visual_count >= 5:
+            score = 0.4
+        else:
+            score = 0.2
+
+        return {
+            "score": score,
+            "visual_count": visual_count
+        }
+
+    def _analyze_sensory_details(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze sensory details (all five senses).
+
+        Seger: "Engage all five senses - not just visual."
+        """
+        score = 0.0
+        details = []
+
+        # Check for sensory markers
+        sensory_count = 0
+        for marker in self.sensory_markers:
+            count = screenplay.lower().count(marker)
+            sensory_count += count
+            if count > 0:
+                # Extract sensory context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        details.append(line.strip()[:100])
+                        if len(details) >= 30:
+                            break
+
+        # Normalize score (high sensory details = immersive)
+        if sensory_count >= 40:
+            score = 1.0
+        elif sensory_count >= 30:
+            score = 0.8
+        elif sensory_count >= 20:
+            score = 0.6
+        elif sensory_count >= 10:
+            score = 0.4
+        else:
+            score = 0.2
+
+        return {
+            "score": score,
+            "sensory_count": sensory_count,
+            "details": details
+        }
+
+    def _analyze_world_uniqueness(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze world uniqueness vs generic.
+
+        McKee: "World should be distinctive - avoid generic settings."
+        """
+        unique = False
+
+        # Check for unique world markers
+        unique_count = 0
+        for marker in self.world_unique_markers:
+            unique_count += screenplay.lower().count(marker)
+
+        # Check for generic world markers (PENALTY)
+        generic_count = 0
+        for marker in self.generic_world_markers:
+            generic_count += screenplay.lower().count(marker)
+
+        if unique_count >= 3 and generic_count == 0:
+            unique = True
+        elif unique_count >= 2 and generic_count <= 1:
+            unique = True
+        elif generic_count >= 2:
+            unique = False
+
+        return {
+            "unique": unique,
+            "unique_count": unique_count,
+            "generic_count": generic_count
+        }
+
+    def _detect_confusing_world(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect confusing world (PENALTY).
+
+        Confusing world = unclear rules/geography, audience lost.
+        """
+        detected = False
+        penalty = False
+
+        # Check for confusing world markers
+        confusing_count = 0
+        for marker in self.confusing_world_markers:
+            confusing_count += screenplay.lower().count(marker)
+
+        if confusing_count >= 3:
+            detected = True
+            penalty = True
+        elif confusing_count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "confusing_count": confusing_count
+        }
+
+    def _detect_inconsistent_rules(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect inconsistent rules (PENALTY).
+
+        Inconsistent rules = contradictions in world logic.
+        """
+        detected = False
+        penalty = False
+        inconsistencies = []
+
+        # Check for inconsistent rules markers
+        inconsistent_count = 0
+        for marker in self.inconsistent_rules_markers:
+            count = screenplay.lower().count(marker)
+            inconsistent_count += count
+            if count > 0:
+                # Extract inconsistency context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        inconsistencies.append(line.strip()[:100])
+                        if len(inconsistencies) >= 10:
+                            break
+
+        if inconsistent_count >= 3:
+            detected = True
+            penalty = True
+        elif inconsistent_count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "inconsistent_count": inconsistent_count,
+            "inconsistencies": inconsistencies
+        }
+
+    def _detect_generic_world(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect generic world (PENALTY).
+
+        Generic world = cliché/derivative setting.
+        """
+        detected = False
+        penalty = False
+
+        # Check for generic world markers
+        generic_count = 0
+        for marker in self.generic_world_markers:
+            generic_count += screenplay.lower().count(marker)
+
+        if generic_count >= 3:
+            detected = True
+            penalty = True
+        elif generic_count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "generic_count": generic_count
+        }
+
+    def _assess_world_coherence(self, setting_consistency: Dict,
+                               rules_consistency: Dict,
+                               confusing_world: Dict,
+                               inconsistent_rules: Dict) -> bool:
+        """Assess overall world coherence."""
+        coherent = True
+
+        if setting_consistency["consistency"] < 0.5:
+            coherent = False
+        if not rules_consistency["consistent"]:
+            coherent = False
+        if confusing_world["detected"]:
+            coherent = False
+        if inconsistent_rules["detected"]:
+            coherent = False
+
+        return coherent
+
+    def _calculate_overall_worldbuilding_quality(self, profile: WorldProfile) -> float:
+        """Calculate overall worldbuilding quality score."""
+        scores = [
+            1.0 if profile.world_established else 0.3,
+            1.0 if profile.setting_clear else 0.4,
+            profile.setting_consistency,
+            1.0 if profile.world_rules_defined else 0.5,
+            1.0 if profile.world_rules_consistent else 0.4,
+            1.0 if profile.geography_clear else 0.6,
+            1.0 if profile.time_period_established else 0.5,
+            1.0 if profile.culture_society_rules else 0.7,
+            1.0 if profile.technology_level_consistent else 0.8,
+            1.0 if profile.magic_system_rules else 0.9,  # Not always applicable
+            profile.visual_worldbuilding_score,
+            profile.sensory_details_score,
+            1.0 if profile.world_unique else 0.5,
+            1.0 if profile.world_coherent else 0.3,
+            0.0 if profile.confusing_world_detected else 1.0,  # PENALTY
+            0.0 if profile.inconsistent_rules_detected else 1.0,  # PENALTY
+            0.0 if profile.generic_world_detected else 1.0  # PENALTY
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_worldbuilding_rules(self, profile: WorldProfile, world_established: Dict,
+                                  setting_clear: Dict, setting_consistency: Dict,
+                                  world_rules: Dict, rules_consistency: Dict,
+                                  geography: Dict, time_period: Dict, culture: Dict,
+                                  technology: Dict, magic: Dict,
+                                  visual_worldbuilding: Dict, sensory_details: Dict,
+                                  world_uniqueness: Dict, confusing_world: Dict,
+                                  inconsistent_rules: Dict, generic_world: Dict) -> List[Dict]:
+        """Check worldbuilding against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "WORLD.R001":
+                # World Established in Opening
+                if not profile.world_established:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "World not established in opening pages",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R002":
+                # Setting Clear and Specific
+                if not profile.setting_clear:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Setting not clear and specific",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R003":
+                # Setting Consistency
+                if profile.setting_consistency < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Setting consistency low ({profile.setting_consistency:.1f}/1.0)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R004":
+                # World Rules Defined
+                if not profile.world_rules_defined:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "World rules not defined (critical for genre stories)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R005":
+                # World Rules Consistent
+                if not profile.world_rules_consistent:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "World rules inconsistent - contradictions detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R006":
+                # Geography Clear
+                if not profile.geography_clear:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Geography unclear - spatial relationships confusing",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R007":
+                # Time Period Established
+                if not profile.time_period_established:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Time period not established",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R008":
+                # Culture/Society Rules
+                if not profile.culture_society_rules:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Culture/society rules not defined",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R009":
+                # Visual Worldbuilding
+                if profile.visual_worldbuilding_score < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Visual worldbuilding weak ({profile.visual_worldbuilding_score:.1f}/1.0)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R010":
+                # Sensory Details
+                if profile.sensory_details_score < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Sensory details insufficient ({profile.sensory_details_score:.1f}/1.0)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R011":
+                # World Coherent
+                if not profile.world_coherent:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "World incoherent - lacks internal logic",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R012":
+                # Avoid Confusing World
+                if profile.confusing_world_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Confusing world - unclear rules/geography",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R013":
+                # Avoid Inconsistent Rules
+                if profile.inconsistent_rules_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Inconsistent rules - contradictions in world logic",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R014":
+                # Avoid Generic World
+                if profile.generic_world_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Generic world - lacks distinctiveness",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "WORLD.R015":
+                # World Unique and Distinctive
+                if not profile.world_unique:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "World not distinctive - lacks originality",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_worldbuilding_score(self, profile: WorldProfile, violations: List) -> float:
+        """Calculate overall worldbuilding score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for major issues
+        if profile.confusing_world_detected:
+            score -= 25  # critical penalty
+        if profile.inconsistent_rules_detected:
+            score -= 20  # major penalty
+        if profile.generic_world_detected:
+            score -= 15
+
+        # Bonus for excellence
+        if profile.overall_worldbuilding_quality > 0.85:
+            score += 5
+        elif profile.overall_worldbuilding_quality > 0.75:
+            score += 3
+
+        if profile.world_established and profile.setting_clear:
+            score += 3
+
+        if profile.world_unique:
+            score += 3
+
+        if profile.visual_worldbuilding_score > 0.8:
+            score += 2
+
+        if profile.sensory_details_score > 0.8:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: WorldProfile,
+                          violations: List) -> str:
+        """Generate worldbuilding diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Worldbuilding rich and immersive with clear rules"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Worldbuilding solid but could be more detailed"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Worldbuilding problems - unclear or inconsistent"
+        else:
+            level = "POOR"
+            summary = "Major worldbuilding problems - confusing or generic"
+
+        diagnosis = f"WORLDBUILDING {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.world_established:
+            issues.append("world unclear")
+        if not profile.setting_clear:
+            issues.append("setting vague")
+        if profile.confusing_world_detected:
+            issues.append("confusing")
+        if profile.inconsistent_rules_detected:
+            issues.append("inconsistent")
+        if profile.generic_world_detected:
+            issues.append("generic")
+        if not profile.world_coherent:
+            issues.append("incoherent")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: WorldProfile) -> List[str]:
+        """Generate specific worldbuilding recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.world_established:
+            recommendations.append("Establish world in opening - McKee/Field: 'First 10 pages establish where we are' - show setting, rules, time period")
+
+        if not profile.setting_clear:
+            recommendations.append("Clarify setting - Field: 'Every scene needs specific location' - use INT./EXT. headings, describe locations")
+
+        if profile.confusing_world_detected:
+            recommendations.append("Clarify world rules - Truby: 'World rules must be clear' - explain how world works, what's possible/impossible")
+
+        if profile.inconsistent_rules_detected:
+            recommendations.append("Fix inconsistencies - McKee: 'World must be internally consistent' - track world rules, eliminate contradictions")
+
+        if profile.generic_world_detected:
+            recommendations.append("Add uniqueness - McKee: 'Distinctive world engages audience' - find fresh angle on familiar settings")
+
+        if profile.visual_worldbuilding_score < 0.5:
+            recommendations.append("Add visual details - Seger: 'Show don't tell worldbuilding' - describe what we see, avoid exposition")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - worldbuilding and setting design fundamental")
+            recommendations.append("Study Truby's Anatomy - world rules and genre expectations critical")
+
+        return recommendations[:5]
+
+    def export_worldbuilding_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export worldbuilding features for correlation/analysis.
+
+        Returns structured data with worldbuilding metrics.
+        """
+        page_count = self._estimate_page_count(screenplay_text)
+        opening_text = self._extract_pages(screenplay_text, 0, 10)
+        world_established = self._detect_world_established(opening_text)
+        scenes = self._extract_scenes(screenplay_text)
+        setting_clear = self._analyze_setting_clear(screenplay_text, scenes)
+
+        return {
+            "world": {
+                "established": world_established["established"],
+                "setting_clear": setting_clear["clear"],
+                "locations_count": len(setting_clear["locations"])
+            },
+            "meta": {
+                "source": "DrWorldbuilding",
+                "focus": "Worldbuilding clarity and consistency"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrWorldbuildingAnalysis(DrWorldbuilding):
+    """Alias for compatibility with test framework."""
+    pass

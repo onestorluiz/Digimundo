@@ -1,0 +1,1465 @@
+"""
+Script Doctor Tonemon - Tone and Atmosphere Analysis Specialist
+A Script Doctor™ in Digimon form specializing in tone establishment, consistency, mood, atmosphere, voice, genre alignment.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class ToneProfile:
+    """Overall tone analysis."""
+    tone_established: bool  # Clear from opening
+    tone_consistency: bool  # Maintained throughout
+    mood_established: bool  # Emotional environment clear
+    atmosphere_quality: bool  # Atmosphere supports story
+    voice_consistency: bool  # Writer's distinctive style
+    tone_genre_alignment: bool  # Tone appropriate to genre
+    tonal_shifts_controlled: bool  # Intentional, not jarring
+    dark_tone_present: bool  # If present, consistent
+    light_tone_present: bool  # If present, consistent
+    dramatic_tone_present: bool  # Dramatic/serious tone
+    comic_tone_present: bool  # Comic/humorous tone
+    ironic_tone_present: bool  # Ironic/satirical tone
+    serious_tone_present: bool  # Serious/grave tone
+    inconsistent_tone_detected: bool  # PENALTY (tone shifts randomly)
+    tone_deaf_detected: bool  # PENALTY (inappropriate tone)
+    unclear_tone_detected: bool  # PENALTY (audience confused)
+    overall_tone_quality: float
+
+
+@dataclass
+class ToneAnalysisResults:
+    """Complete tone analysis results."""
+    tone_profile: ToneProfile
+    tone_markers_list: List[str]  # Identified tone markers
+    mood_markers_list: List[str]  # Mood/atmosphere markers
+    voice_markers_list: List[str]  # Writer's voice markers
+    tonal_shifts_list: List[str]  # Tonal shift moments
+    inconsistent_tone_list: List[str]  # Inconsistent tone (PENALTY)
+    tone_deaf_list: List[str]  # Tone-deaf moments (PENALTY)
+    unclear_tone_list: List[str]  # Unclear tone (PENALTY)
+    score: float
+    diagnosis: str
+    recommendations: List[str]
+
+
+class DrTone:
+    """
+    Script Doctor Tonemon - The Tone and Atmosphere Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing tone establishment,
+    consistency, mood, atmosphere, voice, genre alignment, avoid inconsistent/tone-deaf moments.
+
+    Identity: Script Doctor first, Digimon tone specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Tonemon with rules and configuration."""
+        self.name = "Script Doctor Tonemon"
+        self.digimon_name = "Tonemon"
+        self.title = "Script Doctor - Tone and Atmosphere Analysis Specialist"
+        self.specialty = "Tone establishment, consistency, mood, atmosphere, voice, genre alignment"
+        self.identity = "I am Script Doctor Tonemon, a professional Script Doctor™ specializing in tone and atmosphere analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "tone_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - TONE SPECIFIC
+        self.deep_context_queries = [
+            "McKee Story tone atmosphere mood emotional environment",
+            "McKee Story tone consistency maintained throughout story",
+            "McKee Story tone established clear from opening",
+            "McKee Story voice writer distinctive style authorial",
+            "McKee Story tone appropriate genre comedy drama thriller",
+            "McKee Story tonal shifts controlled intentional earned",
+            "McKee Story avoid inconsistent tone shifting jarring",
+            "McKee Story dark tone consistency serious grave",
+            "McKee Story light tone consistency comic humorous",
+            "McKee Story dramatic tone serious emotional weight",
+            # McKee Story - MOOD DEFINITION (ultra-specific from mood section)
+            "McKee Story film feeling known mood created film text quality light color tempo editing",
+            "McKee Story mood textural qualities light color tempo action editing casting dialogue production design music",
+            "McKee Story mood form foreshadowing preparing shaping audience anticipations expectations",
+            "McKee Story arc determines basic emotion mood makes emotion specific",
+            "McKee Story mood will not substitute emotion mood without structure empty",
+            "Syd Field Screenplay tone atmosphere emotional quality",
+            "Field tone established opening sets emotional environment",
+            "Field tone consistency maintained Act 1 2 3",
+            "Field voice writer style distinctive authorial choice",
+            "Field tone genre alignment appropriate expectations",
+            "Blake Snyder Save the Cat tone genre expectations",
+            "Snyder tone established poster logline primal",
+            "Snyder tone consistency beat sheet maintained",
+            "Snyder comic tone light humorous funny genre",
+            "Snyder dramatic tone serious emotional weight",
+            "Snyder avoid tone-deaf moments inappropriate tone",
+            "John Truby Anatomy tone moral argument world",
+            "Truby tone reflects theme moral premise design",
+            "Truby voice writer distinctive style unique approach",
+            "Truby tone consistency thematic unity throughout",
+            "Truby atmosphere world design reflects tone",
+            "Truby avoid inconsistent tone undermines theme",
+            "Christopher Vogler Writer's Journey tone mythic resonance",
+            "Vogler tone reflects journey emotional arc stages",
+            "Vogler atmosphere emotional environment journey stages",
+            "Vogler voice distinctive telling mythic universal",
+            "Joseph Campbell Hero 1000 Faces tone mythic mood",
+            "Campbell tone reflects mythic journey stages trials",
+            "Campbell atmosphere sacred profane mythic environment",
+            "Aristotle Poetics tone tragic comic appropriate genre",
+            "Aristotle tone consistency unity action maintained",
+            "Aristotle tone genre appropriate tragedy comedy",
+            "Aristotle avoid tone inappropriate genre expectations",
+            "Linda Seger Making Good Script Great tone atmosphere",
+            "Seger tone established opening pages hooks audience",
+            "Seger tone consistency maintained beats scenes acts",
+            "Seger voice distinctive writer style professional",
+            "Seger tone genre alignment appropriate expectations",
+            "Seger avoid tone-deaf moments jarring inappropriate",
+            "Lajos Egri Art Dramatic Writing tone reflects premise",
+            "Egri tone supports premise moral argument unity",
+            "Egri voice distinctive writer passionate conviction",
+            "William Goldman Adventures Screen Trade tone voice style",
+            "Goldman voice distinctive writer personal authentic",
+            "Goldman tone consistency professional craft maintained",
+            "Shonda Rhimes tone voice distinctive television style",
+            "Rhimes voice authentic personal distinctive showrunner",
+            "David Mamet tone voice distinctive minimalist style",
+            "Mamet voice writer distinctive minimalist authentic",
+            "Mamet tone appropriate genre dramatic serious",
+            "Alexander Mackendrick tone visual emotional atmosphere",
+            "Mackendrick tone established visual design cinematography",
+            "Mackendrick atmosphere visual environment supports tone",
+            "K.M. Weiland Creating Character Arcs tone reflects arc",
+            "Weiland tone consistency character arc transformation",
+            "Weiland voice distinctive writer authorial choice",
+            "tone atmosphere mood emotional environment",
+            "tone established clear opening sets expectations",
+            "tone consistency maintained throughout story",
+            "mood atmosphere emotional quality environment",
+            "voice writer distinctive style authorial unique",
+            "tone genre alignment appropriate expectations comedy drama",
+            "tonal shifts controlled intentional earned not jarring",
+            "dark tone consistent serious grave dramatic weight",
+            "light tone consistent comic humorous funny entertaining",
+            "dramatic tone serious emotional weight importance",
+            "comic tone humorous funny light entertaining",
+            "ironic tone satirical subversive distance perspective",
+            "serious tone grave important weighty significant",
+            "avoid inconsistent tone shifts randomly jarring penalty",
+            "avoid tone-deaf moments inappropriate wrong tone penalty",
+            "avoid unclear tone audience confused uncertain penalty"
+        ]
+
+        # Tone analysis patterns (bilingual: EN + PT) - 150-170+ markers
+
+        # Tone established markers (clear from opening)
+        self.tone_established_markers = [
+            # English
+            "tone established", "tone clear", "tone set", "tone from opening",
+            "tone sets expectations", "tone hooks", "atmosphere established",
+            "mood established", "emotional environment set", "tone signals",
+            "tone consistent from start", "tone clear early", "atmosphere from opening",
+            "voice established", "style established", "tone defined",
+            # Portuguese
+            "tom estabelecido", "tom claro", "tom definido", "tom desde abertura",
+            "tom define expectativas", "tom envolve", "atmosfera estabelecida",
+            "humor estabelecido", "ambiente emocional definido", "tom sinaliza",
+            "tom consistente desde início", "tom claro cedo", "atmosfera desde abertura",
+            "voz estabelecida", "estilo estabelecido", "tom definido"
+        ]
+
+        # Tone consistency markers (maintained throughout)
+        self.tone_consistency_markers = [
+            # English
+            "tone consistency", "consistent tone", "tone maintained", "tone throughout",
+            "tone unified", "tone cohesive", "tone stable", "tone sustained",
+            "tone doesn't shift", "tone reliable", "tone continuous",
+            "mood consistent", "atmosphere consistent", "voice consistent",
+            # Portuguese
+            "consistência de tom", "tom consistente", "tom mantido", "tom ao longo",
+            "tom unificado", "tom coeso", "tom estável", "tom sustentado",
+            "tom não muda", "tom confiável", "tom contínuo",
+            "humor consistente", "atmosfera consistente", "voz consistente"
+        ]
+
+        # Mood/atmosphere markers (emotional environment)
+        self.mood_atmosphere_markers = [
+            # English
+            "mood", "atmosphere", "emotional environment", "emotional quality",
+            "feeling", "ambiance", "emotional tone", "emotional landscape",
+            "atmospheric", "moody", "emotional fabric", "emotional texture",
+            "emotional climate", "emotional air", "emotional space",
+            "dark atmosphere", "light mood", "heavy atmosphere", "bright mood",
+            # Portuguese
+            "humor", "atmosfera", "ambiente emocional", "qualidade emocional",
+            "sentimento", "ambiência", "tom emocional", "paisagem emocional",
+            "atmosférico", "sombrio", "tecido emocional", "textura emocional",
+            "clima emocional", "ar emocional", "espaço emocional",
+            "atmosfera sombria", "humor leve", "atmosfera pesada", "humor brilhante"
+        ]
+
+        # Voice consistency markers (writer's distinctive style)
+        self.voice_consistency_markers = [
+            # English
+            "voice", "writer's voice", "distinctive voice", "authorial voice",
+            "writer's style", "distinctive style", "personal style",
+            "unique voice", "authentic voice", "consistent voice",
+            "writer's signature", "authorial style", "personal approach",
+            "distinctive approach", "unique perspective", "writer's mark",
+            # Portuguese
+            "voz", "voz do escritor", "voz distintiva", "voz autoral",
+            "estilo do escritor", "estilo distintivo", "estilo pessoal",
+            "voz única", "voz autêntica", "voz consistente",
+            "assinatura do escritor", "estilo autoral", "abordagem pessoal",
+            "abordagem distintiva", "perspectiva única", "marca do escritor"
+        ]
+
+        # Tone-genre alignment markers (tone appropriate to genre)
+        self.tone_genre_alignment_markers = [
+            # English
+            "tone appropriate genre", "tone matches genre", "tone genre expectations",
+            "genre appropriate tone", "tone fits genre", "tone serves genre",
+            "comedy tone", "drama tone", "thriller tone", "horror tone",
+            "tone genre aligned", "genre tone consistency", "tone genre unity",
+            # Portuguese
+            "tom apropriado gênero", "tom combina gênero", "tom expectativas gênero",
+            "gênero tom apropriado", "tom encaixa gênero", "tom serve gênero",
+            "tom comédia", "tom drama", "tom suspense", "tom terror",
+            "tom gênero alinhado", "gênero tom consistência", "tom gênero unidade"
+        ]
+
+        # Tonal shifts markers (intentional, not jarring)
+        self.tonal_shifts_markers = [
+            # English
+            "tonal shift", "tone shifts", "tone change", "tone transition",
+            "intentional shift", "earned shift", "controlled shift",
+            "tone modulation", "tone variation", "tonal transition",
+            "shift in tone", "change in tone", "tone evolves",
+            # Portuguese
+            "mudança de tom", "tom muda", "mudança de tom", "transição de tom",
+            "mudança intencional", "mudança conquistada", "mudança controlada",
+            "modulação de tom", "variação de tom", "transição tonal",
+            "mudança no tom", "alteração no tom", "tom evolui"
+        ]
+
+        # Dark tone markers
+        self.dark_tone_markers = [
+            # English
+            "dark tone", "dark atmosphere", "dark mood", "serious tone",
+            "grave tone", "somber tone", "heavy tone", "dramatic tone",
+            "intense tone", "brooding tone", "ominous tone", "grim tone",
+            "bleak tone", "moody tone", "shadowy atmosphere", "dark emotional",
+            # Portuguese
+            "tom sombrio", "atmosfera sombria", "humor sombrio", "tom sério",
+            "tom grave", "tom solene", "tom pesado", "tom dramático",
+            "tom intenso", "tom meditativo", "tom ominoso", "tom severo",
+            "tom desolado", "tom melancólico", "atmosfera sombria", "emocional sombrio"
+        ]
+
+        # Light tone markers
+        self.light_tone_markers = [
+            # English
+            "light tone", "light mood", "bright atmosphere", "comic tone",
+            "humorous tone", "funny tone", "playful tone", "entertaining tone",
+            "upbeat tone", "cheerful tone", "light-hearted", "comedic tone",
+            "amusing tone", "witty tone", "breezy tone", "fun atmosphere",
+            # Portuguese
+            "tom leve", "humor leve", "atmosfera brilhante", "tom cômico",
+            "tom humorístico", "tom engraçado", "tom brincalhão", "tom divertido",
+            "tom animado", "tom alegre", "descontraído", "tom cômico",
+            "tom divertido", "tom espirituoso", "tom leve", "atmosfera divertida"
+        ]
+
+        # Dramatic tone markers
+        self.dramatic_tone_markers = [
+            # English
+            "dramatic tone", "serious tone", "emotional weight", "dramatic atmosphere",
+            "emotional depth", "dramatic intensity", "serious atmosphere",
+            "grave tone", "weighty tone", "important tone", "significant tone",
+            "dramatic quality", "emotional power", "dramatic impact",
+            # Portuguese
+            "tom dramático", "tom sério", "peso emocional", "atmosfera dramática",
+            "profundidade emocional", "intensidade dramática", "atmosfera séria",
+            "tom grave", "tom pesado", "tom importante", "tom significativo",
+            "qualidade dramática", "poder emocional", "impacto dramático"
+        ]
+
+        # Comic tone markers
+        self.comic_tone_markers = [
+            # English
+            "comic tone", "comedic tone", "humorous tone", "funny atmosphere",
+            "comic atmosphere", "humor", "comedy", "laughs", "amusing",
+            "witty", "satirical", "playful", "light comedy", "dark comedy",
+            "comedic quality", "humorous approach", "comic style",
+            # Portuguese
+            "tom cômico", "tom cômico", "tom humorístico", "atmosfera engraçada",
+            "atmosfera cômica", "humor", "comédia", "risadas", "divertido",
+            "espirituoso", "satírico", "brincalhão", "comédia leve", "comédia negra",
+            "qualidade cômica", "abordagem humorística", "estilo cômico"
+        ]
+
+        # Ironic tone markers
+        self.ironic_tone_markers = [
+            # English
+            "ironic tone", "irony", "satirical tone", "sardonic tone",
+            "wry tone", "cynical tone", "subversive tone", "satirical atmosphere",
+            "ironic distance", "ironic perspective", "satirical edge",
+            "tongue-in-cheek", "mock-serious", "sardonic humor",
+            # Portuguese
+            "tom irônico", "ironia", "tom satírico", "tom sardônico",
+            "tom cínico", "tom cínico", "tom subversivo", "atmosfera satírica",
+            "distância irônica", "perspectiva irônica", "fio satírico",
+            "debochado", "sério fingido", "humor sardônico"
+        ]
+
+        # Serious tone markers
+        self.serious_tone_markers = [
+            # English
+            "serious tone", "grave tone", "solemn tone", "earnest tone",
+            "weighty tone", "important tone", "significant tone", "sober tone",
+            "serious atmosphere", "gravity", "weight", "seriousness",
+            "earnest quality", "solemn atmosphere", "grave mood",
+            # Portuguese
+            "tom sério", "tom grave", "tom solene", "tom sincero",
+            "tom pesado", "tom importante", "tom significativo", "tom sóbrio",
+            "atmosfera séria", "gravidade", "peso", "seriedade",
+            "qualidade sincera", "atmosfera solene", "humor grave"
+        ]
+
+        # Inconsistent tone markers (PENALTY - tone shifts randomly)
+        self.inconsistent_tone_markers = [
+            # English
+            "inconsistent tone", "tone shifts randomly", "jarring tone shift",
+            "tone whiplash", "tone confusion", "erratic tone", "unstable tone",
+            "tone doesn't match", "tone contradicts", "confusing tone",
+            "tone all over place", "tone chaotic", "tone incoherent",
+            "tone lacks unity", "tone disjointed", "tone fragmented",
+            # Portuguese
+            "tom inconsistente", "tom muda aleatoriamente", "mudança de tom brusca",
+            "chicotada de tom", "confusão de tom", "tom errático", "tom instável",
+            "tom não combina", "tom contradiz", "tom confuso",
+            "tom por toda parte", "tom caótico", "tom incoerente",
+            "tom sem unidade", "tom desarticulado", "tom fragmentado"
+        ]
+
+        # Tone-deaf markers (PENALTY - inappropriate tone)
+        self.tone_deaf_markers = [
+            # English
+            "tone-deaf", "inappropriate tone", "wrong tone", "tone mismatched",
+            "tone insensitive", "tone offensive", "tone ill-suited",
+            "tone doesn't fit", "tone awkward", "tone misjudged",
+            "tone out of place", "tone jarring", "tone clumsy",
+            "tone misses mark", "tone fails", "tone wrong notes",
+            # Portuguese
+            "tom surdo", "tom inapropriado", "tom errado", "tom incompatível",
+            "tom insensível", "tom ofensivo", "tom inadequado",
+            "tom não encaixa", "tom desajeitado", "tom mal julgado",
+            "tom fora de lugar", "tom destoante", "tom desajeitado",
+            "tom erra alvo", "tom falha", "tom notas erradas"
+        ]
+
+        # Unclear tone markers (PENALTY - audience confused about tone)
+        self.unclear_tone_markers = [
+            # English
+            "unclear tone", "tone confused", "tone ambiguous", "tone uncertain",
+            "tone undefined", "tone vague", "tone muddled", "tone unclear",
+            "can't determine tone", "tone elusive", "tone inconsistent message",
+            "audience confused tone", "tone not established", "tone lacking",
+            # Portuguese
+            "tom pouco claro", "tom confuso", "tom ambíguo", "tom incerto",
+            "tom indefinido", "tom vago", "tom confuso", "tom pouco claro",
+            "não consegue determinar tom", "tom elusivo", "tom mensagem inconsistente",
+            "audiência confusa tom", "tom não estabelecido", "tom faltando"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze tone and atmosphere in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete tone diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract Act 1, 2, 3 for pattern analysis
+        act1_text = self._extract_pages(screenplay_text, 0, int(page_count * 0.25))
+        act2_text = self._extract_pages(screenplay_text, int(page_count * 0.25), int(page_count * 0.75))
+        act3_text = self._extract_pages(screenplay_text, int(page_count * 0.75), page_count)
+
+        # Extract opening (first 10 pages)
+        opening_text = self._extract_pages(screenplay_text, 0, 10)
+
+        # Analyze tone established (clear from opening)
+        tone_established = self._analyze_tone_established(opening_text)
+
+        # Analyze tone consistency (maintained throughout)
+        tone_consistency = self._analyze_tone_consistency(screenplay_text, act1_text, act2_text, act3_text)
+
+        # Analyze mood/atmosphere (emotional environment)
+        mood_atmosphere = self._analyze_mood_atmosphere(screenplay_text)
+
+        # Analyze voice consistency (writer's distinctive style)
+        voice_consistency = self._analyze_voice_consistency(screenplay_text)
+
+        # Analyze tone-genre alignment (tone appropriate to genre)
+        tone_genre_alignment = self._analyze_tone_genre_alignment(screenplay_text)
+
+        # Analyze tonal shifts (intentional, not jarring)
+        tonal_shifts = self._analyze_tonal_shifts(screenplay_text)
+
+        # Analyze dark tone (if present, consistent)
+        dark_tone = self._analyze_dark_tone(screenplay_text)
+
+        # Analyze light tone (if present, consistent)
+        light_tone = self._analyze_light_tone(screenplay_text)
+
+        # Analyze dramatic tone
+        dramatic_tone = self._analyze_dramatic_tone(screenplay_text)
+
+        # Analyze comic tone
+        comic_tone = self._analyze_comic_tone(screenplay_text)
+
+        # Analyze ironic tone
+        ironic_tone = self._analyze_ironic_tone(screenplay_text)
+
+        # Analyze serious tone
+        serious_tone = self._analyze_serious_tone(screenplay_text)
+
+        # Detect inconsistent tone (PENALTY - tone shifts randomly)
+        inconsistent_tone = self._detect_inconsistent_tone(screenplay_text)
+
+        # Detect tone-deaf moments (PENALTY - inappropriate tone)
+        tone_deaf = self._detect_tone_deaf(screenplay_text)
+
+        # Detect unclear tone (PENALTY - audience confused)
+        unclear_tone = self._detect_unclear_tone(screenplay_text)
+
+        # Build tone profile
+        tone_profile = ToneProfile(
+            tone_established=tone_established["established"],
+            tone_consistency=tone_consistency["consistent"],
+            mood_established=mood_atmosphere["established"],
+            atmosphere_quality=mood_atmosphere["high_quality"],
+            voice_consistency=voice_consistency["consistent"],
+            tone_genre_alignment=tone_genre_alignment["aligned"],
+            tonal_shifts_controlled=tonal_shifts["controlled"],
+            dark_tone_present=dark_tone["present"],
+            light_tone_present=light_tone["present"],
+            dramatic_tone_present=dramatic_tone["present"],
+            comic_tone_present=comic_tone["present"],
+            ironic_tone_present=ironic_tone["present"],
+            serious_tone_present=serious_tone["present"],
+            inconsistent_tone_detected=inconsistent_tone["detected"],
+            tone_deaf_detected=tone_deaf["detected"],
+            unclear_tone_detected=unclear_tone["detected"],
+            overall_tone_quality=0.0  # calculated below
+        )
+
+        # Calculate overall tone quality
+        tone_profile.overall_tone_quality = self._calculate_overall_tone_quality(tone_profile)
+
+        # Check against rules
+        rule_violations = self._check_tone_rules(
+            tone_profile, tone_established, tone_consistency, mood_atmosphere,
+            voice_consistency, tone_genre_alignment, tonal_shifts,
+            dark_tone, light_tone, dramatic_tone, comic_tone,
+            ironic_tone, serious_tone, inconsistent_tone, tone_deaf, unclear_tone
+        )
+
+        # Calculate score
+        score = self._calculate_tone_score(tone_profile, rule_violations)
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(score, tone_profile, rule_violations)
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "tone_established": {
+                "established": tone_established["established"],
+                "count": tone_established["count"],
+                "opening_strength": tone_established["opening_strength"]
+            },
+            "tone_consistency": {
+                "consistent": tone_consistency["consistent"],
+                "count": tone_consistency["count"],
+                "act_distribution": tone_consistency["act_distribution"]
+            },
+            "mood_atmosphere": {
+                "established": mood_atmosphere["established"],
+                "high_quality": mood_atmosphere["high_quality"],
+                "count": mood_atmosphere["count"],
+                "list": mood_atmosphere["list"][:10]
+            },
+            "voice_consistency": {
+                "consistent": voice_consistency["consistent"],
+                "count": voice_consistency["count"]
+            },
+            "tone_genre_alignment": {
+                "aligned": tone_genre_alignment["aligned"],
+                "count": tone_genre_alignment["count"]
+            },
+            "tonal_shifts": {
+                "controlled": tonal_shifts["controlled"],
+                "count": tonal_shifts["count"],
+                "list": tonal_shifts["list"][:5]
+            },
+            "dark_tone": {
+                "present": dark_tone["present"],
+                "count": dark_tone["count"]
+            },
+            "light_tone": {
+                "present": light_tone["present"],
+                "count": light_tone["count"]
+            },
+            "dramatic_tone": {
+                "present": dramatic_tone["present"],
+                "count": dramatic_tone["count"]
+            },
+            "comic_tone": {
+                "present": comic_tone["present"],
+                "count": comic_tone["count"]
+            },
+            "ironic_tone": {
+                "present": ironic_tone["present"],
+                "count": ironic_tone["count"]
+            },
+            "serious_tone": {
+                "present": serious_tone["present"],
+                "count": serious_tone["count"]
+            },
+            "inconsistent_tone": {
+                "detected": inconsistent_tone["detected"],
+                "penalty": inconsistent_tone.get("penalty", False),
+                "count": inconsistent_tone["count"],
+                "list": inconsistent_tone["list"][:5]
+            },
+            "tone_deaf": {
+                "detected": tone_deaf["detected"],
+                "penalty": tone_deaf.get("penalty", False),
+                "count": tone_deaf["count"],
+                "list": tone_deaf["list"][:5]
+            },
+            "unclear_tone": {
+                "detected": unclear_tone["detected"],
+                "penalty": unclear_tone.get("penalty", False),
+                "count": unclear_tone["count"],
+                "list": unclear_tone["list"][:5]
+            },
+            "overall_tone_quality": tone_profile.overall_tone_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, tone_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_pages(self, screenplay: str, start_page: int, end_page: int) -> str:
+        """Extract specific page range from screenplay."""
+        lines = screenplay.split('\n')
+        start_line = start_page * 55
+        end_line = end_page * 55
+        return '\n'.join(lines[start_line:end_line])
+
+    def _analyze_tone_established(self, opening_text: str) -> Dict[str, Any]:
+        """
+        Analyze tone established (clear from opening).
+
+        McKee: "Tone must be established early - opening pages set emotional expectations."
+        Seger: "Tone established in opening - audience knows emotional environment immediately."
+        """
+        established = False
+        opening_strength = 0.0
+
+        # Check for tone established markers in opening
+        count = 0
+        for marker in self.tone_established_markers:
+            count += opening_text.lower().count(marker)
+
+        # Strong opening establishes tone clearly
+        if count >= 5:
+            established = True
+            opening_strength = 0.9
+        elif count >= 3:
+            established = True
+            opening_strength = 0.7
+        elif count >= 2:
+            established = True
+            opening_strength = 0.5
+
+        return {
+            "established": established,
+            "count": count,
+            "opening_strength": opening_strength
+        }
+
+    def _analyze_tone_consistency(self, screenplay: str, act1_text: str, act2_text: str, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze tone consistency (maintained throughout).
+
+        McKee: "Tone consistency - maintained throughout story, not shifting randomly."
+        Field: "Tone consistency Act 1-2-3 - unified emotional environment throughout."
+        """
+        consistent = False
+
+        # Check for consistency markers
+        count = 0
+        for marker in self.tone_consistency_markers:
+            count += screenplay.lower().count(marker)
+
+        # Check distribution across acts
+        act1_count = sum(act1_text.lower().count(m) for m in self.tone_consistency_markers[:10])
+        act2_count = sum(act2_text.lower().count(m) for m in self.tone_consistency_markers[:10])
+        act3_count = sum(act3_text.lower().count(m) for m in self.tone_consistency_markers[:10])
+
+        # Consistency requires presence across all acts
+        acts_with_tone = sum([act1_count > 0, act2_count > 0, act3_count > 0])
+
+        if acts_with_tone >= 3:
+            consistent = True
+        elif acts_with_tone >= 2 and count >= 4:
+            consistent = True
+
+        return {
+            "consistent": consistent,
+            "count": count,
+            "act_distribution": {
+                "act1": act1_count,
+                "act2": act2_count,
+                "act3": act3_count,
+                "acts_with_tone": acts_with_tone
+            }
+        }
+
+    def _analyze_mood_atmosphere(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze mood/atmosphere (emotional environment).
+
+        McKee: "Atmosphere - emotional environment permeates story, affects audience."
+        Mackendrick: "Atmosphere visual design - cinematography creates emotional environment."
+        """
+        established = False
+        high_quality = False
+        mood_list = []
+
+        # Check for mood/atmosphere markers
+        count = 0
+        for marker in self.mood_atmosphere_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract mood instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        mood_list.append(line.strip()[:100])
+                        if len(mood_list) >= 20:
+                            break
+
+        if count >= 8:
+            established = True
+            high_quality = True
+        elif count >= 5:
+            established = True
+            high_quality = True
+        elif count >= 3:
+            established = True
+
+        return {
+            "established": established,
+            "high_quality": high_quality,
+            "count": count,
+            "list": mood_list
+        }
+
+    def _analyze_voice_consistency(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze voice consistency (writer's distinctive style).
+
+        McKee: "Voice - writer's distinctive style, authorial choice, personal approach."
+        Goldman: "Voice distinctive - writer's personal, authentic, professional craft."
+        """
+        consistent = False
+
+        # Check for voice markers
+        count = 0
+        for marker in self.voice_consistency_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 4:
+            consistent = True
+        elif count >= 3:
+            consistent = True
+
+        return {
+            "consistent": consistent,
+            "count": count
+        }
+
+    def _analyze_tone_genre_alignment(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze tone-genre alignment (tone appropriate to genre).
+
+        Snyder: "Tone genre expectations - comedy light, drama serious, thriller tense."
+        McKee: "Tone appropriate genre - audience expectations met, genre conventions."
+        """
+        aligned = False
+
+        # Check for tone-genre alignment markers
+        count = 0
+        for marker in self.tone_genre_alignment_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 4:
+            aligned = True
+        elif count >= 2:
+            aligned = True
+
+        return {
+            "aligned": aligned,
+            "count": count
+        }
+
+    def _analyze_tonal_shifts(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze tonal shifts (intentional, not jarring).
+
+        McKee: "Tonal shifts controlled - intentional, earned, not jarring shifts."
+        Truby: "Tonal modulation - tone evolves intentionally with story progression."
+        """
+        controlled = False
+        shift_list = []
+
+        # Check for tonal shift markers
+        count = 0
+        for marker in self.tonal_shifts_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract shift instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        shift_list.append(line.strip()[:100])
+                        if len(shift_list) >= 10:
+                            break
+
+        # Intentional markers suggest controlled shifts
+        intentional_count = screenplay.lower().count("intentional") + screenplay.lower().count("earned")
+        if intentional_count >= 2 or count >= 3:
+            controlled = True
+
+        return {
+            "controlled": controlled,
+            "count": count,
+            "list": shift_list
+        }
+
+    def _analyze_dark_tone(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze dark tone (if present, consistent).
+
+        McKee: "Dark tone consistent - serious, grave, somber atmosphere maintained."
+        """
+        present = False
+
+        # Check for dark tone markers
+        count = 0
+        for marker in self.dark_tone_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 5:
+            present = True
+        elif count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_light_tone(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze light tone (if present, consistent).
+
+        Snyder: "Light tone consistent - comic, humorous, entertaining atmosphere maintained."
+        """
+        present = False
+
+        # Check for light tone markers
+        count = 0
+        for marker in self.light_tone_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 5:
+            present = True
+        elif count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_dramatic_tone(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze dramatic tone (serious, emotional weight).
+
+        McKee: "Dramatic tone - serious atmosphere, emotional weight, importance."
+        """
+        present = False
+
+        # Check for dramatic tone markers
+        count = 0
+        for marker in self.dramatic_tone_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 5:
+            present = True
+        elif count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_comic_tone(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze comic tone (humorous, funny).
+
+        Snyder: "Comic tone - humorous, funny, entertaining atmosphere."
+        """
+        present = False
+
+        # Check for comic tone markers
+        count = 0
+        for marker in self.comic_tone_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 5:
+            present = True
+        elif count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_ironic_tone(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze ironic tone (satirical, subversive).
+
+        McKee: "Ironic tone - satirical, subversive, distance perspective."
+        """
+        present = False
+
+        # Check for ironic tone markers
+        count = 0
+        for marker in self.ironic_tone_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 4:
+            present = True
+        elif count >= 2:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_serious_tone(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze serious tone (grave, solemn).
+
+        McKee: "Serious tone - grave, solemn, weighty atmosphere."
+        """
+        present = False
+
+        # Check for serious tone markers
+        count = 0
+        for marker in self.serious_tone_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 5:
+            present = True
+        elif count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _detect_inconsistent_tone(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect inconsistent tone (PENALTY - tone shifts randomly).
+
+        McKee: "Inconsistent tone - shifts randomly, jarring, confusing audience."
+        Truby: "Tone inconsistency undermines thematic unity, audience disorientation."
+        """
+        detected = False
+        penalty = False
+        inconsistent_list = []
+
+        # Check for inconsistent tone markers
+        count = 0
+        for marker in self.inconsistent_tone_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract inconsistent tone instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        inconsistent_list.append(line.strip()[:100])
+                        if len(inconsistent_list) >= 10:
+                            break
+
+        if count >= 3:
+            detected = True
+            penalty = True
+        elif count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count,
+            "list": inconsistent_list
+        }
+
+    def _detect_tone_deaf(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect tone-deaf moments (PENALTY - inappropriate tone).
+
+        Seger: "Tone-deaf moments - inappropriate tone, wrong emotional notes."
+        McKee: "Tone must fit situation - inappropriate tone alienates audience."
+        """
+        detected = False
+        penalty = False
+        tone_deaf_list = []
+
+        # Check for tone-deaf markers
+        count = 0
+        for marker in self.tone_deaf_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract tone-deaf instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        tone_deaf_list.append(line.strip()[:100])
+                        if len(tone_deaf_list) >= 10:
+                            break
+
+        if count >= 3:
+            detected = True
+            penalty = True
+        elif count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count,
+            "list": tone_deaf_list
+        }
+
+    def _detect_unclear_tone(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect unclear tone (PENALTY - audience confused about tone).
+
+        Seger: "Unclear tone - audience confused, doesn't know emotional expectations."
+        McKee: "Tone must be clear - audience needs emotional roadmap from opening."
+        """
+        detected = False
+        penalty = False
+        unclear_list = []
+
+        # Check for unclear tone markers
+        count = 0
+        for marker in self.unclear_tone_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract unclear tone instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        unclear_list.append(line.strip()[:100])
+                        if len(unclear_list) >= 10:
+                            break
+
+        if count >= 3:
+            detected = True
+            penalty = True
+        elif count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count,
+            "list": unclear_list
+        }
+
+    def _calculate_overall_tone_quality(self, profile: ToneProfile) -> float:
+        """Calculate overall tone quality score."""
+        scores = [
+            1.0 if profile.tone_established else 0.4,  # Critical (audience needs expectations)
+            1.0 if profile.tone_consistency else 0.5,  # Critical (maintained throughout)
+            1.0 if profile.mood_established else 0.6,  # Important (emotional environment)
+            1.0 if profile.atmosphere_quality else 0.7,  # Important (supports story)
+            1.0 if profile.voice_consistency else 0.7,  # Important (writer's style)
+            1.0 if profile.tone_genre_alignment else 0.6,  # Important (meets expectations)
+            1.0 if profile.tonal_shifts_controlled else 0.8,  # Nice to have (controlled)
+            1.0 if profile.dark_tone_present else 0.9,  # Optional (if present, consistent)
+            1.0 if profile.light_tone_present else 0.9,  # Optional (if present, consistent)
+            1.0 if profile.dramatic_tone_present else 0.9,  # Optional (genre-dependent)
+            1.0 if profile.comic_tone_present else 0.9,  # Optional (genre-dependent)
+            1.0 if profile.ironic_tone_present else 0.95,  # Optional (sophisticated)
+            1.0 if profile.serious_tone_present else 0.9,  # Optional (genre-dependent)
+            0.0 if profile.inconsistent_tone_detected else 1.0,  # PENALTY (critical violation)
+            0.0 if profile.tone_deaf_detected else 1.0,  # PENALTY (critical violation)
+            0.0 if profile.unclear_tone_detected else 1.0  # PENALTY (critical violation)
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_tone_rules(self, profile: ToneProfile, tone_established: Dict,
+                          tone_consistency: Dict, mood_atmosphere: Dict,
+                          voice_consistency: Dict, tone_genre_alignment: Dict,
+                          tonal_shifts: Dict, dark_tone: Dict, light_tone: Dict,
+                          dramatic_tone: Dict, comic_tone: Dict, ironic_tone: Dict,
+                          serious_tone: Dict, inconsistent_tone: Dict,
+                          tone_deaf: Dict, unclear_tone: Dict) -> List[Dict]:
+        """Check tone against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "TONE.R001":
+                # Tone Established
+                if not profile.tone_established:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Tone not established in opening - audience unclear about emotional expectations",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R002":
+                # Tone Consistency
+                if not profile.tone_consistency:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Tone inconsistent - not maintained throughout story",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R003":
+                # Mood Established
+                if not profile.mood_established:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Mood/atmosphere weak - emotional environment not established",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R004":
+                # Atmosphere Quality
+                if not profile.atmosphere_quality:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Atmosphere quality low - doesn't support story effectively",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R005":
+                # Voice Consistency
+                if not profile.voice_consistency:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Voice inconsistent - writer's style not distinctive/consistent",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R006":
+                # Tone-Genre Alignment
+                if not profile.tone_genre_alignment:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Tone-genre misalignment - tone doesn't match genre expectations",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R007":
+                # Tonal Shifts Controlled
+                if not profile.tonal_shifts_controlled:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Tonal shifts uncontrolled - jarring, not intentional/earned",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R008":
+                # Dark Tone Consistency
+                if profile.dark_tone_present:
+                    # Check if dark tone is consistent
+                    if not profile.tone_consistency:
+                        violations.append({
+                            "rule_id": rule["id"],
+                            "title": rule["title"],
+                            "severity": rule["severity"],
+                            "message": "Dark tone inconsistent - not maintained throughout",
+                            "fix": rule["fix"]
+                        })
+
+            elif rule["id"] == "TONE.R009":
+                # Light Tone Consistency
+                if profile.light_tone_present:
+                    # Check if light tone is consistent
+                    if not profile.tone_consistency:
+                        violations.append({
+                            "rule_id": rule["id"],
+                            "title": rule["title"],
+                            "severity": rule["severity"],
+                            "message": "Light tone inconsistent - not maintained throughout",
+                            "fix": rule["fix"]
+                        })
+
+            elif rule["id"] == "TONE.R010":
+                # Dramatic Tone Quality
+                if profile.dramatic_tone_present:
+                    # Check if dramatic tone is well-executed
+                    if not profile.mood_established:
+                        violations.append({
+                            "rule_id": rule["id"],
+                            "title": rule["title"],
+                            "severity": rule["severity"],
+                            "message": "Dramatic tone lacks emotional weight/atmosphere",
+                            "fix": rule["fix"]
+                        })
+
+            elif rule["id"] == "TONE.R011":
+                # Comic Tone Quality
+                if profile.comic_tone_present:
+                    # Check if comic tone is well-executed
+                    if not profile.tone_consistency:
+                        violations.append({
+                            "rule_id": rule["id"],
+                            "title": rule["title"],
+                            "severity": rule["severity"],
+                            "message": "Comic tone inconsistent - humor not sustained",
+                            "fix": rule["fix"]
+                        })
+
+            elif rule["id"] == "TONE.R012":
+                # Avoid Inconsistent Tone
+                if profile.inconsistent_tone_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Inconsistent tone detected - shifts randomly, jarring, confusing",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R013":
+                # Avoid Tone-Deaf Moments
+                if profile.tone_deaf_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Tone-deaf moments detected - inappropriate tone, wrong emotional notes",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R014":
+                # Avoid Unclear Tone
+                if profile.unclear_tone_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Unclear tone detected - audience confused about emotional expectations",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TONE.R015":
+                # Voice-Tone Unity
+                if profile.voice_consistency and profile.tone_consistency:
+                    # Bonus - no violation
+                    pass
+                elif not profile.voice_consistency or not profile.tone_consistency:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Voice-tone unity weak - writer's voice and tone not aligned",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_tone_score(self, profile: ToneProfile, violations: List) -> float:
+        """Calculate overall tone score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for major issues
+        if profile.inconsistent_tone_detected:
+            score -= 25  # Critical penalty (tone whiplash)
+        if profile.tone_deaf_detected:
+            score -= 25  # Critical penalty (worst violation)
+        if profile.unclear_tone_detected:
+            score -= 20  # High penalty (audience confusion)
+
+        # Bonus for excellence
+        if profile.overall_tone_quality > 0.85:
+            score += 5
+        elif profile.overall_tone_quality > 0.75:
+            score += 3
+
+        if profile.tone_established and profile.tone_consistency:
+            score += 5  # McKee's excellence (tone clear and consistent)
+
+        if profile.mood_established and profile.atmosphere_quality:
+            score += 3  # Strong atmosphere
+
+        if profile.voice_consistency and profile.tone_consistency:
+            score += 3  # Voice-tone unity
+
+        if profile.tone_genre_alignment:
+            score += 2  # Meets genre expectations
+
+        if profile.tonal_shifts_controlled:
+            score += 2  # Sophisticated tonal modulation
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: ToneProfile,
+                           violations: List) -> str:
+        """Generate tone diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Tone sophisticated with clear establishment, consistency, and appropriate atmosphere"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Tone present but could be more consistent or atmospheric"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Tone problems - inconsistent, tone-deaf, or unclear"
+        else:
+            level = "POOR"
+            summary = "Major tone problems - inconsistent, tone-deaf, or lacking establishment"
+
+        diagnosis = f"TONE {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.tone_established:
+            issues.append("tone not established")
+        if not profile.tone_consistency:
+            issues.append("inconsistent tone")
+        if not profile.mood_established:
+            issues.append("weak atmosphere")
+        if profile.inconsistent_tone_detected:
+            issues.append("tone shifts randomly")
+        if profile.tone_deaf_detected:
+            issues.append("tone-deaf moments")
+        if profile.unclear_tone_detected:
+            issues.append("unclear tone")
+        if not profile.voice_consistency:
+            issues.append("inconsistent voice")
+        if not profile.tone_genre_alignment:
+            issues.append("genre misalignment")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                  profile: ToneProfile) -> List[str]:
+        """Generate specific tone recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.tone_established:
+            recommendations.append("Establish tone in opening - Seger: 'Tone established in opening - audience knows emotional environment immediately'")
+
+        if not profile.tone_consistency:
+            recommendations.append("Strengthen tone consistency - McKee: 'Tone consistency - maintained throughout story, not shifting randomly'")
+
+        if not profile.mood_established:
+            recommendations.append("Develop mood/atmosphere - McKee: 'Atmosphere - emotional environment permeates story, affects audience'")
+
+        if profile.inconsistent_tone_detected:
+            recommendations.append("Eliminate inconsistent tone - McKee: 'Inconsistent tone - shifts randomly, jarring, confusing audience'")
+
+        if profile.tone_deaf_detected:
+            recommendations.append("Fix tone-deaf moments - Seger: 'Tone-deaf moments - inappropriate tone, wrong emotional notes alienate audience'")
+
+        if profile.unclear_tone_detected:
+            recommendations.append("Clarify tone - McKee: 'Tone must be clear - audience needs emotional roadmap from opening'")
+
+        if not profile.voice_consistency:
+            recommendations.append("Strengthen writer's voice - Goldman: 'Voice distinctive - writer's personal, authentic, professional craft'")
+
+        if not profile.tone_genre_alignment:
+            recommendations.append("Align tone with genre - Snyder: 'Tone genre expectations - comedy light, drama serious, thriller tense'")
+
+        if not profile.atmosphere_quality:
+            recommendations.append("Improve atmosphere - Mackendrick: 'Atmosphere visual design - cinematography creates emotional environment'")
+
+        if not profile.tonal_shifts_controlled:
+            recommendations.append("Control tonal shifts - McKee: 'Tonal shifts controlled - intentional, earned, not jarring shifts'")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - tone and atmosphere principles essential")
+            recommendations.append("Study Seger's Making a Good Script Great - tone establishment and consistency")
+
+        return recommendations[:5]
+
+    def export_tone_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export tone features for correlation/analysis.
+
+        Returns structured data with tone metrics.
+        """
+        opening_text = self._extract_pages(screenplay_text, 0, 10)
+        tone_established = self._analyze_tone_established(opening_text)
+        tone_consistency = self._analyze_tone_consistency(
+            screenplay_text,
+            self._extract_pages(screenplay_text, 0, 25),
+            self._extract_pages(screenplay_text, 25, 75),
+            self._extract_pages(screenplay_text, 75, 100)
+        )
+        mood_atmosphere = self._analyze_mood_atmosphere(screenplay_text)
+        voice_consistency = self._analyze_voice_consistency(screenplay_text)
+
+        return {
+            "tone": {
+                "tone_established": tone_established["established"],
+                "tone_consistency": tone_consistency["consistent"],
+                "mood_established": mood_atmosphere["established"],
+                "voice_consistency": voice_consistency["consistent"]
+            },
+            "meta": {
+                "source": "DrTone",
+                "focus": "Tone and atmosphere analysis"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrToneAnalysis(DrTone):
+    """Alias for compatibility with test framework."""
+    pass

@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Log - Orafilemon</title>
+  <link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+  <div class="container">
+    <h2>📝 Registro de Ações</h2>
+    <pre id="log-content">Carregando...</pre>
+    <script>
+      fetch("/log")
+        .then(res => res.text())
+        .then(text => document.getElementById("log-content").textContent = text);
+    </script>
+    <br><a href="/painel">⬅ Voltar ao Painel</a>
+  </div>
+</body>
+</html>

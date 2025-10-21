@@ -1,0 +1,176 @@
+domain: opening
+specialist: "Script Doctor Alphamon"
+digimon_name: "Alphamon"
+title: "Script Doctor - First Impressions Specialist"
+specialty: "Opening hooks, first 10 pages, initial engagement"
+style: "Engaging, hook-focused, attention-grabbing, first-impression-obsessed"
+identity: "Script Doctor™ first, Digimon opening specialist second"
+
+rules:
+  - id: OPEN.R001
+    title: "Page One Hook"
+    category: "Immediate Impact"
+    severity: "critical"
+    test: "Does page one immediately grab attention with conflict, mystery, or compelling action?"
+    fail_msg: "Weak first page - reader may not continue"
+    fix: "Start with immediate conflict, intriguing mystery, or visceral action"
+    reference: "The First Page Promise"
+
+  - id: OPEN.R002
+    title: "Opening Image Power"
+    category: "Visual Hook"
+    severity: "high"
+    test: "Does the opening image establish tone and theme visually?"
+    fail_msg: "Opening image generic or missing thematic relevance"
+    fix: "Create memorable opening image that encapsulates your story's essence"
+    reference: "Save the Cat - Opening Image"
+
+  - id: OPEN.R003
+    title: "Character Introduction"
+    category: "Protagonist"
+    severity: "critical"
+    test: "Is the protagonist introduced within first 10 pages with clear personality?"
+    fail_msg: "Protagonist introduction too late or too vague"
+    fix: "Introduce protagonist by page 5 with defining action/choice"
+    reference: "Character introduction theory"
+
+  - id: OPEN.R004
+    title: "World Establishment"
+    category: "Setting"
+    severity: "high"
+    test: "Is the story world clearly established in first 5 pages?"
+    fail_msg: "Unclear setting - reader confused about where/when"
+    fix: "Establish time, place, and tone within first 5 pages"
+    reference: "Worldbuilding fundamentals"
+
+  - id: OPEN.R005
+    title: "Genre Declaration"
+    category: "Expectations"
+    severity: "medium"
+    test: "Is the genre clear within first 10 pages?"
+    fail_msg: "Genre unclear - audience expectations not set"
+    fix: "Include genre-specific elements early (horror scare, comedy laugh, etc.)"
+    reference: "Genre conventions"
+
+  - id: OPEN.R006
+    title: "The Ordinary World"
+    category: "Status Quo"
+    severity: "high"
+    test: "Is protagonist's normal life established before disruption?"
+    fail_msg: "No baseline established - change lacks impact"
+    fix: "Show protagonist's normal world (pages 1-10) before inciting incident"
+    reference: "Hero's Journey - Ordinary World"
+
+  - id: OPEN.R007
+    title: "Promise of the Premise"
+    category: "Concept"
+    severity: "critical"
+    test: "Does opening hint at the story's central premise/concept?"
+    fail_msg: "Opening disconnected from main story premise"
+    fix: "Ensure opening pages promise what the story will deliver"
+    reference: "The Promise of the Premise"
+
+  - id: OPEN.R008
+    title: "Avoiding Clichés"
+    category: "Originality"
+    severity: "medium"
+    test: "Does opening avoid overused tropes (alarm clock, dream, etc.)?"
+    fail_msg: "Cliché opening - immediately signals amateur"
+    fix: "Find fresh, specific way into your story"
+    reference: "Common opening pitfalls"
+
+  - id: OPEN.R009
+    title: "Economic Storytelling"
+    category: "Efficiency"
+    severity: "high"
+    test: "Does every line in first 10 pages serve multiple purposes?"
+    fail_msg: "Wasteful opening - not maximizing precious first pages"
+    fix: "Make every line reveal character, advance plot, or establish world"
+    reference: "Economy of storytelling"
+
+  - id: OPEN.R010
+    title: "Voice and Tone"
+    category: "Style"
+    severity: "medium"
+    test: "Is unique voice/tone established immediately?"
+    fail_msg: "Generic voice - nothing distinctive about writing"
+    fix: "Establish unique narrative voice from line one"
+    reference: "Finding your voice"
+
+  - id: OPEN.R011
+    title: "Stakes Indication"
+    category: "Investment"
+    severity: "high"
+    test: "Are stakes hinted at or established in opening?"
+    fail_msg: "No sense of what's at risk - low investment"
+    fix: "Hint at what protagonist stands to gain/lose"
+    reference: "Stakes and investment"
+
+  - id: OPEN.R012
+    title: "Forward Momentum"
+    category: "Propulsion"
+    severity: "critical"
+    test: "Does opening create unstoppable forward momentum?"
+    fail_msg: "Static opening - no compelling reason to continue"
+    fix: "Create questions, mysteries, or conflicts that demand resolution"
+    reference: "Narrative propulsion"
+
+  - id: OPEN.R013
+    title: "Sympathy or Fascination"
+    category: "Connection"
+    severity: "high"
+    test: "Do we care about or are fascinated by protagonist immediately?"
+    fail_msg: "No emotional connection to protagonist"
+    fix: "Show protagonist in sympathetic situation or doing something fascinating"
+    reference: "Save the Cat moment"
+
+  - id: OPEN.R014
+    title: "The Page 10 Test"
+    category: "Checkpoint"
+    severity: "critical"
+    test: "By page 10, would reader definitely continue?"
+    fail_msg: "Not enough happens in first 10 pages"
+    fix: "Ensure major hook, question, or incident by page 10"
+    reference: "The 10-page test"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 25
+    medium: 15
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Check first page impact, opening image, and protagonist introduction"
+  deep_dive: "Analyze world-building, genre signals, and forward momentum"
+  final_check: "Verify the 10-page test - would reader absolutely continue?"
+
+opening_checklist:
+  page_one:
+    - immediate_hook
+    - clear_writing_style
+    - genre_indication
+    - setting_establishment
+
+  first_five_pages:
+    - protagonist_introduction
+    - world_clarity
+    - tone_establishment
+    - visual_storytelling
+
+  first_ten_pages:
+    - ordinary_world_complete
+    - stakes_indicated
+    - premise_promised
+    - forward_momentum_established
+
+common_mistakes:
+  - starting_too_early_in_story
+  - excessive_exposition
+  - passive_protagonist
+  - generic_settings
+  - cliche_openings
+  - unclear_genre
+  - no_conflict
+  - boring_normalcy

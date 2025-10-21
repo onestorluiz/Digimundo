@@ -1,0 +1,159 @@
+# DIGIMUNDO ECOSYSTEM RESEARCH REPOSITORY - DO NOT DISTRIBUTE
+# Created: 2025-09-20
+# Purpose: Historical research and development tracking for AI ecosystem
+
+# ============================================
+# ACTIVE SYSTEMS (Keep separate - reference only)
+# ============================================
+# These directories have their own Git repos
+scripturemon-champion/.git/
+claude_code/.git/
+
+# ============================================
+# COMPRESSED ARCHIVES (Too large for Git)
+# ============================================
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.bz2
+*.xz
+
+# ============================================
+# LEGACY DATABASE & MEMORY FILES
+# ============================================
+*.db
+*.sqlite
+*.db-journal
+*.db-wal
+*memory*
+*database*
+
+# ============================================
+# CONFIGURATION & SECRETS
+# ============================================
+*.key
+*.secret
+*.env
+.env
+.env.local
+config_private.py
+secrets.json
+credentials.json
+*.pem
+*.p12
+*.pfx
+
+# ============================================
+# LOGS & TEMPORARY FILES
+# ============================================
+*.log
+logs/
+temp/
+tmp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.cache
+nohup.out
+
+# ============================================
+# SYSTEM FILES
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+Icon?
+
+# ============================================
+# PYTHON
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+.venv/
+venv/
+ENV/
+env/
+
+# ============================================
+# JUPYTER NOTEBOOKS
+# ============================================
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# ============================================
+# IDE SPECIFIC
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ============================================
+# LARGE BACKUP DIRECTORIES (Keep separate tracking)
+# ============================================
+Pre_Limpeza_Minimalista_Lixo/
+SURGICAL_PRESERVATION/
+"Digimundo Verdadeira Historia"/
+Novos_backps/
+Respostas_testes/
+
+# ============================================
+# CUSTOM RESEARCH IGNORES
+# ============================================
+# Add any specific historical files you want to track separately
+
+# Scripts de configuração temporários
+reorganize_archive.py
+cleanup_archive_final.py
+
+# Novos_arquivos (já arquivados)
+Novos_arquivos/
+
+# PDFs grandes (livros, documentação)
+*.pdf
+
+# Git LFS desabilitado temporariamente
+.gitattributes.disabled
+
+# Arquivos muito grandes (>100MB) - GitHub não aceita
+*snapshot.json
+*_context.md
+*migration_analysis.json
+*complete_migration_analysis.json
+
+# Padrão para arquivos grandes
+archive/**/*.json
+archive/**/*.md

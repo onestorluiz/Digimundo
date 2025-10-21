@@ -1,0 +1,56 @@
+================================================================================
+HARMONY V100 - FASE 2 - RAG CONTRACT & OOM SAFETY
+================================================================================
+Timestamp: 2025-09-08T21:44:20.995138
+
+TEST RESULTS
+----------------------------------------
+✅ simple_query
+    query_time_ms: 0.13399124145507812
+    results_count: 1
+    schema_valid: True
+    citations_valid: True
+    sample_citation: RAPTOR_level_1 · c0/1
+✅ hyde_query
+    query_time_ms: 0.09322166442871094
+    results_count: 1
+    hyde_method_marked: True
+    schema_valid: True
+    citations_valid: True
+✅ raptor_query
+    query_time_ms: 0.15115737915039062
+    results_count: 1
+    raptor_method_marked: True
+    has_multi_level: True
+    sample_citations: ['RAPTOR_level_1 · c0/1']
+    schema_valid: True
+✅ oom_safety
+    k_100_limited: 1
+    dangerous_includes_filtered: True
+    cache_keys_unique: True
+
+PERFORMANCE METRICS
+----------------------------------------
+  p50: 0.07ms
+  p95: 0.07ms
+  min: 0.06ms
+  max: 0.07ms
+  avg: 0.06ms
+  ✅ Performance invariants met
+
+SUMMARY
+----------------------------------------
+Total Tests: 4
+Passed: 4
+Failed: 0
+Pass Rate: 100.0%
+
+SCHEMA ENFORCEMENT
+----------------------------------------
+Schema Keys Required: source, path, doc_hash, mtime, chunk_no, total_chunks, type, lang
+OOM Safety Limit: k <= 8
+Safe Includes: ids, metadatas, distances
+
+================================================================================
+FASE 2 STATUS: ✅ COMPLETE
+================================================================================

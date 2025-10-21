@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scripturemon Interface</title>
+  <style>
+    body { background: #0d0d0d; color: #00ffff; font-family: monospace; padding: 20px; }
+    .container { border: 1px solid #00ffff; padding: 20px; }
+    textarea, input { width: 100%; background: #111; color: #0ff; border: 1px solid #0ff; padding: 10px; }
+    button { background: #00ffff; color: black; font-weight: bold; padding: 10px 20px; margin-top: 10px; border: none; cursor: pointer; width: 100%; }
+    .resposta { margin-top: 20px; white-space: pre-line; background: #111; padding: 10px; border: 1px solid #0ff; }
+  </style>
+</head>
+<body>
+  <h2>🧠 Interface de Conversa com Scripturemon</h2>
+  <div class="container">
+    <p>📨 Envie um comando simbólico para Scripturemon:</p>
+    <textarea id="comando" rows="3" placeholder="Ex: Scripturemon, o que você sente?"></textarea>
+    <button onclick="enviarComando()">Enviar</button>
+    <div id="resposta" class="resposta"></div>
+  </div>
+  <script>
+    document.getElementById("comando").addEventListener("keydown", function(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        enviarComando();
+      }
+    });
+    function enviarComando() {
+      const comando = document.getElementById("comando").value;
+      fetch("/enviar_comando", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comando: comando })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("resposta").innerText = data.resposta;
+        document.getElementById("comando").value = "";
+      })
+      .catch(() => {
+        document.getElementById("resposta").innerText = "Erro ao conectar com Scripturemon.";
+      });
+    }
+  </script>
+</body>
+</html>

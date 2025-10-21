@@ -1,0 +1,13 @@
+{
+  "migration_date": "2025-09-20T23:23:11.839314",
+  "source": "/Users/clubproducoes/Digimundo/scripturemon-champion/digilibrary/BIBLIOTECA_ROTEIROS",
+  "target": "/Users/clubproducoes/Digimundo/scripturemon-champion-refactored-bm25-tests 2/data/screenplays",
+  "stats": {
+    "roteiros_mestres": 34,
+    "meus_filmes": 1,
+    "teoria": 13,
+    "total_files": 48,
+    "total_size": 13104339,
+    "indexed": 48
+  }
+}

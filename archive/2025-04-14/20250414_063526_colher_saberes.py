@@ -1,0 +1,1 @@
+# Código para extrair e aplicar saberes simbólicos

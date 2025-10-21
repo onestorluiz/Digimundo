@@ -1,0 +1,13 @@
+============================================================
+CASE: b
+TIMESTAMP: 2025-09-09T20:23:18.914745
+============================================================
+
+INPUT:
+Explique o uso de travellings em VHS anos 80.
+
+RESPONSE:
+Travellings em VHS eram limitados pela tecnologia.
+
+NON-EMPTY: True
+LENGTH: 50 chars

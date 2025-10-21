@@ -1,0 +1,1 @@
+# Oráculo central de decisões simbólicas

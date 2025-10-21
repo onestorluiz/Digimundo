@@ -1,0 +1,218 @@
+# CLIMAX ANALYSIS RULES
+# Script Doctor Climaxmon - Climax Quality Rules
+# Based on: McKee (Story), Field (Screenplay), Snyder (Save the Cat), Truby (Anatomy)
+
+rules:
+  - id: CLIMAX.R001
+    title: "Climax Must Be Present"
+    description: "Story must have clear, identifiable climax moment"
+    severity: critical
+    category: climax_presence
+    rationale: "McKee/Field: 'Every story needs climax - moment of ultimate confrontation and peak tension'"
+    fix: "Create clear climax in Act 3 (pages 85-95%) where protagonist faces antagonistic force in ultimate confrontation"
+
+  - id: CLIMAX.R002
+    title: "Ultimate Confrontation Required"
+    description: "Climax must include protagonist vs antagonist face-off"
+    severity: critical
+    category: confrontation
+    rationale: "McKee: 'Climax is ultimate confrontation - protagonist must face antagonistic force directly, no evasion'"
+    fix: "Ensure protagonist directly confronts antagonist at climax - no substitutes, no avoidance, direct face-off"
+
+  - id: CLIMAX.R003
+    title: "Peak Tension Must Be Achieved"
+    description: "Climax should be moment of highest dramatic tension"
+    severity: high
+    category: tension
+    rationale: "McKee: 'All accumulated tension released at climax - this is story's peak moment of pressure'"
+    fix: "Maximize tension at climax - highest stakes, greatest pressure, all forces aligned against protagonist"
+
+  - id: CLIMAX.R004
+    title: "Theme Expressed at Climax"
+    description: "Controlling idea/theme should be proved through climactic action"
+    severity: high
+    category: theme
+    rationale: "McKee: 'Climax is where controlling idea is ultimately expressed - theme proved through action not words'"
+    fix: "Express theme through climactic action - demonstrate controlling idea through protagonist's choices and their consequences"
+
+  - id: CLIMAX.R005
+    title: "Stakes Maximized at Climax"
+    description: "Stakes should be at maximum at climax moment"
+    severity: high
+    category: stakes
+    rationale: "McKee/Field: 'At climax protagonist stands to lose or gain everything - stakes at maximum'"
+    fix: "Raise stakes to maximum at climax - protagonist must risk everything, lose everything or win everything"
+
+  - id: CLIMAX.R006
+    title: "Character Transformation at Climax"
+    description: "Protagonist should complete character arc at climax"
+    severity: medium
+    category: character
+    rationale: "Truby/McKee: 'Climax is moment of self-revelation - character transformation completes'"
+    fix: "Show character transformation at climax - protagonist becomes who they need to be, completes arc"
+
+  - id: CLIMAX.R007
+    title: "Crisis vs Climax Must Be Distinct"
+    description: "Crisis (All Is Lost) and climax should be separate moments"
+    severity: medium
+    category: structure
+    rationale: "Snyder: 'Crisis (All Is Lost/Dark Night) comes before climax - darkest hour before dawn'"
+    fix: "Separate crisis from climax - crisis at 75-80%, climax at 85-95% - distinct moments"
+
+  - id: CLIMAX.R008
+    title: "Climax Sets Up Resolution"
+    description: "Climax should lead directly to resolution"
+    severity: medium
+    category: structure
+    rationale: "McKee: 'Climax resolves story's central conflict and sets up resolution - consequences play out'"
+    fix: "Ensure climax resolves central conflict and creates clear path to resolution - cause and effect"
+
+  - id: CLIMAX.R009
+    title: "All Forces Converge at Climax"
+    description: "All story threads and characters should converge at climax"
+    severity: medium
+    category: convergence
+    rationale: "McKee/Seger: 'All story elements, characters, and forces converge at climax - everything comes together'"
+    fix: "Bring all story threads together at climax - all characters, all subplots, all forces converge"
+
+  - id: CLIMAX.R010
+    title: "Emotional Peak Required"
+    description: "Climax should achieve emotional catharsis"
+    severity: medium
+    category: emotion
+    rationale: "Aristotle/McKee: 'Climax produces catharsis - emotional release for audience through character's experience'"
+    fix: "Create emotional peak at climax - catharsis through character's emotional journey and resolution"
+
+  - id: CLIMAX.R011
+    title: "Avoid Anticlimax"
+    description: "Climax must not be anticlimactic or disappointing"
+    severity: critical
+    category: quality
+    rationale: "McKee: 'Anticlimax = broken promise to audience - climax must deliver on all setups and expectations'"
+    fix: "Avoid anticlimax - deliver satisfying climax that pays off all setups, meets audience expectations"
+
+  - id: CLIMAX.R012
+    title: "Avoid Weak Climax"
+    description: "Climax must not be weak, easy, or rely on deus ex machina"
+    severity: critical
+    category: quality
+    rationale: "McKee: 'Victory must be earned - no deus ex machina, no easy solutions, protagonist earns resolution'"
+    fix: "Strengthen climax - increase difficulty, remove convenient solutions, make protagonist earn victory through choices"
+
+  - id: CLIMAX.R013
+    title: "Optimal Climax Placement"
+    description: "Climax should occur at 85-95% through script"
+    severity: high
+    category: placement
+    rationale: "Field/McKee: 'Climax in Act 3 at 85-95% - not too early (loses momentum), not too late (exhausts audience)'"
+    fix: "Place climax at 85-95% of script - Field's paradigm: pages 85-110 in 110-page screenplay"
+
+  - id: CLIMAX.R014
+    title: "Moral Choice at Climax"
+    description: "Protagonist should face moral/ethical choice at climax"
+    severity: low
+    category: character
+    rationale: "Truby/McKee: 'Climax reveals character's true values through moral choice under ultimate pressure'"
+    fix: "Include moral choice at climax - protagonist reveals true character through ethical decision"
+
+  - id: CLIMAX.R015
+    title: "Climax Intensity Sufficient"
+    description: "Climax intensity should be sufficient (>0.6 on 0-1 scale)"
+    severity: high
+    category: intensity
+    rationale: "McKee: 'Climax is peak dramatic intensity - confrontation, tension, and stakes all maximized'"
+    fix: "Increase climax intensity - raise stakes, increase tension, strengthen confrontation, maximize dramatic power"
+
+# Analysis prompts for deep theory queries
+analysis_prompts:
+  climax_detection: "Identify climax moment - ultimate confrontation where protagonist faces antagonistic force at peak tension"
+
+  ultimate_confrontation: "Analyze ultimate confrontation - does protagonist directly face antagonist? Face-to-face showdown?"
+
+  peak_tension: "Assess peak tension - is this highest tension moment in entire story? All pressure released?"
+
+  theme_expression: "Evaluate theme expression - is controlling idea proved through climactic action? Theme demonstrated?"
+
+  stakes_maximization: "Analyze stakes - are they at maximum? Does protagonist risk everything? Life or death? All or nothing?"
+
+  character_transformation: "Assess character transformation - does protagonist complete arc? Self-revelation? Becomes who needed to be?"
+
+  crisis_vs_climax: "Distinguish crisis from climax - is All Is Lost moment (crisis 75-80%) separate from climax (85-95%)?"
+
+  resolution_setup: "Evaluate resolution setup - does climax lead to resolution? Consequences clear? Path to ending established?"
+
+  forces_converge: "Analyze convergence - do all story threads come together? All characters arrive? Everything aligns?"
+
+  emotional_peak: "Assess emotional peak - does climax achieve catharsis? Emotional release for audience?"
+
+  intellectual_peak: "Evaluate intellectual peak - does protagonist (and audience) finally understand? Truth revealed?"
+
+  moral_choice: "Analyze moral choice - does protagonist face ethical decision? Values tested under pressure?"
+
+  anticlimax_detection: "Detect anticlimax - does climax disappoint? Underwhelm? Fail to deliver on promises?"
+
+  weak_climax_detection: "Detect weak climax - lacks intensity? Too easy? Deus ex machina? Unearned victory?"
+
+  climax_placement: "Assess climax placement - occurs at 85-95% of script? Field's Act 3 structure? Optimal timing?"
+
+# Climax quality metrics
+quality_metrics:
+  excellent_climax:
+    - "Ultimate confrontation present and intense"
+    - "Peak tension achieved (all pressure released)"
+    - "Theme expressed through action"
+    - "Stakes maximized (everything at risk)"
+    - "Character transformation complete"
+    - "Emotional catharsis achieved"
+    - "All story threads converge"
+    - "Optimal placement (85-95%)"
+
+  good_climax:
+    - "Clear confrontation"
+    - "High tension"
+    - "Theme present"
+    - "High stakes"
+    - "Character growth"
+    - "Satisfying resolution"
+
+  weak_climax:
+    - "No clear confrontation"
+    - "Low tension"
+    - "Theme absent"
+    - "Low stakes"
+    - "No transformation"
+    - "Anticlimactic"
+    - "Poor placement"
+    - "Deus ex machina"
+
+# Theoretical foundations
+theory_foundations:
+  mckee_story:
+    - "Climax is ultimate confrontation at peak tension"
+    - "Theme/controlling idea proved through climactic action"
+    - "All accumulated pressure released at climax"
+    - "Victory must be earned through character choices"
+
+  field_screenplay:
+    - "Climax in Act 3 at pages 85-110 (110-page script)"
+    - "Protagonist faces antagonist in final confrontation"
+    - "Climax resolves central dramatic question"
+    - "Plot Point 2 leads to climax"
+
+  snyder_save_cat:
+    - "Finale beat = climax where all A/B/C stories resolved"
+    - "Crisis (All Is Lost) separate from climax"
+    - "Final Image vs Opening Image shows transformation"
+    - "Gathering the Team precedes finale"
+
+  truby_anatomy:
+    - "Final Battle - protagonist confronts opponent"
+    - "Self-revelation at climax - character sees truth"
+    - "Moral decision defines character"
+    - "New equilibrium established after climax"
+
+  aristotle_poetics:
+    - "Climax produces catharsis - emotional release"
+    - "Peripeteia (reversal) at climax"
+    - "Anagnorisis (recognition) moment"
+    - "Unity of action maintained through climax"

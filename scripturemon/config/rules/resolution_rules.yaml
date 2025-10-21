@@ -1,0 +1,216 @@
+# Resolution Rules - Script Doctor Resolutionmon
+# Based on: McKee (Story), Field (Screenplay), Snyder (Save the Cat),
+# Seger (Making Good Script Great), Aristotle (Poetics)
+
+rules:
+  - id: RESOLUTION.R001
+    title: Resolution Present
+    severity: critical
+    description: |
+      Resolution must be present - denouement after climax.
+      McKee: "Resolution is where all story threads are tied up - consequences of climax play out."
+      Field: "Resolution typically pages 95-110 - final aftermath."
+    fix: "Add clear resolution section - show consequences of climax, character fates, new equilibrium established - minimum 3 pages"
+
+  - id: RESOLUTION.R002
+    title: All Threads Closed
+    severity: high
+    description: |
+      All story threads must be closed - no loose ends.
+      Seger: "Every setup needs payoff - all questions answered."
+      McKee: "Audience deserves complete closure on all story threads."
+    fix: "Close all story threads - address every subplot, answer every question raised - no loose ends remain"
+
+  - id: RESOLUTION.R003
+    title: Character Fates Resolved
+    severity: high
+    description: |
+      Character fates must be clear - protagonist and antagonist.
+      McKee/Field: "Audience must know what happens to main characters - clear fates."
+      Truby: "Character destiny fulfilled or denied - make it explicit."
+    fix: "Make character fates explicit - show what happens to protagonist, antagonist, key supporting characters - clear destinies"
+
+  - id: RESOLUTION.R004
+    title: Theme Reinforced at Resolution
+    severity: medium
+    description: |
+      Theme should be reinforced at resolution.
+      McKee: "Controlling idea echoed at resolution - moral lesson reinforced."
+      Egri: "Premise proved through resolution - theme demonstrated."
+    fix: "Reinforce theme at resolution - echo controlling idea, demonstrate moral lesson learned - theme comes full circle"
+
+  - id: RESOLUTION.R005
+    title: Emotional Satisfaction Achieved
+    severity: high
+    description: |
+      Resolution must provide emotional satisfaction.
+      McKee: "Audience deserves emotional payoff - catharsis."
+      Aristotle: "Resolution provides catharsis - emotional release for audience."
+    fix: "Deliver emotional satisfaction - provide catharsis, fulfill emotional promise made to audience - leave them satisfied"
+
+  - id: RESOLUTION.R006
+    title: New Equilibrium Established
+    severity: medium
+    description: |
+      New equilibrium must be established - world restored or changed.
+      McKee: "Resolution establishes new equilibrium - world in balance again (or new balance)."
+      Field: "Show new normal - how world changed or restored after climax."
+    fix: "Establish new equilibrium - show how world restored or changed to new balance - new normal clear"
+
+  - id: RESOLUTION.R007
+    title: Loose Ends Addressed
+    severity: high
+    description: |
+      Loose ends must be addressed - unanswered questions resolved.
+      Seger: "Address all loose ends - don't leave audience with unanswered questions."
+      McKee: "Every setup deserves payoff - all plants must bloom."
+    fix: "Address loose ends - identify all unanswered questions and address them - complete all setups with payoffs"
+
+  - id: RESOLUTION.R008
+    title: Final Image Effective
+    severity: medium
+    description: |
+      Final image should bookend opening image.
+      Snyder: "Final image mirrors opening image - shows transformation visually."
+      Mackendrick: "Visual closure - final shot should resonate with opening."
+    fix: "Create effective final image - bookend opening image to show transformation - visual closure that resonates"
+
+  - id: RESOLUTION.R009
+    title: Denouement Pacing Appropriate
+    severity: medium
+    description: |
+      Denouement pacing must be appropriate - not too fast, not dragging.
+      Goldman: "End quickly - don't overstay welcome - 3-5 pages ideal after climax."
+      McKee: "Resolution should be proportional to story - enough time but not excessive."
+    fix: "Adjust denouement pacing - aim for 3-10 pages after climax - enough time for closure but don't drag"
+
+  - id: RESOLUTION.R010
+    title: Catharsis Delivered
+    severity: medium
+    description: |
+      Catharsis must be delivered - emotional release for audience.
+      Aristotle: "Resolution provides catharsis - purging of emotions through story."
+      McKee: "Emotional release at resolution - audience feels satisfaction."
+    fix: "Deliver catharsis - provide emotional release for audience through resolution - purge accumulated tension"
+
+  - id: RESOLUTION.R011
+    title: Avoid Abrupt Ending
+    severity: critical
+    description: |
+      Avoid abrupt ending - too sudden, insufficient resolution.
+      Goldman: "End quickly but not abruptly - give time for consequences."
+      McKee: "Abrupt ending cheats audience - they deserve proper closure."
+    fix: "Lengthen resolution - avoid abrupt cut-off - give minimum 3-5 pages for consequences to play out"
+
+  - id: RESOLUTION.R012
+    title: Avoid Unresolved Threads
+    severity: critical
+    description: |
+      Avoid unresolved threads - loose ends remain.
+      Seger: "All story threads must be closed - no hanging questions."
+      McKee: "Unresolved threads frustrate audience - broken promise."
+    fix: "Resolve all threads - identify hanging subplots and unanswered questions - close every thread opened"
+
+  - id: RESOLUTION.R013
+    title: Avoid Dragging Resolution
+    severity: high
+    description: |
+      Avoid dragging resolution - overstays welcome.
+      Goldman: "Don't overstay welcome - audience wants to leave on high note."
+      Mackendrick: "Multiple endings exhausting - end once and end well."
+    fix: "Shorten resolution - end within 5-10 pages after climax - avoid multiple false endings"
+
+  - id: RESOLUTION.R014
+    title: Hope or Wisdom Present
+    severity: medium
+    description: |
+      Story should leave audience with hope or wisdom.
+      McKee: "Resolution leaves audience with something meaningful - hope, wisdom, understanding."
+      Campbell: "Hero returns with boon - wisdom gained shared with audience."
+    fix: "Add hope or wisdom - leave audience with meaningful takeaway - insight, hope, or lesson learned"
+
+  - id: RESOLUTION.R015
+    title: Resolution Completeness
+    severity: high
+    description: |
+      Resolution must be complete - all elements addressed.
+      McKee: "Complete resolution addresses: character fates, theme, emotional satisfaction, new equilibrium."
+      Field: "Resolution completeness = professional vs amateur writing."
+    fix: "Ensure resolution completeness - check all elements: threads closed, fates clear, theme reinforced, satisfaction delivered"
+
+# Analysis prompts for LLM-based analysis
+analysis_prompts:
+  resolution_present: |
+    Analyze if clear resolution present after climax.
+    McKee: "Resolution is denouement - consequences of climax play out, threads closed."
+    Look for: Final pages (90-100% of script), aftermath, character fates, closure.
+
+  threads_closed: |
+    Analyze if all story threads closed.
+    Seger: "Every setup needs payoff - all questions answered."
+    Check: Main plot resolved, subplots resolved, no loose ends, all questions answered.
+
+  character_fates: |
+    Analyze if character fates clear.
+    McKee/Field: "Protagonist and antagonist fates must be explicit."
+    Check: Protagonist fate clear, antagonist fate clear, supporting character futures addressed.
+
+  theme_reinforcement: |
+    Analyze if theme reinforced at resolution.
+    McKee: "Controlling idea echoed at resolution - moral lesson reinforced."
+    Look for: Theme callbacks, moral lesson restated or demonstrated, thematic resonance.
+
+  emotional_satisfaction: |
+    Analyze if emotional satisfaction achieved.
+    Aristotle: "Resolution provides catharsis - emotional release."
+    Check: Emotional payoff, audience satisfaction, catharsis delivered, fulfillment.
+
+  new_equilibrium: |
+    Analyze if new equilibrium established.
+    McKee: "World restored or changed to new balance."
+    Look for: New normal, world stability, balance restored, new beginning.
+
+  loose_ends: |
+    Analyze if loose ends addressed.
+    Seger: "All loose ends must be tied up - no unanswered questions."
+    Check: No hanging subplots, all questions answered, no forgotten elements.
+
+  final_image: |
+    Analyze final image effectiveness.
+    Snyder: "Final image bookends opening image - shows transformation."
+    Check: Visual closure, bookends opening, transformation visible, resonance.
+
+  denouement_pacing: |
+    Analyze denouement pacing.
+    Goldman: "End quickly but not abruptly - 3-5 pages ideal."
+    Assess: Resolution length (3-10 pages optimal), pacing (not rushed, not dragging).
+
+  catharsis: |
+    Analyze if catharsis delivered.
+    Aristotle: "Catharsis = emotional release through resolution."
+    Look for: Emotional release, purging of tension, audience satisfaction, relief.
+
+  hope_wisdom: |
+    Analyze if hope or wisdom present.
+    McKee: "Story leaves audience with something meaningful."
+    Check: Hope expressed, wisdom gained, meaningful takeaway, insight provided.
+
+  callbacks: |
+    Analyze callbacks to setup.
+    Field/Snyder: "Resolution pays off earlier setups."
+    Look for: Callbacks to Act 1, payoffs to plants, echoes of earlier elements.
+
+  abrupt_ending: |
+    Detect abrupt ending (PENALTY).
+    Goldman: "End quickly but not abruptly - give time for closure."
+    Red flags: Resolution <2 pages, sudden cut-off, insufficient aftermath.
+
+  unresolved_threads: |
+    Detect unresolved threads (PENALTY).
+    Seger: "Unresolved threads frustrate audience."
+    Red flags: Hanging subplots, unanswered questions, forgotten elements.
+
+  dragging_resolution: |
+    Detect dragging resolution (PENALTY).
+    Goldman: "Don't overstay welcome."
+    Red flags: Resolution >15 pages, multiple endings, exhausting audience.

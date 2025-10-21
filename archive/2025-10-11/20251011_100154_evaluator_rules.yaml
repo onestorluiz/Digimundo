@@ -1,0 +1,216 @@
+# Master Evaluation Rules
+# Based on McKee (Story), Seger (Making a Good Script Great), Field (Screenplay)
+# Focus: Overall quality, strengths/weaknesses, recommendations, industry readiness
+
+rules:
+  - id: EVALUATOR.R001
+    title: Overall Quality Standard
+    severity: critical
+    description: |
+      Screenplay must meet basic professional quality standards.
+      McKee: "Story quality - professional standards, industry expectations must be met."
+      Field: "Professional level execution - industry ready."
+    fix: "Raise overall quality through systematic improvement of all elements"
+    source: "McKee - Story, Field - Screenplay"
+
+  - id: EVALUATOR.R002
+    title: Strengths Present
+    severity: high
+    description: |
+      Screenplay must have identifiable strengths and standout elements.
+      Seger: "Identify strengths - what's working in this screenplay?"
+      McKee: "Recognize excellence - acknowledge what's done well."
+    fix: "Develop clear strengths - identify and amplify what works best"
+    source: "Seger - Making a Good Script Great, McKee - Story"
+
+  - id: EVALUATOR.R003
+    title: Balanced Strengths/Weaknesses
+    severity: medium
+    description: |
+      Strengths should balance or outweigh weaknesses.
+      Seger: "Good script has more strengths than weaknesses."
+      McKee: "Quality work shows more excellence than problems."
+    fix: "Address weaknesses and amplify strengths until balanced"
+    source: "Seger - Making a Good Script Great"
+
+  - id: EVALUATOR.R004
+    title: No Critical Issues
+    severity: critical
+    description: |
+      Screenplay must not have deal-breaker flaws.
+      McKee: "Fatal flaws doom the screenplay - must be eliminated."
+      Seger: "Critical problems must be fixed before consideration."
+    fix: "Eliminate critical issues immediately - these prevent any consideration"
+    source: "McKee - Story, Seger - Making a Good Script Great"
+
+  - id: EVALUATOR.R005
+    title: Industry Readiness
+    severity: critical
+    description: |
+      Screenplay must be ready for professional market.
+      McKee: "Professional standards - meets industry expectations."
+      Field: "Industry ready - polished, professional, market-ready."
+    fix: "Polish to industry standards before submission"
+    source: "McKee - Story, Field - Screenplay"
+
+  - id: EVALUATOR.R006
+    title: Audience Appeal
+    severity: high
+    description: |
+      Screenplay must engage and appeal to audience.
+      Snyder: "Primal - audience appeal essential, must engage."
+      McKee: "Audience engagement - will they care, invest emotionally?"
+    fix: "Increase audience appeal through primal engagement and emotional investment"
+    source: "Snyder - Save the Cat, McKee - Story"
+
+  - id: EVALUATOR.R007
+    title: Commercial Potential
+    severity: medium
+    description: |
+      Screenplay should have commercial viability.
+      Goldman: "Commercial viability - will this sell?"
+      McKee: "Marketability - commercial appeal, audience potential."
+    fix: "Strengthen commercial elements - marketability and broad appeal"
+    source: "Goldman - Adventures in the Screen Trade, McKee - Story"
+
+  - id: EVALUATOR.R008
+    title: Execution Quality
+    severity: critical
+    description: |
+      Craft execution must be at professional level.
+      McKee: "Craft mastery - technical excellence, execution quality."
+      Mackendrick: "Control and craft - mastery of technique essential."
+    fix: "Improve craft execution to professional mastery level"
+    source: "McKee - Story, Mackendrick - On Film-making"
+
+  - id: EVALUATOR.R009
+    title: Originality Required
+    severity: high
+    description: |
+      Screenplay must be original, not derivative.
+      McKee: "Originality - fresh, unique, not derivative or clichéd."
+      Truby: "Original voice - distinctive, innovative, creative."
+    fix: "Find fresh perspective and original voice - avoid derivative work"
+    source: "McKee - Story, Truby - Anatomy of Story"
+
+  - id: EVALUATOR.R010
+    title: Emotional Impact
+    severity: high
+    description: |
+      Screenplay must move audience emotionally.
+      McKee: "Emotional impact - does it move the audience?"
+      Aristotle: "Catharsis - emotional purging, audience must be moved."
+    fix: "Strengthen emotional impact - audience must be moved and engaged"
+    source: "McKee - Story, Aristotle - Poetics"
+
+  - id: EVALUATOR.R011
+    title: Thematic Depth
+    severity: medium
+    description: |
+      Themes must be meaningful and significant.
+      McKee: "Thematic depth - significant, meaningful, resonant."
+      Truby: "Moral argument - profound themes, universal significance."
+    fix: "Deepen themes - make meaningful and universally resonant"
+    source: "McKee - Story, Truby - Anatomy of Story"
+
+  - id: EVALUATOR.R012
+    title: Story Cohesion
+    severity: high
+    description: |
+      All story elements must work together organically.
+      Aristotle: "Unity of action - organic whole, nothing extraneous."
+      McKee: "Story cohesion - all elements integrated, unified."
+    fix: "Improve unity - ensure all elements work together organically"
+    source: "Aristotle - Poetics, McKee - Story"
+
+  - id: EVALUATOR.R013
+    title: Professional Standards
+    severity: critical
+    description: |
+      Must meet industry professional standards.
+      McKee: "Professional standards - meets industry expectations."
+      Field: "Professional quality - industry standard level required."
+    fix: "Meet professional standards - polish to industry level"
+    source: "McKee - Story, Field - Screenplay"
+
+  - id: EVALUATOR.R014
+    title: Core Excellence
+    severity: high
+    description: |
+      At least one core area (character, structure, dialogue) must be excellent.
+      McKee: "Excellence in fundamentals - master at least one core area."
+      Field: "Core strength required - character, structure, or dialogue must excel."
+    fix: "Achieve excellence in at least one core area - character, structure, or dialogue"
+    source: "McKee - Story, Field - Screenplay"
+
+  - id: EVALUATOR.R015
+    title: Minimum Quality Threshold
+    severity: critical
+    description: |
+      Overall score must exceed minimum threshold for consideration.
+      McKee: "Quality threshold - below minimum, not ready for industry."
+      Seger: "Professional level required - minimum standards must be met."
+    fix: "Raise overall quality above minimum threshold through systematic improvement"
+    source: "McKee - Story, Seger - Making a Good Script Great"
+
+# Analysis prompts for deeper evaluation
+analysis_prompts:
+  overall_quality:
+    prompt: "Evaluate overall screenplay quality against professional industry standards"
+    books: ["Story-Robert-McKee", "making-a-good-script-great.txt", "screenplay.txt"]
+
+  strengths_identification:
+    prompt: "Identify major strengths and standout elements in screenplay"
+    books: ["making-a-good-script-great.txt", "Story-Robert-McKee"]
+
+  weaknesses_identification:
+    prompt: "Identify problems and areas needing improvement"
+    books: ["making-a-good-script-great.txt", "Story-Robert-McKee"]
+
+  critical_issues:
+    prompt: "Detect critical issues and deal-breaker flaws"
+    books: ["Story-Robert-McKee", "making-a-good-script-great.txt"]
+
+  industry_readiness:
+    prompt: "Assess readiness for professional market submission"
+    books: ["Story-Robert-McKee", "screenplay.txt", "making-a-good-script-great.txt"]
+
+  audience_appeal:
+    prompt: "Evaluate audience engagement and appeal"
+    books: ["save-the-cat.txt", "Story-Robert-McKee"]
+
+  commercial_potential:
+    prompt: "Assess commercial viability and marketability"
+    books: ["adventures-in-the-screen-trade.txt", "Story-Robert-McKee"]
+
+  execution_quality:
+    prompt: "Evaluate craft execution and technical mastery"
+    books: ["Story-Robert-McKee", "on-film-making.txt"]
+
+  originality:
+    prompt: "Assess originality and fresh perspective"
+    books: ["Story-Robert-McKee", "Anatomy-of-Story"]
+
+  emotional_impact:
+    prompt: "Evaluate emotional impact on audience"
+    books: ["Story-Robert-McKee", "poetics_aristotle.txt"]
+
+  thematic_depth:
+    prompt: "Assess thematic significance and depth"
+    books: ["Story-Robert-McKee", "Anatomy-of-Story"]
+
+  story_cohesion:
+    prompt: "Evaluate unity and integration of all elements"
+    books: ["poetics_aristotle.txt", "Story-Robert-McKee"]
+
+  professional_standard:
+    prompt: "Assess against industry professional standards"
+    books: ["Story-Robert-McKee", "screenplay.txt"]
+
+  recommendations:
+    prompt: "Generate prioritized recommendations for improvement"
+    books: ["making-a-good-script-great.txt", "Story-Robert-McKee", "screenplay.txt"]
+
+  final_verdict:
+    prompt: "Provide final pass/fail determination and verdict"
+    books: ["Story-Robert-McKee", "making-a-good-script-great.txt"]

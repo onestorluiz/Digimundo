@@ -1,0 +1,183 @@
+# Backstory Integration Rules
+# Based on McKee (Story), Truby (Anatomy), Field, Seger, Weiland
+
+rules:
+  - id: BACKSTORY.R001
+    title: "Backstory Present"
+    severity: medium
+    description: "Characters should have backstory/history that adds dimension"
+    check: "backstory_present == True"
+    fix: "Add character backstory - Truby: 'Ghost shapes character's present behavior' - give characters history that informs current actions"
+    theory:
+      - "Truby: Ghost - past trauma that haunts character"
+      - "McKee: Character dimension comes from backstory revealed strategically"
+      - "Weiland: Backstory creates character depth and authenticity"
+
+  - id: BACKSTORY.R002
+    title: "Backstory Integrated Naturally"
+    severity: critical
+    description: "Backstory should be weaved naturally not dumped all at once"
+    check: "backstory_integrated == True"
+    fix: "Weave backstory naturally - McKee: 'Backstory revelation through conflict not narration' - integrate into present action, avoid exposition dumps"
+    theory:
+      - "McKee: Backstory revelation through conflict not narration"
+      - "Field: Plant backstory details early, pay off later - organic integration"
+      - "Seger: Show don't tell - backstory through behavior not explanation"
+
+  - id: BACKSTORY.R003
+    title: "Drip-Feed Technique"
+    severity: high
+    description: "Backstory should be revealed gradually piece by piece (McKee)"
+    check: "drip_feed_technique == True"
+    fix: "Use drip-feed technique - McKee: 'Drip-feed backstory - reveal piece by piece, not all at once' - gradual revelation throughout story"
+    theory:
+      - "McKee: Drip-feed backstory - reveal piece by piece"
+      - "Truby: Need-to-know basis - only reveal when necessary"
+      - "Field: Backstory pacing - strategic revelation timing"
+
+  - id: BACKSTORY.R004
+    title: "Backstory Reveals Character"
+    severity: high
+    description: "Backstory should illuminate who character is now"
+    check: "backstory_reveals_character == True"
+    fix: "Make backstory reveal character - Truby: 'Ghost shapes who character is now' - backstory must illuminate present behavior and choices"
+    theory:
+      - "Truby: Ghost shapes who character is now"
+      - "McKee: Backstory reveals character dimension - why they act this way"
+      - "Weiland: Backstory explains character's lie/truth"
+
+  - id: BACKSTORY.R005
+    title: "Backstory Timing"
+    severity: high
+    description: "Backstory revealed when needed for story at strategic moments"
+    check: "backstory_timing == True"
+    fix: "Improve backstory timing - McKee: 'Reveal when tension is high, stakes are clear' - strategic revelation when audience needs to understand character"
+    theory:
+      - "McKee: Backstory revelation timing - when tension is high"
+      - "Truby: Strategic timing - when audience needs to understand actions"
+      - "Field: Backstory revealed at plot points when necessary"
+
+  - id: BACKSTORY.R006
+    title: "Ghost/Wound Identified"
+    severity: medium
+    description: "Character should have ghost/wound - past trauma affecting present (Truby)"
+    check: "ghost_wound_identified == True"
+    fix: "Add ghost/wound - Truby: 'Ghost - past trauma that haunts character, drives current behavior' - create deeper character dimension through past wound"
+    theory:
+      - "Truby: Ghost - past trauma that haunts character"
+      - "Weiland: Lie character believes rooted in wound"
+      - "McKee: Character wound affects present choices"
+
+  - id: BACKSTORY.R007
+    title: "Appropriate Flashback Usage"
+    severity: high
+    description: "Flashbacks used sparingly when appropriate not overused"
+    check: "flashback_usage == True"
+    fix: "Use flashbacks sparingly - McKee: 'Flashbacks break present tension - use only when necessary' - maintain present story momentum"
+    theory:
+      - "McKee: Flashbacks break present tension - use sparingly"
+      - "Field: Flashback must be earned - present action must justify"
+      - "Seger: Avoid excessive flashbacks that break narrative flow"
+
+  - id: BACKSTORY.R008
+    title: "Exposition Integration"
+    severity: high
+    description: "Backstory shown through action not told through exposition"
+    check: "exposition_integration == True"
+    fix: "Show backstory - McKee: 'Exposition through action - show through behavior not narration' - visual storytelling over dialogue exposition"
+    theory:
+      - "McKee: Exposition through action not narration"
+      - "Seger: Show don't tell - backstory through character actions"
+      - "Field: Visual backstory revelation through behavior"
+
+  - id: BACKSTORY.R009
+    title: "Backstory Explains Motivation"
+    severity: medium
+    description: "Backstory should illuminate current behavior and motivation"
+    check: "backstory_motivation == True"
+    fix: "Connect backstory to motivation - Truby: 'Ghost explains why character wants what they want' - backstory drives present motivation"
+    theory:
+      - "Truby: Ghost explains character's wants and needs"
+      - "McKee: Backstory illuminates present behavior choices"
+      - "Weiland: Backstory creates character motivation"
+
+  - id: BACKSTORY.R010
+    title: "Backstory Relevant"
+    severity: medium
+    description: "Every backstory detail should serve story - cut irrelevant"
+    check: "backstory_relevant == True"
+    fix: "Cut irrelevant backstory - McKee: 'Every detail must be relevant - cut what doesn't serve story' - economy of backstory"
+    theory:
+      - "McKee: Every backstory detail must be relevant"
+      - "Goldman: Backstory economy - only what audience needs"
+      - "Field: Backstory serves story - cut unnecessary details"
+
+  - id: BACKSTORY.R011
+    title: "Avoid Info Dumps"
+    severity: critical
+    description: "Avoid info dumps - too much backstory at once kills drama"
+    check: "info_dump_detected == False"
+    fix: "Eliminate info dumps - McKee: 'Info dump kills drama - never stop action to explain' - drip-feed backstory, don't pour it all at once"
+    theory:
+      - "McKee: Info dump kills drama - never stop action to explain"
+      - "Field: Avoid exposition dump - drip-feed backstory"
+      - "Seger: Backstory revealed gradually not dumped"
+
+  - id: BACKSTORY.R012
+    title: "Avoid Irrelevant Backstory"
+    severity: medium
+    description: "Avoid irrelevant backstory details that don't serve story"
+    check: "irrelevant_backstory_detected == False"
+    fix: "Cut irrelevant backstory - McKee: 'Cut what doesn't advance story or reveal character' - every detail must earn its place"
+    theory:
+      - "McKee: Cut irrelevant backstory - every detail must serve"
+      - "Goldman: Economy of backstory - if it doesn't matter, cut it"
+      - "Field: Backstory must advance story or reveal character"
+
+  - id: BACKSTORY.R013
+    title: "Avoid Excessive Flashbacks"
+    severity: high
+    description: "Avoid excessive flashbacks that break present tension and flow"
+    check: "excessive_flashbacks_detected == False"
+    fix: "Reduce flashbacks - McKee: 'Excessive flashbacks destroy present tension' - maintain present story momentum, use flashbacks sparingly"
+    theory:
+      - "McKee: Excessive flashbacks destroy present tension"
+      - "Field: Too many flashbacks break narrative flow"
+      - "Seger: Flashbacks should be rare and earned"
+
+  - id: BACKSTORY.R014
+    title: "Backstory Through Conflict"
+    severity: medium
+    description: "Backstory revealed through conflict not comfortable narration"
+    check: "backstory_integrated == True AND exposition_integration == True"
+    fix: "Reveal backstory through conflict - McKee: 'Backstory forced out by tension - protagonist confronts past under pressure' - dramatic revelation"
+    theory:
+      - "McKee: Backstory revelation through conflict not narration"
+      - "Truby: Backstory forced out by story pressure"
+      - "Field: Backstory revealed at moments of crisis"
+
+  - id: BACKSTORY.R015
+    title: "Strategic Backstory Revelation"
+    severity: medium
+    description: "Backstory revealed strategically when audience needs to understand"
+    check: "backstory_timing == True AND drip_feed_technique == True"
+    fix: "Strategic revelation - Truby: 'Need-to-know basis - reveal backstory when necessary for understanding' - don't reveal too early or too late"
+    theory:
+      - "Truby: Need-to-know basis - strategic timing"
+      - "McKee: Backstory revealed when stakes are clear"
+      - "Field: Backstory timing at plot points when needed"
+
+analysis_prompts:
+  backstory_present: "Does screenplay include character backstory/history that adds dimension?"
+  backstory_integrated: "Is backstory weaved naturally into present action or dumped through exposition?"
+  drip_feed: "Is backstory revealed gradually piece by piece (McKee's drip-feed technique)?"
+  backstory_reveals: "Does backstory illuminate who character is now and why they act this way?"
+  backstory_timing: "Is backstory revealed at strategic moments when needed for story?"
+  ghost_wound: "Does character have ghost/wound - past trauma affecting present behavior (Truby)?"
+  flashback_usage: "Are flashbacks used appropriately and sparingly without breaking present tension?"
+  exposition_integration: "Is backstory shown through action/behavior rather than told through exposition?"
+  backstory_motivation: "Does backstory explain current motivation and behavior?"
+  backstory_relevant: "Is every backstory detail relevant and serving the story?"
+  info_dump: "Are there info dumps where too much backstory is revealed at once?"
+  irrelevant_backstory: "Are there irrelevant backstory details that don't serve story?"
+  excessive_flashbacks: "Are there excessive flashbacks that break present tension and narrative flow?"

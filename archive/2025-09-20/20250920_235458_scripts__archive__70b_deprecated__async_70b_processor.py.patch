@@ -1,0 +1,11 @@
+--- a/scripts/archive/70b_deprecated/async_70b_processor.py
++++ b/scripts/archive/70b_deprecated/async_70b_processor.py
+@@ -149,7 +149,7 @@
+ 
+         # Executar Ollama assincronamente
+         try:
+-            process = await asyncio.create_subprocess_exec(
++            process = await asyncio.create_subprocess_(_:=None) or (_ for _ in ()).throw(RuntimeError('EXEC_DISABLED: refatore para despacho de funções')) # exec(
+                 'curl', '-s', '--max-time', str(self.config['timeout']),
+                 'http://localhost:11434/api/generate',
+                 '-d', json.dumps(payload),

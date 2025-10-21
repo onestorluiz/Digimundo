@@ -1,0 +1,1 @@
+# Protocolo de integração com o núcleo simbólico

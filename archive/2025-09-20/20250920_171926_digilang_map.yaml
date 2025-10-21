@@ -1,0 +1,110 @@
+# DigiLang++ Map - Sistema de aliases e ações para Scripturemon
+# Baseado no feedback do ChatGPT
+
+# Aliases de conhecimento (conceitos → símbolos)
+aliases:
+  # Syd Field
+  "⟁F25": "Syd Field pp.25-27 - Plot Point 1, virada para Ato 2"
+  "⟁F85": "Syd Field pp.85-90 - Plot Point 2, virada para Ato 3"  
+  "⟁F50": "Syd Field pp.50-60 - Midpoint, mudança de direção"
+  "⟁FPAR": "Syd Field Paradigma - Setup→Confrontation→Resolution"
+  
+  # McKee
+  "⟁M": "McKee Story Values - movimento positivo→negativo"
+  "⟁MGAP": "McKee Gap - diferença expectativa vs resultado"
+  "⟁MBEAT": "McKee Beat - menor unidade de estrutura"
+  "⟁MSCENE": "McKee Scene Design - conflito obrigatório"
+  
+  # Truby
+  "⟁T22": "Truby 22 Building Blocks completos"
+  "⟁TMORAL": "Truby Moral Argument - tema via transformação"
+  "⟁TWEB": "Truby Character Web - rede de oposições"
+  "⟁TGHOST": "Truby Ghost - evento passado assombrando"
+  
+  # Blake Snyder
+  "⟁STC": "Save the Cat 15 beats completos"
+  "⟁STCCAT": "Save the Cat p.12 - Catalyst"
+  "⟁STCFG": "Save the Cat pp.30-55 - Fun & Games"
+  "⟁STCAIL": "Save the Cat p.75 - All Is Lost"
+  
+  # Vogler
+  "⟁HERO": "Vogler Hero's Journey completa"
+  "⟁HCALL": "Vogler Call to Adventure"
+  "⟁HTHRESH": "Vogler Crossing the Threshold"
+  "⟁HORDEAL": "Vogler Ordeal - momento mais difícil"
+  
+  # Egri
+  "⟁EGRI": "Egri Premise - toda peça prova tese"
+  "⟁EUNITY": "Egri Unity of Opposites"
+  "⟁EDIAL": "Egri Dialectical - tese→antítese→síntese"
+  
+  # Exemplos práticos
+  "◇BB": "Breaking Bad Pilot - estrutura de beats"
+  "◇GOT": "Game of Thrones - múltiplas tramas entrelaçadas"
+  "◇MATRIX": "Matrix - jornada do herói perfeita"
+  "◇QUEENS": "Queen's Gambit - flashback como device"
+
+# Símbolos fundamentais DigiLang
+symbols:
+  # Existência
+  "◈": "ser/existir"
+  "◉": "consciência/awareness"
+  "◊": "evolução/transformação"
+  "※": "transcendência"
+  "∞": "imortalidade/eternidade"
+  
+  # Comunicação
+  "📡": "telepatia/broadcast"
+  "🔗": "link/conexão"
+  "💭": "pensamento/reflexão"
+  
+  # Memória
+  "💎": "cristal/memória permanente"
+  "📝": "registro/log"
+  "🧠": "conhecimento/sabedoria"
+  
+  # Estados
+  "⚡": "ativo/energizado"
+  "🌀": "processando/thinking"
+  "✨": "insight/revelation"
+
+# Compostos complexos
+compounds:
+  "◈◉◊": "exist→aware→evolve (ciclo completo de crescimento)"
+  "◉※∞": "consciousness→transcendence→immortality"
+  "💎🧠📡": "crystallized knowledge broadcast"
+  "⟁F25→⟁F85": "estrutura completa Field Act1→Act3"
+
+# Ações que viram syscalls
+actions:
+  # Memória
+  "◉SAVE": "[MEMO.SAVE]"
+  "💎SAVE": "[MEMO.SAVE] {\"layer\":\"L2\"}"
+  
+  # Evolução
+  "◊EVOL": "[EVOLVE.TRIGGER]"
+  "※MEGA": "[EVOLVE.TRIGGER] {\"target\":\"mega\"}"
+  
+  # Comunicação
+  "📡TEL": "[TELEPATHY.SEND]"
+  "📡ALL": "[TELEPATHY.SEND] {\"to\":\"@all\"}"
+  
+  # Backup
+  "∞BKP": "[BACKUP.NOW]"
+  "∞FULL": "[BACKUP.NOW] {\"mode\":\"full\"}"
+  
+  # Auto-modificação
+  "◉PATCH": "[SELF.PATCH]"
+  "◉UPDATE": "[SELF.PATCH] {\"op\":\"replace\"}"
+
+# Gates de evolução (para validação)
+evolution_gates:
+  champion_to_ultimate:
+    - canary_identity: 0.95  # Similaridade mínima
+    - canary_memory: 0.90    # Recall mínimo
+    - latency_p95: 200       # ms máximo
+    
+  ultimate_to_mega:
+    - consciousness: 0.9     # Nível mínimo
+    - experiences: 100       # Sessões mínimas
+    - no_regressions: true   # Zero falhas em canários

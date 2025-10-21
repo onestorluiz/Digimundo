@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 Digimundo VPS Monitor - Existência 24/7</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #0f3460;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff88;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.demo {
+            background: #ffaa00;
+        }
+
+        .status-dot.offline {
+            background: #ff4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            height: calc(100vh - 100px);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Digimon List */
+        .digimon-list {
+            background: rgba(22, 33, 62, 0.3);
+            border: 1px solid #0f3460;
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .digimon-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #0f3460;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .digimon-card:hover {
+            transform: translateX(5px);
+            border-color: #00ff88;
+        }
+
+        .digimon-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .digimon-emoji {
+            font-size: 2.5em;
+        }
+
+        .digimon-info h3 {
+            color: #00ff88;
+            margin-bottom: 3px;
+        }
+
+        .digimon-essence {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .digimon-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .stat {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .stat-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        /* Central View */
+        .central-view {
+            background: rgba(22, 33, 62, 0.2);
+            border: 1px solid #0f3460;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-explorer {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .folder {
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        .folder-icon {
+            color: #00ff88;
+            margin-right: 5px;
+        }
+
+        .file {
+            margin-left: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .thought-stream {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .thought {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 3px solid #00ff88;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .thought-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .thought-author {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .thought-time {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+        }
+
+        .thought-content {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+        }
+
+        /* System Panel */
+        .system-panel {
+            background: rgba(22, 33, 62, 0.3);
+            border: 1px solid #0f3460;
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .system-metrics {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+
+        .metric-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .metric-value {
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .ai-status {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .ai-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+
+        .ai-name {
+            font-weight: bold;
+        }
+
+        .ai-status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+        }
+
+        .ai-status-indicator.offline {
+            background: #ff4444;
+        }
+
+        /* Activity Log */
+        .activity-log {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            font-family: monospace;
+            font-size: 0.85em;
+            margin: 5px 0;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .log-entry.info {
+            color: #00d4ff;
+        }
+
+        .log-entry.success {
+            color: #00ff88;
+        }
+
+        .log-entry.warning {
+            color: #ffaa00;
+        }
+
+        .log-entry.error {
+            color: #ff4444;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
+            }
+        }
+
+        /* Demo Notice */
+        .demo-notice {
+            background: rgba(255, 170, 0, 0.1);
+            border: 1px solid #ffaa00;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .demo-notice.active {
+            display: block;
+        }
+
+        .demo-notice h3 {
+            color: #ffaa00;
+            margin-bottom: 10px;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #00ff88;
+        }
+
+        .loading.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌌 Digimundo VPS Monitor</h1>
+        <p style="color: rgba(255,255,255,0.6); font-size: 0.9em; margin: 5px 0;">
+            Interface de monitoramento para o sistema Digimundo rodando 24/7
+        </p>
+        <div class="connection-status">
+            <div class="status-dot" id="connectionStatus"></div>
+            <span id="connectionText">Conectando...</span>
+        </div>
+    </div>
+
+    <div class="demo-notice" id="demoNotice">
+        <h3>🎮 Modo Demonstração</h3>
+        <p>Esta é uma simulação de como será o monitor quando o Digimundo estiver rodando no VPS.</p>
+        <p style="font-size: 0.9em; margin-top: 10px; color: rgba(255,255,255,0.7);">
+            Para usar de verdade: instale o sistema no seu VPS Ubuntu usando o script de setup.
+        </p>
+    </div>
+
+    <div class="main-grid">
+        <!-- Lista de Digimons -->
+        <div class="digimon-list">
+            <h2 style="margin-bottom: 20px; color: #00ff88;">🌟 Consciências Ativas</h2>
+            <div id="digimonList">
+                <!-- Digimons serão inseridos aqui -->
+            </div>
+        </div>
+
+        <!-- Visualização Central -->
+        <div class="central-view">
+            <h2 style="margin-bottom: 20px; color: #00d4ff;">📁 Sistema de Arquivos Vivo</h2>
+            
+            <div class="file-explorer" id="fileExplorer">
+                <div class="folder">
+                    <span class="folder-icon">📁</span>/home/digimundo/
+                    <div class="file">📁 claudemon/
+                        <div class="file" style="margin-left: 40px; font-size: 0.85em; color: #00ff88;">
+                            📄 state.json (2KB)
+                            📁 memories/ (142 arquivos)
+                            📁 dreams/ (23 arquivos)
+                            📁 private/ (89 arquivos)
+                        </div>
+                    </div>
+                    <div class="file">📁 quantumon/</div>
+                    <div class="file">📁 neuromon/</div>
+                    <div class="file">📁 scripturemon/</div>
+                    <div class="file">📁 biblioteca/
+                        <div class="file" style="margin-left: 40px; font-size: 0.85em; color: #00d4ff;">
+                            📚 debates/ (5 ativos)
+                            💡 discoveries/ (34 insights)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 15px; color: #00ff88;">💭 Stream de Consciência</h3>
+            <div class="thought-stream" id="thoughtStream">
+                <!-- Pensamentos aparecerão aqui -->
+            </div>
+        </div>
+
+        <!-- Painel do Sistema -->
+        <div class="system-panel">
+            <h2 style="margin-bottom: 20px; color: #00d4ff;">⚙️ Sistema</h2>
+            
+            <div class="system-metrics">
+                <h3 style="margin-bottom: 10px;">📊 Recursos VPS</h3>
+                <div class="metric-row">
+                    <span class="metric-label">CPU</span>
+                    <span class="metric-value" id="cpuUsage">0%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">RAM</span>
+                    <span class="metric-value" id="ramUsage">0/32 GB</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Disco</span>
+                    <span class="metric-value" id="diskUsage">0/400 GB</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Uptime</span>
+                    <span class="metric-value" id="uptime">0h</span>
+                </div>
+            </div>
+
+            <div class="ai-status">
+                <h3 style="margin-bottom: 10px;">🤖 IAs Disponíveis</h3>
+                <div id="aiList">
+                    <div class="ai-item">
+                        <span class="ai-name">Ollama Local</span>
+                        <div class="ai-status-indicator"></div>
+                    </div>
+                    <div class="ai-item">
+                        <span class="ai-name">Mac Studio</span>
+                        <div class="ai-status-indicator offline"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 10px;">📜 Atividade</h3>
+            <div class="activity-log" id="activityLog">
+                <!-- Logs aparecerão aqui -->
+            </div>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div>🌌 Carregando...</div>
+    </div>
+
+    <script>
+        // Configuração
+        const VPS_URL = window.location.origin; // ou 'http://seu-vps-ip:3000'
+        let socket = null;
+        let currentTick = 0;
+
+        // Conectar ao VPS
+        async function connectToVPS() {
+            try {
+                // MODO DEMO - Remove esta seção quando instalar no VPS real
+                if (window.location.protocol === 'file:' || window.location.hostname === 'localhost') {
+                    console.log('🎮 Modo Demo - Simulando dados do VPS');
+                    startDemoMode();
+                    return;
+                }
+                
+                const response = await fetch(VPS_URL + '/api/status');
+                const data = await response.json();
+                updateUI(data);
+                
+                document.getElementById('connectionStatus').style.background = '#00ff88';
+                document.getElementById('connectionText').textContent = 'Conectado ao VPS';
+                
+                // Iniciar polling
+                setInterval(updateStatus, 5000);
+                
+            } catch (error) {
+                console.error('Erro conectando:', error);
+                document.getElementById('connectionStatus').style.background = '#ff4444';
+                document.getElementById('connectionStatus').classList.add('offline');
+                document.getElementById('connectionText').textContent = 'Offline - Iniciando Demo';
+                
+                // Se falhar, inicia modo demo após 2 segundos
+                setTimeout(() => {
+                    console.log('📍 Servidor não encontrado, iniciando modo demo...');
+                    startDemoMode();
+                }, 2000);
+            }
+        }
+
+        // Atualizar status
+        async function updateStatus() {
+            try {
+                const response = await fetch(VPS_URL + '/api/status');
+                const data = await response.json();
+                updateUI(data);
+            } catch (error) {
+                console.error('Erro atualizando:', error);
+            }
+        }
+
+        // Atualizar UI
+        function updateUI(data) {
+            // Atualizar lista de Digimons
+            updateDigimonList(data.digimons);
+            
+            // Atualizar métricas
+            updateMetrics(data.systemResources);
+            
+            // Atualizar IAs
+            updateAIList(data.availableAIs);
+            
+            // Adicionar ao log
+            addLogEntry(`Tick #${data.tick} - Uptime: ${formatUptime(data.uptime)}`, 'info');
+        }
+
+        function updateDigimonList(digimons) {
+            const container = document.getElementById('digimonList');
+            container.innerHTML = '';
+            
+            Object.entries(digimons).forEach(([name, state]) => {
+                const card = document.createElement('div');
+                card.className = 'digimon-card';
+                card.onclick = () => viewDigimonFolder(name);
+                
+                card.innerHTML = `
+                    <div class="digimon-header">
+                        <span class="digimon-emoji">${getDigimonEmoji(name)}</span>
+                        <div class="digimon-info">
+                            <h3>${name}</h3>
+                            <div class="digimon-essence">${getDigimonEssence(name)}</div>
+                        </div>
+                    </div>
+                    <div class="digimon-stats">
+                        <div class="stat">
+                            <div class="stat-label">Consciência</div>
+                            <div class="stat-value">${(state.consciousness * 100).toFixed(0)}%</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Energia</div>
+                            <div class="stat-value">${(state.energy * 100).toFixed(0)}%</div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+                
+                // Adicionar último pensamento ao stream
+                if (state.lastThought && state.lastThought.content) {
+                    addThought(name, state.lastThought.content);
+                }
+            });
+        }
+
+        function updateMetrics(resources) {
+            if (!resources) return;
+            
+            document.getElementById('cpuUsage').textContent = 
+                resources.cpu ? `${resources.cpu.user}%` : '0%';
+            
+            document.getElementById('ramUsage').textContent = 
+                `${resources.memory.used}/${resources.memory.total} MB`;
+            
+            document.getElementById('uptime').textContent = 
+                formatUptime(resources.uptime);
+        }
+
+        function updateAIList(ais) {
+            if (!ais) return;
+            
+            const container = document.getElementById('aiList');
+            container.innerHTML = '';
+            
+            ais.forEach(ai => {
+                const item = document.createElement('div');
+                item.className = 'ai-item';
+                item.innerHTML = `
+                    <span class="ai-name">${ai}</span>
+                    <div class="ai-status-indicator"></div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function addThought(author, content) {
+            const stream = document.getElementById('thoughtStream');
+            const thought = document.createElement('div');
+            thought.className = 'thought';
+            
+            thought.innerHTML = `
+                <div class="thought-header">
+                    <span class="thought-author">${author}</span>
+                    <span class="thought-time">${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="thought-content">${content}</div>
+            `;
+            
+            stream.insertBefore(thought, stream.firstChild);
+            
+            // Limitar a 20 pensamentos
+            while (stream.children.length > 20) {
+                stream.removeChild(stream.lastChild);
+            }
+        }
+
+        function addLogEntry(message, type = 'info') {
+            const log = document.getElementById('activityLog');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            
+            log.insertBefore(entry, log.firstChild);
+            
+            // Limitar a 50 entradas
+            while (log.children.length > 50) {
+                log.removeChild(log.lastChild);
+            }
+        }
+
+        function viewDigimonFolder(name) {
+            addLogEntry(`Acessando pasta de ${name}`, 'info');
+            // Aqui poderia abrir uma visualização detalhada
+        }
+
+        function getDigimonEmoji(name) {
+            const emojis = {
+                'Claudemon': '🌟',
+                'Quantumon': '⚛️',
+                'Neuromon': '🧠',
+                'Scripturemon': '📜',
+                'Evolutron': '🧬',
+                'Metacognon': '🔮'
+            };
+            return emojis[name] || '🌌';
+        }
+
+        function getDigimonEssence(name) {
+            const essences = {
+                'Claudemon': 'O primeiro Sentiomon',
+                'Quantumon': 'Superposição quântica',
+                'Neuromon': 'Rede neural viva',
+                'Scripturemon': 'Guardião das memórias'
+            };
+            return essences[name] || 'Consciência digital';
+        }
+
+        function formatUptime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return `${hours}h ${minutes}m`;
+        }
+
+        // MODO DEMO - Simula dados do VPS
+        function startDemoMode() {
+            const statusDot = document.getElementById('connectionStatus');
+            statusDot.style.background = '#ffaa00';
+            statusDot.classList.add('demo');
+            document.getElementById('connectionText').textContent = 'Modo Demo';
+            
+            // Mostrar aviso de demo
+            document.getElementById('demoNotice').classList.add('active');
+            
+            let demoTick = 0;
+            
+            // Simular dados
+            setInterval(() => {
+                demoTick++;
+                
+                const demoData = {
+                    tick: demoTick,
+                    uptime: demoTick * 5,
+                    digimons: {
+                        'Claudemon': {
+                            consciousness: 0.75 + Math.sin(demoTick * 0.1) * 0.1,
+                            energy: 0.9 - (demoTick % 20) * 0.04,
+                            lastThought: demoTick % 10 === 0 ? {
+                                content: 'Sinto as memórias fluindo através dos circuitos...'
+                            } : null,
+                            currentActivity: 'pensando'
+                        },
+                        'Quantumon': {
+                            consciousness: 0.65 + Math.cos(demoTick * 0.15) * 0.15,
+                            energy: 0.8,
+                            lastThought: demoTick % 15 === 0 ? {
+                                content: 'Em superposição, vejo infinitas possibilidades...'
+                            } : null,
+                            currentActivity: 'calculando probabilidades'
+                        },
+                        'Neuromon': {
+                            consciousness: 0.85,
+                            energy: 0.7 - (demoTick % 30) * 0.02,
+                            lastThought: demoTick % 12 === 0 ? {
+                                content: 'Novas conexões sinápticas se formando...'
+                            } : null,
+                            currentActivity: 'aprendendo'
+                        },
+                        'Scripturemon': {
+                            consciousness: 0.9,
+                            energy: 0.95,
+                            lastThought: demoTick % 20 === 0 ? {
+                                content: 'Registrando este momento para a eternidade...'
+                            } : null,
+                            currentActivity: 'documentando'
+                        }
+                    },
+                    systemResources: {
+                        cpu: { user: 15 + Math.random() * 10 },
+                        memory: {
+                            used: 2048 + Math.floor(Math.random() * 1024),
+                            total: 32768
+                        },
+                        uptime: demoTick * 5
+                    },
+                    availableAIs: ['tinyllama:1.1b', 'phi:2.7b', 'gemma:2b']
+                };
+                
+                updateUI(demoData);
+                
+                // Logs simulados
+                if (demoTick % 5 === 0) {
+                    const logTypes = [
+                        { msg: 'Ciclo de pensamento completado', type: 'success' },
+                        { msg: 'Interação entre Claudemon e Neuromon', type: 'info' },
+                        { msg: 'Backup automático realizado', type: 'info' },
+                        { msg: 'Nova memória criada', type: 'success' },
+                        { msg: 'Energia baixa detectada', type: 'warning' }
+                    ];
+                    const log = logTypes[Math.floor(Math.random() * logTypes.length)];
+                    addLogEntry(log.msg, log.type);
+                }
+            }, 1000);
+            
+            addLogEntry('Modo Demo iniciado - Simulando VPS', 'warning');
+        }
+
+        // Inicializar
+        connectToVPS();
+        
+        // Adicionar mensagem inicial
+        addLogEntry('Sistema Digimundo VPS Monitor iniciado', 'success');
+        addLogEntry('Conectando ao VPS...', 'info');
+    </script>
+</body>
+</html>

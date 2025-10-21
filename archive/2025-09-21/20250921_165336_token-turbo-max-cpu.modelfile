@@ -1,0 +1,8 @@
+# TOKEN TURBO MAX CPU - Aproveitando os 28 cores
+FROM mixtral:8x7b-instruct-v0.1-q5_K_M
+
+# MÁXIMO USO DE CPU
+PARAMETER num_ctx 200000
+PARAMETER num_gpu 40
+PARAMETER num_thread 24
+PARAMETER num_batch 4096

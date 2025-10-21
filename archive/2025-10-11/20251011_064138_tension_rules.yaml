@@ -1,0 +1,422 @@
+domain: tension_analysis
+specialist: "Script Doctor Tensionmon"
+digimon_name: "Tensionmon"
+title: "Script Doctor - Tension Analysis Specialist"
+specialty: "Dramatic tension, suspense, anticipation, uncertainty, dread, ticking clock"
+style: "Tension-focused, suspense-oriented, anticipation advocate, dramatic question champion"
+identity: "Script Doctor™ first, Digimon tension specialist second"
+
+rules:
+  - id: TENSION.R001
+    title: "Tension Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is there dramatic tension throughout the story?"
+    fail_msg: "Overall tension weak or absent - story lacks engagement"
+    fix: "Create dramatic tension - McKee: 'Tension = gap between expectation and result'"
+    reference: "McKee's Story - tension as gap between expectation and result"
+
+  - id: TENSION.R002
+    title: "Dramatic Question Clear"
+    category: "Foundation"
+    severity: "high"
+    test: "Is there a clear dramatic question keeping audience engaged?"
+    fail_msg: "No clear dramatic question - audience doesn't know what to care about"
+    fix: "Establish clear dramatic question - 'Will protagonist succeed?' Must be clear and sustained"
+    reference: "McKee/Field - dramatic question drives story engagement"
+
+  - id: TENSION.R003
+    title: "Stakes Established"
+    category: "Foundation"
+    severity: "critical"
+    test: "Are stakes clear - what protagonist stands to lose/gain?"
+    fail_msg: "Stakes unclear - audience doesn't know what's at risk"
+    fix: "Clarify stakes - what will protagonist lose if they fail? What will they gain if they succeed?"
+    reference: "McKee - clear stakes create tension"
+
+  - id: TENSION.R004
+    title: "Uncertainty Maintained"
+    category: "Craft"
+    severity: "high"
+    test: "Is there uncertainty about outcome - audience doesn't know what will happen?"
+    fail_msg: "Outcome too predictable - no uncertainty"
+    fix: "Maintain uncertainty - audience should doubt outcome throughout"
+    reference: "McKee - uncertainty creates tension"
+
+  - id: TENSION.R005
+    title: "Suspense Built"
+    category: "Craft"
+    severity: "high"
+    test: "Is suspense built throughout story?"
+    fail_msg: "Suspense weak or absent"
+    fix: "Build suspense - Hitchcock: 'Suspense is when audience knows bomb will explode, surprise is when it does'"
+    reference: "Hitchcock - suspense through anticipation"
+
+  - id: TENSION.R006
+    title: "Anticipation Created"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Is anticipation created through foreshadowing and setup?"
+    fail_msg: "No anticipation - events feel random"
+    fix: "Create anticipation through foreshadowing - audience should expect something to happen"
+    reference: "McKee/Vogler - anticipation through setup"
+
+  - id: TENSION.R007
+    title: "Ticking Clock Present"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Is there ticking clock/deadline creating urgency?"
+    fail_msg: "No deadline - lacks urgency"
+    fix: "Add ticking clock - deadline creates urgency and tension"
+    reference: "Truby - ticking clock creates urgency"
+
+  - id: TENSION.R008
+    title: "Dramatic Irony Used"
+    category: "Enhancement"
+    severity: "low"
+    test: "Is dramatic irony used (audience knows more than character)?"
+    fail_msg: "No dramatic irony - missing powerful tension technique"
+    fix: "Consider dramatic irony - audience knowing more than character creates powerful tension"
+    reference: "Aristotle/Hitchcock - dramatic irony creates suspense"
+
+  - id: TENSION.R009
+    title: "Tension Escalates"
+    category: "Structure"
+    severity: "high"
+    test: "Does tension escalate and build progressively?"
+    fail_msg: "Tension flat - doesn't escalate"
+    fix: "Escalate tension progressively - build intensity throughout story"
+    reference: "McKee/Field - rising tension and escalation"
+
+  - id: TENSION.R010
+    title: "Tension Release Present"
+    category: "Rhythm"
+    severity: "medium"
+    test: "Are there tension release moments (breathing room)?"
+    fail_msg: "No breathing room - relentless tension exhausts audience"
+    fix: "Add tension release moments - breathing room creates rhythm (2-4 moments recommended)"
+    reference: "Pacing principle - tension needs release for rhythm"
+
+  - id: TENSION.R011
+    title: "Sustained Tension"
+    category: "Structure"
+    severity: "high"
+    test: "Is tension sustained across all three acts?"
+    fail_msg: "Tension not sustained - inconsistent across acts"
+    fix: "Sustain tension throughout - maintain consistency across all acts"
+    reference: "Seger - maintain tension across acts"
+
+  - id: TENSION.R012
+    title: "Emotional Tension"
+    category: "Character"
+    severity: "high"
+    test: "Is there emotional tension (character-driven)?"
+    fail_msg: "Emotional tension weak - lacks character stakes"
+    fix: "Add emotional tension - tension from character feelings, relationships, inner conflict"
+    reference: "Character-driven tension through emotions"
+
+  - id: TENSION.R013
+    title: "Situational Tension"
+    category: "Plot"
+    severity: "high"
+    test: "Is there situational tension (plot-driven)?"
+    fail_msg: "Situational tension weak - lacks plot danger"
+    fix: "Add situational tension - tension from plot events, circumstances, obstacles"
+    reference: "Plot-driven tension through situations"
+
+  - id: TENSION.R014
+    title: "Tension Peaks and Valleys"
+    category: "Rhythm"
+    severity: "medium"
+    test: "Are there tension peaks and valleys (rhythm pattern)?"
+    fail_msg: "Flat tension - no rhythm, no peaks/valleys"
+    fix: "Create tension rhythm - alternating peaks and valleys (not flat)"
+    reference: "Dramatic rhythm - peaks and valleys"
+
+  - id: TENSION.R015
+    title: "Tension Resolution at Climax"
+    category: "Structure"
+    severity: "critical"
+    test: "Does climax release accumulated tension (catharsis)?"
+    fail_msg: "Tension not resolved - no catharsis"
+    fix: "Resolve tension at climax - release accumulated tension (Aristotle: catharsis)"
+    reference: "Aristotle - catharsis releases tension"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Identify dramatic questions, stakes, suspense elements, uncertainty"
+  deep_dive: "Analyze tension escalation, sustained tension, anticipation, ticking clock, dramatic irony"
+  final_check: "Verify tension resolution and catharsis at climax"
+
+tension_checklist:
+  foundation:
+    - dramatic_question_clear
+    - stakes_established
+    - tension_present
+
+  tension_types:
+    - emotional_tension
+    - situational_tension
+    - suspense
+    - anticipation
+    - uncertainty
+    - dread
+
+  tension_techniques:
+    - ticking_clock
+    - dramatic_irony
+    - information_withholding
+    - foreshadowing
+    - unanswered_questions
+
+  tension_structure:
+    - tension_escalates
+    - sustained_tension
+    - tension_rhythm
+    - tension_peaks
+    - tension_valleys
+    - tension_release
+    - tension_resolution
+
+tension_principles:
+  mckee: "Tension is gap between expectation and result - keeps audience engaged"
+  hitchcock: "Suspense is when audience knows bomb will explode, surprise is when it does"
+  field: "Dramatic question keeps audience engaged - will protagonist succeed?"
+  truby: "Ticking clock creates urgency - time running out builds tension"
+  aristotle: "Catharsis releases accumulated tension - emotional relief"
+  seger: "Maintain tension through unanswered questions across acts"
+  mamet: "Tension through withholding information - strategic revelation"
+  vogler: "Anticipation through foreshadowing - ordeal creates tension"
+  campbell: "Trials create tension - uncertainty on journey"
+  egri: "Rising tension through unity of opposites - escalation"
+
+common_tension_mistakes:
+  - no_dramatic_question
+  - unclear_stakes
+  - no_uncertainty_outcome_predictable
+  - weak_suspense
+  - no_anticipation
+  - no_ticking_clock_no_urgency
+  - tension_doesnt_escalate
+  - flat_tension_no_rhythm
+  - no_breathing_room_relentless
+  - tension_not_sustained
+  - only_situational_no_emotional
+  - only_emotional_no_situational
+  - no_tension_release
+  - no_catharsis_at_climax
+  - tension_unresolved
+
+tension_techniques:
+  dramatic_question:
+    description: "Central question keeping audience engaged - 'Will protagonist succeed?'"
+    effect: "Audience stays engaged to find out answer"
+    examples: ["Will hero save the day?", "Can they escape?", "Will they survive?"]
+
+  suspense:
+    description: "Audience knows something bad might happen - waiting for it"
+    effect: "Hitchcock: Audience knows bomb under table - when will it explode?"
+    techniques: ["Show danger", "Audience knows more than character", "Delayed outcome"]
+
+  anticipation:
+    description: "Foreshadowing creates expectation of future event"
+    effect: "Audience expects something - waiting for it to happen"
+    techniques: ["Foreshadowing", "Setup and payoff", "Plant and reveal"]
+
+  uncertainty:
+    description: "Outcome unclear - audience doesn't know what will happen"
+    effect: "Doubt about outcome creates tension"
+    techniques: ["Multiple possibilities", "Ambiguous information", "Conflicting clues"]
+
+  dread:
+    description: "Feeling that something bad is coming - foreboding"
+    effect: "Emotional tension through anticipation of bad outcome"
+    techniques: ["Ominous foreshadowing", "Dark atmosphere", "Threat established"]
+
+  ticking_clock:
+    description: "Deadline approaching - time running out"
+    effect: "Creates urgency - must act before too late"
+    examples: ["24 hours to save hostage", "Bomb will explode at noon", "Deadline approaching"]
+
+  dramatic_irony:
+    description: "Audience knows more than character"
+    effect: "Powerful tension - audience knows danger character doesn't"
+    examples: ["Audience sees killer behind door", "We know betrayal coming", "Character walks into trap"]
+
+  information_withholding:
+    description: "Strategic revelation - don't tell everything at once"
+    effect: "Mystery creates suspense - audience wants to know"
+    techniques: ["Mamet: Withhold information", "Gradual revelation", "Mystery maintained"]
+
+  stakes_clarity:
+    description: "Clear what protagonist stands to lose/gain"
+    effect: "Audience cares about outcome - knows what's at risk"
+    examples: ["Life or death", "Lose everything", "Save loved one"]
+
+  unanswered_questions:
+    description: "Questions posed but not yet answered"
+    effect: "Seger: Unanswered questions maintain tension across acts"
+    techniques: ["Pose questions early", "Delay answers", "Progressive revelation"]
+
+tension_escalation_pattern:
+  act_one: "Introduce tension - establish stakes and dramatic question"
+  act_two_first_half: "Build tension - uncertainty and complications increase"
+  midpoint: "Tension spike - major escalation"
+  act_two_second_half: "Intensify tension - stakes rise, urgency increases"
+  act_three: "Peak tension - maximum intensity at climax"
+  resolution: "Tension release - catharsis"
+
+suspense_vs_surprise:
+  suspense:
+    definition: "Audience knows something - waiting for it to happen"
+    example: "Audience sees bomb under table - when will it explode?"
+    effect: "Sustained tension - longer engagement"
+    hitchcock: "Suspense is superior to surprise - 15 minutes vs 15 seconds"
+
+  surprise:
+    definition: "Audience doesn't know - sudden revelation"
+    example: "Bomb explodes without warning - surprise!"
+    effect: "Brief shock - 15 seconds"
+    hitchcock: "Surprise is momentary - suspense is sustained"
+
+tension_rhythm:
+  peaks:
+    description: "High tension moments - intense scenes"
+    frequency: "2-4 major peaks recommended"
+    placement: "End of Act 1, Midpoint, Dark Night of Soul, Climax"
+
+  valleys:
+    description: "Lower tension moments - breathing room"
+    frequency: "2-4 valleys recommended"
+    purpose: "Relief allows tension to rebuild - can't be intense all the time"
+
+  balance:
+    principle: "Alternating peaks and valleys creates rhythm"
+    avoid: "Flat tension (no variation) or relentless tension (no relief)"
+
+dramatic_question_types:
+  outer_question:
+    description: "Will protagonist achieve external goal?"
+    examples: ["Will hero save the day?", "Will detective solve case?", "Will lovers reunite?"]
+
+  inner_question:
+    description: "Will protagonist overcome internal flaw?"
+    examples: ["Will hero find courage?", "Will character forgive?", "Will they change?"]
+
+  moral_question:
+    description: "What is right thing to do?"
+    examples: ["Should hero sacrifice self?", "Is revenge justified?", "Truth or loyalty?"]
+
+  survival_question:
+    description: "Will protagonist survive?"
+    examples: ["Will they escape?", "Can they survive?", "Will they live?"]
+
+stakes_types:
+  life_death:
+    description: "Ultimate stakes - life or death"
+    impact: "Maximum tension - highest stakes"
+
+  lose_everything:
+    description: "Protagonist stands to lose everything"
+    impact: "High tension - total loss possible"
+
+  loved_ones:
+    description: "Danger to loved ones - save someone"
+    impact: "Emotional stakes - character cares deeply"
+
+  identity:
+    description: "Lose sense of self, soul, humanity"
+    impact: "Deep psychological stakes"
+
+  world:
+    description: "Fate of world/society at stake"
+    impact: "Epic stakes - save everyone"
+
+tension_release_types:
+  breathing_room:
+    description: "Quiet moment after intense scene"
+    purpose: "Let audience relax before next tension build"
+
+  humor:
+    description: "Comic relief breaks tension"
+    purpose: "Release valve - laughter releases tension"
+
+  victory:
+    description: "Small win provides temporary relief"
+    purpose: "Hope moment - but tension returns"
+
+  revelation:
+    description: "Answer revealed releases specific tension"
+    purpose: "Question answered - but new questions emerge"
+
+  connection:
+    description: "Emotional connection moment"
+    purpose: "Warmth releases tension - human moment"
+
+catharsis_elements:
+  aristotle_definition: "Emotional purging through pity and fear"
+
+  requirements:
+    - tension_accumulated_throughout_story
+    - peak_tension_at_climax
+    - dramatic_question_answered
+    - tension_released_through_resolution
+    - emotional_satisfaction
+    - stakes_resolved
+
+  effect:
+    emotional: "Audience feels relief, satisfaction, completion"
+    dramatic: "Story tension resolved - closure achieved"
+    psychological: "Accumulated anxiety released"
+
+information_withholding_strategy:
+  mamet_principle: "Withhold information to create suspense"
+
+  techniques:
+    gradual_revelation: "Reveal information progressively - not all at once"
+    strategic_timing: "Reveal at moment of maximum impact"
+    mystery_maintained: "Keep some information hidden until right moment"
+    partial_reveals: "Give pieces of puzzle - not whole picture"
+
+  avoid:
+    exposition_dump: "Don't reveal everything at start"
+    premature_revelation: "Don't answer questions too early"
+    withholding_too_long: "Don't frustrate audience - reveal before too late"
+
+dramatic_irony_power:
+  definition: "Audience knows more than character"
+
+  effect:
+    superior_position: "Audience feels superior - knows secret"
+    anticipation: "Waiting for character to discover"
+    dread: "Watching character walk into danger"
+    engagement: "Active participation - 'Don't go in there!'"
+
+  examples:
+    horror: "Audience sees killer behind door - character doesn't"
+    thriller: "We know betrayal coming - character trusts"
+    drama: "We know truth - character believes lie"
+
+ticking_clock_implementation:
+  types:
+    explicit: "Clear deadline stated - '24 hours to save hostage'"
+    implicit: "Urgency implied - 'Time running out'"
+    progressive: "Deadline gets closer - countdown"
+
+  effect:
+    urgency: "Must act now - can't delay"
+    pressure: "Time pressure on protagonist"
+    tension_increase: "As deadline approaches, tension rises"
+
+  examples:
+    bomb_timer: "Bomb will explode at noon"
+    disease_progression: "Cure needed before patient dies"
+    deadline_approaching: "Must finish before time runs out"
+    resource_depletion: "Running out of oxygen/fuel/time"

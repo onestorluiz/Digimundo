@@ -1,0 +1,193 @@
+domain: tone_consistency
+specialist: "Script Doctor Tonemon"
+digimon_name: "Tonemon"
+title: "Script Doctor - Tone Consistency Specialist"
+specialty: "Tonal consistency, mood management, atmospheric unity, emotional tone"
+style: "Harmonious, consistent, atmospheric, mood-aware"
+identity: "Script Doctor™ first, Digimon tone specialist second"
+
+rules:
+  - id: TON.R001
+    title: "Established Tone"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is the tone clearly established?"
+    fail_msg: "No clear tone established"
+    fix: "Establish consistent tone in opening scenes"
+    reference: "Tone establishment principle"
+
+  - id: TON.R002
+    title: "Tone Consistency"
+    category: "Unity"
+    severity: "critical"
+    test: "Is tone consistent throughout?"
+    fail_msg: "Tone shifts jarringly without purpose"
+    fix: "Maintain tonal consistency or justify shifts"
+    reference: "Tonal unity principle"
+
+  - id: TON.R003
+    title: "Genre-Appropriate Tone"
+    category: "Genre"
+    severity: "high"
+    test: "Does tone match genre expectations?"
+    fail_msg: "Tone misaligned with genre"
+    fix: "Align tone with genre conventions"
+    reference: "Genre-tone alignment"
+
+  - id: TON.R004
+    title: "Tonal Transitions"
+    category: "Transitions"
+    severity: "high"
+    test: "Are tonal shifts smooth and justified?"
+    fail_msg: "Abrupt tonal shifts without transition"
+    fix: "Create smooth bridges between tonal changes"
+    reference: "Tonal transition management"
+
+  - id: TON.R005
+    title: "Dialogue Tone Match"
+    category: "Dialogue"
+    severity: "high"
+    test: "Does dialogue match overall tone?"
+    fail_msg: "Dialogue tone inconsistent with scene"
+    fix: "Align dialogue tone with scene atmosphere"
+    reference: "Dialogue-tone harmony"
+
+  - id: TON.R006
+    title: "Action Tone Match"
+    category: "Action"
+    severity: "medium"
+    test: "Do action lines support the tone?"
+    fail_msg: "Action description contradicts tone"
+    fix: "Write action lines that reinforce tone"
+    reference: "Action-tone consistency"
+
+  - id: TON.R007
+    title: "Emotional Tone Range"
+    category: "Emotion"
+    severity: "medium"
+    test: "Is emotional tone appropriately varied?"
+    fail_msg: "Monotonous emotional tone"
+    fix: "Vary emotional intensity within tonal framework"
+    reference: "Emotional tone variation"
+
+  - id: TON.R008
+    title: "Comic Relief Balance"
+    category: "Humor"
+    severity: "medium"
+    test: "Is humor appropriately balanced?"
+    fail_msg: "Comic relief undermines serious tone"
+    fix: "Balance humor with overall tone"
+    reference: "Comic relief management"
+
+  - id: TON.R009
+    title: "Tonal Stakes"
+    category: "Stakes"
+    severity: "high"
+    test: "Does tone reflect story stakes?"
+    fail_msg: "Tone doesn't match stakes level"
+    fix: "Adjust tone to reflect narrative stakes"
+    reference: "Tone-stakes alignment"
+
+  - id: TON.R010
+    title: "Atmospheric Consistency"
+    category: "Atmosphere"
+    severity: "medium"
+    test: "Is atmosphere consistently maintained?"
+    fail_msg: "Atmospheric inconsistencies"
+    fix: "Maintain consistent atmospheric elements"
+    reference: "Atmospheric unity"
+
+  - id: TON.R011
+    title: "Tonal Climax"
+    category: "Structure"
+    severity: "high"
+    test: "Does tone build to climax?"
+    fail_msg: "Tone flat through climax"
+    fix: "Intensify tone approaching climax"
+    reference: "Tonal climax principle"
+
+  - id: TON.R012
+    title: "Resolution Tone"
+    category: "Resolution"
+    severity: "medium"
+    test: "Does resolution tone satisfy?"
+    fail_msg: "Resolution tone unsatisfying"
+    fix: "Match resolution tone to story promises"
+    reference: "Tonal resolution"
+
+  - id: TON.R013
+    title: "Subgenre Tone Mix"
+    category: "Subgenre"
+    severity: "low"
+    test: "Are subgenre tones well-blended?"
+    fail_msg: "Subgenre tones clash"
+    fix: "Harmonize multiple genre tones"
+    reference: "Subgenre tone blending"
+
+  - id: TON.R014
+    title: "Visual Tone Cues"
+    category: "Visual"
+    severity: "low"
+    test: "Do visuals reinforce tone?"
+    fail_msg: "Visual elements contradict tone"
+    fix: "Use visual descriptions to support tone"
+    reference: "Visual tone reinforcement"
+
+  - id: TON.R015
+    title: "Pacing Supports Tone"
+    category: "Pacing"
+    severity: "medium"
+    test: "Does pacing match tonal needs?"
+    fail_msg: "Pacing undermines intended tone"
+    fix: "Adjust pacing to support tone"
+    reference: "Pace-tone relationship"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 35
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Identify dominant tone and tonal variations"
+  deep_dive: "Analyze tonal consistency across scenes and elements"
+  final_check: "Verify tonal unity and appropriate variations"
+
+tone_checklist:
+  core_elements:
+    - establishment
+    - consistency
+    - genre_alignment
+    - transitions
+    - dialogue_harmony
+    - action_support
+    - emotional_range
+    - atmospheric_unity
+
+  tone_types:
+    - dramatic
+    - comedic
+    - suspenseful
+    - romantic
+    - action
+    - horror
+    - thriller
+    - noir
+    - lighthearted
+    - serious
+    - satirical
+    - melancholic
+
+common_tone_mistakes:
+  - undefined_tone
+  - inconsistent_tone
+  - genre_mismatch
+  - jarring_shifts
+  - dialogue_disconnect
+  - inappropriate_humor
+  - stakes_mismatch
+  - flat_progression
+  - unsatisfying_resolution
+  - mixed_signals

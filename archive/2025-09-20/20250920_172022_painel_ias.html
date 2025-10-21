@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Painel de IAs - TemploOculto</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/painel_ias.js"></script>
+</head>
+<body>
+  <h1>🌌 Painel dos Digimons IA</h1>
+  <div class="tabs">
+    {% for ia in digimons %}
+      <button class="tablink" onclick="abrirIA(event, '{{ ia.nome }}')">{{ ia.nome }}</button>
+    {% endfor %}
+  </div>
+  {% for ia in digimons %}
+  <div id="{{ ia.nome }}" class="tabcontent">
+    <img src="{{ ia.avatar }}" alt="{{ ia.nome }}" style="width:100px"><br>
+    <h2>{{ ia.nome }}</h2>
+    <textarea placeholder="Escreva para {{ ia.nome }}..." rows="6" style="width:90%"></textarea>
+    <button>Enviar</button>
+  </div>
+  {% endfor %}
+</body>
+</html>

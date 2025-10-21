@@ -1,0 +1,63 @@
+part 1: Theoretical Framework (200 words)
+
+To optimize the script, we'll apply McKee's story principles, which emphasize the importance of character development, stakes, and turning points (McKee, 1997). We''ll also utilize Field's paradigm, which divides a story into three acts: setup, confrontation, and resolution (Field, 2005). Additionally, we'll incorporate Save the Cat beats, ensuring that our script includes key plot points such as the "inciting incident" and "all is lost" moments (Snyder, 2005). Lastly, we'll reference Truby's anatomy of a story, which emphasizes character growth and structure (Truby, 2007).
+
+part 2: Practical Application (200 words)
+
+Let's apply these theories to the script. In the setup, we need to establish Sarah's relationship with her best friend and the stakes of their friendship. This can be achieved through dialogue that reveals their shared history and mutual trust. For example:
+
+SARAH
+Remember when we snuck into that concert? We were so young and foolish. But it was also one of the most fun nights of my life.
+
+DR. MARTINEZ
+What made it so special?
+
+SARAH
+We did it together. And I knew she'd always have my back, no matter what.
+
+The confrontation should involve a conflict between Sarah and her best friend that leads to the "killing" of their friendship. This moment can be heightened by increasing the stakes, such as revealing that Sarah's actions caused her friend to lose an opportunity or suffer a negative consequence. For example:
+
+SARAH
+I didn't mean for it to go so far. I just wanted to protect myself. But now she's lost everything because of me.
+
+The resolution should show Sarah taking action to make amends and attempting to restore their friendship. This can be achieved through a clear turning point, such as an apology or act of service. For example:
+
+SARAH
+I know I can't take it back, but I want to make things right. I'll do whatever it takes.
+
+part 3: Evidence-Based Critique (150 words)
+
+To improve the script, we need to support our claims with evidence from the text. For example, if we identify a weakness in Sarah's motivation for her actions, we can quote specific lines and document patterns of failure. For instance:
+
+CRITIQUE: Sarah's motivation for "killing" her best friend is unclear and inconsistent.
+
+EVIDENCE: Sarah states that she "did it to protect herself," but this rationale is not supported by previous actions or dialogue. Additionally, Sarah does not demonstrate any remorse or understanding of the consequences until after the fact.
+
+part 4: Actionable Solutions (150 words)
+
+To address these issues, we can provide concrete solutions and examples. For instance, to clarify Sarah's motivation, we can add a scene that shows her friend in danger or under threat, prompting Sarah to take action. We can also include dialogue that reveals Sarah's internal conflict before the confrontation, such as:
+
+SARAH
+I know I need to protect myself, but I don't want to hurt her. What should I do?
+
+Furthermore, we can suggest structural fixes, such as moving the confrontation earlier in the script to increase tension and stakes. We can also provide an implementation guide that outlines these changes and offers guidance on how to execute them effectively. For example:
+
+GUIDE: Move the confrontation scene before the midpoint of the script to heighten tension and raise the stakes for Sarah's actions. Additionally, clarify Sarah's motivation by adding a scene that shows her friend in danger, prompting Sarah to take action.
+
+FADE IN:
+
+INT. THERAPIST'S OFFICE - DAY
+
+SARAH (40s), tired eyes, sits across from DR. MARTINEZ.
+
+SARAH
+I need to tell someone what really
+happened that night.
+
+DR. MARTINEZ
+Take your time.
+
+SARAH
+(long pause)
+My best friend was in danger, and I had to make a choice. I chose myself. And now she's gone.
+

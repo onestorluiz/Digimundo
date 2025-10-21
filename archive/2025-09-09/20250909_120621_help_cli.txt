@@ -1,0 +1,28 @@
+UnifiedMemoryManager not found, trying fallback
+Monitoring thread already running
+                                                                                
+ Usage: scripturemon-cli [OPTIONS] COMMAND [ARGS]...                            
+                                                                                
+ Scripturemon CLI — fusão: CLI + HTML + strategy                                
+                                                                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ status             Show system status with all subsystems                    │
+│ analyze            Analyze a screenplay file                                 │
+│ backup                                                                       │
+│ chat               Enter interactive chat mode                               │
+│ doctor             Analisa um arquivo com ScriptDoctor.                      │
+│ report             Gera e abre relatório HTML com estratégia.                │
+│ ultimate           Núcleo Ultimate leve (Parte 1): consciência + memória +   │
+│                    backup.                                                   │
+│ analyze-parallel   Análise paralela 4-perspectivas (usa Ollama se            │
+│                    disponível; fallback heurístico).                         │
+│ telepathy                                                                    │
+│ validate                                                                     │
+│ ui                 Preferências de UI (live reload) e atalhos de abertura.   │
+│ persona            Gerencia persona (soulpack) ativa.                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+

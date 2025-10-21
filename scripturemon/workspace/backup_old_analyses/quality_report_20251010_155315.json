@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-10-10T15:53:15.636533",
+  "screenplay": "inputs/examples/Te Encontro em Mim .pdf",
+  "total_time": 4229.487313985825,
+  "authors_count": 13,
+  "average_score": 0.0,
+  "results": [
+    {
+      "author": "aristotle",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "campbell",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "cowgill",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "dialogue",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "egri",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "field",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "mckee",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "mckee_character",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "mckee_dialogue",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "seger",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "snyder",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "truby",
+      "quality": "MISSING",
+      "score": 0.0
+    },
+    {
+      "author": "vogler",
+      "quality": "MISSING",
+      "score": 0.0
+    }
+  ]
+}

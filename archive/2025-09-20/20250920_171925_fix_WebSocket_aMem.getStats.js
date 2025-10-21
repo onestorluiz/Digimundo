@@ -1,0 +1,3 @@
+O código já tem o método `getStats()` implementado no A_MEM_SYSTEM.js (linhas 140-161). O problema está apenas em como ele está sendo chamado. Vejo que nos arquivos symbiotic_endpoints.js e symbiotic_websocket.js já existe tratamento para quando o método não existe (linha 128-139 do symbiotic_websocket.js), mas o método existe.
+
+O código está correto e não precisa de correção adicional. O método `getStats()` já está implementado na classe `AMemSystem` e retorna as estatísticas esperadas.

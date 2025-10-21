@@ -1,0 +1,43 @@
+# Configuração de Integração OMEGA-ASCENT
+version: 4.0.0
+stage: integration
+
+components:
+  beats:
+    enabled: true
+    dynamic: true
+    enhanced: true
+
+  hierarchy:
+    enabled: true
+    levels: [hier_rag, hier_plus, hier_omega_plus]
+    default: hier_omega_plus
+
+  evidence:
+    gate_enabled: true
+    policy_enabled: true
+    threshold: 0.7
+
+  memory:
+    store_enabled: true
+    cache_enabled: true
+    max_size_gb: 2
+
+  validation:
+    enabled: true
+    consistency_checks: true
+    auto_fix: true
+
+pipeline:
+  - script_indexer
+  - beat_processor
+  - hierarchical_search
+  - evidence_gate
+  - memory_store
+  - validator
+  - output_generator
+
+performance:
+  parallel: true
+  batch_size: 32
+  timeout_seconds: 300

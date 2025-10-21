@@ -1,0 +1,1500 @@
+"""
+Script Doctor Twistmon - Twist and Revelation Analysis Specialist
+A Script Doctor™ in Digimon form specializing in twist effectiveness, surprise vs inevitability, misdirection, revelation timing, earned twists, avoid predictable/unearned twists.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class TwistProfile:
+    """Overall twist analysis."""
+    twist_present: bool  # Major revelation/reversal exists
+    twist_effectiveness: bool  # Surprising yet inevitable (Aristotle)
+    twist_timing: bool  # Optimal placement (Act 2 midpoint or Act 3)
+    twist_setup: bool  # Properly foreshadowed, not random
+    twist_impact: bool  # Changes everything, recontextualizes story
+    red_herrings_present: bool  # Misdirection techniques used
+    multiple_twists_handled: bool  # If multiple twists, each must land
+    false_protagonist_twist: bool  # Psycho example - protagonist switch
+    identity_twist: bool  # Character not who they seem
+    reversal_of_fortune: bool  # Peripeteia (Aristotle)
+    recognition_moment: bool  # Anagnorisis (Aristotle)
+    twist_earned: bool  # Not cheap gimmick, properly setup
+    unearned_twist_detected: bool  # PENALTY (random, not foreshadowed)
+    predictable_twist_detected: bool  # PENALTY (too obvious)
+    twist_overload_detected: bool  # PENALTY (too many twists, loses impact)
+    overall_twist_quality: float
+
+
+@dataclass
+class TwistAnalysisResults:
+    """Complete twist analysis results."""
+    twist_profile: TwistProfile
+    twist_moments: List[str]  # Moments of major revelation/reversal
+    reversal_list: List[str]  # Peripeteia moments
+    recognition_list: List[str]  # Anagnorisis moments
+    red_herring_list: List[str]  # Misdirection moments
+    identity_twist_list: List[str]  # Identity revelation moments
+    setup_clues: List[str]  # Clues planted for twist
+    unearned_twists: List[str]  # Random twists (PENALTY)
+    predictable_twists: List[str]  # Obvious twists (PENALTY)
+    score: float
+    diagnosis: str
+    recommendations: List[str]
+
+
+class DrTwist:
+    """
+    Script Doctor Twistmon - The Twist and Revelation Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing twist effectiveness,
+    surprise vs inevitability balance, misdirection, revelation timing, earned twists,
+    avoid predictable/unearned twists.
+
+    Identity: Script Doctor first, Digimon twist specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Twistmon with rules and configuration."""
+        self.name = "Script Doctor Twistmon"
+        self.digimon_name = "Twistmon"
+        self.title = "Script Doctor - Twist and Revelation Analysis Specialist"
+        self.specialty = "Twist effectiveness, surprise vs inevitability, misdirection, revelation timing, earned twists, avoid predictable/unearned twists"
+        self.identity = "I am Script Doctor Twistmon, a professional Script Doctor™ specializing in twist and revelation analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "twist_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - TWIST SPECIFIC
+        self.deep_context_queries = [
+            "McKee Story twist revelation surprise inevitable",
+            "McKee Story reversal peripeteia turning point",
+            "McKee Story recognition anagnorisis moment",
+            "McKee Story twist earned through setup",
+            "McKee Story misdirection red herring hide truth",
+            "McKee Story twist recontextualizes everything",
+            "McKee Story surprise yet feels inevitable",
+            "McKee Story twist changes meaning retroactively",
+            "McKee Story twist timing placement optimal",
+            "McKee Story twist must be foreshadowed",
+
+            # McKee Story - REVERSAL & IRREVERSIBLE CHANGE (ultra-specific manual reading)
+            "McKee Story act climax series sequences peaks climactic scene major reversal values powerful",
+            "McKee Story turning point beat action changes value life situation reversal",
+            "McKee Story story climax absolute irreversible change final act ultimate reversal",
+            "McKee Story scene reversal reversible sequence reversible act reversible story irreversible",
+            "McKee Story major reversal value charged condition character life impact degree",
+
+            "Syd Field Screenplay twist turning point",
+            "Field plot twist revelation reversal",
+            "Field twist midpoint Act 2 center",
+            "Field twist Act 3 final reversal",
+            "Field twist must be earned setup",
+            "Blake Snyder Save the Cat twist midpoint",
+            "Snyder All Is Lost twist beat",
+            "Snyder false defeat false victory twist",
+            "Snyder twist beat sheet placement",
+            "Snyder twist revelation setup payoff",
+            "John Truby Anatomy revelation sequence",
+            "Truby revelation builds to ultimate twist",
+            "Truby revelation strategic placement design",
+            "Truby twist redefines character want need",
+            "Truby revelation moral choice moment",
+            "Truby surprise inevitable balance earned",
+            "Christopher Vogler Writer's Journey twist ordeal",
+            "Vogler revelation resurrection moment",
+            "Vogler twist hero's journey reversal",
+            "Vogler twist mythic structure placement",
+            "Joseph Campbell Hero 1000 Faces revelation",
+            "Campbell twist apotheosis moment recognition",
+            "Campbell revelation journey reversal",
+            "Aristotle Poetics peripeteia reversal fortune",
+            "Aristotle anagnorisis recognition moment",
+            "Aristotle reversal recognition combined",
+            "Aristotle surprise inevitable necessary probable",
+            "Aristotle best plots surprising yet inevitable",
+            "Aristotle twist must feel earned logical",
+            "Linda Seger Making Good Script Great twist",
+            "Seger revelation timing placement optimal",
+            "Seger twist earned through foreshadowing",
+            "Seger twist rewrite technique strengthen",
+            "Lajos Egri Art Dramatic Writing reversal",
+            "Egri twist premise driven inevitable",
+            "Egri reversal fortune character driven",
+            "William Goldman Adventures Screen Trade twist",
+            "Goldman twist earned surprise effective",
+            "Goldman twist timing placement advice",
+            "Shonda Rhimes twist revelation television",
+            "David Mamet twist revelation dramatic",
+            "Alexander Mackendrick twist visual revelation",
+            "K.M. Weiland Creating Character Arcs twist",
+            "Weiland twist character arc revelation",
+            "Weiland lie truth revealed twist moment",
+            "twist revelation surprise yet inevitable",
+            "peripeteia reversal fortune Aristotle",
+            "anagnorisis recognition moment revelation",
+            "twist earned through foreshadowing setup",
+            "misdirection red herring hide truth twist",
+            "twist recontextualizes story changes meaning",
+            "surprise inevitable balance Aristotle",
+            "twist timing placement Act 2 midpoint",
+            "twist timing placement Act 3 reversal",
+            "unearned twist random not foreshadowed penalty",
+            "predictable twist too obvious telegraphed penalty",
+            "twist overload too many twists loses impact",
+            "false protagonist twist Psycho example",
+            "identity twist character not who seem",
+            "twist must change everything redefine story"
+        ]
+
+        # Twist analysis patterns (bilingual: EN + PT) - 150-170+ markers
+
+        # Twist present markers (major revelation/reversal)
+        self.twist_present_markers = [
+            # English
+            "twist", "revelation", "reveal", "reversal", "shocking", "surprise",
+            "plot twist", "major twist", "big reveal", "shocking revelation",
+            "everything changes", "nothing is as it seems", "recontextualizes",
+            "turns out", "actually", "really", "truth is", "in reality",
+            "not what it seems", "hidden truth", "secret revealed",
+            "shocking discovery", "game changer", "paradigm shift",
+            "changes everything", "redefines", "new understanding",
+            # Portuguese
+            "reviravolta", "revelação", "revelar", "reversão", "chocante", "surpresa",
+            "grande revelação", "reviravolta dramática", "revelação chocante",
+            "tudo muda", "nada é como parece", "recontextualiza",
+            "na verdade", "realmente", "verdade é", "na realidade",
+            "não é o que parece", "verdade oculta", "segredo revelado",
+            "descoberta chocante", "mudança radical", "mudança de paradigma",
+            "muda tudo", "redefine", "nova compreensão"
+        ]
+
+        # Twist effectiveness markers (surprising yet inevitable - Aristotle)
+        self.twist_effectiveness_markers = [
+            # English
+            "surprising yet inevitable", "didn't see coming", "makes sense",
+            "clues were there", "obvious in hindsight", "should have seen",
+            "brilliant twist", "earned twist", "satisfying twist",
+            "shocking but logical", "unexpected but earned",
+            "perfect twist", "masterful revelation", "genius twist",
+            # Portuguese
+            "surpresa mas inevitável", "não vi vindo", "faz sentido",
+            "pistas estavam lá", "óbvio em retrospecto", "deveria ter visto",
+            "reviravolta brilhante", "reviravolta merecida", "reviravolta satisfatória",
+            "chocante mas lógico", "inesperado mas merecido",
+            "reviravolta perfeita", "revelação magistral", "reviravolta genial"
+        ]
+
+        # Twist timing markers (optimal placement)
+        self.twist_timing_markers = [
+            # English
+            "midpoint twist", "Act 2 twist", "Act 3 twist",
+            "halfway through", "middle of story", "center twist",
+            "third act twist", "climactic twist", "final twist",
+            "at the right moment", "perfect timing", "optimal placement",
+            # Portuguese
+            "reviravolta no meio", "reviravolta Ato 2", "reviravolta Ato 3",
+            "na metade", "meio da história", "reviravolta central",
+            "reviravolta terceiro ato", "reviravolta climática", "reviravolta final",
+            "no momento certo", "timing perfeito", "posicionamento ótimo"
+        ]
+
+        # Twist setup markers (properly foreshadowed)
+        self.twist_setup_markers = [
+            # English
+            "foreshadowed", "hinted at", "clues planted", "setup earlier",
+            "mentioned before", "established earlier", "callback",
+            "seeds planted", "groundwork laid", "prepared audience",
+            "breadcrumbs", "trail of clues", "planted evidence",
+            # Portuguese
+            "prenunciado", "insinuado", "pistas plantadas", "preparado antes",
+            "mencionado antes", "estabelecido antes", "retorno",
+            "sementes plantadas", "base estabelecida", "audiência preparada",
+            "migalhas", "rastro de pistas", "evidência plantada"
+        ]
+
+        # Twist impact markers (changes everything)
+        self.twist_impact_markers = [
+            # English
+            "changes everything", "recontextualizes", "game changer",
+            "nothing will be same", "paradigm shift", "redefines story",
+            "see everything differently", "new light", "new meaning",
+            "everything makes sense now", "alters understanding",
+            "profound impact", "seismic shift", "earth-shattering",
+            # Portuguese
+            "muda tudo", "recontextualiza", "mudança radical",
+            "nada será o mesmo", "mudança de paradigma", "redefine história",
+            "ver tudo diferente", "nova luz", "novo significado",
+            "tudo faz sentido agora", "altera compreensão",
+            "impacto profundo", "mudança sísmica", "devastador"
+        ]
+
+        # Red herrings markers (misdirection)
+        self.red_herrings_markers = [
+            # English
+            "red herring", "misdirection", "false lead", "decoy",
+            "misleading clue", "distraction", "smoke screen",
+            "false trail", "wrong suspect", "planted evidence",
+            "audience misled", "deliberate misdirection",
+            # Portuguese
+            "pista falsa", "desvio de atenção", "falsa pista", "chamariz",
+            "pista enganosa", "distração", "cortina de fumaça",
+            "rastro falso", "suspeito errado", "evidência plantada",
+            "público enganado", "desvio deliberado"
+        ]
+
+        # Multiple twists markers
+        self.multiple_twists_markers = [
+            # English
+            "multiple twists", "twist upon twist", "another twist",
+            "second twist", "third twist", "cascade of twists",
+            "layers of revelation", "nested twists", "twist after twist",
+            # Portuguese
+            "múltiplas reviravoltas", "reviravolta sobre reviravolta", "outra reviravolta",
+            "segunda reviravolta", "terceira reviravolta", "cascata de reviravoltas",
+            "camadas de revelação", "reviravoltas aninhadas", "reviravolta após reviravolta"
+        ]
+
+        # False protagonist twist markers (Psycho example)
+        self.false_protagonist_markers = [
+            # English
+            "false protagonist", "protagonist dies", "protagonist switch",
+            "not the real hero", "Psycho twist", "character dies early",
+            "protagonist killed", "new protagonist emerges",
+            # Portuguese
+            "falso protagonista", "protagonista morre", "troca de protagonista",
+            "não é o herói real", "reviravolta Psycho", "personagem morre cedo",
+            "protagonista morto", "novo protagonista surge"
+        ]
+
+        # Identity twist markers (character not who they seem)
+        self.identity_twist_markers = [
+            # English
+            "identity revealed", "not who they seem", "secret identity",
+            "true identity", "hidden identity", "real identity",
+            "is actually", "turns out to be", "revealed as",
+            "disguise removed", "mask falls", "true self",
+            # Portuguese
+            "identidade revelada", "não é quem parece", "identidade secreta",
+            "verdadeira identidade", "identidade oculta", "identidade real",
+            "na verdade é", "revela-se ser", "revelado como",
+            "disfarce removido", "máscara cai", "verdadeiro eu"
+        ]
+
+        # Reversal of fortune markers (peripeteia - Aristotle)
+        self.reversal_fortune_markers = [
+            # English
+            "peripeteia", "reversal", "reversal of fortune", "tables turned",
+            "fortune reverses", "sudden reversal", "dramatic reversal",
+            "everything flips", "opposite direction", "turns against",
+            "fortune changes", "luck reverses", "tide turns",
+            # Portuguese
+            "peripécia", "reversão", "reversão de fortuna", "mesas viradas",
+            "fortuna reverte", "reversão súbita", "reversão dramática",
+            "tudo vira", "direção oposta", "vira contra",
+            "fortuna muda", "sorte reverte", "maré vira"
+        ]
+
+        # Recognition moment markers (anagnorisis - Aristotle)
+        self.recognition_moment_markers = [
+            # English
+            "anagnorisis", "recognition", "realizes", "understands finally",
+            "sees the truth", "moment of clarity", "epiphany",
+            "discovers", "learns the truth", "revelation moment",
+            "eyes opened", "finally understands", "truth revealed",
+            # Portuguese
+            "anagnórise", "reconhecimento", "percebe", "entende finalmente",
+            "vê a verdade", "momento de clareza", "epifania",
+            "descobre", "aprende a verdade", "momento de revelação",
+            "olhos abertos", "finalmente entende", "verdade revelada"
+        ]
+
+        # Twist earned markers (not cheap gimmick)
+        self.twist_earned_markers = [
+            # English
+            "earned twist", "properly setup", "well foreshadowed",
+            "clues planted", "makes sense", "logical twist",
+            "justified twist", "prepared audience", "earned revelation",
+            # Portuguese
+            "reviravolta merecida", "bem preparada", "bem prenunciada",
+            "pistas plantadas", "faz sentido", "reviravolta lógica",
+            "reviravolta justificada", "audiência preparada", "revelação merecida"
+        ]
+
+        # Unearned twist markers (PENALTY - random, not foreshadowed)
+        self.unearned_twist_markers = [
+            # English
+            "unearned twist", "out of nowhere", "random twist",
+            "no setup", "not foreshadowed", "comes from nowhere",
+            "unjustified twist", "cheap twist", "gimmick twist",
+            "deus ex machina", "convenient twist", "contrived twist",
+            "no clues", "no warning", "no preparation",
+            # Portuguese
+            "reviravolta não merecida", "do nada", "reviravolta aleatória",
+            "sem preparação", "não prenunciada", "vem do nada",
+            "reviravolta injustificada", "reviravolta barata", "reviravolta truque",
+            "deus ex machina", "reviravolta conveniente", "reviravolta forçada",
+            "sem pistas", "sem aviso", "sem preparação"
+        ]
+
+        # Predictable twist markers (PENALTY - too obvious)
+        self.predictable_twist_markers = [
+            # English
+            "predictable twist", "saw it coming", "obvious twist",
+            "telegraphed", "too obvious", "no surprise",
+            "cliché twist", "expected twist", "guessed twist",
+            "boring twist", "formulaic twist", "generic twist",
+            # Portuguese
+            "reviravolta previsível", "vi vindo", "reviravolta óbvia",
+            "telegrafada", "muito óbvio", "sem surpresa",
+            "reviravolta clichê", "reviravolta esperada", "reviravolta adivinhada",
+            "reviravolta chata", "reviravolta formulaica", "reviravolta genérica"
+        ]
+
+        # Twist overload markers (PENALTY - too many twists)
+        self.twist_overload_markers = [
+            # English
+            "too many twists", "twist overload", "excessive twists",
+            "twist fatigue", "loses impact", "diminishing returns",
+            "one twist too many", "overstuffed", "convoluted",
+            # Portuguese
+            "reviravoltas demais", "sobrecarga de reviravoltas", "reviravoltas excessivas",
+            "fadiga de reviravoltas", "perde impacto", "retornos diminuídos",
+            "uma reviravolta a mais", "sobrecarregado", "complicado demais"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze twist and revelation in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete twist diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract Act 1 (first 25%)
+        act1_text = self._extract_pages(screenplay_text, 0, int(page_count * 0.25))
+
+        # Extract Act 2 (middle 50%)
+        act2_text = self._extract_pages(screenplay_text, int(page_count * 0.25), int(page_count * 0.75))
+        act2_midpoint_text = self._extract_pages(screenplay_text, int(page_count * 0.45), int(page_count * 0.55))
+
+        # Extract Act 3 (final 25%)
+        act3_text = self._extract_pages(screenplay_text, int(page_count * 0.75), page_count)
+
+        # Analyze twist present (major revelation/reversal)
+        twist_present = self._analyze_twist_present(screenplay_text)
+
+        # Analyze twist effectiveness (surprising yet inevitable - Aristotle)
+        twist_effectiveness = self._analyze_twist_effectiveness(screenplay_text)
+
+        # Analyze twist timing (optimal placement)
+        twist_timing = self._analyze_twist_timing(screenplay_text, page_count, act2_midpoint_text, act3_text)
+
+        # Analyze twist setup (properly foreshadowed)
+        twist_setup = self._analyze_twist_setup(screenplay_text, act1_text, act2_text)
+
+        # Analyze twist impact (changes everything)
+        twist_impact = self._analyze_twist_impact(screenplay_text)
+
+        # Analyze red herrings (misdirection)
+        red_herrings = self._analyze_red_herrings(screenplay_text)
+
+        # Analyze multiple twists handling
+        multiple_twists = self._analyze_multiple_twists(screenplay_text)
+
+        # Analyze false protagonist twist (Psycho example)
+        false_protagonist = self._analyze_false_protagonist(screenplay_text)
+
+        # Analyze identity twist (character not who they seem)
+        identity_twist = self._analyze_identity_twist(screenplay_text)
+
+        # Analyze reversal of fortune (peripeteia - Aristotle)
+        reversal_fortune = self._analyze_reversal_fortune(screenplay_text)
+
+        # Analyze recognition moment (anagnorisis - Aristotle)
+        recognition_moment = self._analyze_recognition_moment(screenplay_text)
+
+        # Analyze twist earned (not cheap gimmick)
+        twist_earned = self._analyze_twist_earned(screenplay_text, twist_setup)
+
+        # Detect unearned twist (PENALTY - random, not foreshadowed)
+        unearned_twist = self._detect_unearned_twist(screenplay_text, twist_setup)
+
+        # Detect predictable twist (PENALTY - too obvious)
+        predictable_twist = self._detect_predictable_twist(screenplay_text)
+
+        # Detect twist overload (PENALTY - too many twists)
+        twist_overload = self._detect_twist_overload(screenplay_text, multiple_twists)
+
+        # Build twist profile
+        twist_profile = TwistProfile(
+            twist_present=twist_present["present"],
+            twist_effectiveness=twist_effectiveness["effective"],
+            twist_timing=twist_timing["good_timing"],
+            twist_setup=twist_setup["properly_setup"],
+            twist_impact=twist_impact["high_impact"],
+            red_herrings_present=red_herrings["present"],
+            multiple_twists_handled=multiple_twists["handled_well"],
+            false_protagonist_twist=false_protagonist["present"],
+            identity_twist=identity_twist["present"],
+            reversal_of_fortune=reversal_fortune["present"],
+            recognition_moment=recognition_moment["present"],
+            twist_earned=twist_earned["earned"],
+            unearned_twist_detected=unearned_twist["detected"],
+            predictable_twist_detected=predictable_twist["detected"],
+            twist_overload_detected=twist_overload["detected"],
+            overall_twist_quality=0.0  # calculated below
+        )
+
+        # Calculate overall twist quality
+        twist_profile.overall_twist_quality = self._calculate_overall_twist_quality(twist_profile)
+
+        # Check against rules
+        rule_violations = self._check_twist_rules(
+            twist_profile, twist_present, twist_effectiveness, twist_timing,
+            twist_setup, twist_impact, red_herrings, multiple_twists,
+            false_protagonist, identity_twist, reversal_fortune, recognition_moment,
+            twist_earned, unearned_twist, predictable_twist, twist_overload
+        )
+
+        # Calculate score
+        score = self._calculate_twist_score(twist_profile, rule_violations)
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(score, twist_profile, rule_violations)
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "twist_present": {
+                "present": twist_present["present"],
+                "count": twist_present["count"],
+                "moments": twist_present["moments"][:10]
+            },
+            "twist_effectiveness": {
+                "effective": twist_effectiveness["effective"],
+                "count": twist_effectiveness["count"]
+            },
+            "twist_timing": {
+                "good_timing": twist_timing["good_timing"],
+                "location": twist_timing["location"],
+                "act2_midpoint": twist_timing["act2_midpoint"],
+                "act3_twist": twist_timing["act3_twist"]
+            },
+            "twist_setup": {
+                "properly_setup": twist_setup["properly_setup"],
+                "setup_count": twist_setup["setup_count"],
+                "clues": twist_setup["clues"][:10]
+            },
+            "twist_impact": {
+                "high_impact": twist_impact["high_impact"],
+                "count": twist_impact["count"]
+            },
+            "red_herrings": {
+                "present": red_herrings["present"],
+                "count": red_herrings["count"],
+                "list": red_herrings["list"][:10]
+            },
+            "multiple_twists": {
+                "present": multiple_twists["present"],
+                "count": multiple_twists["count"],
+                "handled_well": multiple_twists["handled_well"]
+            },
+            "false_protagonist": {
+                "present": false_protagonist["present"],
+                "count": false_protagonist["count"]
+            },
+            "identity_twist": {
+                "present": identity_twist["present"],
+                "count": identity_twist["count"],
+                "list": identity_twist["list"][:5]
+            },
+            "reversal_fortune": {
+                "present": reversal_fortune["present"],
+                "count": reversal_fortune["count"],
+                "list": reversal_fortune["list"][:10]
+            },
+            "recognition_moment": {
+                "present": recognition_moment["present"],
+                "count": recognition_moment["count"],
+                "list": recognition_moment["list"][:10]
+            },
+            "twist_earned": {
+                "earned": twist_earned["earned"],
+                "score": twist_earned["score"]
+            },
+            "unearned_twist": {
+                "detected": unearned_twist["detected"],
+                "penalty": unearned_twist.get("penalty", False),
+                "count": unearned_twist["count"],
+                "list": unearned_twist["list"][:5]
+            },
+            "predictable_twist": {
+                "detected": predictable_twist["detected"],
+                "penalty": predictable_twist.get("penalty", False),
+                "count": predictable_twist["count"]
+            },
+            "twist_overload": {
+                "detected": twist_overload["detected"],
+                "penalty": twist_overload.get("penalty", False),
+                "count": twist_overload["count"]
+            },
+            "overall_twist_quality": twist_profile.overall_twist_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, twist_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_pages(self, screenplay: str, start_page: int, end_page: int) -> str:
+        """Extract specific page range from screenplay."""
+        lines = screenplay.split('\n')
+        start_line = start_page * 55
+        end_line = end_page * 55
+        return '\n'.join(lines[start_line:end_line])
+
+    def _analyze_twist_present(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze twist present (major revelation/reversal exists).
+
+        McKee: "Best stories have major revelations - twist recontextualizes everything seen before."
+        Aristotle: "Peripeteia and anagnorisis - reversal and recognition - most powerful plot elements."
+        """
+        present = False
+        moments = []
+
+        # Check for twist markers
+        count = 0
+        for marker in self.twist_present_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract twist moments
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        moments.append(line.strip()[:100])
+                        if len(moments) >= 20:
+                            break
+
+        if count >= 5:
+            present = True
+        elif count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": count,
+            "moments": moments
+        }
+
+    def _analyze_twist_effectiveness(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze twist effectiveness (surprising yet inevitable - Aristotle).
+
+        Aristotle: "Best plots - surprise audience yet feel inevitable in hindsight."
+        McKee: "Twist must be surprising yet earned - audience shocked but says 'of course'."
+        """
+        effective = False
+
+        # Check for effectiveness markers
+        count = 0
+        for marker in self.twist_effectiveness_markers:
+            count += screenplay.lower().count(marker)
+
+        # Effectiveness requires both surprise AND inevitability
+        surprise_markers = ["didn't see coming", "shocking", "surprise", "unexpected"]
+        inevitable_markers = ["makes sense", "obvious in hindsight", "clues were there", "should have seen"]
+
+        surprise_count = sum(screenplay.lower().count(m) for m in surprise_markers)
+        inevitable_count = sum(screenplay.lower().count(m) for m in inevitable_markers)
+
+        if count >= 3:
+            effective = True
+        elif surprise_count >= 2 and inevitable_count >= 2:
+            effective = True
+
+        return {
+            "effective": effective,
+            "count": count,
+            "surprise_count": surprise_count,
+            "inevitable_count": inevitable_count
+        }
+
+    def _analyze_twist_timing(self, screenplay: str, page_count: int, act2_midpoint_text: str, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze twist timing (optimal placement).
+
+        Field: "Major twist at Act 2 midpoint (page 60) or Act 3 final reversal (page 85-95)."
+        Snyder: "Midpoint twist - false victory/false defeat - changes everything."
+        """
+        good_timing = False
+        location = "unknown"
+
+        # Check for timing markers
+        act2_midpoint = sum(act2_midpoint_text.lower().count(m) for m in self.twist_present_markers[:10])
+        act3_twist = sum(act3_text.lower().count(m) for m in self.twist_present_markers[:10])
+
+        # Optimal timing: midpoint or Act 3
+        if act2_midpoint >= 2:
+            good_timing = True
+            location = "act2_midpoint"
+        elif act3_twist >= 2:
+            good_timing = True
+            location = "act3"
+        elif act2_midpoint >= 1 or act3_twist >= 1:
+            good_timing = True
+            location = "present"
+
+        return {
+            "good_timing": good_timing,
+            "location": location,
+            "act2_midpoint": act2_midpoint,
+            "act3_twist": act3_twist
+        }
+
+    def _analyze_twist_setup(self, screenplay: str, act1_text: str, act2_text: str) -> Dict[str, Any]:
+        """
+        Analyze twist setup (properly foreshadowed, not random).
+
+        McKee: "Twist must be earned - plant clues audience misses, surprise but inevitable."
+        Truby: "Revelation sequence - strategic placement of clues builds to twist."
+        """
+        properly_setup = False
+        clues = []
+
+        # Check for setup markers
+        setup_count = 0
+        for marker in self.twist_setup_markers:
+            marker_count = screenplay.lower().count(marker)
+            setup_count += marker_count
+            if marker_count > 0 and len(clues) < 20:
+                # Extract setup moments
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        clues.append(line.strip()[:100])
+                        if len(clues) >= 20:
+                            break
+
+        # Proper setup: clues in Act 1 and/or Act 2
+        act1_setup = sum(act1_text.lower().count(m) for m in self.twist_setup_markers[:10])
+        act2_setup = sum(act2_text.lower().count(m) for m in self.twist_setup_markers[:10])
+
+        if setup_count >= 5:
+            properly_setup = True
+        elif act1_setup >= 2 or act2_setup >= 2:
+            properly_setup = True
+        elif setup_count >= 3:
+            properly_setup = True
+
+        return {
+            "properly_setup": properly_setup,
+            "setup_count": setup_count,
+            "act1_setup": act1_setup,
+            "act2_setup": act2_setup,
+            "clues": clues
+        }
+
+    def _analyze_twist_impact(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze twist impact (changes everything, recontextualizes story).
+
+        McKee: "Great twist recontextualizes everything - audience sees story in new light."
+        Truby: "Revelation redefines character want/need - changes understanding retroactively."
+        """
+        high_impact = False
+
+        # Check for impact markers
+        count = 0
+        for marker in self.twist_impact_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 4:
+            high_impact = True
+        elif count >= 2:
+            high_impact = True
+
+        return {
+            "high_impact": high_impact,
+            "count": count
+        }
+
+    def _analyze_red_herrings(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze red herrings (misdirection techniques).
+
+        McKee: "Misdirection - plant false clues, hide truth in plain sight, surprise yet earned."
+        Truby: "Red herrings create surprise - audience follows false trail, twist more effective."
+        """
+        present = False
+        red_herring_list = []
+
+        # Check for red herring markers
+        count = 0
+        for marker in self.red_herrings_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract red herring moments
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        red_herring_list.append(line.strip()[:100])
+                        if len(red_herring_list) >= 20:
+                            break
+
+        if count >= 3:
+            present = True
+        elif count >= 2:
+            present = True
+
+        return {
+            "present": present,
+            "count": count,
+            "list": red_herring_list
+        }
+
+    def _analyze_multiple_twists(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze multiple twists handling (if present, each must land).
+
+        McKee: "Multiple twists can work - but each must be earned, spaced properly, not diminish impact."
+        Snyder: "Avoid twist overload - one great twist better than three mediocre twists."
+        """
+        present = False
+        handled_well = True
+
+        # Check for multiple twist markers
+        count = 0
+        for marker in self.multiple_twists_markers:
+            count += screenplay.lower().count(marker)
+
+        # Count twist instances
+        twist_count = screenplay.lower().count("twist")
+        revelation_count = screenplay.lower().count("revelation")
+        reversal_count = screenplay.lower().count("reversal")
+
+        total_twist_indicators = twist_count + revelation_count + reversal_count
+
+        if count >= 2:
+            present = True
+        elif total_twist_indicators >= 8:
+            present = True
+
+        # If multiple twists, check if handled well (not overload)
+        if present and total_twist_indicators > 15:
+            handled_well = False  # Too many twists = overload
+
+        return {
+            "present": present,
+            "count": count,
+            "twist_indicators": total_twist_indicators,
+            "handled_well": handled_well
+        }
+
+    def _analyze_false_protagonist(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze false protagonist twist (Psycho example).
+
+        McKee: "False protagonist - character appears to be hero but dies/disappears - shocking twist."
+        Snyder: "Psycho twist - protagonist killed Act 1, new protagonist emerges - rare but powerful."
+        """
+        present = False
+
+        # Check for false protagonist markers
+        count = 0
+        for marker in self.false_protagonist_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 2:
+            present = True
+        elif count >= 1:
+            present = True
+
+        return {
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_identity_twist(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze identity twist (character not who they seem).
+
+        McKee: "Identity revelation - character's true nature revealed, redefines relationships."
+        Truby: "Identity twist - character's secret revealed, changes everything protagonist thought."
+        """
+        present = False
+        identity_list = []
+
+        # Check for identity twist markers
+        count = 0
+        for marker in self.identity_twist_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract identity twist moments
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        identity_list.append(line.strip()[:100])
+                        if len(identity_list) >= 20:
+                            break
+
+        if count >= 5:
+            present = True
+        elif count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": count,
+            "list": identity_list
+        }
+
+    def _analyze_reversal_fortune(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze reversal of fortune (peripeteia - Aristotle).
+
+        Aristotle: "Peripeteia - reversal of fortune - action produces opposite result expected."
+        McKee: "Reversal - protagonist's action produces opposite effect, changes trajectory."
+        """
+        present = False
+        reversal_list = []
+
+        # Check for reversal markers
+        count = 0
+        for marker in self.reversal_fortune_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract reversal moments
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        reversal_list.append(line.strip()[:100])
+                        if len(reversal_list) >= 20:
+                            break
+
+        if count >= 4:
+            present = True
+        elif count >= 2:
+            present = True
+
+        return {
+            "present": present,
+            "count": count,
+            "list": reversal_list
+        }
+
+    def _analyze_recognition_moment(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze recognition moment (anagnorisis - Aristotle).
+
+        Aristotle: "Anagnorisis - recognition, discovery - character understands truth, sees reality."
+        McKee: "Recognition moment - protagonist's eyes opened, understands self/situation/truth."
+        """
+        present = False
+        recognition_list = []
+
+        # Check for recognition markers
+        count = 0
+        for marker in self.recognition_moment_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract recognition moments
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        recognition_list.append(line.strip()[:100])
+                        if len(recognition_list) >= 20:
+                            break
+
+        if count >= 5:
+            present = True
+        elif count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": count,
+            "list": recognition_list
+        }
+
+    def _analyze_twist_earned(self, screenplay: str, twist_setup_data: Dict) -> Dict[str, Any]:
+        """
+        Analyze twist earned (not cheap gimmick, properly setup).
+
+        McKee: "Twist must be earned - properly setup, clues planted, surprise but inevitable."
+        Aristotle: "Best twists - surprising yet necessary/probable, feel earned not arbitrary."
+        """
+        earned = False
+        score = 0.0
+
+        # Check for earned markers
+        count = 0
+        for marker in self.twist_earned_markers:
+            count += screenplay.lower().count(marker)
+
+        # Earned twist requires good setup
+        setup_score = 1.0 if twist_setup_data["properly_setup"] else 0.3
+
+        # Calculate earned score
+        if count >= 3:
+            earned = True
+            score = 1.0
+        elif count >= 2 and setup_score >= 0.7:
+            earned = True
+            score = 0.8
+        elif setup_score >= 0.7:
+            earned = True
+            score = 0.7
+        else:
+            score = setup_score * 0.5
+
+        return {
+            "earned": earned,
+            "count": count,
+            "score": score
+        }
+
+    def _detect_unearned_twist(self, screenplay: str, twist_setup_data: Dict) -> Dict[str, Any]:
+        """
+        Detect unearned twist (PENALTY - random, not foreshadowed).
+
+        McKee: "Unearned twist - no setup, comes from nowhere, violates contract with audience."
+        Aristotle: "Deus ex machina - arbitrary resolution, not earned through plot, worst flaw."
+        """
+        detected = False
+        penalty = False
+        unearned_list = []
+
+        # Check for unearned markers
+        count = 0
+        for marker in self.unearned_twist_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract unearned twist moments
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        unearned_list.append(line.strip()[:100])
+                        if len(unearned_list) >= 10:
+                            break
+
+        # Check if twist present but poorly setup
+        if not twist_setup_data["properly_setup"] and twist_setup_data["setup_count"] < 2:
+            detected = True
+            penalty = True
+
+        if count >= 3:
+            detected = True
+            penalty = True
+        elif count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count,
+            "list": unearned_list
+        }
+
+    def _detect_predictable_twist(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect predictable twist (PENALTY - too obvious, telegraphed).
+
+        McKee: "Predictable twist - foreshadowing too heavy, audience ahead of story, no surprise."
+        Truby: "Balance foreshadowing - enough to feel earned, not so much it's obvious."
+        """
+        detected = False
+        penalty = False
+
+        # Check for predictable markers
+        count = 0
+        for marker in self.predictable_twist_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 4:
+            detected = True
+            penalty = True
+        elif count >= 3:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count
+        }
+
+    def _detect_twist_overload(self, screenplay: str, multiple_twists_data: Dict) -> Dict[str, Any]:
+        """
+        Detect twist overload (PENALTY - too many twists, loses impact).
+
+        McKee: "Twist overload - too many reversals, audience fatigue, diminishing returns."
+        Snyder: "One great twist better than three mediocre twists - focus impact."
+        """
+        detected = False
+        penalty = False
+
+        # Check for overload markers
+        count = 0
+        for marker in self.twist_overload_markers:
+            count += screenplay.lower().count(marker)
+
+        # Check if multiple twists not handled well
+        if multiple_twists_data["present"] and not multiple_twists_data["handled_well"]:
+            detected = True
+            penalty = True
+
+        if count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count
+        }
+
+    def _calculate_overall_twist_quality(self, profile: TwistProfile) -> float:
+        """Calculate overall twist quality score."""
+        scores = [
+            1.0 if profile.twist_present else 0.4,  # Critical - twist makes story memorable
+            1.0 if profile.twist_effectiveness else 0.5,  # Critical (Aristotle: surprise yet inevitable)
+            1.0 if profile.twist_timing else 0.6,  # Important (Field/Snyder: midpoint or Act 3)
+            1.0 if profile.twist_setup else 0.4,  # Critical (McKee: must be earned)
+            1.0 if profile.twist_impact else 0.6,  # Important (changes everything)
+            1.0 if profile.red_herrings_present else 0.8,  # Nice to have (sophisticated misdirection)
+            1.0 if profile.multiple_twists_handled else 0.7,  # If multiple, must handle well
+            1.0 if profile.false_protagonist_twist else 0.9,  # Rare but powerful (Psycho)
+            1.0 if profile.identity_twist else 0.8,  # Common powerful twist type
+            1.0 if profile.reversal_of_fortune else 0.7,  # Aristotle's peripeteia
+            1.0 if profile.recognition_moment else 0.7,  # Aristotle's anagnorisis
+            1.0 if profile.twist_earned else 0.3,  # Critical (McKee: earned not arbitrary)
+            0.0 if profile.unearned_twist_detected else 1.0,  # PENALTY (critical violation)
+            0.0 if profile.predictable_twist_detected else 1.0,  # PENALTY (loses surprise)
+            0.0 if profile.twist_overload_detected else 1.0  # PENALTY (diminishing returns)
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_twist_rules(self, profile: TwistProfile, twist_present: Dict,
+                          twist_effectiveness: Dict, twist_timing: Dict,
+                          twist_setup: Dict, twist_impact: Dict,
+                          red_herrings: Dict, multiple_twists: Dict,
+                          false_protagonist: Dict, identity_twist: Dict,
+                          reversal_fortune: Dict, recognition_moment: Dict,
+                          twist_earned: Dict, unearned_twist: Dict,
+                          predictable_twist: Dict, twist_overload: Dict) -> List[Dict]:
+        """Check twist against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "TWIST.R001":
+                # Twist Present
+                if not profile.twist_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Twist missing - no major revelation/reversal detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R002":
+                # Twist Effectiveness (Surprise Yet Inevitable)
+                if not profile.twist_effectiveness:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Twist effectiveness weak - not surprising yet inevitable (Aristotle)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R003":
+                # Twist Timing Optimal
+                if not profile.twist_timing:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Twist timing suboptimal - not at Act 2 midpoint or Act 3",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R004":
+                # Twist Setup Proper
+                if not profile.twist_setup:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Twist setup weak - not properly foreshadowed, appears random",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R005":
+                # Twist Impact Significant
+                if not profile.twist_impact:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Twist impact weak - doesn't change everything or recontextualize story",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R006":
+                # Red Herrings Present
+                if not profile.red_herrings_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Red herrings missing - no misdirection, twist too predictable",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R007":
+                # Multiple Twists Handled Well
+                if multiple_twists["present"] and not profile.multiple_twists_handled:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Multiple twists poorly handled - overload, diminishing returns",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R008":
+                # Identity Twist Effective
+                if identity_twist["present"] and identity_twist["count"] < 3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Identity twist weak - not enough setup/impact",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R009":
+                # Reversal of Fortune Present
+                if not profile.reversal_of_fortune:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Reversal of fortune missing - no peripeteia (Aristotle)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R010":
+                # Recognition Moment Present
+                if not profile.recognition_moment:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Recognition moment missing - no anagnorisis (Aristotle)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R011":
+                # Twist Earned
+                if not profile.twist_earned:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Twist not earned - cheap gimmick, not properly setup",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R012":
+                # Avoid Unearned Twist
+                if profile.unearned_twist_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Unearned twist detected - random, not foreshadowed, deus ex machina",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R013":
+                # Avoid Predictable Twist
+                if profile.predictable_twist_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Predictable twist detected - too obvious, telegraphed, no surprise",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R014":
+                # Avoid Twist Overload
+                if profile.twist_overload_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Twist overload detected - too many twists, diminishing returns",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TWIST.R015":
+                # Twist Surprise Balance
+                if twist_effectiveness["surprise_count"] < 2 or twist_effectiveness["inevitable_count"] < 2:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Twist surprise-inevitability balance weak - needs both elements",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_twist_score(self, profile: TwistProfile, violations: List) -> float:
+        """Calculate overall twist score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for major issues
+        if profile.unearned_twist_detected:
+            score -= 30  # Critical penalty (worst violation)
+        if profile.predictable_twist_detected:
+            score -= 20  # High penalty (loses surprise)
+        if profile.twist_overload_detected:
+            score -= 15  # High penalty (diminishing returns)
+
+        # Bonus for excellence
+        if profile.overall_twist_quality > 0.85:
+            score += 5
+        elif profile.overall_twist_quality > 0.75:
+            score += 3
+
+        if profile.twist_present and profile.twist_effectiveness:
+            score += 5  # Aristotle's excellence (surprise yet inevitable)
+
+        if profile.twist_earned and profile.twist_setup:
+            score += 3  # McKee's sophisticated structure
+
+        if profile.red_herrings_present:
+            score += 2  # Sophisticated misdirection
+
+        if profile.reversal_of_fortune and profile.recognition_moment:
+            score += 3  # Aristotle's peripeteia + anagnorisis combo
+
+        if profile.twist_impact:
+            score += 2  # Changes everything
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: TwistProfile,
+                          violations: List) -> str:
+        """Generate twist diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Twist sophisticated with effective surprise-inevitability balance and proper setup"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Twist present but could be more effective or better balanced"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Twist problems - unearned, predictable, or poorly timed"
+        else:
+            level = "POOR"
+            summary = "Major twist problems - unearned, predictable, or overload detected"
+
+        diagnosis = f"TWIST {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.twist_present:
+            issues.append("no twist")
+        if not profile.twist_effectiveness:
+            issues.append("weak effectiveness")
+        if not profile.twist_setup:
+            issues.append("poor setup")
+        if profile.unearned_twist_detected:
+            issues.append("unearned twist")
+        if profile.predictable_twist_detected:
+            issues.append("predictable twist")
+        if profile.twist_overload_detected:
+            issues.append("twist overload")
+        if not profile.twist_timing:
+            issues.append("poor timing")
+        if not profile.twist_impact:
+            issues.append("weak impact")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: TwistProfile) -> List[str]:
+        """Generate specific twist recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.twist_present:
+            recommendations.append("Add major twist - McKee: 'Great stories have revelations that recontextualize everything seen before'")
+
+        if not profile.twist_effectiveness:
+            recommendations.append("Improve twist effectiveness - Aristotle: 'Best plots surprise audience yet feel inevitable in hindsight'")
+
+        if not profile.twist_setup:
+            recommendations.append("Strengthen twist setup - McKee: 'Twist must be earned - plant clues audience misses, surprise but inevitable'")
+
+        if profile.unearned_twist_detected:
+            recommendations.append("Eliminate unearned twist - Aristotle: 'Deus ex machina worst flaw - arbitrary resolution not earned through plot'")
+
+        if profile.predictable_twist_detected:
+            recommendations.append("Balance foreshadowing - Truby: 'Enough to feel earned, not so much it's obvious' - add misdirection, red herrings")
+
+        if profile.twist_overload_detected:
+            recommendations.append("Reduce twists - Snyder: 'One great twist better than three mediocre twists - focus impact'")
+
+        if not profile.twist_timing:
+            recommendations.append("Optimize twist timing - Field: 'Major twist at Act 2 midpoint (page 60) or Act 3 final reversal (page 85-95)'")
+
+        if not profile.twist_impact:
+            recommendations.append("Increase twist impact - McKee: 'Great twist recontextualizes everything - audience sees story in new light'")
+
+        if not profile.red_herrings_present:
+            recommendations.append("Add red herrings - McKee: 'Misdirection - plant false clues, hide truth in plain sight, surprise yet earned'")
+
+        if not profile.reversal_of_fortune and not profile.recognition_moment:
+            recommendations.append("Add Aristotelian elements - Aristotle: 'Peripeteia (reversal) + anagnorisis (recognition) most powerful plot elements'")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - twist and revelation principles essential")
+            recommendations.append("Study Aristotle's Poetics - peripeteia/anagnorisis foundation of great twists")
+
+        return recommendations[:5]
+
+    def export_twist_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export twist features for correlation/analysis.
+
+        Returns structured data with twist metrics.
+        """
+        twist_present = self._analyze_twist_present(screenplay_text)
+        twist_effectiveness = self._analyze_twist_effectiveness(screenplay_text)
+        page_count = self._estimate_page_count(screenplay_text)
+        act2_midpoint_text = self._extract_pages(screenplay_text, int(page_count * 0.45), int(page_count * 0.55))
+        act3_text = self._extract_pages(screenplay_text, int(page_count * 0.75), page_count)
+        twist_timing = self._analyze_twist_timing(screenplay_text, page_count, act2_midpoint_text, act3_text)
+
+        return {
+            "twist": {
+                "twist_present": twist_present["present"],
+                "twist_effectiveness": twist_effectiveness["effective"],
+                "twist_timing": twist_timing["good_timing"],
+                "twist_location": twist_timing["location"]
+            },
+            "meta": {
+                "source": "DrTwist",
+                "focus": "Twist and revelation analysis"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrTwistAnalysis(DrTwist):
+    """Alias for compatibility with test framework."""
+    pass

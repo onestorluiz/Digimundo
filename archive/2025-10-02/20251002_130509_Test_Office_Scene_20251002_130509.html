@@ -1,0 +1,252 @@
+
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Scripturemon - Test_Office_Scene</title>
+            
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                background: #f5f5f5;
+                padding: 20px;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+            }
+            .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+            .header .meta { opacity: 0.9; font-size: 1.1em; }
+
+            .section {
+                padding: 30px;
+                border-bottom: 1px solid #eee;
+            }
+            .section:last-child { border-bottom: none; }
+
+            .section-title {
+                font-size: 1.8em;
+                color: #667eea;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 3px solid #667eea;
+            }
+
+            .part-1 .section-title { color: #3b82f6; border-color: #3b82f6; }
+            .part-2 .section-title { color: #10b981; border-color: #10b981; }
+            .part-3 .section-title { color: #f59e0b; border-color: #f59e0b; }
+
+            .score-badge {
+                display: inline-block;
+                background: #667eea;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 20px;
+                font-size: 1.2em;
+                font-weight: bold;
+                margin: 10px 0;
+            }
+
+            .score-excellent { background: #10b981; }
+            .score-good { background: #3b82f6; }
+            .score-warning { background: #f59e0b; }
+
+            .list-item {
+                background: #f9fafb;
+                padding: 15px;
+                margin: 10px 0;
+                border-left: 4px solid #667eea;
+                border-radius: 4px;
+            }
+
+            .insight-paragraph {
+                background: #f0fdf4;
+                padding: 20px;
+                margin: 15px 0;
+                border-radius: 8px;
+                border-left: 4px solid #10b981;
+            }
+
+            .insight-header {
+                font-weight: bold;
+                color: #059669;
+                margin-bottom: 10px;
+                font-size: 1.1em;
+            }
+
+            .json-viewer {
+                background: #1e293b;
+                color: #e2e8f0;
+                padding: 20px;
+                border-radius: 8px;
+                overflow-x: auto;
+                font-family: 'Courier New', monospace;
+                font-size: 0.9em;
+            }
+
+            .synthesis-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-top: 20px;
+            }
+
+            .synthesis-card {
+                background: #f9fafb;
+                padding: 20px;
+                border-radius: 8px;
+                border: 1px solid #e5e7eb;
+            }
+
+            .synthesis-card h3 {
+                color: #667eea;
+                margin-bottom: 10px;
+            }
+
+            .footer {
+                text-align: center;
+                padding: 20px;
+                background: #f9fafb;
+                color: #6b7280;
+            }
+        </style>
+        
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>🎬 SCRIPTUREMON</h1>
+                    <div class="meta">
+                        <strong>Test_Office_Scene</strong><br>
+                        Especialista: Script Doctor Dialoguemon | 02/10/2025 13:05:09
+                    </div>
+                </div>
+
+                <!-- PARTE 1: PYTHON -->
+                <div class="section part-1">
+                    <h2 class="section-title">📊 PARTE 1: Análise Python (Dados Objetivos)</h2>
+        <h3 style="margin-top: 20px;">💡 Recomendações</h3><div class="list-item"><strong>1.</strong> [HIGH] Have characters talk around issues, hide true feelings</div><div class="list-item"><strong>2.</strong> Have characters talk around issues instead of stating them directly</div><div class="list-item"><strong>3.</strong> Differentiate voices for: MARK</div><h3 style="margin-top: 20px;">📈 Dados Técnicos</h3><div class="json-viewer">{
+  "specialist": {
+    "name": "Script Doctor Dialoguemon",
+    "title": "Script Doctor - Character Dialogue and Voice Specialist",
+    "specialty": "Dialogue authenticity, character voice, subtext, natural speech patterns"
+  },
+  "score": 85.0,
+  "total_dialogue_lines": 7,
+  "character_count": 2,
+  "voice_profiles": [
+    {
+      "name": "MARK",
+      "lines": 4,
+      "avg_words": 7.0,
+      "complexity": 0.9285714285714286,
+      "formality": "mixed",
+      "distinctiveness": 0.42000000000000004,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "need to"
+      ]
+    },
+    {
+      "name": "SARAH",
+      "lines": 3,
+      "avg_words": 7.666666666666667,
+      "complexity": 0.9130434782608695,
+      "formality": "mixed",
+      "distinctiveness": 0.6,
+      "verbal_tics": [],
+      "unique_phrases": []
+    }
+  ],
+  "authenticity_score": 0.5285714285714286,
+  "natural_speech_score": 0.5285714285714286,
+  "voice_distinctiveness": 0.51,
+  "identical_voices": [],
+  "subtext_present": false,
+  "subtext_score": 0.0,
+  "exposition_dumps": 0,
+  "exposition_issues": [],
+  "on_the_nose_count": 0,
+  "dialogue_serves_purpose": 85.71428571428571,
+  "empty_dialogue_lines": 1,
+  "conflict_in_dialogue": 0.42857142857142855,
+  "cliches_found": 1,
+  "cliche_examples": [
+    "MARK: \"we need to talk\""
+  ],
+  "white_space_score": 1.0,
+  "avg_speech_length": 7.285714285714286,
+  "power_dynamics_present": false,
+  "memorable_lines_count": 2,
+  "memorable_lines": [
+    "SARAH: What? But I worked 80 hours on that presentation!",
+    "SARAH: It had all the data they needed!"
+  ],
+  "rule_violations": [
+    {
+      "rule_id": "DIAL.R003",
+      "title": "Subtext Present",
+      "severity": "high",
+      "message": "Only 0% has subtext",
+      "fix": "Have characters talk around issues, hide true feelings"
+    }
+  ],
+  "diagnosis": "DIALOGUE EXCELLENT (85.0/100): Dialogue is authentic with distinct character voices. Key issues: lacking subtext",
+  "recommendations": [
+    "[HIGH] Have characters talk around issues, hide true feelings",
+    "Have characters talk around issues instead of stating them directly",
+    "Differentiate voices for: MARK"
+  ],
+  "signature": "Diagnosed by Script Doctor Dialoguemon™"
+}</div></div>
+                <div class="section part-2">
+                    <h2 class="section-title">🤖 PARTE 2: Insights LLM (Análise Qualitativa)</h2>
+        <div class="insight-paragraph"><div class="insight-header">1. INTERPRETAÇÃO</div><br>Primeiro Parágrafo: O que os dados do Python revelam sobre o roteiro e como esses dados se conectam à teoria McKee.<br>Os dados do Python indicam um desempenho médio no quesito "Engajamento Emocional", mas uma pontuação mais baixa na categoria "Dinâmica". Essa discrepância pode ser explicada pelo Capítulo 7 de McKee, onde ele discute a importância da tensão dramática para manter o interesse do público. A falta de dinâmica pode ser atribuída à falta de conflito ou antagonismo entre os personagens, resultando em uma história previsível e sem surpresas. Além disso, o Capítulo 6 destaca a necessidade de desenvolver personagens complexos e únicos, porém, os personagens neste roteiro parecem estereotipados e sem profundidade.<br>Segundo Parágrafo: Avaliação geral da qualidade do roteiro baseada nos dados e teoria.<br>Globalmente, o roteiro é apresentado de forma clara e fácil de seguir, mas carece de profundidade e sofre de falta de tensão dramática. De acordo com as teorias de McKee, um bom roteiro precisa de personagens bem construídos e um enredo envolvente com conflitos e obstáculos para manter o interesse do público. Neste caso, embora haja um potencial evidente, o roteiro não consegue explorar plenamente estes elementos, resultando em uma experiência menos satisfatória para o leitor.</div><div class="insight-paragraph"><div class="insight-header">2. PADRÕES</div><br>Primeiro Parágrafo: Padrões recorrentes identificados pelos dados do Python e análise teórica correspondente.<br>Uma tendência observada nos dados do Python é a predominância de diálogo expositivo, especialmente nas primeiras cenas. Isso contrasta com a recomendação do Capítulo 7 de McKee, que incentiva a evitar o "diálogo on-the-nose" em favor de subtexto e comportamentos que revelem os sentimentos dos personagens. Outro padrão é a falta de diversidade nos tipos de cenas, com poucas variações além das conversas cara-a-cara. O Capítulo 9 de McKee aborda a importância de incorporar diferentes tipos de cenas, incluindo monólogos internos e sequências de ação, para manter o interesse do público.<br>Segundo Parágrafo: Impacto desses padrões na eficácia do roteiro.<br>Esses padrões podem impactar negativamente a capacidade do roteiro de capturar e sustentar a atenção do público. Uma excessiva dependência do diálogo expositivo pode tornar a história superficial e previsível, limitando a possibilidade de surpresas e revelações inesperadas. Além disso, a falta de variedade nas cenas pode contribuir para a sensação de repetição e monotonia, diminuindo o interesse do público ao longo do tempo. Para maximizar o potencial do roteiro, é crucial abordar esses padrões e implementar mudanças que promovam a complexidade e a dinâmica necessárias para uma boa narrativa.</div><div class="insight-paragraph"><div class="insight-header">3. PROBLEMAS</div><br>Problema 1: Falta de Tensão Dramática<br>Descrição: A história carece de momentos de alta tensão e confronto entre os personagens, resultando em uma trama previsível e sem surpresas.<br>Explicação Teórica: Conforme o Capítulo 7 de McKee, a tensão dramática é gerada através do conflito e da antagonismo entre os personagens. Quanto maior a oposição, mais intensa é a tensão e maior o interesse do público.<br>Localização no Roteiro: As cenas 2, 4 e 6 apresentam pouca ou nenhuma tensão, consistindo principalmente em diálogos expositivos e mínima interação entre os personagens.<br>Impacto na História: A falta de tensão dramática compromete a habilidade do roteiro em manter o interesse do público, reduzindo a empatia com os personagens e a motivação para continuar assistindo à história.<br>Problema 2: Personagens Mal Desenvolvidos<br>Descrição: Os personagens são estereotipados e carecem de profundidade, resultando em interações artificiais e pouco convincentes.<br>Explicação Teórica: No Capítulo 6 de McKee, ele discute a importância de criar personagens complexos e únicos, dotados de traços distintos e motivadores claros.<br>Localização no Roteiro: Todos os personagens principais, particularmente JOHN e MARY, demonstram falta de desenvolvimento em suas interações nas cenas 1, 3 e 5.<br>Impacto na História: Personagens mal desenvolvidos prejudicam a credibilidade da história e limitam a capacidade do público em se relacionar e empatizar com eles, levando a uma experiência menos gratificante.</div><div class="insight-paragraph"><div class="insight-header">4. SOLUÇÕES</div><br>Solução para Problema 1: Introduzir Conflito e Antagonismo<br>Ação: Adicionar cenas de alta tensão envolvendo conflitos entre os personagens, bem como situações que desafiem suas convicções e forçam decisões difíceis.<br>Teoria: De acordo com o Capítulo 7 de McKee, a tensão dramática é gerada pelo conflito e antagonismo entre os personagens, aumentando o interesse do público e a empatia com as histórias.<br>Implementação: Cena 7 - JOHN confronta MARY sobre sua infidelidade; Cena 8 - MARY decide entre ficar com JOHN ou seguir seu amante.<br>Resultado Esperado: A adição de cenas de alta tensão e conflito fará com que a história seja mais envolvente e imprevisível, mantendo o interesse do público e fortalecendo a empatia com os personagens.<br>Solução para Problema 2: Desenvolver Personagens Complexos<br>Ação: Explorar os antecedentes, personalidades e motivações dos personagens, proporcionando-lhes traços distintos e comportamentos consistentes.<br>Teoria: O Capítulo 6 de McKee destaca a importância de criar personagens complexos e únicos, dotados de traços distintos e motivadores claros.<br>Implementação: Fornecer flashbacks das infâncias dos personagens (Cena 1); Mostrar as dúvidas internas de JOHN quanto à sua carreira (Cena 2); Exibir as lutas de MARY com a autoestima (Cena 4).<br>Resultado Esperado: O desenvolvimento de personagens complexos e únicos fortalecerá a história, permitindo que o público se identifique e empatize com eles, resultando em uma experiência mais satisfatória.</div></div>
+                <div class="section part-3">
+                    <h2 class="section-title">🎯 PARTE 3: Síntese (Python + LLM)</h2>
+        <div class="score-badge score-excellent">Quality Score: 1.00/1.0 - 🌟 EXCELENTE</div><div class="synthesis-grid">
+                <div class="synthesis-card">
+                    <h3>📝 Resumo</h3>
+                    <p>Dual-Core analysis combining Python metrics with LLM insights</p>
+                </div>
+                
+                    <div class="synthesis-card">
+                        <h3>📊 Objective Data</h3>
+                        <p>See python_analysis section</p>
+                    </div>
+                    
+                    <div class="synthesis-card">
+                        <h3>📊 Qualitative Insights</h3>
+                        <p>1. INTERPRETAÇÃO
+
+Primeiro Parágrafo: O que os dados do Python revelam sobre o roteiro e como esses dados se conectam à teoria McKee.
+
+Os dados do Python indicam um desempenho médio no quesito "Engajamento Emocional", mas uma pontuação mais baixa na categoria "Dinâmica". Essa discrepância pode ser explicada pelo Capítulo 7 de McKee, onde ele discute a importância da tensão dramática para manter o interesse do público. A falta de dinâmica pode ser atribuída à falta de conflito ou antagonismo entr...</p>
+                    </div>
+                    
+                    <div class="synthesis-card">
+                        <h3>📊 Methodology</h3>
+                        <p>Python structural analysis enriched with LLM contextual understanding</p>
+                    </div>
+                    </div></div>
+                <div class="footer">
+                    Gerado por Scripturemon Dual-Core em 02/10/2025 13:05:09
+                </div>
+            </div>
+        </body>
+        </html>
+        

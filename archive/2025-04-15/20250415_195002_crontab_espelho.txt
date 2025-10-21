@@ -1,0 +1,6 @@
+
+# Comando para editar crontab no VPS
+crontab -e
+
+# Adicione a linha abaixo para rodar a cada hora:
+0 * * * * python3 /root/espelho_central.py

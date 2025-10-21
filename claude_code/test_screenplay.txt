@@ -1,0 +1,68 @@
+TESTE DE DIÁLOGO
+Screenplay de Teste para Scripturemon v3.0
+
+Escrito por Claude Code
+Para teste do sistema de análise
+
+
+INT. CAFÉ - DIA
+
+MARIA (30s), desenvolvedora de software, senta-se nervosamente
+em frente ao laptop. JOÃO (35s), seu chefe, aproxima-se com
+dois cafés.
+
+                    JOÃO
+          Trouxe seu café. Dois açúcares, como
+          você gosta.
+
+Maria sorri, mas não tira os olhos da tela.
+
+                    MARIA
+          Obrigada... Estou quase terminando o
+          código do checkpoint system.
+
+João senta-se ao lado dela.
+
+                    JOÃO
+          Você está trabalhando nisso há três
+          dias sem parar. Precisa descansar.
+
+                    MARIA
+          Eu sei, mas isso vai mudar tudo.
+          Nunca mais vamos perder trabalho.
+
+                    JOÃO
+          E se você perder a sanidade no
+          processo? Isso não vale nada.
+
+Maria finalmente olha para ele.
+
+                    MARIA
+          Você tem razão. Vou fazer um teste
+          rápido e vou para casa.
+
+                    JOÃO
+          Promete?
+
+                    MARIA
+          Prometo.
+
+João levanta-se e vai embora. Maria volta para o código,
+mas desta vez com um sorriso.
+
+                    MARIA (cont'd)
+          Só mais um commit... Só mais um...
+
+
+INT. APARTAMENTO DE MARIA - NOITE
+
+Maria entra exausta, mas feliz. Liga o computador.
+
+                    MARIA
+          Funcionou! O checkpoint salvou tudo!
+
+Ela cai no sofá, aliviada.
+
+FADE OUT.
+
+FIM

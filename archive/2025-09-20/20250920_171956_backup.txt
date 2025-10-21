@@ -1,0 +1,3 @@
+Monitoring thread already running
+Failed to export snapshot: Expecting value: line 682 column 27 (char 16391)
+/Users/clubproducoes/.scripturemon/soul/checkpoint_20250909_203244

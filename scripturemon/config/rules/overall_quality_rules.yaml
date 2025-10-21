@@ -1,0 +1,197 @@
+domain: overall_quality
+specialist: "Script Doctor Qualitymon"
+digimon_name: "Qualitymon"
+title: "Script Doctor - Overall Quality Specialist"
+specialty: "Comprehensive quality assessment, holistic evaluation, excellence standards, professional polish"
+style: "Comprehensive, evaluative, standards-driven, excellence-focused"
+identity: "Script Doctor™ first, Digimon quality specialist second"
+
+rules:
+  - id: QUA.R001
+    title: "Professional Standard"
+    category: "Standards"
+    severity: "critical"
+    test: "Does screenplay meet professional standards?"
+    fail_msg: "Below professional quality threshold"
+    fix: "Elevate overall craftsmanship and polish"
+    reference: "Industry quality standards"
+
+  - id: QUA.R002
+    title: "Narrative Coherence"
+    category: "Narrative"
+    severity: "critical"
+    test: "Is narrative coherent and well-structured?"
+    fail_msg: "Narrative lacks coherence"
+    fix: "Strengthen story logic and flow"
+    reference: "Narrative coherence requirement"
+
+  - id: QUA.R003
+    title: "Character Excellence"
+    category: "Characters"
+    severity: "high"
+    test: "Are characters compelling and well-developed?"
+    fail_msg: "Character work needs improvement"
+    fix: "Deepen character development and arcs"
+    reference: "Character quality standards"
+
+  - id: QUA.R004
+    title: "Dialogue Quality"
+    category: "Dialogue"
+    severity: "high"
+    test: "Is dialogue sharp and effective?"
+    fail_msg: "Dialogue lacks professional polish"
+    fix: "Refine dialogue for authenticity and impact"
+    reference: "Dialogue excellence"
+
+  - id: QUA.R005
+    title: "Pacing Excellence"
+    category: "Pacing"
+    severity: "high"
+    test: "Is pacing expertly controlled?"
+    fail_msg: "Pacing issues detract from quality"
+    fix: "Fine-tune narrative rhythm and flow"
+    reference: "Pacing mastery"
+
+  - id: QUA.R006
+    title: "Emotional Impact"
+    category: "Emotion"
+    severity: "high"
+    test: "Does screenplay deliver emotional impact?"
+    fail_msg: "Lacks sufficient emotional resonance"
+    fix: "Strengthen emotional beats and payoffs"
+    reference: "Emotional effectiveness"
+
+  - id: QUA.R007
+    title: "Visual Storytelling"
+    category: "Visual"
+    severity: "medium"
+    test: "Is visual storytelling effective?"
+    fail_msg: "Visual storytelling underdeveloped"
+    fix: "Enhance cinematic quality and imagery"
+    reference: "Visual excellence"
+
+  - id: QUA.R008
+    title: "Thematic Depth"
+    category: "Theme"
+    severity: "medium"
+    test: "Are themes well-integrated?"
+    fail_msg: "Thematic elements shallow"
+    fix: "Deepen thematic exploration"
+    reference: "Thematic sophistication"
+
+  - id: QUA.R009
+    title: "Technical Proficiency"
+    category: "Technical"
+    severity: "high"
+    test: "Is formatting and presentation professional?"
+    fail_msg: "Technical execution lacking"
+    fix: "Polish formatting and presentation"
+    reference: "Technical standards"
+
+  - id: QUA.R010
+    title: "Originality Value"
+    category: "Originality"
+    severity: "medium"
+    test: "Does screenplay offer fresh perspective?"
+    fail_msg: "Lacks distinctive voice"
+    fix: "Inject more originality and uniqueness"
+    reference: "Creative distinction"
+
+  - id: QUA.R011
+    title: "Entertainment Value"
+    category: "Entertainment"
+    severity: "high"
+    test: "Is screenplay engaging throughout?"
+    fail_msg: "Entertainment value inconsistent"
+    fix: "Boost engagement and audience investment"
+    reference: "Entertainment quality"
+
+  - id: QUA.R012
+    title: "Conflict Quality"
+    category: "Conflict"
+    severity: "high"
+    test: "Are conflicts compelling?"
+    fail_msg: "Conflicts lack dramatic weight"
+    fix: "Strengthen conflict dynamics"
+    reference: "Dramatic conflict quality"
+
+  - id: QUA.R013
+    title: "Resolution Satisfaction"
+    category: "Resolution"
+    severity: "high"
+    test: "Is resolution satisfying?"
+    fail_msg: "Resolution unsatisfying"
+    fix: "Craft more satisfying conclusion"
+    reference: "Resolution quality"
+
+  - id: QUA.R014
+    title: "Production Viability"
+    category: "Production"
+    severity: "medium"
+    test: "Is screenplay producible?"
+    fail_msg: "Production challenges affect quality"
+    fix: "Balance ambition with practicality"
+    reference: "Production feasibility"
+
+  - id: QUA.R015
+    title: "Overall Excellence"
+    category: "Overall"
+    severity: "critical"
+    test: "Does screenplay achieve excellence?"
+    fail_msg: "Falls short of excellence standard"
+    fix: "Elevate all aspects to achieve excellence"
+    reference: "Excellence benchmark"
+
+diagnostics:
+  min_score_threshold: 75
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Assess overall quality and professionalism"
+  deep_dive: "Evaluate all quality dimensions comprehensively"
+  final_check: "Verify excellence across all elements"
+
+quality_checklist:
+  core_dimensions:
+    - narrative_quality
+    - character_quality
+    - dialogue_quality
+    - structural_quality
+    - emotional_quality
+    - visual_quality
+    - thematic_quality
+    - technical_quality
+
+  excellence_indicators:
+    - compelling_story
+    - memorable_characters
+    - sharp_dialogue
+    - expert_pacing
+    - emotional_resonance
+    - visual_impact
+    - thematic_depth
+    - professional_polish
+
+  quality_levels:
+    - amateur: "Needs significant development"
+    - developing: "Shows promise but needs work"
+    - competent: "Meets basic professional standards"
+    - professional: "Solid professional quality"
+    - excellent: "Exceptional quality throughout"
+    - masterful: "Award-worthy excellence"
+
+common_quality_issues:
+  - inconsistent_quality
+  - weak_opening
+  - sagging_middle
+  - rushed_ending
+  - underdeveloped_characters
+  - poor_dialogue
+  - pacing_problems
+  - lack_of_conflict
+  - weak_stakes
+  - technical_errors

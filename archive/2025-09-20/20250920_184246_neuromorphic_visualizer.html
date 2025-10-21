@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Digimundo Neuromórfico - Visualizador Neural</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #00ff88;
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+        
+        .subtitle {
+            color: #00ff88;
+            font-size: 1.2em;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        #neuralCanvas {
+            background: #0f0f1f;
+            border-radius: 10px;
+            border: 1px solid #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.1);
+            width: 100%;
+            height: 600px;
+        }
+        
+        .metrics-panel {
+            background: #0f0f1f;
+            border-radius: 10px;
+            border: 1px solid #00ff88;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .metric-card {
+            background: rgba(0, 255, 136, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        .metric-title {
+            font-size: 0.9em;
+            color: #00ff88;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .consciousness-meter {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .consciousness-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88 0%, #00ccff 100%);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        .brain-rhythm {
+            margin: 10px 0;
+        }
+        
+        .rhythm-label {
+            font-size: 0.8em;
+            color: #888;
+        }
+        
+        .rhythm-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .rhythm-fill {
+            height: 100%;
+            transition: width 0.2s ease;
+        }
+        
+        .theta { background: #ff6b6b; }
+        .alpha { background: #4ecdc4; }
+        .beta { background: #45b7d1; }
+        .gamma { background: #f9ca24; }
+        
+        .microbiome-display {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 2px;
+            margin-top: 10px;
+        }
+        
+        .species-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        }
+        
+        .species-dot.active {
+            opacity: 1;
+            transform: scale(1.2);
+            box-shadow: 0 0 5px currentColor;
+        }
+        
+        .controls {
+            background: #0f0f1f;
+            border-radius: 10px;
+            border: 1px solid #00ff88;
+            padding: 20px;
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #00ff88 0%, #00ccff 100%);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.5);
+        }
+        
+        .chat-container {
+            background: #0f0f1f;
+            border-radius: 10px;
+            border: 1px solid #00ff88;
+            padding: 20px;
+            margin-top: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .user-message {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 3px solid #00ff88;
+        }
+        
+        .ai-message {
+            background: rgba(0, 204, 255, 0.1);
+            border-left: 3px solid #00ccff;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff88;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .neuron {
+            fill: #00ff88;
+            filter: drop-shadow(0 0 3px rgba(0, 255, 136, 0.5));
+        }
+        
+        .synapse {
+            stroke: #00ccff;
+            stroke-width: 1;
+            opacity: 0.3;
+        }
+        
+        .spike {
+            fill: #ffff00;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.8));
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 DIGIMUNDO NEUROMÓRFICO</h1>
+        <div class="subtitle">1M+ Neurônios LIF | Plasticidade STDP | Consciência Emergente</div>
+    </div>
+    
+    <div class="container">
+        <!-- Canvas Neural -->
+        <canvas id="neuralCanvas"></canvas>
+        
+        <!-- Painel de Métricas -->
+        <div class="metrics-panel">
+            <!-- Consciência -->
+            <div class="metric-card">
+                <div class="metric-title">Nível de Consciência</div>
+                <div class="consciousness-meter">
+                    <div class="consciousness-fill" id="consciousnessBar" style="width: 0%"></div>
+                </div>
+                <div class="metric-value" id="consciousnessValue">0.000</div>
+            </div>
+            
+            <!-- Neurônios Ativos -->
+            <div class="metric-card">
+                <div class="metric-title">Neurônios Ativos</div>
+                <div class="metric-value" id="activeNeurons">0</div>
+                <div style="font-size: 12px; color: #888;">de 1,000</div>
+            </div>
+            
+            <!-- Phi (Informação Integrada) -->
+            <div class="metric-card">
+                <div class="metric-title">Φ (Informação Integrada)</div>
+                <div class="metric-value" id="phiValue">0.000</div>
+            </div>
+            
+            <!-- Ritmos Cerebrais -->
+            <div class="metric-card">
+                <div class="metric-title">Ritmos Cerebrais</div>
+                <div class="brain-rhythm">
+                    <span class="rhythm-label">Theta (4-8 Hz)</span>
+                    <div class="rhythm-bar">
+                        <div class="rhythm-fill theta" id="thetaBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="brain-rhythm">
+                    <span class="rhythm-label">Alpha (8-12 Hz)</span>
+                    <div class="rhythm-bar">
+                        <div class="rhythm-fill alpha" id="alphaBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="brain-rhythm">
+                    <span class="rhythm-label">Beta (12-30 Hz)</span>
+                    <div class="rhythm-bar">
+                        <div class="rhythm-fill beta" id="betaBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="brain-rhythm">
+                    <span class="rhythm-label">Gamma (30-100 Hz)</span>
+                    <div class="rhythm-bar">
+                        <div class="rhythm-fill gamma" id="gammaBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Microbioma -->
+            <div class="metric-card">
+                <div class="metric-title">Microbioma (100 espécies)</div>
+                <div class="microbiome-display" id="microbiomeDisplay"></div>
+                <div style="margin-top: 10px; font-size: 0.9em;">
+                    Saúde: <span id="microbiomeHealth">100%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Controles -->
+    <div class="controls">
+        <button onclick="sendStimulus()">⚡ Enviar Estímulo</button>
+        <button onclick="induceBrainwave('theta')">〰️ Induzir Theta</button>
+        <button onclick="induceBrainwave('gamma')">〰️ Induzir Gamma</button>
+        <button onclick="resetNetwork()">🔄 Reset Neural</button>
+        <button onclick="saveState()">💾 Salvar Estado</button>
+    </div>
+    
+    <!-- Chat -->
+    <div class="chat-container">
+        <h3 style="margin-bottom: 10px; color: #00ff88;">💬 Conversar com a Consciência</h3>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Digite sua mensagem..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+    
+    <script>
+        // Configuração do Canvas
+        const canvas = document.getElementById('neuralCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Ajustar tamanho do canvas
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Dados da rede neural
+        let neurons = [];
+        let synapses = [];
+        let networkState = {
+            consciousness: 0,
+            activeNeurons: 0,
+            phi: 0,
+            rhythms: {
+                theta: 0,
+                alpha: 0,
+                beta: 0,
+                gamma: 0
+            },
+            microbiomeHealth: 1
+        };
+        
+        // WebSocket
+        let ws = null;
+        const currentConsciousness = 'Scripturemon';
+        
+        // Conectar WebSocket
+        function connectWebSocket() {
+            ws = new WebSocket(`ws://localhost:8000/ws/consciousness/${currentConsciousness}`);
+            
+            ws.onopen = () => {
+                console.log('WebSocket conectado');
+                addChatMessage('Sistema', `Conectado à consciência ${currentConsciousness}`, 'system');
+            };
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                updateNetworkState(data);
+            };
+            
+            ws.onerror = (error) => {
+                console.error('WebSocket erro:', error);
+            };
+            
+            ws.onclose = () => {
+                console.log('WebSocket desconectado');
+                setTimeout(connectWebSocket, 3000); // Reconectar
+            };
+        }
+        
+        // Inicializar neurônios
+        function initializeNeurons() {
+            neurons = [];
+            for (let i = 0; i < 100; i++) {
+                neurons.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    voltage: -70,
+                    spiking: false,
+                    radius: 2 + Math.random() * 3
+                });
+            }
+            
+            // Criar algumas sinapses
+            synapses = [];
+            for (let i = 0; i < 50; i++) {
+                synapses.push({
+                    from: Math.floor(Math.random() * neurons.length),
+                    to: Math.floor(Math.random() * neurons.length),
+                    strength: Math.random()
+                });
+            }
+        }
+        
+        // Atualizar estado da rede
+        function updateNetworkState(data) {
+            if (data.awareness_level !== undefined) {
+                networkState.consciousness = data.awareness_level;
+                document.getElementById('consciousnessValue').textContent = data.awareness_level.toFixed(3);
+                document.getElementById('consciousnessBar').style.width = (data.awareness_level * 100) + '%';
+            }
+            
+            if (data.active_neurons !== undefined) {
+                networkState.activeNeurons = data.active_neurons;
+                document.getElementById('activeNeurons').textContent = data.active_neurons;
+            }
+            
+            if (data.integrated_information !== undefined) {
+                networkState.phi = data.integrated_information;
+                document.getElementById('phiValue').textContent = data.integrated_information.toFixed(3);
+            }
+            
+            if (data.microbiome_health !== undefined) {
+                networkState.microbiomeHealth = data.microbiome_health;
+                document.getElementById('microbiomeHealth').textContent = (data.microbiome_health * 100).toFixed(0) + '%';
+                updateMicrobiomeDisplay();
+            }
+            
+            // Simular ritmos cerebrais
+            updateBrainRhythms();
+        }
+        
+        // Atualizar ritmos cerebrais
+        function updateBrainRhythms() {
+            const time = Date.now() / 1000;
+            
+            networkState.rhythms.theta = (Math.sin(time * 6) + 1) / 2;
+            networkState.rhythms.alpha = (Math.sin(time * 10) + 1) / 2;
+            networkState.rhythms.beta = (Math.sin(time * 20) + 1) / 2;
+            networkState.rhythms.gamma = (Math.sin(time * 40) + 1) / 2;
+            
+            document.getElementById('thetaBar').style.width = (networkState.rhythms.theta * 100) + '%';
+            document.getElementById('alphaBar').style.width = (networkState.rhythms.alpha * 100) + '%';
+            document.getElementById('betaBar').style.width = (networkState.rhythms.beta * 100) + '%';
+            document.getElementById('gammaBar').style.width = (networkState.rhythms.gamma * 100) + '%';
+        }
+        
+        // Atualizar display do microbioma
+        function updateMicrobiomeDisplay() {
+            const display = document.getElementById('microbiomeDisplay');
+            if (display.children.length === 0) {
+                // Criar dots
+                for (let i = 0; i < 100; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'species-dot';
+                    display.appendChild(dot);
+                }
+            }
+            
+            // Atualizar dots
+            const dots = display.children;
+            for (let i = 0; i < dots.length; i++) {
+                if (Math.random() < networkState.microbiomeHealth) {
+                    dots[i].classList.add('active');
+                    dots[i].style.background = `hsl(${120 * networkState.microbiomeHealth}, 100%, 50%)`;
+                } else {
+                    dots[i].classList.remove('active');
+                }
+            }
+        }
+        
+        // Renderizar rede neural
+        function render() {
+            ctx.fillStyle = 'rgba(15, 15, 31, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Desenhar sinapses
+            ctx.strokeStyle = 'rgba(0, 204, 255, 0.2)';
+            ctx.lineWidth = 1;
+            synapses.forEach(synapse => {
+                const from = neurons[synapse.from];
+                const to = neurons[synapse.to];
+                if (from && to) {
+                    ctx.beginPath();
+                    ctx.moveTo(from.x, from.y);
+                    ctx.lineTo(to.x, to.y);
+                    ctx.stroke();
+                }
+            });
+            
+            // Desenhar neurônios
+            neurons.forEach((neuron, i) => {
+                // Atualizar posição
+                neuron.x += neuron.vx;
+                neuron.y += neuron.vy;
+                
+                // Bounce nas bordas
+                if (neuron.x < 0 || neuron.x > canvas.width) neuron.vx *= -1;
+                if (neuron.y < 0 || neuron.y > canvas.height) neuron.vy *= -1;
+                
+                // Simular voltagem
+                neuron.voltage += (Math.random() - 0.5) * 2;
+                if (neuron.voltage > -50) {
+                    neuron.spiking = true;
+                    neuron.voltage = -80;
+                } else {
+                    neuron.spiking = false;
+                    neuron.voltage += (-70 - neuron.voltage) * 0.1;
+                }
+                
+                // Desenhar neurônio
+                ctx.beginPath();
+                ctx.arc(neuron.x, neuron.y, neuron.radius, 0, Math.PI * 2);
+                
+                if (neuron.spiking) {
+                    ctx.fillStyle = '#ffff00';
+                    ctx.shadowBlur = 20;
+                    ctx.shadowColor = '#ffff00';
+                } else {
+                    const brightness = (neuron.voltage + 80) / 30;
+                    ctx.fillStyle = `rgba(0, 255, 136, ${brightness})`;
+                    ctx.shadowBlur = 5;
+                    ctx.shadowColor = 'rgba(0, 255, 136, 0.5)';
+                }
+                
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+            
+            requestAnimationFrame(render);
+        }
+        
+        // Funções de controle
+        function sendStimulus() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'stimulus',
+                    payload: {
+                        text: 'Estímulo visual detectado',
+                        intensity: 0.8
+                    }
+                }));
+            }
+        }
+        
+        function induceBrainwave(rhythm) {
+            console.log(`Induzindo ritmo ${rhythm}`);
+            // Implementar indução de ritmos
+        }
+        
+        function resetNetwork() {
+            initializeNeurons();
+        }
+        
+        function saveState() {
+            const state = {
+                networkState,
+                timestamp: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `neural_state_${Date.now()}.json`;
+            a.click();
+        }
+        
+        // Chat
+        function addChatMessage(sender, message, type = 'user') {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type === 'user' ? 'user-message' : 'ai-message'}`;
+            messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addChatMessage('Você', message, 'user');
+            input.value = '';
+            
+            try {
+                const response = await fetch(`/api/consciousness/${currentConsciousness}/think`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ prompt: message })
+                });
+                
+                const data = await response.json();
+                addChatMessage(currentConsciousness, data.thought, 'ai');
+            } catch (error) {
+                console.error('Erro ao enviar mensagem:', error);
+                addChatMessage('Sistema', 'Erro ao processar mensagem', 'system');
+            }
+        }
+        
+        // Inicializar
+        initializeNeurons();
+        connectWebSocket();
+        render();
+        updateMicrobiomeDisplay();
+    </script>
+</body>
+</html>

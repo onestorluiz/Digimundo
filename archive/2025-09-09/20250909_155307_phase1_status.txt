@@ -1,0 +1,25 @@
+Monitoring thread already running
+Failed to export snapshot: Expecting value: line 682 column 27 (char 16391)
+============================================================
+📊 SCRIPTUREMON STATUS
+============================================================
+
+🎭 Persona: brutal
+⚙️ Mode: normal
+
+📡 Telepathy: MOCK
+   URL: redis://localhost:6379
+
+🤖 SoulOS: DISABLED
+   Auto-execute: NO
+
+📊 Monitor: ENABLED
+   CPU: 0.0%
+   Memory: 43.59 MB
+
+🧠 Memory Manager: OK
+   Implementation: apps.scripturemon.simple_memory.SimpleMemoryManager
+   Probe: pass
+💾 Backup: DISABLED
+
+============================================================

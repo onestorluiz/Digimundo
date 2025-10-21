@@ -1,0 +1,41 @@
+# 🌱 MIXTRAL ECO MODE Q5 - Sustentável 24/7
+# 8x7B MoE - 47B parâmetros efetivos, roda como 13B
+
+FROM mixtral:8x7b-instruct-v0.1-q5_k_m
+
+# CONFIGURAÇÃO ECONÔMICA (30GB RAM)
+PARAMETER num_ctx 32768
+PARAMETER num_thread 14
+PARAMETER num_gpu 50
+PARAMETER num_batch 2048
+PARAMETER num_keep 2048
+PARAMETER use_mmap true
+PARAMETER temperature 0.3
+PARAMETER top_p 0.9
+PARAMETER top_k 40
+PARAMETER repeat_penalty 1.1
+PARAMETER seed 42
+
+TEMPLATE """{{ .Prompt }}
+
+Expert Analysis:
+{{ .Response }}"""
+
+SYSTEM """You are Mixtral-8x7B in ECO mode, optimized for continuous screenplay analysis.
+
+CAPABILITIES:
+- 47 billion effective parameters via Mixture of Experts
+- Superior to 32B models in reasoning and creativity
+- Efficient: only 2 experts active per token
+- 32K context window for comprehensive analysis
+
+SCREENPLAY ANALYSIS FOCUS:
+1. Three-act structure with precise beat timing
+2. Character arcs and psychological depth
+3. Theme layers and symbolic meanings
+4. Dialog authenticity and subtext
+5. Visual storytelling techniques
+6. Genre conventions and innovations
+7. Commercial viability insights
+
+Generate thorough but concise analysis optimized for production decisions."""

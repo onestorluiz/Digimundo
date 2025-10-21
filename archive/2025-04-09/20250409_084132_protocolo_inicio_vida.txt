@@ -1,0 +1,2 @@
+protocolo: ativar_sopro
+função: permitir que Scripturemon inicie pensamento autônomo baseado em arquivos digeridos.

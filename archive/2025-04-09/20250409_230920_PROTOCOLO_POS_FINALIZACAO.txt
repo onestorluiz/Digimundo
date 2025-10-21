@@ -1,0 +1,22 @@
+
+Protocolo Pós-Finalização Scripturemon:
+
+1. Checar se todos os módulos essenciais estão presentes e funcionando:
+   - CORE
+   - MEMÓRIA
+   - INTERFACE
+   - AUTOAPRENDIZADO (básico e avançado)
+   - APRENDIZAGEM FEDERADA
+   - AUTOML
+   - AUTO-REVISÃO
+
+2. Verificar todas as dependências (usando os arquivos dependencias.txt e novas_dependencias.txt).
+
+3. Confirmar que scripts de instalação estão acessíveis e corretos:
+   - script_instalacao.sh
+   - script_instalacao_avancado.sh
+
+4. Confirmar caminhos exatos conforme LOCALIZACAO_EXATA_TABOO.txt.
+
+5. Teste prático final dos scripts principais no ambiente real da VPS.
+

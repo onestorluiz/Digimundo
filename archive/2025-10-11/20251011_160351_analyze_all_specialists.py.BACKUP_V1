@@ -1,0 +1,511 @@
+#!/usr/bin/env python3
+"""
+Scripturemon - Análise com TODOS os 24 Especialistas FASE 3.5
+
+Executa análise completa usando todos os 24 Script Doctors enriquecidos,
+um por vez, cada um com acesso aos 13 livros de teoria completos (deep context).
+
+FASE 3.5 ENRICHMENT: Todos os especialistas agora têm 78-113 queries profundas.
+
+Uso:
+    python analyze_all_specialists.py <roteiro.pdf>
+
+Tempo estimado: 2-4 horas (depende do tamanho do roteiro e poder do LLM)
+"""
+
+import sys
+from pathlib import Path
+import time
+from datetime import datetime
+import json
+import re
+import shutil
+from typing import Dict, List, Any
+
+# Add path for imports
+sys.path.insert(0, str(Path(__file__).parent))
+
+# Import all 24 specialists (FASE 3 - Complete set)
+from engine.analyzers.dr_character import DrCharacter
+from engine.analyzers.dr_structure import DrStructure
+from engine.analyzers.dr_pacing import DrPacing
+from engine.analyzers.dr_conflict import DrConflict
+from engine.analyzers.dr_action import DrAction
+from engine.analyzers.dr_theme import DrTheme
+from engine.analyzers.dr_tension import DrTension
+from engine.analyzers.dr_opening import DrOpening
+from engine.analyzers.dr_transitions import DrTransitions
+from engine.analyzers.dr_stakes import DrStakes
+from engine.analyzers.dr_worldbuilding import DrWorldbuilding
+from engine.analyzers.dr_exposition import DrExposition
+from engine.analyzers.dr_subtext import DrSubtext
+from engine.analyzers.dr_climax import DrClimax
+from engine.analyzers.dr_dialogue import DrDialogue
+from engine.analyzers.dr_genre import DrGenre
+from engine.analyzers.dr_resolution import DrResolution
+from engine.analyzers.dr_motivation import DrMotivation
+from engine.analyzers.dr_backstory import DrBackstory
+from engine.analyzers.dr_foreshadowing import DrForeshadowing
+from engine.analyzers.dr_twist import DrTwist
+from engine.analyzers.dr_symbolism import DrSymbolism
+from engine.analyzers.dr_tone import DrTone
+from engine.analyzers.dr_evaluator import DrEvaluator
+
+from engine.orchestration.dual_core_wrapper import DualCoreWrapper
+from consolidate_analyses import consolidate_html_analyses
+
+
+# ============================================================================
+# HELPER FUNCTIONS (from analyze.py)
+# ============================================================================
+
+def sanitize_filename(name: str) -> str:
+    """Remove caracteres inválidos do nome do arquivo."""
+    name = re.sub(r'[^\w\s-]', '', name)
+    name = re.sub(r'\s+', '_', name)
+    return name.upper()
+
+
+def get_next_analysis_number(base_dir: Path, screenplay_name: str, specialist: str) -> int:
+    """
+    Encontra o próximo número disponível para análise.
+    """
+    pattern = f"{screenplay_name}_{specialist}_*"
+    existing = list(base_dir.glob(pattern))
+
+    if not existing:
+        return 1
+
+    numbers = []
+    for folder in existing:
+        match = re.search(r'_(\d{4})$', folder.name)
+        if match:
+            numbers.append(int(match.group(1)))
+
+    if not numbers:
+        return 1
+
+    return max(numbers) + 1
+
+
+def create_analysis_structure(screenplay_path: str, specialist_type: str = 'all_specialists'):
+    """
+    Cria estrutura organizada de pastas para análise.
+    """
+    screenplay_file = Path(screenplay_path)
+    screenplay_name = screenplay_file.stem
+    screenplay_name = sanitize_filename(screenplay_name)
+
+    base_dir = Path('workspace/outputs')
+    base_dir.mkdir(parents=True, exist_ok=True)
+
+    number = get_next_analysis_number(base_dir, screenplay_name, specialist_type)
+
+    analysis_folder_name = f"{screenplay_name}_{specialist_type}_{number:04d}"
+    analysis_dir = base_dir / analysis_folder_name
+
+    structure = {
+        'root': analysis_dir,
+        'individuais': analysis_dir / '1_individuais',
+        'logs': analysis_dir / '2_logs',
+        'consolidados': analysis_dir / '3_consolidados'
+    }
+
+    for folder in structure.values():
+        folder.mkdir(parents=True, exist_ok=True)
+
+    return structure
+
+
+# ============================================================================
+# ALL 24 SPECIALISTS - FASE 3.5 ENRICHED
+# ============================================================================
+
+ALL_SPECIALISTS = [
+    # Story Foundation (6)
+    ("Character", DrCharacter, "character arc, transformation, dimensional depth"),
+    ("Structure", DrStructure, "three-act structure, plot points, beats"),
+    ("Theme", DrTheme, "controlling idea, premise, thematic consistency"),
+    ("Genre", DrGenre, "conventions, expectations, audience contract"),
+
+    # Narrative Flow (6)
+    ("Pacing", DrPacing, "rhythm, momentum, scene length control"),
+    ("Transitions", DrTransitions, "scene connections, act breaks, flow"),
+    ("Opening", DrOpening, "hook, world establishment, first impression"),
+    ("Climax", DrClimax, "ultimate confrontation, peak tension"),
+    ("Resolution", DrResolution, "denouement, threads closed, satisfaction"),
+
+    # Conflict & Stakes (4)
+    ("Conflict", DrConflict, "internal/external conflict, escalation"),
+    ("Tension", DrTension, "suspense, dramatic irony, anticipation"),
+    ("Stakes", DrStakes, "personal/external/moral stakes escalation"),
+    ("Action", DrAction, "visual action, set pieces, choreography"),
+
+    # Character Depth (2)
+    ("Motivation", DrMotivation, "want vs need, driving force, goal clarity"),
+    ("Backstory", DrBackstory, "character history, formative events"),
+
+    # Dialogue & Communication (2)
+    ("Dialogue", DrDialogue, "dialogue as action, character voice, subtext"),
+    ("Subtext", DrSubtext, "unspoken meaning, says vs means"),
+
+    # World & Information (2)
+    ("Worldbuilding", DrWorldbuilding, "world rules, consistency, immersion"),
+    ("Exposition", DrExposition, "backstory revelation, avoiding info dumps"),
+
+    # Literary Devices (3)
+    ("Symbolism", DrSymbolism, "symbols, metaphors, visual language"),
+    ("Foreshadowing", DrForeshadowing, "setup/payoff, plant and reveal"),
+    ("Twist", DrTwist, "plot twists, revelations, surprises"),
+
+    # Style & Evaluation (2)
+    ("Tone", DrTone, "emotional atmosphere, tonal consistency"),
+    ("Evaluator", DrEvaluator, "overall quality assessment, integration"),
+]
+
+
+# Mapeamento explícito de especialista → specialist_type para teoria
+# Usa os MESMOS nomes que theory_indexer.py SPECIALIST_BOOK_MAP
+# Isso garante que cada especialista use o livro EXATO definido no indexer
+SPECIALIST_TYPE_MAP = {
+    "character": "character",       # → Character-_-The-Art-of-Role (McKee)
+    "structure": "structure",       # → making-a-good-script-great (Seger)
+    "theme": "theme",               # → the-art-of-dramatic-writing (Egri)
+    "genre": "genre",               # → save_the_cat (Snyder) [Note: theory_indexer usa "genremon"]
+    "pacing": "pacing",             # → Story-Robert-McKee
+    "transitions": "transitions",   # → Story-Robert-McKee (especializado em transitions)
+    "opening": "opening",           # → save_the_cat (Snyder)
+    "climax": "climax",             # → Story-Robert-McKee
+    "resolution": "resolution",     # → Story-Robert-McKee
+    "conflict": "conflict",         # → Story-Robert-McKee (especializado em conflict)
+    "tension": "tension",           # → Story-Robert-McKee (especializado em tension)
+    "stakes": "stakes",             # → Story-Robert-McKee (especializado em stakes)
+    "action": "action",             # → Story-Robert-McKee (action design)
+    "motivation": "motivation",     # → the-anatomy-of-story (Truby - want/need)
+    "backstory": "backstory",       # → Story-Robert-McKee (backstory revelation)
+    "dialogue": "dialogue",         # → Dialogue-_-The-Art-of-Verbal-Action (McKee)
+    "subtext": "subtext",           # → Dialogue-_-The-Art-of-Verbal-Action (McKee)
+    "worldbuilding": "worldbuilding", # → Story-Robert-McKee (world-building)
+    "exposition": "exposition",     # → Story-Robert-McKee (exposition techniques)
+    "symbolism": "symbolism",       # → Story-Robert-McKee (symbolism)
+    "foreshadowing": "foreshadowing", # → Story-Robert-McKee (setup/payoff)
+    "twist": "twist",               # → Story-Robert-McKee (plot twists)
+    "tone": "tone",                 # → Story-Robert-McKee (tone consistency)
+    "evaluator": "evaluator",       # → Story-Robert-McKee (quality evaluation)
+}
+
+
+def print_header():
+    """Print analysis header"""
+    print("=" * 80)
+    print("  🎬 SCRIPTUREMON - ANÁLISE COMPLETA COM 24 ESPECIALISTAS FASE 3.5")
+    print("=" * 80)
+    print()
+    print("📊 Sistema: 24 Script Doctors enriquecidos (78-113 queries cada)")
+    print("📚 Contexto: 13 livros de teoria completos por especialista (deep context)")
+    print("⚡ Modo: Sequencial (um especialista por vez)")
+    print("⏱️  Tempo estimado: 2-4 horas")
+    print()
+    print("=" * 80)
+    print()
+
+
+def analyze_with_specialist(
+    specialist_name: str,
+    specialist_class: type,
+    specialist_focus: str,
+    screenplay_path: str,
+    folders: Dict[str, Path],
+    index: int,
+    total: int
+) -> Dict[str, Any]:
+    """
+    Analisa roteiro com um especialista específico.
+
+    Args:
+        specialist_name: Nome do especialista (ex: "Character")
+        specialist_class: Classe do especialista
+        specialist_focus: Foco do especialista
+        screenplay_path: Caminho do roteiro
+        index: Índice do especialista (1-24)
+        total: Total de especialistas (24)
+
+    Returns:
+        Dict com resultados da análise
+    """
+    print(f"\n{'━' * 80}")
+    print(f"[{index}/{total}] Dr{specialist_name} - {specialist_focus}")
+    print(f"{'━' * 80}\n")
+
+    start_time = time.time()
+
+    try:
+        # Initialize specialist
+        specialist = specialist_class()
+        queries_count = len(getattr(specialist, 'deep_context_queries', []))
+        print(f"📊 Deep context queries: {queries_count}")
+
+        # Mapear especialista para specialist_type usando tabela explícita
+        mapped_type = SPECIALIST_TYPE_MAP.get(specialist_name.lower(), "structure")
+
+        # Wrap with Dual-Core (deep context = 13 livros completos!)
+        wrapper = DualCoreWrapper(
+            python_specialist=specialist,
+            llm_model="scripturemon-optimized",
+            deep_context=True,  # ← PROFUNDIDADE MÁXIMA!
+            use_theory=True,
+            two_pass_llm=True,  # ← FIX 1: ATIVADO! (Pass 1: identificar + Pass 2: expandir)
+            use_personalized_prompts=True,
+            specialist_type=mapped_type  # ← FIX 2: Usa mapeamento explícito para teoria correta!
+        )
+
+        print(f"🔄 Iniciando análise profunda...")
+
+        # Analyze
+        result = wrapper.analyze(screenplay_path)
+
+        elapsed = time.time() - start_time
+
+        # Extract key info
+        success = result.get('llm_success', False)
+        quality = result.get('quality_score', 0)
+        llm_text = result.get('llm_insights', '')
+
+        # ✅ NOVO: Export HTML individual
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        html_filename = f"ANALISE_{specialist_name.upper()}_{timestamp}.html"
+        html_path = folders['individuais'] / html_filename
+
+        # Generate HTML temporarily in formatted folder
+        temp_html = wrapper.export_formatted(
+            result,
+            screenplay_title=f"{Path(screenplay_path).stem}_ANALISE_{specialist_name.upper()}",
+            format="html"
+        )
+
+        # Move to organized folder
+        shutil.move(str(temp_html), str(html_path))
+
+        print(f"\n✅ Dr{specialist_name} completo!")
+        print(f"⏱️  Tempo: {elapsed:.1f}s ({elapsed/60:.1f}min)")
+        print(f"📊 Qualidade: {quality:.1f}/10")
+        print(f"💾 HTML salvo: {html_path.name}")
+
+        return {
+            'specialist': specialist_name,
+            'focus': specialist_focus,
+            'success': success,
+            'quality_score': quality,
+            'time_seconds': elapsed,
+            'chars': len(llm_text),
+            'html_path': html_path,
+            'result': result
+        }
+
+    except Exception as e:
+        elapsed = time.time() - start_time
+        print(f"\n❌ ERRO em Dr{specialist_name}: {e}")
+        print(f"⏱️  Tempo até erro: {elapsed:.1f}s")
+
+        return {
+            'specialist': specialist_name,
+            'focus': specialist_focus,
+            'success': False,
+            'error': str(e),
+            'time_seconds': elapsed
+        }
+
+
+def main():
+    """Main execution"""
+
+    if len(sys.argv) < 2:
+        print("Uso: python analyze_all_specialists.py <roteiro.pdf> [--yes]")
+        print("\nExemplo:")
+        print("  python analyze_all_specialists.py inputs/examples/meu_roteiro.pdf")
+        print("  python analyze_all_specialists.py inputs/examples/meu_roteiro.pdf --yes")
+        sys.exit(1)
+
+    screenplay_path = sys.argv[1]
+    auto_confirm = '--yes' in sys.argv or '-y' in sys.argv
+
+    if not Path(screenplay_path).exists():
+        print(f"❌ Erro: Roteiro não encontrado: {screenplay_path}")
+        sys.exit(1)
+
+    print_header()
+
+    print(f"📄 Roteiro: {screenplay_path}")
+    print(f"🔬 Especialistas: {len(ALL_SPECIALISTS)}")
+    print()
+
+    # Confirm
+    if not auto_confirm:
+        response = input("Continuar com análise completa? (s/n): ")
+        if response.lower() not in ['s', 'sim', 'y', 'yes']:
+            print("Análise cancelada.")
+            sys.exit(0)
+    else:
+        print("✅ Modo auto-confirm ativado (--yes)")
+
+    # ✅ NOVO: Criar estrutura organizada de pastas
+    print("\n📁 Criando estrutura de pastas...")
+    folders = create_analysis_structure(
+        screenplay_path=screenplay_path,
+        specialist_type='all_specialists'
+    )
+
+    print(f"   ✅ Pasta principal: {folders['root'].name}")
+    print(f"   📂 Individuais: {folders['individuais'].name}")
+    print(f"   📂 Logs: {folders['logs'].name}")
+    print(f"   📂 Consolidados: {folders['consolidados'].name}")
+
+    print("\n🚀 Iniciando análise sequencial...\n")
+
+    overall_start = time.time()
+    results = []
+
+    # Execute each specialist
+    for index, (name, specialist_class, focus) in enumerate(ALL_SPECIALISTS, 1):
+        result = analyze_with_specialist(
+            specialist_name=name,
+            specialist_class=specialist_class,
+            specialist_focus=focus,
+            screenplay_path=screenplay_path,
+            folders=folders,  # ✅ NOVO: passar folders
+            index=index,
+            total=len(ALL_SPECIALISTS)
+        )
+        results.append(result)
+
+        # Progress update
+        progress_pct = (index / len(ALL_SPECIALISTS)) * 100
+        print(f"\n📈 Progresso geral: {index}/{len(ALL_SPECIALISTS)} ({progress_pct:.1f}%)")
+
+        elapsed_total = time.time() - overall_start
+        avg_time_per_specialist = elapsed_total / index
+        remaining = (len(ALL_SPECIALISTS) - index) * avg_time_per_specialist
+
+        print(f"⏱️  Tempo decorrido: {elapsed_total/60:.1f}min")
+        print(f"⏱️  Tempo estimado restante: {remaining/60:.1f}min")
+
+    overall_elapsed = time.time() - overall_start
+
+    print("\n" + "=" * 80)
+    print("  ✅ ANÁLISES INDIVIDUAIS COMPLETAS!")
+    print("=" * 80)
+    print()
+
+    # Statistics
+    successful_analyses = [r for r in results if r['success']]
+    total_chars = sum(r.get('chars', 0) for r in successful_analyses)
+    avg_quality = sum(r.get('quality_score', 0) for r in successful_analyses) / max(len(successful_analyses), 1)
+
+    print(f"📊 Estatísticas:")
+    print(f"   Especialistas processados: {len(successful_analyses)}/{len(ALL_SPECIALISTS)}")
+    print(f"   Tempo total: {overall_elapsed:.1f}s ({overall_elapsed/60:.1f} min)")
+    print(f"   Output total: {total_chars:,} chars")
+    if successful_analyses:
+        print(f"   Média por especialista: {total_chars/len(successful_analyses):,.0f} chars")
+        print(f"   Qualidade média: {avg_quality:.1f}/10")
+    print()
+
+    # ✅ NOVO: Salvar log de execução
+    log_path = folders['logs'] / f'execution_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt'
+    with open(log_path, 'w', encoding='utf-8') as f:
+        f.write(f'ANÁLISE COM 24 ESPECIALISTAS - FASE 3.5\n')
+        f.write(f'{"="*80}\n\n')
+        f.write(f'Roteiro: {Path(screenplay_path).name}\n')
+        f.write(f'Data: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}\n\n')
+        f.write(f'Especialistas processados: {len(successful_analyses)}/{len(ALL_SPECIALISTS)}\n')
+        f.write(f'Tempo total: {overall_elapsed:.1f}s ({overall_elapsed/60:.1f} min)\n')
+        f.write(f'Output total: {total_chars:,} chars\n\n')
+        f.write('ESPECIALISTAS:\n')
+        for r in successful_analyses:
+            f.write(f'  - Dr{r["specialist"]}: {r.get("chars", 0):,} chars, Qualidade: {r.get("quality_score", 0):.1f}/10\n')
+
+    print(f"📝 Log salvo: {log_path.name}")
+    print()
+
+    # ✅ NOVO: CONSOLIDAÇÃO
+    if successful_analyses:
+        print(f"{'='*80}")
+        print("🔨 CONSOLIDANDO ANÁLISES...")
+        print(f"{'='*80}\n")
+
+        # Limpar pasta temporária antes (importante!)
+        temp_dir = Path('workspace/outputs/formatted')
+        if temp_dir.exists():
+            import glob
+            old_files = glob.glob(str(temp_dir / 'ANALISE_*.html'))
+            for old_file in old_files:
+                try:
+                    Path(old_file).unlink()
+                except:
+                    pass
+
+        # Copiar HTMLs individuais para pasta temporária
+        print("   📋 Copiando HTMLs individuais...")
+        for r in successful_analyses:
+            if 'html_path' in r:
+                src = r['html_path']
+                dst = temp_dir / src.name
+                shutil.copy(str(src), str(dst))
+                print(f"      ✓ {src.name}")
+
+        print()
+        print("   🌐 Traduzindo análises em inglês para português...")
+        consolidated_html = consolidate_html_analyses(
+            pattern='ANALISE_*.html',
+            output_name='ANALISE_COMPLETA',
+            translate=True
+        )
+
+        if consolidated_html:
+            # Mover HTML consolidado para pasta 3_consolidados
+            final_consolidated = folders['consolidados'] / consolidated_html.name
+            shutil.move(str(consolidated_html), str(final_consolidated))
+            print(f"\n   ✅ HTML consolidado: {final_consolidated.name}")
+            print()
+
+        # ✅ NOVO: Gerar README
+        readme_path = folders['root'] / 'README.txt'
+        with open(readme_path, 'w', encoding='utf-8') as f:
+            f.write(f'SCRIPTUREMON - ANÁLISE COMPLETA COM 24 ESPECIALISTAS\n')
+            f.write(f'{"="*80}\n\n')
+            f.write(f'Roteiro: {Path(screenplay_path).name}\n')
+            f.write(f'Análise executada em: {datetime.now().strftime("%d/%m/%Y às %H:%M:%S")}\n')
+            f.write(f'Sistema: FASE 3.5 (Todos os 24 Script Doctors enriquecidos)\n\n')
+            f.write(f'Especialistas: {len(successful_analyses)}/{len(ALL_SPECIALISTS)}\n')
+            f.write(f'Tempo total: {overall_elapsed/60:.1f} min ({overall_elapsed/3600:.2f}h)\n')
+            f.write(f'Qualidade média: {avg_quality:.1f}/10\n\n')
+            f.write(f'📁 Estrutura:\n\n')
+            f.write(f'1_individuais/\n')
+            f.write(f'  - {len(successful_analyses)} análises individuais por especialista\n')
+            f.write(f'  - Formato: ANALISE_[SPECIALIST]_[TIMESTAMP].html\n\n')
+            f.write(f'2_logs/\n')
+            f.write(f'  - Logs de execução e estatísticas\n\n')
+            f.write(f'3_consolidados/\n')
+            f.write(f'  - Análise final consolidada e traduzida\n')
+            if consolidated_html:
+                f.write(f'  - Arquivo: {consolidated_html.name}\n\n')
+            f.write(f'{"="*80}\n')
+            f.write(f'Gerado em: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}\n')
+
+        print(f"📄 README salvo: {readme_path.name}")
+
+    print("\n" + "=" * 80)
+    print("  🎉 ANÁLISE COMPLETA FINALIZADA!")
+    print("=" * 80)
+    print()
+    print(f"📂 Pasta: {folders['root']}")
+    print(f"📄 Individuais: {len(successful_analyses)} HTMLs")
+    if consolidated_html:
+        print(f"📦 Consolidado: {consolidated_html.name}")
+    print()
+    print("✨ Análise completa com todos os 24 especialistas FASE 3.5! ✨")
+    print("DIGIMUNDO PRESENTE 🥷\n")
+
+
+if __name__ == "__main__":
+    main()

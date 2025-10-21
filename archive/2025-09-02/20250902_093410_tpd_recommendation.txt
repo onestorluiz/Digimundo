@@ -1,0 +1,4 @@
+Best TPD: K2000_n2-6
+Path: data/tpd/K2000_n2-6/token_dict.json
+Compression: 0.245
+Patterns: 2000

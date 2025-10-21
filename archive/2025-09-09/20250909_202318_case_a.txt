@@ -1,0 +1,13 @@
+============================================================
+CASE: a
+TIMESTAMP: 2025-09-09T20:23:18.914627
+============================================================
+
+INPUT:
+Oi, teste rápido.
+
+RESPONSE:
+Processando: Oi, teste rápido.
+
+NON-EMPTY: True
+LENGTH: 30 chars

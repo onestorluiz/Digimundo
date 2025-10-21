@@ -1,0 +1,1 @@
+# Arquivo simbólico: app_obscuramon.py de obscuramon

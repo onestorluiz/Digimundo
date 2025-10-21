@@ -1,0 +1,28 @@
+
+Localizações Exatas (Implementação Taboo Avançada):
+
+1. aprendizagem_federada.py deve ficar em:
+   messamon/digidata/digimons/scripturemon/federacao/aprendizagem_federada.py
+
+2. auto_ml.py deve ficar em:
+   messamon/digidata/digimons/scripturemon/automl/auto_ml.py
+
+3. auto_revisao.py deve ficar em:
+   messamon/digidata/digimons/scripturemon/autorevisao/auto_revisao.py
+
+Dependências adicionais necessárias (atualizar dependencias.txt):
+- scikit-learn
+
+Integrações adicionais necessárias em integrador_ia.py:
+from aprendizagem_federada import AprendizagemFederada
+from auto_ml import AutoML
+from auto_revisao import AutoRevisao
+
+class IntegradorIA:
+    def __init__(self):
+        self.aprendizado_profundo = AprendizadoProfundo()
+        self.memoria_episodica = MemoriaEpisodica()
+        self.sistema_recompensa = SistemaRecompensa()
+        self.aprendizagem_federada = AprendizagemFederada(modelos=[])
+        self.automl = AutoML()
+        self.auto_revisao = AutoRevisao()

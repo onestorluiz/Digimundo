@@ -1,0 +1,2 @@
+[UPDATED] live reload -> reports/index.html default: 10s
+[UPDATED] live reload -> reports/ultimate_panel.html default: 10s

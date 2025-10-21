@@ -1,0 +1,35 @@
+📘 SCRIPT: gerar_index_digimons.py
+
+🧠 DESCRIÇÃO:
+Este script gera automaticamente o arquivo `index_digimons.json`, essencial para o funcionamento correto do TemploOculto.
+Ele percorre a pasta `/messamon/digidata/digimons/`, detecta todos os Digimons que têm um arquivo JSON próprio (como `ajamon/ajamon.json`)
+e extrai informações-chave para mapear a função de cada Digimon, criando um índice de referência para os sistemas centrais.
+
+🔧 FUNCIONALIDADE:
+- Detecta novas pastas de Digimons automaticamente
+- Lê o conteúdo de cada JSON dentro da pasta de cada Digimon
+- Extrai a função (campo "função") e o nome (baseado na pasta ou campo interno)
+- Gera um arquivo `/messamon/digidata/digimons/index_digimons.json` no formato:
+  {
+    "scripturemon": "IA principal do Livro Vivo",
+    "ajamon": "IA da unificação simbólica",
+    ...
+  }
+
+🖥️ COMANDOS DE USO NO SERVIDOR:
+
+1. Enviar para o servidor:
+scp gerar_index_digimons.py root@82.25.74.142:/root/
+
+2. Acessar o servidor:
+ssh root@82.25.74.142
+
+3. Executar o script:
+python3 /root/gerar_index_digimons.py
+
+📦 SAÍDA:
+Criação ou atualização de:
+→ /messamon/digidata/digimons/index_digimons.json
+
+⚙️ OPCIONAL:
+Você pode integrar esse script ao `verificador_templo.sh` ou agendar uma execução automática via cron para manter o índice sempre atualizado.

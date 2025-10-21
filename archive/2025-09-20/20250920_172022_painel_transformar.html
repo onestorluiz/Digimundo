@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>Transformar Tora</title></head>
+<body style="background:#0e0e0e;color:#0ff;font-family:monospace">
+<h1>⚙️ Transmutação da Tora Viva</h1>
+<form method="POST">
+  {% for b in blocos %}
+    <div style="margin-bottom:20px;">
+      <b>🌀 {{ b.funcao }}</b><br>
+      Arquivo: {{ b.arquivo }}<br>
+      Criar rota: <code>{{ b.rota }}</code><br>
+      <button name="funcao" value="{{ b.funcao }}" style="margin-top:5px;">Transformar {{ b.funcao }}</button>
+    </div>
+  {% endfor %}
+</form>
+</body>
+</html>

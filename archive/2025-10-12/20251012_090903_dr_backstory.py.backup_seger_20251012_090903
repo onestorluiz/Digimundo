@@ -1,0 +1,1390 @@
+"""
+Script Doctor Backstorymon - Backstory Integration Analysis Specialist
+A Script Doctor™ in Digimon form specializing in backstory integration, drip-feed technique, ghost/wound, avoid info dumps.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class BackstoryProfile:
+    """Overall backstory analysis."""
+    backstory_present: bool  # Character has backstory/history
+    backstory_integrated: bool  # Weaved naturally not dumped
+    drip_feed_technique: bool  # Revealed gradually (McKee)
+    backstory_reveals_character: bool  # Shows who they are now
+    backstory_timing: bool  # Revealed when needed for story
+    ghost_wound_identified: bool  # Past trauma affecting present (Truby)
+    flashback_usage: bool  # When appropriate, not overused
+    exposition_integration: bool  # Show don't tell backstory
+    backstory_motivation: bool  # Explains current behavior
+    backstory_relevant: bool  # Every detail serves story
+    info_dump_detected: bool  # PENALTY (too much backstory at once)
+    irrelevant_backstory_detected: bool  # PENALTY (doesn't serve story)
+    excessive_flashbacks_detected: bool  # PENALTY (overused, breaks flow)
+    overall_backstory_quality: float
+
+
+@dataclass
+class BackstoryAnalysisResults:
+    """Complete backstory analysis results."""
+    backstory_profile: BackstoryProfile
+    backstory_moments: List[str]  # Moments of backstory revelation
+    ghost_wound_list: List[str]  # Past traumas identified
+    flashback_list: List[str]  # Flashback scenes
+    drip_feed_moments: List[str]  # Gradual revelation moments
+    info_dump_list: List[str]  # Info dumps detected (PENALTY)
+    score: float
+    diagnosis: str
+    recommendations: List[str]
+
+
+class DrBackstory:
+    """
+    Script Doctor Backstorymon - The Backstory Integration Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing backstory integration,
+    drip-feed technique, ghost/wound identification, backstory timing, avoid info dumps.
+
+    Identity: Script Doctor first, Digimon backstory specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Backstorymon with rules and configuration."""
+        self.name = "Script Doctor Backstorymon"
+        self.digimon_name = "Backstorymon"
+        self.title = "Script Doctor - Backstory Integration Analysis Specialist"
+        self.specialty = "Backstory integration, drip-feed technique, ghost/wound, backstory timing, avoid info dumps"
+        self.identity = "I am Script Doctor Backstorymon, a professional Script Doctor™ specializing in backstory integration analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "backstory_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - BACKSTORY SPECIFIC
+        self.deep_context_queries = [
+            "McKee Story backstory revelation timing",
+            "McKee Story backstory weave not dump",
+            "McKee Story backstory through conflict",
+            "McKee Story backstory earned revelation",
+            "McKee Story backstory drip-feed technique",
+            "McKee Story backstory strategic timing",
+            "McKee Story backstory forced by pressure",
+            "McKee Story exposition backstory dramatic",
+            # McKee Story - BACKSTORY DEFINITION (ultra-specific from backstory definition section)
+            "McKee Story backstory set significant events characters past writer use build progressions",
+            "McKee Story backstory not life history biography specific significant events only",
+            "McKee Story landscape character biographies planting events garden harvest again",
+            "McKee Story backstory events use build story progressions strategic purpose",
+            "Syd Field Screenplay backstory setup",
+            "Field backstory plant payoff",
+            "Field backstory revelation timing",
+            "Field backstory natural integration",
+            "Blake Snyder Save the Cat backstory",
+            "Snyder backstory opening image",
+            "Snyder backstory reveal gradually",
+            "Snyder backstory through action",
+            "John Truby Anatomy backstory ghost",
+            "Truby ghost past trauma wound",
+            "Truby backstory strategic revelation",
+            "Truby backstory need-to-know basis",
+            "Truby backstory shapes character",
+            "Truby ghost affects present behavior",
+            "Truby moral weakness backstory",
+            "Truby backstory timing critical",
+            "Christopher Vogler Writer's Journey backstory",
+            "Vogler ordinary world backstory",
+            "Vogler hero past history",
+            "Vogler backstory establishes character",
+            "Joseph Campbell Hero 1000 Faces backstory",
+            "Campbell mythic backstory hero origin",
+            "Campbell hero history shapes quest",
+            "Aristotle Poetics backstory necessary information",
+            "Aristotle backstory anagnorisis recognition",
+            "Linda Seger Making Good Script Great backstory",
+            "Seger backstory show don't tell",
+            "Seger backstory revelation strategy",
+            "Seger backstory through dialogue",
+            "Lajos Egri Art Dramatic Writing backstory",
+            "Egri backstory character dimension",
+            "Egri premise backstory foundation",
+            "William Goldman Adventures Screen Trade backstory",
+            "Goldman backstory economy efficiency",
+            "Shonda Rhimes backstory character history",
+            "David Mamet backstory through action",
+            "Alexander Mackendrick backstory visual",
+            "K.M. Weiland Creating Character Arcs backstory",
+            "Weiland backstory ghost lie wound",
+            "Weiland backstory affects arc",
+            "backstory integration weave naturally",
+            "backstory drip-feed gradual revelation",
+            "ghost wound past trauma",
+            "backstory reveals character now",
+            "backstory timing when needed",
+            "flashback usage appropriate sparingly",
+            "exposition show don't tell backstory",
+            "backstory explains motivation behavior",
+            "backstory relevant serves story",
+            "info dump backstory penalty avoid",
+            "irrelevant backstory penalty unnecessary",
+            "excessive flashbacks penalty breaks flow"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story secret painful truth withheld until crisis turning point",
+        "McKee Story revelation past event closes gap reconfigures understanding",
+        "McKee Story backstory creates curiosity how why character behaves thus",
+        "McKee Story flashback dramatize backstory inciting progression payoff",
+
+        # Campbell Hero 1000 Faces - GPT-5 (12 Oct 2025)
+        "Campbell Hero ogre tyrant reign wasteland blight kingdom decay,",
+        "Campbell Hero prophecy birth omen tyrant slaughter infants,",
+        "Campbell Hero exile infancy miraculous preservation foster parents,",
+        "Campbell Hero culture decline loss rituals forgotten myths,",
+
+        # Truby Anatomy 22 Steps - GPT-5 (12 Oct 2025)
+        "Truby Anatomy ghost open wound past event haunting present internal opponent",
+        "Truby Anatomy internal opponent counterdesire paralysis sailing with a corpse cargo",
+        "Truby Anatomy withholding exposition audience pull gradual reveal placement",
+        "Truby Anatomy problem outgrowth of weakness opening fast definition crisis",
+        "Truby Anatomy paradise start no ghost attack shift vulnerability setup",
+        "Truby Anatomy origin of moral weakness hurting others linked psychological need",
+        "Truby Anatomy ghost timing explanation early third placement alternative climax",
+        "Truby Anatomy audience curiosity detective induction backstory puzzle",
+        "Truby Anatomy backstory via opponent knowledge leverage blackmail exposure",
+        "Truby Anatomy ghost as motive ethical pivot forgiveness revenge redemption",
+        "Truby Anatomy hero denial coping facade behavior symptom pattern",
+        "Truby Anatomy counterdesire sabotage plan fear regression retreat",
+        "Truby Anatomy backstory symbol object photograph sled paperweight resonator",
+        "Truby Anatomy backstory through storyteller memory triggered present crisis",
+        "Truby Anatomy ghost world mirror enslaving arena accentuating flaw",
+        "Truby Anatomy ally knowledge history sounding board revelation scene",
+        "Truby Anatomy fake memory unreliable narration truth ambiguity tension",
+        "Truby Anatomy backstory beats flashback restraint emotional payoff",
+        "Truby Anatomy wounds to want transformation mapping W A C process",
+        "Truby Anatomy ghost exposure self-revelation integration change possibility",
+
+        # Field Screenplay Paradigm - GPT-5 (12 Oct 2025)
+        "Field Screenplay backstory interior life from birth forms character",
+        "Field Screenplay character biography first ten years second ten years third ten years",
+        "Field Screenplay parents siblings upbringing school relationships formative",
+        "Field Screenplay traumatic event past incident illuminates present behavior",
+        "Field Screenplay creative research free association write fragments",
+        "Field Screenplay interior versus exterior forms character reveals character",
+        "Field Screenplay professional personal private present echo past",
+        "Field Screenplay backstory emerging through incident not exposition",
+        "Field Screenplay Henry James incident determination illumination character",
+        "Field Screenplay streetwise sheltered class culture shaping history",
+        "Field Screenplay mentor wound promise vow past drives choices",
+        "Field Screenplay backstory drip feed visuals props photos mementos",
+        "Field Screenplay biography informs need want fear desire",
+        "Field Screenplay past relationships teachers rivals friends alliances",
+        "Field Screenplay significant childhood moment returns at plot point",
+        "Field Screenplay backstory used sparingly show don’t tell economy",
+        "Field Screenplay free association twenty pages interior life discovery",
+        "Field Screenplay formative job skills experience professional competence",
+        "Field Screenplay decision rooted in past vow pledge historical cause",
+        "Field Screenplay interior life timeline anchors consistent characterization",
+
+        # Vogler Writer's Journey - GPT-5 (12 Oct 2025)
+        "Vogler Journey backstory history biography sketch timeline influences",
+        "Vogler Journey exposition graceful visual on the run conflict",
+        "Vogler Journey ordinary world establishment family work community stakes",
+        "Vogler Journey inner problem outer problem dual conflict engines",
+        "Vogler Journey hero’s lack missing piece death kidnapping subtraction",
+        "Vogler Journey wounded hero scars guilt trauma vulnerability setup",
+        "Vogler Journey tragic flaw hamartia hubris fatal arrogance seed",
+        "Vogler Journey making an entrance first action characteristic behavior",
+        "Vogler Journey identification universal needs love belonging recognition",
+        "Vogler Journey secrets layered defenses gradual revelation detective",
+        "Vogler Journey foreshadow miniature model of special world echo",
+        "Vogler Journey theme stated offhand remark early plant",
+        "Vogler Journey raising dramatic question plot emotion hook",
+        "Vogler Journey disorientation leads to suggestibility ritual opening",
+        "Vogler Journey ordinary world vs special world contrast setup",
+        "Vogler Journey establishing stakes life death consequences early",
+        "Vogler Journey biography timeline world events shaping character",
+        "Vogler Journey law of genre promise tone mood contract",
+        "Vogler Journey herald teaser news message catalyst preview",
+        "Vogler Journey refusal groundwork fear obligations hesitation humanize",
+
+            # McKee Character - GPT-5 (12 Oct 2025)
+            "McKee Character character biography five thousand bits patterns residues formative",
+            "McKee Character backstory early adolescence first dreams identity crisis solidifies",
+            "McKee Character formative events repeated traumas residues shaping motivations temperaments dispositions",
+            "McKee Character self-story personal narrative truth versus BS self-deception test",
+            "McKee Character telling detail implies entire humanity sparks original characterization",
+            "McKee Character grounded research firsthand observation setting society informs backstory",
+            "McKee Character book-bound research psychology sociology anthropology politics enrich character",
+            "McKee Character personal research inventory memory vivid diary sensations actions language",
+            "McKee Character imaginative research analogies merging scraps into new wholes",
+            "McKee Character Magic If if scenario triggers invented past implications",
+            "McKee Character family dynamics patriarch matriarch punishment rebellion emotional patterns",
+            "McKee Character backstory wounds residues drive tactics later life conflicts",
+            "McKee Character biographical exposition stage monologue flashback risks and uses",
+            "McKee Character early relationships parents siblings imprint values beliefs reactions",
+            "McKee Character self-story cause effect coherence versus inconsistency signals psychology",
+            "McKee Character adolescence mentors epiphany or confusion shaping lifelong pursuit",
+            "McKee Character extended self possessions friends education professions expand identity",
+            "McKee Character cultural restraints time place institutions constrain biographical choices",
+            "McKee Character past versus future remembered textures versus imagined possibilities",
+            "McKee Character cast map integrates backstories revealing dimensions through relationships",
+
+            # Egri Dramatic Writing - GPT-5 (12 Oct 2025)
+            "Egri Dramatic sociology dimension home life parents habits vices",
+            "Egri Dramatic heredity illnesses defects birthmarks family traits",
+            "Egri Dramatic education amount schools marks aptitudes subjects",
+            "Egri Dramatic occupation type hours income conditions union attitude",
+            "Egri Dramatic religion race nationality place in community",
+            "Egri Dramatic political affiliations clubs sports leadership roles",
+            "Egri Dramatic amusements hobbies books newspapers magazines he reads",
+            "Egri Dramatic I.Q. abilities languages talents judgment taste poise",
+            "Egri Dramatic physiology sex age height weight posture appearance",
+            "Egri Dramatic psychology temperament complexes inhibitions phobias obsessions",
+            "Egri Dramatic sex life moral standards personal premise ambition",
+            "Egri Dramatic frustrations chief disappointments attitudes toward life",
+            "Egri Dramatic environment poverty wealth war depression propaganda influences",
+            "Egri Dramatic backstory revealed through conflict not narration",
+            "Egri Dramatic character bone structure compiled before drafting",
+            "Egri Dramatic past incidents motivate present decisions cause effect",
+            "Egri Dramatic family secrets scandals shape present conflicts",
+            "Egri Dramatic reading list reveals tastes worldview sociology",
+            "Egri Dramatic formative events foreshadow current crisis",
+            "Egri Dramatic background details implied by behavior dialogue",
+
+
+
+
+
+
+
+        ]
+
+        # Backstory analysis patterns (bilingual: EN + PT) - 150-170+ markers
+
+        # Backstory present markers (character has history)
+        self.backstory_present_markers = [
+            # English
+            "in the past", "years ago", "when I was", "back then", "used to",
+            "remember when", "history", "before this", "my childhood", "growing up",
+            "my father", "my mother", "my family", "my past", "what happened",
+            "that day", "the accident", "the incident", "I once", "long ago",
+            # Portuguese
+            "no passado", "anos atrás", "quando eu era", "naquela época", "costumava",
+            "lembro quando", "história", "antes disso", "minha infância", "crescendo",
+            "meu pai", "minha mãe", "minha família", "meu passado", "o que aconteceu",
+            "aquele dia", "o acidente", "o incidente", "uma vez", "há muito tempo"
+        ]
+
+        # Backstory integrated markers (weaved naturally not dumped)
+        self.backstory_integrated_markers = [
+            # English
+            "reminds me", "just like when", "similar to", "brings back",
+            "takes me back", "echoes of", "shadows of past", "haunted by",
+            "can't forget", "still affects", "shaped by", "because of what happened",
+            # Portuguese
+            "me lembra", "igual quando", "parecido com", "traz de volta",
+            "me leva de volta", "ecos de", "sombras do passado", "assombrado por",
+            "não posso esquecer", "ainda afeta", "moldado por", "por causa do que aconteceu"
+        ]
+
+        # Drip-feed technique markers (revealed gradually - McKee)
+        self.drip_feed_markers = [
+            # English
+            "there's more", "I haven't told", "something I never", "part of the story",
+            "didn't mention", "left out", "kept secret", "never said",
+            "piece by piece", "gradually realized", "started to understand", "slowly revealed",
+            # Portuguese
+            "há mais", "não contei", "algo que nunca", "parte da história",
+            "não mencionei", "deixei de fora", "mantive segredo", "nunca disse",
+            "pedaço por pedaço", "gradualmente percebi", "comecei a entender", "lentamente revelado"
+        ]
+
+        # Backstory reveals character markers (shows who they are now)
+        self.backstory_reveals_character_markers = [
+            # English
+            "that's why I", "explains why", "makes sense now", "I understand now",
+            "defines me", "who I am", "made me this way", "changed me",
+            "never been the same", "shaped who", "became what", "turned into",
+            # Portuguese
+            "por isso eu", "explica porque", "faz sentido agora", "entendo agora",
+            "me define", "quem eu sou", "me fez assim", "me mudou",
+            "nunca mais fui o mesmo", "moldou quem", "me tornei", "virei"
+        ]
+
+        # Backstory timing markers (revealed when needed for story)
+        self.backstory_timing_markers = [
+            # English
+            "need to know", "should tell you", "time you knew", "must understand",
+            "important to know", "have to explain", "better explain", "context matters",
+            # Portuguese
+            "precisa saber", "devo contar", "hora de saber", "deve entender",
+            "importante saber", "tenho que explicar", "melhor explicar", "contexto importa"
+        ]
+
+        # Ghost/wound markers (past trauma affecting present - Truby)
+        self.ghost_wound_markers = [
+            # English
+            "trauma", "wound", "scar", "haunts me", "can't escape",
+            "damaged", "broken", "hurt me", "pain from", "never healed",
+            "still bleeding", "unresolved", "carries the weight", "burden of",
+            "guilt", "shame", "regret", "tormented by", "suffering from",
+            # Portuguese
+            "trauma", "ferida", "cicatriz", "me assombra", "não posso escapar",
+            "danificado", "quebrado", "me machucou", "dor de", "nunca curou",
+            "ainda sangrando", "não resolvido", "carrega o peso", "fardo de",
+            "culpa", "vergonha", "arrependimento", "atormentado por", "sofrendo de"
+        ]
+
+        # Flashback usage markers (when appropriate)
+        self.flashback_markers = [
+            # English
+            "FLASHBACK", "FLASH BACK", "INT. - PAST", "EXT. - PAST",
+            "INT. - EARLIER", "EXT. - EARLIER", "YEARS EARLIER", "DAYS EARLIER",
+            "memory:", "remembers:", "recalls:", "imagines:",
+            # Portuguese
+            "FLASHBACK", "FLASH BACK", "INT. - PASSADO", "EXT. - PASSADO",
+            "INT. - ANTES", "EXT. - ANTES", "ANOS ANTES", "DIAS ANTES",
+            "memória:", "lembra:", "recorda:", "imagina:"
+        ]
+
+        # Exposition integration markers (show don't tell backstory)
+        self.exposition_integration_markers = [
+            # English
+            "shows through action", "reveals through", "demonstrated by", "evident in",
+            "visible in behavior", "manifests as", "expressed through", "displayed in",
+            # Portuguese
+            "mostra através da ação", "revela através", "demonstrado por", "evidente em",
+            "visível no comportamento", "manifesta como", "expresso através", "exibido em"
+        ]
+
+        # Backstory motivation markers (explains current behavior)
+        self.backstory_motivation_markers = [
+            # English
+            "because of what happened", "after what", "since that day", "ever since",
+            "that's when", "from that moment", "started when", "began with",
+            "rooted in", "stems from", "originates from", "traces back to",
+            # Portuguese
+            "por causa do que aconteceu", "depois do que", "desde aquele dia", "desde então",
+            "foi quando", "daquele momento", "começou quando", "começou com",
+            "enraizado em", "vem de", "origina de", "remonta a"
+        ]
+
+        # Backstory relevant markers (every detail serves story)
+        self.backstory_relevant_markers = [
+            # English
+            "matters because", "important because", "relevant to", "connects to",
+            "explains the", "answers why", "key to understanding", "crucial detail",
+            # Portuguese
+            "importa porque", "importante porque", "relevante para", "conecta com",
+            "explica o", "responde por que", "chave para entender", "detalhe crucial"
+        ]
+
+        # Info dump markers (PENALTY - too much backstory at once)
+        self.info_dump_markers = [
+            # English
+            "let me tell you everything", "here's my whole story", "I'll explain it all",
+            "sits down and tells", "explains his entire", "recounts her whole",
+            "long explanation", "detailed history", "complete backstory", "tells everything",
+            # Portuguese
+            "deixe-me contar tudo", "aqui está minha história toda", "vou explicar tudo",
+            "senta e conta", "explica seu todo", "reconta seu inteiro",
+            "explicação longa", "história detalhada", "backstory completo", "conta tudo"
+        ]
+
+        # Irrelevant backstory markers (PENALTY - doesn't serve story)
+        self.irrelevant_backstory_markers = [
+            # English
+            "by the way", "random fact", "interesting story", "unrelated but",
+            "not important but", "just for context", "side note", "fun fact",
+            # Portuguese
+            "a propósito", "fato aleatório", "história interessante", "não relacionado mas",
+            "não importante mas", "só para contexto", "nota lateral", "fato curioso"
+        ]
+
+        # Excessive flashbacks markers (PENALTY - overused, breaks flow)
+        self.excessive_flashbacks_markers = [
+            # English
+            "another flashback", "yet another memory", "more flashbacks", "constant flashbacks",
+            "keeps flashing back", "flashback after flashback", "too many flashbacks",
+            # Portuguese
+            "outro flashback", "ainda outra memória", "mais flashbacks", "flashbacks constantes",
+            "continua voltando", "flashback após flashback", "muitos flashbacks"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze backstory integration in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete backstory diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract opening (first 15 pages) for backstory setup
+        opening_text = self._extract_pages(screenplay_text, 0, 15)
+
+        # Extract Act 1 (first 25%) for backstory establishment
+        act1_text = self._extract_pages(screenplay_text, 0, int(page_count * 0.25))
+
+        # Extract Act 2 (middle 50%) for backstory drip-feed
+        act2_text = self._extract_pages(screenplay_text, int(page_count * 0.25), int(page_count * 0.75))
+
+        # Analyze backstory present (character has history)
+        backstory_present = self._analyze_backstory_present(screenplay_text)
+
+        # Analyze backstory integrated (weaved naturally)
+        backstory_integrated = self._analyze_backstory_integrated(screenplay_text)
+
+        # Analyze drip-feed technique (revealed gradually - McKee)
+        drip_feed = self._analyze_drip_feed_technique(screenplay_text, act2_text)
+
+        # Analyze backstory reveals character (shows who they are now)
+        backstory_reveals = self._analyze_backstory_reveals_character(screenplay_text)
+
+        # Analyze backstory timing (revealed when needed)
+        backstory_timing = self._analyze_backstory_timing(screenplay_text)
+
+        # Analyze ghost/wound (past trauma affecting present - Truby)
+        ghost_wound = self._analyze_ghost_wound(screenplay_text)
+
+        # Analyze flashback usage (when appropriate)
+        flashback_usage = self._analyze_flashback_usage(screenplay_text, scenes)
+
+        # Analyze exposition integration (show don't tell)
+        exposition_integration = self._analyze_exposition_integration(screenplay_text)
+
+        # Analyze backstory motivation (explains behavior)
+        backstory_motivation = self._analyze_backstory_motivation(screenplay_text)
+
+        # Analyze backstory relevant (serves story)
+        backstory_relevant = self._analyze_backstory_relevant(screenplay_text)
+
+        # Detect info dump (PENALTY)
+        info_dump = self._detect_info_dump(screenplay_text)
+
+        # Detect irrelevant backstory (PENALTY)
+        irrelevant_backstory = self._detect_irrelevant_backstory(screenplay_text)
+
+        # Detect excessive flashbacks (PENALTY)
+        excessive_flashbacks = self._detect_excessive_flashbacks(screenplay_text, flashback_usage)
+
+        # Build backstory profile
+        backstory_profile = BackstoryProfile(
+            backstory_present=backstory_present["present"],
+            backstory_integrated=backstory_integrated["integrated"],
+            drip_feed_technique=drip_feed["drip_feed"],
+            backstory_reveals_character=backstory_reveals["reveals"],
+            backstory_timing=backstory_timing["good_timing"],
+            ghost_wound_identified=ghost_wound["identified"],
+            flashback_usage=flashback_usage["appropriate"],
+            exposition_integration=exposition_integration["integrated"],
+            backstory_motivation=backstory_motivation["explains"],
+            backstory_relevant=backstory_relevant["relevant"],
+            info_dump_detected=info_dump["detected"],
+            irrelevant_backstory_detected=irrelevant_backstory["detected"],
+            excessive_flashbacks_detected=excessive_flashbacks["detected"],
+            overall_backstory_quality=0.0  # calculated below
+        )
+
+        # Calculate overall backstory quality
+        backstory_profile.overall_backstory_quality = self._calculate_overall_backstory_quality(backstory_profile)
+
+        # Check against rules
+        rule_violations = self._check_backstory_rules(
+            backstory_profile, backstory_present, backstory_integrated, drip_feed,
+            backstory_reveals, backstory_timing, ghost_wound, flashback_usage,
+            exposition_integration, backstory_motivation, backstory_relevant,
+            info_dump, irrelevant_backstory, excessive_flashbacks
+        )
+
+        # Calculate score
+        score = self._calculate_backstory_score(backstory_profile, rule_violations)
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(score, backstory_profile, rule_violations)
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "backstory_present": {
+                "present": backstory_present["present"],
+                "count": backstory_present["count"],
+                "moments": backstory_present["moments"][:10]
+            },
+            "backstory_integrated": {
+                "integrated": backstory_integrated["integrated"],
+                "count": backstory_integrated["count"]
+            },
+            "drip_feed": {
+                "drip_feed": drip_feed["drip_feed"],
+                "count": drip_feed["count"],
+                "moments": drip_feed["moments"][:10]
+            },
+            "backstory_reveals_character": {
+                "reveals": backstory_reveals["reveals"],
+                "count": backstory_reveals["count"]
+            },
+            "backstory_timing": {
+                "good_timing": backstory_timing["good_timing"],
+                "count": backstory_timing["count"]
+            },
+            "ghost_wound": {
+                "identified": ghost_wound["identified"],
+                "count": ghost_wound["count"],
+                "list": ghost_wound["list"][:10]
+            },
+            "flashback_usage": {
+                "appropriate": flashback_usage["appropriate"],
+                "count": flashback_usage["count"],
+                "list": flashback_usage["list"][:10]
+            },
+            "exposition_integration": {
+                "integrated": exposition_integration["integrated"],
+                "count": exposition_integration["count"]
+            },
+            "backstory_motivation": {
+                "explains": backstory_motivation["explains"],
+                "count": backstory_motivation["count"]
+            },
+            "backstory_relevant": {
+                "relevant": backstory_relevant["relevant"],
+                "count": backstory_relevant["count"]
+            },
+            "info_dump": {
+                "detected": info_dump["detected"],
+                "penalty": info_dump.get("penalty", False),
+                "count": info_dump["count"],
+                "list": info_dump["list"][:5]
+            },
+            "irrelevant_backstory": {
+                "detected": irrelevant_backstory["detected"],
+                "penalty": irrelevant_backstory.get("penalty", False),
+                "count": irrelevant_backstory["count"]
+            },
+            "excessive_flashbacks": {
+                "detected": excessive_flashbacks["detected"],
+                "penalty": excessive_flashbacks.get("penalty", False),
+                "flashback_ratio": excessive_flashbacks["flashback_ratio"]
+            },
+            "overall_backstory_quality": backstory_profile.overall_backstory_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, backstory_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_pages(self, screenplay: str, start_page: int, end_page: int) -> str:
+        """Extract specific page range from screenplay."""
+        lines = screenplay.split('\n')
+        start_line = start_page * 55
+        end_line = end_page * 55
+        return '\n'.join(lines[start_line:end_line])
+
+    def _analyze_backstory_present(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze backstory present (character has history).
+
+        Truby: "Ghost - past trauma that shapes character's present behavior."
+        McKee: "Character dimension comes from backstory revealed strategically."
+        """
+        present = False
+        moments = []
+
+        # Check for backstory markers
+        count = 0
+        for marker in self.backstory_present_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract backstory moments
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        moments.append(line.strip()[:100])
+                        if len(moments) >= 20:
+                            break
+
+        if count >= 10:
+            present = True
+        elif count >= 7:
+            present = True
+
+        return {
+            "present": present,
+            "count": count,
+            "moments": moments
+        }
+
+    def _analyze_backstory_integrated(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze backstory integrated (weaved naturally not dumped).
+
+        McKee: "Backstory revelation through conflict not narration - weave it in naturally."
+        Field: "Plant backstory details early, pay off later - organic integration."
+        """
+        integrated = False
+
+        # Check for integration markers
+        count = 0
+        for marker in self.backstory_integrated_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 8:
+            integrated = True
+        elif count >= 5:
+            integrated = True
+
+        return {
+            "integrated": integrated,
+            "count": count
+        }
+
+    def _analyze_drip_feed_technique(self, screenplay: str, act2_text: str) -> Dict[str, Any]:
+        """
+        Analyze drip-feed technique (revealed gradually - McKee).
+
+        McKee: "Drip-feed backstory - reveal piece by piece, not all at once."
+        Truby: "Need-to-know basis - only reveal backstory when necessary for story."
+        """
+        drip_feed = False
+        moments = []
+
+        # Check for drip-feed markers
+        count = 0
+        for marker in self.drip_feed_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract drip-feed moments
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        moments.append(line.strip()[:100])
+                        if len(moments) >= 20:
+                            break
+
+        # Check for gradual revelation in Act 2 (McKee: backstory continues throughout)
+        act2_backstory_count = 0
+        for marker in self.backstory_present_markers:
+            act2_backstory_count += act2_text.lower().count(marker)
+
+        if count >= 5 and act2_backstory_count >= 5:
+            drip_feed = True
+        elif count >= 3:
+            drip_feed = True
+
+        return {
+            "drip_feed": drip_feed,
+            "count": count,
+            "act2_count": act2_backstory_count,
+            "moments": moments
+        }
+
+    def _analyze_backstory_reveals_character(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze backstory reveals character (shows who they are now).
+
+        Truby: "Ghost shapes who character is now - backstory must illuminate present."
+        McKee: "Backstory reveals character dimension - why they act this way."
+        """
+        reveals = False
+
+        # Check for revelation markers
+        count = 0
+        for marker in self.backstory_reveals_character_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 6:
+            reveals = True
+        elif count >= 4:
+            reveals = True
+
+        return {
+            "reveals": reveals,
+            "count": count
+        }
+
+    def _analyze_backstory_timing(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze backstory timing (revealed when needed for story).
+
+        McKee: "Backstory revelation timing - reveal when tension is high, stakes are clear."
+        Truby: "Strategic timing - backstory revealed when audience needs to understand character's actions."
+        """
+        good_timing = False
+
+        # Check for timing markers
+        count = 0
+        for marker in self.backstory_timing_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 5:
+            good_timing = True
+        elif count >= 3:
+            good_timing = True
+
+        return {
+            "good_timing": good_timing,
+            "count": count
+        }
+
+    def _analyze_ghost_wound(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze ghost/wound (past trauma affecting present - Truby).
+
+        Truby: "Ghost - past trauma that haunts character, drives current behavior."
+        McKee: "Character wound - unhealed past injury that affects present choices."
+        Weiland: "Lie character believes - rooted in ghost/wound from past."
+        """
+        identified = False
+        ghost_list = []
+
+        # Check for ghost/wound markers
+        count = 0
+        for marker in self.ghost_wound_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract ghost/wound references
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        ghost_list.append(line.strip()[:100])
+                        if len(ghost_list) >= 20:
+                            break
+
+        if count >= 8:
+            identified = True
+        elif count >= 5:
+            identified = True
+
+        return {
+            "identified": identified,
+            "count": count,
+            "list": ghost_list
+        }
+
+    def _analyze_flashback_usage(self, screenplay: str, scenes: List[Dict]) -> Dict[str, Any]:
+        """
+        Analyze flashback usage (when appropriate, not overused).
+
+        McKee: "Flashbacks break present tension - use sparingly, only when necessary."
+        Field: "Flashback must be earned - present action must justify past revelation."
+        """
+        appropriate = False
+        flashback_list = []
+
+        # Count flashback scenes
+        flashback_count = 0
+        for marker in self.flashback_markers:
+            marker_count = screenplay.upper().count(marker.upper())
+            flashback_count += marker_count
+            if marker_count > 0:
+                # Extract flashback scenes
+                for scene in scenes:
+                    heading = scene['heading'].upper()
+                    if marker.upper() in heading:
+                        flashback_list.append(heading[:100])
+                        if len(flashback_list) >= 20:
+                            break
+
+        # Flashbacks are appropriate if used sparingly (McKee: not overused)
+        total_scenes = len(scenes)
+        if total_scenes > 0:
+            flashback_ratio = flashback_count / total_scenes
+            if flashback_ratio <= 0.1:  # Less than 10% of scenes are flashbacks
+                appropriate = True
+            elif flashback_ratio <= 0.15:
+                appropriate = True
+        else:
+            # No scenes detected, check simple count
+            if flashback_count <= 5:
+                appropriate = True
+
+        return {
+            "appropriate": appropriate,
+            "count": flashback_count,
+            "list": flashback_list,
+            "total_scenes": total_scenes
+        }
+
+    def _analyze_exposition_integration(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze exposition integration (show don't tell backstory).
+
+        McKee: "Exposition through action - show backstory through behavior not narration."
+        Seger: "Show don't tell - backstory revealed through character actions and choices."
+        """
+        integrated = False
+
+        # Check for exposition integration markers
+        count = 0
+        for marker in self.exposition_integration_markers:
+            count += screenplay.lower().count(marker)
+
+        # Check for action-based exposition (visual storytelling)
+        action_markers = ["does", "acts", "demonstrates", "shows", "reveals through action"]
+        action_count = 0
+        for marker in action_markers:
+            action_count += screenplay.lower().count(marker)
+
+        if count >= 3 or action_count >= 5:
+            integrated = True
+        elif count >= 2:
+            integrated = True
+
+        return {
+            "integrated": integrated,
+            "count": count,
+            "action_count": action_count
+        }
+
+    def _analyze_backstory_motivation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze backstory motivation (explains current behavior).
+
+        Truby: "Ghost explains why character wants what they want - backstory drives motivation."
+        McKee: "Backstory illuminates present behavior - why character makes these choices."
+        """
+        explains = False
+
+        # Check for motivation markers
+        count = 0
+        for marker in self.backstory_motivation_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 8:
+            explains = True
+        elif count >= 5:
+            explains = True
+
+        return {
+            "explains": explains,
+            "count": count
+        }
+
+    def _analyze_backstory_relevant(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze backstory relevant (every detail serves story).
+
+        McKee: "Every backstory detail must be relevant - cut what doesn't serve story."
+        Goldman: "Backstory economy - only include what audience needs to know."
+        """
+        relevant = False
+
+        # Check for relevance markers
+        count = 0
+        for marker in self.backstory_relevant_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 5:
+            relevant = True
+        elif count >= 3:
+            relevant = True
+
+        return {
+            "relevant": relevant,
+            "count": count
+        }
+
+    def _detect_info_dump(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect info dump (PENALTY - too much backstory at once).
+
+        McKee: "Info dump kills drama - never stop action to explain backstory."
+        Field: "Avoid exposition dump - drip-feed backstory, don't pour it all at once."
+        """
+        detected = False
+        penalty = False
+        dump_list = []
+
+        # Check for info dump markers
+        count = 0
+        for marker in self.info_dump_markers:
+            marker_count = screenplay.lower().count(marker)
+            count += marker_count
+            if marker_count > 0:
+                # Extract info dump instances
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        dump_list.append(line.strip()[:100])
+                        if len(dump_list) >= 10:
+                            break
+
+        if count >= 3:
+            detected = True
+            penalty = True
+        elif count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count,
+            "list": dump_list
+        }
+
+    def _detect_irrelevant_backstory(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect irrelevant backstory (PENALTY - doesn't serve story).
+
+        McKee: "Cut irrelevant backstory - every detail must advance story or reveal character."
+        Goldman: "Economy of backstory - if it doesn't matter, cut it."
+        """
+        detected = False
+        penalty = False
+
+        # Check for irrelevant backstory markers
+        count = 0
+        for marker in self.irrelevant_backstory_markers:
+            count += screenplay.lower().count(marker)
+
+        if count >= 4:
+            detected = True
+            penalty = True
+        elif count >= 3:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": count
+        }
+
+    def _detect_excessive_flashbacks(self, screenplay: str, flashback_data: Dict) -> Dict[str, Any]:
+        """
+        Detect excessive flashbacks (PENALTY - overused, breaks flow).
+
+        McKee: "Excessive flashbacks destroy present tension - use sparingly."
+        Field: "Too many flashbacks break narrative flow - maintain present story momentum."
+        """
+        detected = False
+        penalty = False
+
+        flashback_count = flashback_data["count"]
+        total_scenes = flashback_data["total_scenes"]
+
+        # Calculate flashback ratio
+        if total_scenes > 0:
+            flashback_ratio = flashback_count / total_scenes
+            if flashback_ratio > 0.2:  # More than 20% flashbacks = excessive
+                detected = True
+                penalty = True
+            elif flashback_ratio > 0.15:
+                detected = True
+                penalty = True
+        else:
+            # No scenes detected, check simple count
+            if flashback_count > 8:
+                detected = True
+                penalty = True
+            flashback_ratio = 0.0
+
+        # Check for excessive flashback markers
+        excessive_count = 0
+        for marker in self.excessive_flashbacks_markers:
+            excessive_count += screenplay.lower().count(marker)
+
+        if excessive_count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "flashback_ratio": flashback_ratio,
+            "excessive_count": excessive_count
+        }
+
+    def _calculate_overall_backstory_quality(self, profile: BackstoryProfile) -> float:
+        """Calculate overall backstory quality score."""
+        scores = [
+            1.0 if profile.backstory_present else 0.5,  # Important but not all stories
+            1.0 if profile.backstory_integrated else 0.4,  # CRITICAL
+            1.0 if profile.drip_feed_technique else 0.5,  # Important (McKee)
+            1.0 if profile.backstory_reveals_character else 0.6,  # Important
+            1.0 if profile.backstory_timing else 0.6,  # Important
+            1.0 if profile.ghost_wound_identified else 0.7,  # Nice to have (Truby)
+            1.0 if profile.flashback_usage else 0.3,  # CRITICAL (avoid overuse)
+            1.0 if profile.exposition_integration else 0.5,  # Important
+            1.0 if profile.backstory_motivation else 0.6,  # Important
+            1.0 if profile.backstory_relevant else 0.6,  # Important
+            0.0 if profile.info_dump_detected else 1.0,  # PENALTY
+            0.0 if profile.irrelevant_backstory_detected else 1.0,  # PENALTY
+            0.0 if profile.excessive_flashbacks_detected else 1.0  # PENALTY
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_backstory_rules(self, profile: BackstoryProfile, backstory_present: Dict,
+                               backstory_integrated: Dict, drip_feed: Dict,
+                               backstory_reveals: Dict, backstory_timing: Dict,
+                               ghost_wound: Dict, flashback_usage: Dict,
+                               exposition_integration: Dict, backstory_motivation: Dict,
+                               backstory_relevant: Dict, info_dump: Dict,
+                               irrelevant_backstory: Dict, excessive_flashbacks: Dict) -> List[Dict]:
+        """Check backstory against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "BACKSTORY.R001":
+                # Backstory Present
+                if not profile.backstory_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Backstory weak - characters lack history/dimension",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R002":
+                # Backstory Integrated
+                if not profile.backstory_integrated:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Backstory not integrated - dumped instead of weaved naturally",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R003":
+                # Drip-Feed Technique
+                if not profile.drip_feed_technique:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Drip-feed technique missing - backstory not revealed gradually",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R004":
+                # Backstory Reveals Character
+                if not profile.backstory_reveals_character:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Backstory doesn't reveal character - fails to illuminate present behavior",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R005":
+                # Backstory Timing
+                if not profile.backstory_timing:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Backstory timing weak - not revealed when needed for story",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R006":
+                # Ghost/Wound Identified
+                if not profile.ghost_wound_identified:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Ghost/wound not identified - missing past trauma affecting present (Truby)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R007":
+                # Flashback Usage
+                if not profile.flashback_usage:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Flashback usage problematic - overused or breaks present tension",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R008":
+                # Exposition Integration
+                if not profile.exposition_integration:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Exposition integration weak - backstory told not shown",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R009":
+                # Backstory Motivation
+                if not profile.backstory_motivation:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Backstory doesn't explain motivation - fails to illuminate current behavior",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R010":
+                # Backstory Relevant
+                if not profile.backstory_relevant:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Backstory relevance weak - some details don't serve story",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R011":
+                # Avoid Info Dump
+                if profile.info_dump_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Info dump detected - too much backstory at once kills drama",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R012":
+                # Avoid Irrelevant Backstory
+                if profile.irrelevant_backstory_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Irrelevant backstory detected - details don't serve story",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "BACKSTORY.R013":
+                # Avoid Excessive Flashbacks
+                if profile.excessive_flashbacks_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Excessive flashbacks detected - breaks present tension and narrative flow",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_backstory_score(self, profile: BackstoryProfile, violations: List) -> float:
+        """Calculate overall backstory score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for major issues
+        if profile.info_dump_detected:
+            score -= 25  # critical penalty
+        if profile.excessive_flashbacks_detected:
+            score -= 20  # high penalty
+        if profile.irrelevant_backstory_detected:
+            score -= 10
+
+        # Bonus for excellence
+        if profile.overall_backstory_quality > 0.85:
+            score += 5
+        elif profile.overall_backstory_quality > 0.75:
+            score += 3
+
+        if profile.backstory_integrated and profile.drip_feed_technique:
+            score += 3  # McKee's sophisticated technique
+
+        if profile.ghost_wound_identified:
+            score += 3  # Truby's sophisticated storytelling
+
+        if profile.backstory_integrated and not profile.info_dump_detected:
+            score += 2
+
+        if profile.flashback_usage and not profile.excessive_flashbacks_detected:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: BackstoryProfile,
+                          violations: List) -> str:
+        """Generate backstory diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Backstory integrated naturally with drip-feed technique and strategic timing"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Backstory present but could be better integrated or more gradual"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Backstory problems - info dumps or excessive flashbacks detected"
+        else:
+            level = "POOR"
+            summary = "Major backstory problems - excessive exposition or irrelevant details"
+
+        diagnosis = f"BACKSTORY {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.backstory_integrated:
+            issues.append("not integrated")
+        if not profile.drip_feed_technique:
+            issues.append("no drip-feed")
+        if profile.info_dump_detected:
+            issues.append("info dumps")
+        if profile.excessive_flashbacks_detected:
+            issues.append("excessive flashbacks")
+        if profile.irrelevant_backstory_detected:
+            issues.append("irrelevant details")
+        if not profile.backstory_timing:
+            issues.append("poor timing")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: BackstoryProfile) -> List[str]:
+        """Generate specific backstory recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.backstory_integrated:
+            recommendations.append("Integrate backstory - McKee: 'Backstory revelation through conflict not narration - weave it in naturally' - avoid dumps")
+
+        if not profile.drip_feed_technique:
+            recommendations.append("Use drip-feed - McKee: 'Drip-feed backstory - reveal piece by piece, not all at once' - gradual revelation throughout")
+
+        if profile.info_dump_detected:
+            recommendations.append("Cut info dumps - McKee: 'Info dump kills drama - never stop action to explain backstory' - weave backstory into present action")
+
+        if profile.excessive_flashbacks_detected:
+            recommendations.append("Reduce flashbacks - McKee: 'Excessive flashbacks destroy present tension - use sparingly' - maintain present story momentum")
+
+        if not profile.ghost_wound_identified:
+            recommendations.append("Add ghost/wound - Truby: 'Ghost - past trauma that haunts character, drives current behavior' - create deeper character dimension")
+
+        if not profile.backstory_timing:
+            recommendations.append("Improve timing - McKee: 'Backstory revelation timing - reveal when tension is high, stakes are clear' - strategic revelation")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - backstory revelation techniques essential")
+            recommendations.append("Study Truby's Anatomy of Story - ghost/wound fundamental")
+
+        return recommendations[:5]
+
+    def export_backstory_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export backstory features for correlation/analysis.
+
+        Returns structured data with backstory metrics.
+        """
+        backstory_present = self._analyze_backstory_present(screenplay_text)
+        backstory_integrated = self._analyze_backstory_integrated(screenplay_text)
+        drip_feed = self._analyze_drip_feed_technique(screenplay_text, screenplay_text)
+
+        return {
+            "backstory": {
+                "backstory_present": backstory_present["present"],
+                "backstory_integrated": backstory_integrated["integrated"],
+                "drip_feed_technique": drip_feed["drip_feed"]
+            },
+            "meta": {
+                "source": "DrBackstory",
+                "focus": "Backstory integration and revelation"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrBackstoryAnalysis(DrBackstory):
+    """Alias for compatibility with test framework."""
+    pass

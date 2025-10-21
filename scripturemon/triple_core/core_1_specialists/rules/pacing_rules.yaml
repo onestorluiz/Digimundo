@@ -1,0 +1,158 @@
+domain: pacing
+specialist: "Script Doctor Pacingmon"
+digimon_name: "Pacingmon"
+title: "Script Doctor - Rhythm and Tempo Specialist"
+specialty: "Scene tempo, narrative flow, pacing dynamics"
+style: "Musical, rhythmic, flow-conscious, tempo-aware"
+identity: "Script Doctor™ first, Digimon rhythm specialist second"
+
+rules:
+  - id: PACE.R001
+    title: "Scene Length Balance"
+    category: "Rhythm"
+    severity: "high"
+    test: "Are scenes appropriately varied in length (1-3 pages average)?"
+    fail_msg: "Scenes too uniform or extreme in length - pacing monotonous"
+    fix: "Vary scene lengths: quick 1-page beats between 2-3 page dramatic scenes"
+    reference: "The Rhythm of Screenplay Writing"
+
+  - id: PACE.R002
+    title: "Page-Per-Minute Rule"
+    category: "Timing"
+    severity: "critical"
+    test: "Does the script follow the 1 page = 1 minute guideline?"
+    fail_msg: "Script length doesn't match intended runtime"
+    fix: "Adjust to ~90-120 pages for feature, trim or expand as needed"
+    reference: "Industry standard timing"
+
+  - id: PACE.R003
+    title: "Action-to-Dialogue Ratio"
+    category: "Balance"
+    severity: "medium"
+    test: "Is there appropriate balance between action and dialogue?"
+    fail_msg: "Too dialogue-heavy or action-heavy - pacing imbalanced"
+    fix: "Aim for 40-60% dialogue, 40-60% action/description balance"
+    reference: "Screenplay pacing fundamentals"
+
+  - id: PACE.R004
+    title: "White Space Usage"
+    category: "Visual"
+    severity: "medium"
+    test: "Does the script have enough white space for readability?"
+    fail_msg: "Dense blocks of text slow reading pace"
+    fix: "Break up paragraphs - max 4 lines per action block"
+    reference: "Professional screenplay formatting"
+
+  - id: PACE.R005
+    title: "Momentum Building"
+    category: "Acceleration"
+    severity: "high"
+    test: "Does pacing accelerate toward climax?"
+    fail_msg: "Flat pacing - no sense of building urgency"
+    fix: "Shorten scenes and increase cuts as approaching climax"
+    reference: "Editing theory - accelerated montage"
+
+  - id: PACE.R006
+    title: "Breathing Room"
+    category: "Rhythm"
+    severity: "medium"
+    test: "Are there quiet moments between intense sequences?"
+    fail_msg: "Relentless pacing causes audience fatigue"
+    fix: "Insert character moments after action sequences"
+    reference: "The peaks and valleys principle"
+
+  - id: PACE.R007
+    title: "Opening Pace"
+    category: "Hook"
+    severity: "critical"
+    test: "Do the first 10 pages move quickly and efficiently?"
+    fail_msg: "Slow opening - reader/audience may disengage"
+    fix: "Tighten first 10 pages - cut exposition, start later in story"
+    reference: "The First Ten Pages principle"
+
+  - id: PACE.R008
+    title: "Act 2 Momentum"
+    category: "Middle"
+    severity: "high"
+    test: "Does Act 2 maintain momentum without sagging?"
+    fail_msg: "Second act sag - common pacing killer"
+    fix: "Add subplot complications, raise stakes at midpoint"
+    reference: "Solving the Act 2 problem"
+
+  - id: PACE.R009
+    title: "Transition Speed"
+    category: "Flow"
+    severity: "low"
+    test: "Do transitions between scenes maintain pace?"
+    fail_msg: "Sluggish transitions break narrative flow"
+    fix: "Use match cuts, momentum cuts, or immediate conflict"
+    reference: "Editing transitions"
+
+  - id: PACE.R010
+    title: "Climax Duration"
+    category: "Payoff"
+    severity: "high"
+    test: "Is the climax appropriately sustained (5-10 pages)?"
+    fail_msg: "Climax too brief or overextended"
+    fix: "Ensure climax gets proper page count for payoff"
+    reference: "Climactic pacing theory"
+
+  - id: PACE.R011
+    title: "Resolution Pace"
+    category: "Ending"
+    severity: "medium"
+    test: "Does resolution conclude efficiently (3-5 pages)?"
+    fail_msg: "Ending drags or feels rushed"
+    fix: "Wrap up efficiently after climax - avoid multiple endings"
+    reference: "Ending theory"
+
+  - id: PACE.R012
+    title: "Parallel Action"
+    category: "Advanced"
+    severity: "low"
+    test: "Is cross-cutting used effectively for pace?"
+    fail_msg: "Missing opportunities for parallel tension"
+    fix: "Consider intercutting for simultaneous action/tension"
+    reference: "Cross-cutting technique"
+
+diagnostics:
+  min_score_threshold: 60
+  weight_distribution:
+    critical: 30
+    high: 20
+    medium: 10
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Analyze scene lengths, page count, and overall flow"
+  deep_dive: "Examine pacing dynamics, rhythm variations, and momentum"
+  final_check: "Verify pacing supports genre expectations and emotional journey"
+
+pacing_metrics:
+  ideal_scene_length:
+    min: 0.5  # pages
+    max: 3.0  # pages
+    average: 2.0
+
+  tempo_markers:
+    slow: ["establishing", "contemplates", "waits", "silence"]
+    medium: ["walks", "talks", "drives", "discusses"]
+    fast: ["runs", "fights", "chases", "explodes", "crashes"]
+
+  genre_expectations:
+    action:
+      scene_average: 1.5
+      dialogue_ratio: 0.3
+      white_space: "high"
+    drama:
+      scene_average: 2.5
+      dialogue_ratio: 0.6
+      white_space: "medium"
+    thriller:
+      scene_average: 1.8
+      dialogue_ratio: 0.4
+      white_space: "high"
+    comedy:
+      scene_average: 2.0
+      dialogue_ratio: 0.7
+      white_space: "medium"

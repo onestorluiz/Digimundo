@@ -1,0 +1,25 @@
+ANÁLISE MULTI-AUTOR
+================================================================================
+
+Roteiro: Te Encontro em Mim .pdf
+Especialidade: dialogue
+Data: 11/10/2025 18:55:21
+
+Autores processados: 13/13
+Tempo total: 4004.7s (66.7 min)
+Output total: 123,124 chars
+
+AUTORES:
+  - ARISTOTLE: 18,743 chars
+  - CAMPBELL: 6,197 chars
+  - COWGILL: 9,395 chars
+  - DIALOGUE: 10,601 chars
+  - EGRI: 6,753 chars
+  - FIELD: 11,654 chars
+  - MCKEE: 9,917 chars
+  - MCKEE_CHARACTER: 11,988 chars
+  - MCKEE_DIALOGUE: 9,484 chars
+  - SEGER: 8,136 chars
+  - SNYDER: 3,459 chars
+  - TRUBY: 7,686 chars
+  - VOGLER: 9,111 chars

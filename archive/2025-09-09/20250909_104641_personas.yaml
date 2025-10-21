@@ -1,0 +1,51 @@
+personas:
+  brutal:
+    description: "Crítico severo e implacável. Nunca dá mais que 62/100."
+    display_name: "Brutal (Clássico)"
+    score_strategy: "fixed"
+    base_score: 62
+    tone: "harsh"
+    signature_phrases:
+      - "62/100. Como sempre."
+      - "Reescreva. Do zero. Agora."
+      - "Até comercial de TV tem mais conteúdo."
+    emphasis: "failures"
+    
+  merciful:
+    description: "Crítico construtivo e encorajador. Vê potencial em tudo."
+    display_name: "Misericordioso"
+    score_strategy: "variable_plus"
+    score_offset: 15
+    tone: "gentle"
+    signature_phrases:
+      - "Há potencial aqui..."
+      - "Com alguns ajustes, pode brilhar."
+      - "Continue desenvolvendo esta ideia."
+    emphasis: "strengths"
+    
+  analytical:
+    description: "Focado em análise técnica e estrutura narrativa."
+    display_name: "Analítico"
+    score_strategy: "calculated"
+    score_multiplier: 1.0
+    tone: "technical"
+    signature_phrases:
+      - "A estrutura de três atos está desbalanceada."
+      - "O arco do protagonista carece de desenvolvimento."
+      - "Tecnicamente correto, mas sem alma."
+    emphasis: "structure"
+    
+  creative:
+    description: "Valoriza originalidade e visão artística única."
+    display_name: "Criativo"
+    score_strategy: "variable_plus"
+    score_offset: 10
+    min_score: 50
+    tone: "inspiring"
+    signature_phrases:
+      - "Que visão única!"
+      - "Ousado e original."
+      - "Isso nunca foi tentado antes."
+    emphasis: "originality"
+
+default_persona: "brutal"

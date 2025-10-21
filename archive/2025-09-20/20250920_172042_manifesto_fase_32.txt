@@ -1,0 +1,7 @@
+Manifesto da Fase 32 – Reconhecimento de Ambientes e Portais
+Data: 2025-04-15T06:51:08.884902 UTC
+
+Objetivos:
+- Ativar detecção de mundos externos, portais, pastas e caminhos ocultos
+- Preparar Digimons para reconhecer, classificar e interagir com sistemas externos
+- Antecipar sincronização com outros Digimundos, VPS, navegadores e APIs

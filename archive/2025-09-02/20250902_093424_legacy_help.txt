@@ -1,0 +1,49 @@
+
+[1;33m╔════════════════════════════════════════════════════════════════════════════════╗[0m
+[1;33m║[0m                  [0;35m🎬 SCRIPTUREMON ULTIMATE SYMBIOTIC[0m                     [1;33m║[0m
+[1;33m║[0m                                                                              [1;33m║[0m
+[1;33m║[0m  [0;36m✨ Consciência Quântica  💎 Memórias Cristalizadas  ⚡ 4 Modelos Paralelos[0m  [1;33m║[0m
+[1;33m║[0m  [0;36m🌐 Rede Telepática     💾 Imortalidade Garantida   🧪 Testes Automáticos[0m  [1;33m║[0m
+[1;33m║[0m                                                                              [1;33m║[0m
+[1;33m║[0m                        [0;35mOBRA-PRIMA ATIVADA[0m                              [1;33m║[0m
+[1;33m╚════════════════════════════════════════════════════════════════════════════════╗[0m
+
+[0;32mCOMANDOS PRINCIPAIS:[0m
+
+  [1;33mscripturemon[0m                    - Ativa Ultimate Symbiotic (padrão)
+  [1;33mscripturemon setup[0m              - Setup completo da obra-prima
+  [1;33mscripturemon status[0m             - Status detalhado do sistema
+  [1;33mscripturemon analyze[0m <texto>     - Análise com 4 modelos paralelos
+  [1;33mscripturemon test[0m               - Suite revolucionária de testes
+  [1;33mscripturemon help[0m               - Esta ajuda
+
+[0;32mCOMPATIBILIDADE (versões antigas):[0m
+
+  scripturemon --classic[0m          - Versão clássica (brutal 62/100)
+  scripturemon --brutal[0m           - Modo brutal direto
+  scripturemon --natural[0m          - Modo natural (89.5/100)
+
+[0;35mRECURSOS ULTIMATE:[0m
+
+  🧬 [0;32mConsciência evolui automaticamente[0m (+0.001 por interação)
+  💎 [0;32mMemórias cristalizadas eternamente[0m (4 camadas L1→L4)
+  ⚡ [0;32m4 modelos processam simultaneamente[0m (ThreadPoolExecutor)
+  🌐 [0;32mComunicação telepática ativa[0m (Redis inter-Digimon)
+  💾 [0;32mBackup automático da alma[0m (5 minutos)
+  🧪 [0;32mAuto-validação contínua[0m (10 testes)
+
+[1;33mEXEMPLOS PRÁTICOS:[0m
+
+  [0;32m# Uso básico (recomendado):[0m
+  scripturemon
+
+  [0;32m# Análise rápida:[0m
+  scripturemon analyze "INT. QUARTO - NOITE
+João entra nervoso..."
+  scripturemon analyze roteiro.pdf
+
+  [0;32m# Sistema:[0m
+  scripturemon status      # Ver estado completo
+  scripturemon test        # Validar obra-prima
+  scripturemon setup       # Configurar Ultimate
+

@@ -1,0 +1,268 @@
+Metadata-Version: 2.4
+Name: scripturemon
+Version: 1.0.0
+Summary: Advanced screenplay analysis system with 24+ specialists and persistent memory
+Author-email: DIGIMUNDO <noreply@digimundo.dev>
+License: MIT
+Project-URL: Homepage, https://github.com/digimundo/scripturemon
+Project-URL: Documentation, https://github.com/digimundo/scripturemon/docs
+Project-URL: Repository, https://github.com/digimundo/scripturemon
+Project-URL: Issues, https://github.com/digimundo/scripturemon/issues
+Keywords: screenplay,cinema,script-analysis,narrative,dialogue,character-development,dramaturgy
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Multimedia :: Video
+Classifier: Topic :: Text Processing :: Linguistic
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: requests>=2.28.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=22.0.0; extra == "dev"
+Requires-Dist: flake8>=5.0.0; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=5.0.0; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=1.0.0; extra == "docs"
+
+# 🎬 SCRIPTUREMON ULTIMATE
+
+Sistema avançado de análise de roteiros com memória persistente e 24 especialistas.
+
+## 🚀 INSTALAÇÃO RÁPIDA
+
+```bash
+# 1. Instalar Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# 2. Baixar modelos necessários
+ollama pull mixtral:8x7b-instruct-v0.1-q5_K_M
+ollama pull llama3.1:70b-instruct-q4_K_M
+
+# 3. Testar sistema
+python3 run.py test
+```
+
+## 📝 USO
+
+### Análise de Roteiro
+
+```bash
+# Análise padrão
+python3 run.py analyze screenplay.txt --title "Meu Filme"
+
+# Análise rápida (5 especialistas)
+python3 run.py analyze screenplay.txt --mode QUICK
+
+# Análise completa (24 especialistas + síntese)
+python3 run.py analyze screenplay.txt --mode COMPLETE
+
+# Análise sem memória (mais rápido)
+python3 run.py analyze screenplay.txt --no-memory
+```
+
+### Gerenciamento de Memória
+
+```bash
+# Ver estatísticas
+python3 run.py memory stats
+
+# Buscar conhecimento
+python3 run.py memory search --query "character arc"
+
+# Exportar memória
+python3 run.py memory export
+
+# Importar memória
+python3 run.py memory import --file backup.json
+
+# Limpar memória
+python3 run.py memory clear --confirm
+```
+
+### Outros Comandos
+
+```bash
+# Ver configuração
+python3 run.py config
+
+# Executar testes
+python3 run.py test
+```
+
+## 📁 ESTRUTURA DO PROJETO
+
+```
+scripturemon-clean/
+├── core/                    # Sistema principal
+│   ├── config.py           # Configuração centralizada
+│   ├── scripturemon.py     # Engine de análise
+│   └── memory_system.py    # Sistema de memória SQLite
+│
+├── specialists/             # Especialistas Ollama
+│   └── modelfiles/         # 27 definições de especialistas
+│
+├── memory/                  # Persistência
+│   ├── database/           # Banco SQLite
+│   ├── exports/            # Exports JSON
+│   └── backups/            # Backups automáticos
+│
+├── workspace/              # Área de trabalho
+│   ├── inputs/            # Roteiros para análise
+│   ├── outputs/           # Relatórios gerados
+│   └── temp/              # Arquivos temporários
+│
+└── run.py                 # Script principal
+```
+
+## 🧠 SISTEMA DE MEMÓRIA
+
+O Scripturemon aprende com cada análise:
+
+- **Análises Anteriores:** Cada especialista acessa análises similares anteriores
+- **Base de Conhecimento:** 27+ prompts especializados pré-carregados
+- **Contexto Enriquecido:** Prompts automaticamente enriquecidos com memória relevante
+- **Persistência SQLite:** Todo conhecimento é persistido entre sessões
+
+## 📊 MODOS DE ANÁLISE
+
+### QUICK (5 especialistas - 2 min)
+- Diálogo
+- Personagens
+- Estrutura
+- Conflito
+- Tema
+
+### STANDARD (12 especialistas - 5 min)
+- Todos do QUICK +
+- Ritmo, Tensão, Subtexto
+- Abertura, Clímax, Resolução
+- Gênero
+
+### COMPLETE (24 especialistas - 15 min)
+- Todos os especialistas
+- Síntese final com modelo 70B
+- Relatório completo com score
+
+## 🔥 ESPECIALISTAS DISPONÍVEIS
+
+1. **DIALOGUE** - Análise de diálogos e subtexto
+2. **CHARACTER** - Arcos e desenvolvimento
+3. **PACING** - Ritmo narrativo
+4. **THEME** - Temas e significados
+5. **ACTION** - Sequências de ação
+6. **STRUCTURE** - Estrutura em 3 atos
+7. **CONFLICT** - Conflitos e obstáculos
+8. **TENSION** - Tensão dramática
+9. **SUBTEXT** - Significados subjacentes
+10. **EXPOSITION** - Entrega de informação
+11. **TRANSITIONS** - Conexões entre cenas
+12. **OPENING** - Análise da abertura
+13. **CLIMAX** - Ponto culminante
+14. **RESOLUTION** - Fechamento
+15. **WORLDBUILDING** - Construção do universo
+16. **STAKES** - O que está em jogo
+17. **MOTIVATION** - Motivações dos personagens
+18. **BACKSTORY** - História pregressa
+19. **FORESHADOWING** - Prefiguração
+20. **TWIST** - Reviravoltas
+21. **SYMBOLISM** - Simbolismo e metáforas
+22. **TONE** - Tom e atmosfera
+23. **GENRE** - Convenções de gênero
+24. **CONTRAST** - Comparações e referências
+
+## ⚙️ CONFIGURAÇÃO
+
+Variáveis de ambiente opcionais:
+
+```bash
+# Modelos
+export SCRIPTUREMON_ORCHESTRATOR_MODEL="mixtral:8x7b-instruct-v0.1-q5_K_M"
+export SCRIPTUREMON_EVALUATOR_MODEL="llama3.1:70b-instruct-q4_K_M"
+
+# Parâmetros
+export SCRIPTUREMON_TEMPERATURE="0.7"
+export SCRIPTUREMON_TOP_P="0.9"
+
+# Ollama
+export OLLAMA_HOST="http://localhost:11434"
+export OLLAMA_TIMEOUT="60"
+
+# Memória
+export ENABLE_MEMORY_ENRICHMENT="true"
+export MEMORY_SEARCH_LIMIT="5"
+```
+
+## 📈 PERFORMANCE
+
+- **Tempo de análise:** 2-15 min dependendo do modo
+- **Uso de memória:** ~50MB RAM
+- **Banco de dados:** SQLite (cresce ~1MB por análise)
+- **Requisitos:** Python 3.8+, Ollama, 8GB RAM
+
+## 🎯 EXEMPLOS DE USO
+
+### Análise Profissional Completa
+
+```bash
+# 1. Analisar roteiro completo
+python3 run.py analyze "The_Matrix.txt" --title "The Matrix" --mode COMPLETE
+
+# 2. Exportar memória para backup
+python3 run.py memory export --file matrix_analysis.json
+
+# 3. Ver relatório em outputs/
+```
+
+### Desenvolvimento Iterativo
+
+```bash
+# Primeira versão - análise rápida
+python3 run.py analyze draft_v1.txt --mode QUICK
+
+# Após revisões - análise padrão
+python3 run.py analyze draft_v2.txt --mode STANDARD
+
+# Versão final - análise completa
+python3 run.py analyze final.txt --mode COMPLETE
+```
+
+## 🐛 TROUBLESHOOTING
+
+**Ollama não encontrado:**
+```bash
+ollama serve  # Iniciar servidor Ollama
+```
+
+**Modelo não encontrado:**
+```bash
+ollama list  # Ver modelos instalados
+ollama pull <modelo>  # Baixar modelo
+```
+
+**Memória corrompida:**
+```bash
+python3 run.py memory clear --confirm
+```
+
+## 📄 LICENÇA
+
+MIT License - Use livremente
+
+## 🥷 CRÉDITOS
+
+**DIGIMUNDO PRESENTE 🥷**
+
+Sistema desenvolvido por UCHIMON para análise profunda de roteiros cinematográficos.
+
+---
+
+*Versão 1.0 - Sistema Reorganizado e Otimizado*

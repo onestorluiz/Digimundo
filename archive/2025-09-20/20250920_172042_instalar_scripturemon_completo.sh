@@ -1,0 +1,1 @@
+# Instalador completo (ainda pesado, revisar depois)

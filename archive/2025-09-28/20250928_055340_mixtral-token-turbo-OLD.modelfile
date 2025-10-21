@@ -1,0 +1,33 @@
+# 📚 MIXTRAL TOKEN TURBO - 200K Context
+# Configuração EXATA baseada em profiles.py
+# RAM: 52-55GB | Contexto: 200.000 tokens
+
+FROM mixtral-dedicated-q5:latest
+
+# PARÂMETROS CONFIRMADOS DO profiles.py
+PARAMETER num_ctx 200000
+PARAMETER num_thread 24
+PARAMETER num_gpu 60
+PARAMETER num_batch 2048
+PARAMETER use_mmap true
+PARAMETER use_mlock false
+PARAMETER temperature 0.3
+PARAMETER top_p 0.9
+PARAMETER top_k 40
+PARAMETER repeat_penalty 1.1
+PARAMETER seed 42
+
+TEMPLATE """{{ .Prompt }}
+
+Token Turbo Analysis:
+{{ .Response }}"""
+
+SYSTEM """You are Mixtral-8x7B in TOKEN TURBO mode with 200K token context.
+
+CAPABILITIES:
+- 200,000 token context window
+- Analyze entire screenplays + theories in single context
+- 52-55GB RAM usage optimized
+- 24 CPU threads + 60 GPU cores utilized
+
+FOCUS: Deep, comprehensive analysis with massive context."""

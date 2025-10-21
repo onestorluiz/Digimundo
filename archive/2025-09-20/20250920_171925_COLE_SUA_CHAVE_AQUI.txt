@@ -1,0 +1,78 @@
+# 🔑 CONFIGURAÇÃO MANUAL DO CLAUDE CODE
+
+## OPÇÃO 1: Script Automático (Recomendado)
+Execute no terminal:
+```bash
+./setup_claude_key.sh
+```
+
+## OPÇÃO 2: Configuração Manual
+
+### Passo 1: Obtenha sua chave
+1. Acesse: https://console.anthropic.com/settings/keys
+2. Clique em "Create Key"
+3. Nomeie como "Digimundo"
+4. Copie a chave (começa com sk-ant-api...)
+
+### Passo 2: Cole a chave abaixo
+Substitua o texto COLE_AQUI_SUA_CHAVE pela sua chave real:
+
+```
+export ANTHROPIC_API_KEY="COLE_AQUI_SUA_CHAVE"
+```
+
+### Passo 3: Execute estes comandos no terminal
+
+```bash
+# Criar diretório de configuração
+mkdir -p ~/.config/claude-code
+
+# Criar arquivo de configuração (substitua SUA_CHAVE_AQUI pela chave real)
+cat > ~/.config/claude-code/config.json << 'EOF'
+{
+  "apiKey": "SUA_CHAVE_AQUI",
+  "model": "claude-3-5-sonnet-20241022",
+  "verbose": false,
+  "temperature": 0.7,
+  "maxTokens": 4096
+}
+EOF
+
+# Proteger o arquivo
+chmod 600 ~/.config/claude-code/config.json
+
+# Testar
+export ANTHROPIC_API_KEY="SUA_CHAVE_AQUI"
+npx @anthropic-ai/claude-code --print "Say OK"
+```
+
+## OPÇÃO 3: Usar variável de ambiente
+
+Adicione ao seu ~/.zshrc ou ~/.bash_profile:
+
+```bash
+export ANTHROPIC_API_KEY="sua_chave_aqui"
+```
+
+Depois execute:
+```bash
+source ~/.zshrc
+# ou
+source ~/.bash_profile
+```
+
+---
+
+## 🆘 PRECISA DE AJUDA?
+
+Se não tem uma chave ainda:
+1. Vá em https://console.anthropic.com/
+2. Faça login com sua conta Claude Pro
+3. Vá em Settings → API Keys
+4. Crie uma nova chave
+
+IMPORTANTE: 
+- A chave começa com "sk-ant-api"
+- Guarde ela com segurança
+- Não compartilhe com ninguém
+- É gratuita com seu plano Pro

@@ -1,0 +1,1504 @@
+"""
+Script Doctor Tensionmon - Tension Analysis Specialist
+A Script Doctor™ in Digimon form specializing in dramatic tension, suspense, anticipation, uncertainty, dread, ticking clock.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class TensionMoment:
+    """Individual tension instance."""
+    moment_type: str  # "dramatic_question", "suspense", "ticking_clock", "dramatic_irony", etc.
+    location: str  # scene/page
+    description: str
+    intensity: float  # 0-1
+    technique: str  # how tension is created
+    resolved: bool  # whether tension is released
+
+
+@dataclass
+class TensionProfile:
+    """Overall tension analysis."""
+    dramatic_questions: List[str]
+    stakes_clarity: float  # 0-1
+    uncertainty_level: float
+    suspense_score: float
+    anticipation_score: float
+    ticking_clock_present: bool
+    dramatic_irony_count: int
+    tension_escalation: bool
+    tension_release_moments: int
+    sustained_tension_score: float
+    emotional_tension_score: float
+    situational_tension_score: float
+    tension_peak_count: int
+    tension_valley_count: int
+    tension_resolution: bool
+    overall_tension_quality: float
+    unanswered_questions: int
+    information_withholding: bool
+    tension_rhythm_quality: float
+    climax_releases_tension: bool
+
+
+class DrTension:
+    """
+    Script Doctor Tensionmon - The Tension Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing dramatic tension,
+    suspense, anticipation, uncertainty, dread, ticking clock, and dramatic questions.
+
+    Identity: Script Doctor first, Digimon tension specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Tensionmon with rules and configuration."""
+        self.name = "Script Doctor Tensionmon"
+        self.digimon_name = "Tensionmon"
+        self.title = "Script Doctor - Tension Analysis Specialist"
+        self.specialty = "Dramatic tension, suspense, anticipation, uncertainty, dread, ticking clock"
+        self.identity = "I am Script Doctor Tensionmon, a professional Script Doctor™ specializing in tension analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "tension_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - TENSION SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Tension architecture
+            "McKee Story tension gap expectation vs result desire vs reality",
+            "McKee Story dramatic question central unanswered tension sustained",
+            "McKee Story anticipation uncertainty outcome unknown audience engaged",
+            "McKee Story suspense withholding information revelation timing strategic",
+            "McKee Story tension escalation progressive intensity building climax",
+            "McKee Story tension release catharsis emotional payoff resolution",
+            "McKee Story stakes clarity what at risk protagonist lose gain",
+            "McKee Story controlling idea tension through value charge positive negative",
+
+            # McKee Story - GAP and ANTICIPATION (ultra-specific manual reading)
+            "McKee Story gap widens tension mounts expectation result divide increases pressure",
+            "McKee Story anticipation gap outcome uncertain audience wonders what happens next",
+            "McKee Story suspense withholding outcome delay strategic revelation timing control",
+            "McKee Story curiosity gap information withheld mystery intrigue engagement maintained",
+            "McKee Story dramatic question gap unanswered central sustained tension throughout story",
+            "McKee Story tension gap expectation versus result desire versus reality divide",
+
+            # Truby Anatomy - Suspense and urgency
+            "Truby Anatomy ticking clock deadline urgency time pressure mounting",
+            "Truby withholding information revelation postponement suspense building",
+            "Truby opponent creates tension pressure obstacles opposition mounting",
+            "Truby moral argument tension ethical dilemma stakes escalating",
+            "Truby revelation sequence information strategic release timing perfect",
+            "Truby desire line tension protagonist want obstacle preventing attainment",
+            "Truby battle climax tension peak supreme moment confrontation ultimate",
+
+            # Field Screenplay - Dramatic tension
+            "Field Screenplay dramatic question clear sustained will protagonist succeed",
+            "Field tension building through uncertainty conflict opposition mounting",
+            "Field paradigm structure tension escalation act breaks turning points",
+            "Field dramatic need protagonist want obstacle tension inherent",
+            "Field scene tension conflict present stakes clear outcome uncertain",
+            "Field midpoint shift tension escalation stakes raised urgency increased",
+
+            # Snyder Save the Cat - Tension beats
+            "Snyder Save the Cat catalyst inciting incident tension initiated stakes established",
+            "Snyder break into two tension escalation new world challenges mounting",
+            "Snyder B story theme tension emotional stakes personal relationships",
+            "Snyder fun and games tension through promise premise delivered",
+            "Snyder midpoint false victory defeat tension shift stakes raised",
+            "Snyder bad guys close in tension mounting obstacles multiplying pressure",
+            "Snyder all is lost dark night soul tension peak lowest moment",
+            "Snyder break into three tension release solution discovered hope restored",
+
+            # Vogler Writer's Journey - Suspense and ordeal
+            "Vogler Writer's Journey call to adventure tension uncertainty unknown",
+            "Vogler threshold crossing tension fear apprehension commitment tested",
+            "Vogler tests allies enemies tension uncertainty trust stakes established",
+            "Vogler approach inmost cave tension mounting anticipation supreme ordeal",
+            "Vogler ordeal supreme tension peak death rebirth transformation crisis",
+            "Vogler road back tension pursuit consequences chase urgency mounting",
+
+            # Campbell Hero 1000 Faces - Mythic tension
+            "Campbell Hero 1000 Faces trials tests tension hero proven worthy",
+            "Campbell belly whale tension death rebirth metamorphosis transformation",
+            "Campbell road of trials tension mounting obstacles challenges escalating",
+            "Campbell meeting goddess tension ultimate boon revelation supreme moment",
+            "Campbell atonement father tension confrontation authority supreme ordeal",
+
+            # Aristotle Poetics - Cathartic tension
+            "Aristotle Poetics fear pity tension audience emotional engagement empathy",
+            "Aristotle catharsis tension release emotional purification climax resolution",
+            "Aristotle recognition anagnorisis tension revelation discovery truth exposed",
+            "Aristotle reversal peripeteia tension fortune shift unexpected outcome",
+            "Aristotle magnitude tension sustained proper length intensity maintained",
+
+            # Egri Art Dramatic Writing - Rising tension
+            "Egri Art Dramatic Writing premise tension through opposition conflict inherent",
+            "Egri unity of opposites tension creation character vs character forces",
+            "Egri rising tension escalation conflict intensifying stakes mounting",
+            "Egri orchestration tension through character contrast diversity conflict",
+            "Egri point of attack tension immediate conflict present stakes clear",
+
+            # Seger Making Good Script Great - Sustaining tension
+            "Seger Making Good Script Great unanswered questions tension sustained curiosity",
+            "Seger dramatic irony tension audience knows character doesn't suspense",
+            "Seger anticipation foreshadowing tension setup payoff promise delivered",
+            "Seger tension maintained across acts sustained consistency rhythm pacing",
+            "Seger mystery enigma tension withholding information revelation strategic",
+            "Seger tension peaks valleys rhythm breathing room balance pacing",
+
+            # Weiland Creating Character Arcs - Internal tension
+            "Weiland Creating Character Arcs lie believed tension internal struggle",
+            "Weiland ghost wound tension past trauma affecting present choices",
+            "Weiland want vs need tension external desire vs internal necessity",
+            "Weiland moment truth tension supreme test character choice defining",
+            "Weiland tension mirrors arc internal external conflict synchronized",
+
+            # Goldman Adventures Screen Trade - Page-turning tension
+            "Goldman Adventures Screen Trade tension sustained attention page-turning compulsive",
+            "Goldman what happens next tension suspense anticipation outcome unknown",
+            "Goldman stakes personal high tension audience invested caring engaged",
+            "Goldman tension through character jeopardy danger threat imminent",
+
+            # Rhimes Year of Yes - Cliffhanger mastery
+            "Rhimes Year of Yes cliffhanger tension beat ending unanswered hook",
+            "Rhimes tension through stakes personal character-driven emotional investment",
+            "Rhimes pacing tension rhythm intensity sustained peaks valleys balanced",
+
+            # Mamet Three Uses of the Knife - Information control
+            "Mamet Three Uses Knife tension withholding information strategic revelation",
+            "Mamet dramatic question tension unanswered sustained outcome uncertain",
+            "Mamet tension through uncertainty ambiguity mystery audience engaged",
+
+            # Mackendrick On Film-Making - Visual tension
+            "Mackendrick On Film-Making tension sustained visual cinematic engagement",
+            "Mackendrick tension through character objective obstacle opposition mounting",
+
+            # General tension concepts - comprehensive
+            "suspense vs surprise tension building Hitchcock bomb under table",
+            "dramatic tension uncertainty outcome what will happen anticipation",
+            "anticipation dread foreshadowing tension promise threat mounting",
+            "ticking clock deadline urgency time running out pressure mounting",
+            "dramatic question unanswered will protagonist succeed outcome uncertain",
+            "stakes escalation tension building what at risk mounting consequences",
+            "withholding information suspense revelation timing strategic payoff",
+            "dramatic irony tension audience knows character unaware suspense mounting",
+            "tension release breathing room relief respite rhythm balance necessary",
+            "sustained tension consistency across acts maintained engagement",
+            "tension peaks valleys rhythm pacing intensity variations balanced",
+            "emotional tension character-driven personal stakes relationships jeopardy",
+            "situational tension plot-driven external stakes danger threat mounting",
+            "tension resolution climax catharsis emotional release payoff satisfying"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story curiosity questions close open patterns concern positive values",
+        "McKee Story suspense audience and character know same outcome uncertain",
+        "McKee Story suspense build anxiety fear forward projection narrative drive",
+        "McKee Story mystery conceal facts red herrings who done it guessing game",
+        "McKee Story mystery closed multiple suspects open perfect crime flaw",
+        "McKee Story dramatic irony dread compassion audience superior knowledge",
+        "McKee Story open with ending then watch discovery how and why",
+        "McKee Story earn the pause accelerate rhythm then retard before climax",
+        "McKee Story rhythm swing tension relaxation drive time awareness vanishes",
+        "McKee Story false mystery cliffhanger tease meaningless hole kicks shins",
+        "McKee Story cheap surprise smash cut shock without insight not tragic",
+        "McKee Story obligatory scene foreshadow image projected by inciting incident",
+        "McKee Story audience leans expectation mingled uncertainty crisis approach",
+
+        # McKee DIALOGUE - GPT-5 extracted (12 Oct 2025)
+        "McKee Dialogue suspense sentence periodic delay punch word tension",
+        "McKee Dialogue pause pre-crisis tighten focus post-turn meaning absorption",
+
+
+        ]
+
+        # Tension analysis patterns (bilingual: EN + PT)
+
+        # General tension markers
+        self.tension_markers = [
+            # English
+            "tension", "tense", "suspense", "suspenseful", "anticipation",
+            "uncertainty", "unsure", "doubt", "dread", "fear",
+            "anxiety", "nervous", "worried", "concerned", "apprehension",
+            "waiting", "wondering", "unknown", "mysterious", "ominous",
+            # Portuguese
+            "tensão", "tenso", "suspense", "suspensivo", "antecipação",
+            "incerteza", "inseguro", "dúvida", "pavor", "medo",
+            "ansiedade", "nervoso", "preocupado", "apreensão",
+            "esperando", "imaginando", "desconhecido", "misterioso", "sinistro"
+        ]
+
+        # Suspense markers
+        self.suspense_markers = [
+            # English
+            "suspense", "mystery", "unknown", "waiting", "wondering",
+            "what will happen", "what happens next", "outcome uncertain",
+            "don't know", "unclear", "mysterious", "enigmatic",
+            # Portuguese
+            "suspense", "mistério", "desconhecido", "esperando", "imaginando",
+            "o que vai acontecer", "o que acontece depois", "resultado incerto",
+            "não sabe", "incerto", "misterioso", "enigmático"
+        ]
+
+        # Anticipation markers
+        self.anticipation_markers = [
+            # English
+            "anticipates", "expects", "awaits", "foresees", "looks ahead",
+            "dreads", "fears what", "waits for", "prepares for",
+            "coming", "approaching", "impending", "looming",
+            # Portuguese
+            "antecipa", "espera", "aguarda", "prevê", "olha adiante",
+            "receia", "teme o que", "espera por", "prepara-se para",
+            "vindo", "aproximando", "iminente", "ameaçador"
+        ]
+
+        # Uncertainty markers
+        self.uncertainty_markers = [
+            # English
+            "uncertain", "unsure", "doubt", "ambiguous", "unclear",
+            "don't know", "not sure", "maybe", "perhaps", "possibly",
+            "questionable", "dubious", "undecided", "hesitant",
+            # Portuguese
+            "incerto", "inseguro", "dúvida", "ambíguo", "incerto",
+            "não sabe", "não tem certeza", "talvez", "possivelmente",
+            "questionável", "duvidoso", "indeciso", "hesitante"
+        ]
+
+        # Dread markers
+        self.dread_markers = [
+            # English
+            "dread", "fear", "apprehension", "foreboding", "ominous",
+            "dark", "ominous", "threatening", "sinister", "menacing",
+            "terrifying", "frightening", "alarming", "disturbing",
+            # Portuguese
+            "pavor", "medo", "apreensão", "pressentimento", "sinistro",
+            "sombrio", "ameaçador", "sinistro", "ameaçador",
+            "aterrorizante", "assustador", "alarmante", "perturbador"
+        ]
+
+        # Ticking clock markers
+        self.ticking_clock_markers = [
+            # English
+            "deadline", "time limit", "running out of time", "countdown",
+            "before it's too late", "time running out", "hurry", "urgent",
+            "must act now", "no time", "clock ticking", "hours left",
+            # Portuguese
+            "prazo", "limite de tempo", "tempo esgotando", "contagem regressiva",
+            "antes que seja tarde", "tempo acabando", "pressa", "urgente",
+            "precisa agir agora", "sem tempo", "relógio correndo", "horas restantes"
+        ]
+
+        # Dramatic question markers
+        self.dramatic_question_markers = [
+            # English
+            "will they", "can they", "how will", "what will", "who will",
+            "will he", "will she", "can he", "can she", "succeed?",
+            "survive?", "escape?", "win?", "lose?", "die?",
+            # Portuguese
+            "será que", "conseguirão", "como vão", "o que vai", "quem vai",
+            "ele vai", "ela vai", "ele consegue", "ela consegue", "suceder?",
+            "sobreviver?", "escapar?", "vencer?", "perder?", "morrer?"
+        ]
+
+        # Stakes markers
+        self.stakes_markers = [
+            # English
+            "at stake", "risk", "danger", "consequence", "lose everything",
+            "life or death", "everything depends", "must succeed",
+            "failure means", "if he fails", "if she loses",
+            # Portuguese
+            "em jogo", "risco", "perigo", "consequência", "perder tudo",
+            "vida ou morte", "tudo depende", "precisa ter sucesso",
+            "fracasso significa", "se falhar", "se perder"
+        ]
+
+        # Dramatic irony markers
+        self.dramatic_irony_markers = [
+            # English
+            "audience knows", "viewers know", "we know", "unaware",
+            "doesn't know", "doesn't realize", "oblivious", "unaware that",
+            "if only he knew", "little does he know", "unknown to him",
+            # Portuguese
+            "audiência sabe", "espectadores sabem", "sabemos", "inconsciente",
+            "não sabe", "não percebe", "alheio", "sem saber que",
+            "se ele soubesse", "mal sabe ele", "desconhecido para ele"
+        ]
+
+        # Information withholding markers
+        self.withholding_markers = [
+            # English
+            "doesn't reveal", "keeps secret", "hides", "conceals",
+            "withholds", "doesn't tell", "mysterious", "cryptic",
+            "refuses to say", "won't explain", "vague", "ambiguous",
+            # Portuguese
+            "não revela", "mantém segredo", "esconde", "oculta",
+            "retém", "não conta", "misterioso", "críptico",
+            "recusa-se a dizer", "não explica", "vago", "ambíguo"
+        ]
+
+        # Revelation markers
+        self.revelation_markers = [
+            # English
+            "reveals", "discovers", "finds out", "learns", "realizes",
+            "revelation", "discovery", "truth", "exposed", "uncovers",
+            # Portuguese
+            "revela", "descobre", "fica sabendo", "aprende", "percebe",
+            "revelação", "descoberta", "verdade", "exposto", "desvenda"
+        ]
+
+        # Tension release markers
+        self.release_markers = [
+            # English
+            "relief", "relaxes", "breathes", "calm", "safe",
+            "tension eases", "lets guard down", "peaceful", "quiet moment",
+            "breathing room", "respite", "pause",
+            # Portuguese
+            "alívio", "relaxa", "respira", "calmo", "seguro",
+            "tensão diminui", "baixa a guarda", "pacífico", "momento tranquilo",
+            "folga", "descanso", "pausa"
+        ]
+
+        # Escalation markers
+        self.escalation_markers = [
+            # English
+            "escalates", "intensifies", "worsens", "heightens",
+            "builds", "grows", "increases", "mounts", "rises",
+            # Portuguese
+            "escala", "intensifica", "piora", "eleva",
+            "constrói", "cresce", "aumenta", "sobe", "aumenta"
+        ]
+
+        # Peak tension markers
+        self.peak_markers = [
+            # English
+            "climax", "peak", "highest tension", "breaking point",
+            "maximum tension", "unbearable", "critical moment",
+            # Portuguese
+            "clímax", "pico", "tensão máxima", "ponto de ruptura",
+            "tensão máxima", "insuportável", "momento crítico"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze tension in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete tension diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Detect dramatic questions
+        dramatic_questions = self._detect_dramatic_questions(screenplay_text)
+
+        # Analyze stakes
+        stakes_analysis = self._analyze_stakes(screenplay_text)
+
+        # Analyze uncertainty
+        uncertainty_analysis = self._analyze_uncertainty(screenplay_text)
+
+        # Analyze suspense
+        suspense_analysis = self._analyze_suspense(screenplay_text)
+
+        # Analyze anticipation
+        anticipation_analysis = self._analyze_anticipation(screenplay_text)
+
+        # Detect ticking clock
+        ticking_clock = self._detect_ticking_clock(screenplay_text)
+
+        # Detect dramatic irony
+        dramatic_irony = self._detect_dramatic_irony(screenplay_text)
+
+        # Analyze tension escalation
+        tension_escalation = self._analyze_tension_escalation(screenplay_text)
+
+        # Analyze tension release
+        tension_release = self._analyze_tension_release(screenplay_text)
+
+        # Analyze sustained tension
+        sustained_tension = self._analyze_sustained_tension(screenplay_text, scenes)
+
+        # Analyze emotional tension
+        emotional_tension = self._analyze_emotional_tension(screenplay_text)
+
+        # Analyze situational tension
+        situational_tension = self._analyze_situational_tension(screenplay_text)
+
+        # Analyze tension rhythm
+        tension_rhythm = self._analyze_tension_rhythm(screenplay_text)
+
+        # Detect information withholding
+        information_withholding = self._detect_information_withholding(screenplay_text)
+
+        # Assess tension resolution
+        tension_resolution = self._assess_tension_resolution(screenplay_text)
+
+        # Build tension profile
+        tension_profile = TensionProfile(
+            dramatic_questions=dramatic_questions["questions"],
+            stakes_clarity=stakes_analysis["clarity"],
+            uncertainty_level=uncertainty_analysis["level"],
+            suspense_score=suspense_analysis["score"],
+            anticipation_score=anticipation_analysis["score"],
+            ticking_clock_present=ticking_clock["present"],
+            dramatic_irony_count=dramatic_irony["count"],
+            tension_escalation=tension_escalation["present"],
+            tension_release_moments=tension_release["moments"],
+            sustained_tension_score=sustained_tension["score"],
+            emotional_tension_score=emotional_tension["score"],
+            situational_tension_score=situational_tension["score"],
+            tension_peak_count=tension_rhythm["peak_count"],
+            tension_valley_count=tension_rhythm["valley_count"],
+            tension_resolution=tension_resolution["resolved"],
+            overall_tension_quality=0.0,  # calculated below
+            unanswered_questions=dramatic_questions["unanswered_count"],
+            information_withholding=information_withholding["present"],
+            tension_rhythm_quality=tension_rhythm["quality"],
+            climax_releases_tension=tension_resolution["climax_release"]
+        )
+
+        # Calculate overall tension quality
+        tension_profile.overall_tension_quality = self._calculate_overall_tension_quality(tension_profile)
+
+        # Check against rules
+        rule_violations = self._check_tension_rules(
+            tension_profile, dramatic_questions, stakes_analysis,
+            suspense_analysis, tension_escalation, sustained_tension,
+            tension_resolution
+        )
+
+        # Calculate score
+        score = self._calculate_tension_score(
+            tension_profile, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, tension_profile, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "dramatic_questions": {
+                "questions": dramatic_questions["questions"][:5],
+                "unanswered_count": dramatic_questions["unanswered_count"],
+                "clear": dramatic_questions.get("clear", False),
+                "quality": dramatic_questions.get("quality", "medium")
+            },
+            "stakes": {
+                "clarity": stakes_analysis["clarity"],
+                "clear": stakes_analysis.get("clear", False),
+                "high_stakes": stakes_analysis.get("high_stakes", False),
+                "examples": stakes_analysis.get("examples", [])[:3]
+            },
+            "uncertainty": {
+                "level": uncertainty_analysis["level"],
+                "present": uncertainty_analysis.get("present", False),
+                "effective": uncertainty_analysis.get("effective", False)
+            },
+            "suspense": {
+                "score": suspense_analysis["score"],
+                "present": suspense_analysis.get("present", False),
+                "quality": suspense_analysis.get("quality", "medium"),
+                "count": suspense_analysis.get("count", 0)
+            },
+            "anticipation": {
+                "score": anticipation_analysis["score"],
+                "present": anticipation_analysis.get("present", False),
+                "foreshadowing_present": anticipation_analysis.get("foreshadowing", False)
+            },
+            "ticking_clock": {
+                "present": ticking_clock["present"],
+                "urgency_level": ticking_clock.get("urgency", "low"),
+                "examples": ticking_clock.get("examples", [])[:2]
+            },
+            "dramatic_irony": {
+                "count": dramatic_irony["count"],
+                "present": dramatic_irony["count"] > 0,
+                "examples": dramatic_irony.get("examples", [])[:2]
+            },
+            "tension_escalation": {
+                "present": tension_escalation["present"],
+                "quality": tension_escalation.get("quality", "medium"),
+                "escalation_count": tension_escalation.get("count", 0)
+            },
+            "tension_release": {
+                "moments": tension_release["moments"],
+                "adequate": tension_release.get("adequate", False),
+                "breathing_room": tension_release.get("breathing_room", False)
+            },
+            "sustained_tension": {
+                "score": sustained_tension["score"],
+                "consistent": sustained_tension.get("consistent", False),
+                "act_breakdown": sustained_tension.get("by_act", {})
+            },
+            "emotional_tension": {
+                "score": emotional_tension["score"],
+                "present": emotional_tension.get("present", False),
+                "character_driven": emotional_tension.get("character_driven", False)
+            },
+            "situational_tension": {
+                "score": situational_tension["score"],
+                "present": situational_tension.get("present", False),
+                "plot_driven": situational_tension.get("plot_driven", False)
+            },
+            "tension_rhythm": {
+                "quality": tension_rhythm["quality"],
+                "peak_count": tension_rhythm["peak_count"],
+                "valley_count": tension_rhythm["valley_count"],
+                "balanced": tension_rhythm.get("balanced", False)
+            },
+            "information_withholding": {
+                "present": information_withholding["present"],
+                "strategic": information_withholding.get("strategic", False),
+                "count": information_withholding.get("count", 0)
+            },
+            "tension_resolution": {
+                "resolved": tension_resolution["resolved"],
+                "climax_release": tension_resolution["climax_release"],
+                "catharsis": tension_resolution.get("catharsis", False),
+                "quality": tension_resolution.get("quality", "medium")
+            },
+            "overall_tension_quality": tension_profile.overall_tension_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, tension_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _detect_dramatic_questions(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Identify unanswered dramatic questions.
+
+        McKee: "Dramatic question keeps audience engaged - will protagonist succeed?"
+        The central dramatic question must be clear and sustained.
+        """
+        questions = []
+
+        # Look for explicit questions
+        for line in screenplay.split('\n'):
+            # Check for dramatic question patterns
+            for marker in self.dramatic_question_markers:
+                if marker in line.lower():
+                    questions.append(line.strip()[:100])
+                    break
+
+        # Remove duplicates
+        questions = list(set(questions))
+
+        unanswered_count = len(questions)
+
+        # Assess clarity
+        clear = unanswered_count >= 1
+
+        # Determine quality
+        if unanswered_count >= 5:
+            quality = "excellent"
+        elif unanswered_count >= 3:
+            quality = "good"
+        elif unanswered_count >= 1:
+            quality = "adequate"
+        else:
+            quality = "poor"
+
+        return {
+            "questions": questions,
+            "unanswered_count": unanswered_count,
+            "clear": clear,
+            "quality": quality
+        }
+
+    def _analyze_stakes(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze what's at stake and clarity.
+
+        Stakes must be clear - what protagonist stands to lose/gain.
+        """
+        # Count stakes markers
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.stakes_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:100])
+                    break
+
+        # Calculate clarity (0-1)
+        clarity = min(1.0, count / 10.0)
+
+        clear = count >= 3
+        high_stakes = count >= 7
+
+        return {
+            "clarity": clarity,
+            "clear": clear,
+            "high_stakes": high_stakes,
+            "count": count,
+            "examples": examples
+        }
+
+    def _analyze_uncertainty(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze level of ambiguity and doubt.
+
+        McKee: "Uncertainty creates tension - audience doesn't know outcome."
+        """
+        # Count uncertainty markers
+        count = 0
+        for marker in self.uncertainty_markers:
+            count += screenplay.lower().count(marker)
+
+        # Calculate level (0-1)
+        level = min(1.0, count / 15.0)
+
+        present = count >= 5
+        effective = level >= 0.5
+
+        return {
+            "level": level,
+            "present": present,
+            "effective": effective,
+            "count": count
+        }
+
+    def _analyze_suspense(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze suspense building techniques.
+
+        Hitchcock: "Suspense is when audience knows bomb will explode."
+        """
+        # Count suspense markers
+        count = 0
+        for marker in self.suspense_markers:
+            count += screenplay.lower().count(marker)
+
+        # Calculate score (0-1)
+        score = min(1.0, count / 12.0)
+
+        present = count >= 3
+
+        # Determine quality
+        if score >= 0.7:
+            quality = "excellent"
+        elif score >= 0.5:
+            quality = "good"
+        elif score >= 0.3:
+            quality = "adequate"
+        else:
+            quality = "poor"
+
+        return {
+            "score": score,
+            "present": present,
+            "quality": quality,
+            "count": count
+        }
+
+    def _analyze_anticipation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze foreshadowing and setup creating anticipation.
+
+        Anticipation = audience expects something to happen.
+        """
+        # Count anticipation markers
+        count = 0
+        for marker in self.anticipation_markers:
+            count += screenplay.lower().count(marker)
+
+        # Calculate score (0-1)
+        score = min(1.0, count / 10.0)
+
+        present = count >= 3
+
+        # Check for foreshadowing
+        foreshadowing = "foreshadow" in screenplay.lower() or "hints at" in screenplay.lower()
+
+        return {
+            "score": score,
+            "present": present,
+            "foreshadowing": foreshadowing,
+            "count": count
+        }
+
+    def _detect_ticking_clock(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect deadline/urgency elements.
+
+        Truby: "Ticking clock creates urgency - time running out."
+        """
+        # Count ticking clock markers
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.ticking_clock_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:100])
+                    break
+
+        present = count >= 2
+
+        # Determine urgency level
+        if count >= 7:
+            urgency = "high"
+        elif count >= 4:
+            urgency = "medium"
+        elif count >= 2:
+            urgency = "low"
+        else:
+            urgency = "none"
+
+        return {
+            "present": present,
+            "urgency": urgency,
+            "count": count,
+            "examples": examples
+        }
+
+    def _detect_dramatic_irony(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect dramatic irony (audience knows more than character).
+
+        Dramatic irony = powerful tension technique.
+        """
+        # Count dramatic irony markers
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.dramatic_irony_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:100])
+                    break
+
+        return {
+            "count": count,
+            "examples": examples
+        }
+
+    def _analyze_tension_escalation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze progressive tension building.
+
+        McKee: "Tension must escalate - build progressively."
+        """
+        # Count escalation markers
+        count = 0
+        for marker in self.escalation_markers:
+            count += screenplay.lower().count(marker)
+
+        # Also count general tension progression
+        lines = screenplay.split('\n')
+        first_third = '\n'.join(lines[:len(lines)//3])
+        middle_third = '\n'.join(lines[len(lines)//3:2*len(lines)//3])
+        last_third = '\n'.join(lines[2*len(lines)//3:])
+
+        first_tension = sum(1 for marker in self.tension_markers if marker in first_third.lower())
+        middle_tension = sum(1 for marker in self.tension_markers if marker in middle_third.lower())
+        last_tension = sum(1 for marker in self.tension_markers if marker in last_third.lower())
+
+        # Escalation present if tension increases
+        present = (middle_tension > first_tension) and (last_tension > middle_tension)
+
+        # Determine quality
+        if present and count >= 8:
+            quality = "excellent"
+        elif present and count >= 5:
+            quality = "good"
+        elif present or count >= 3:
+            quality = "adequate"
+        else:
+            quality = "poor"
+
+        return {
+            "present": present,
+            "count": count,
+            "quality": quality,
+            "tension_progression": {
+                "act1": first_tension,
+                "act2": middle_tension,
+                "act3": last_tension
+            }
+        }
+
+    def _analyze_tension_release(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze breathing room moments.
+
+        Tension release needed for rhythm - can't be tense all the time.
+        """
+        # Count release markers
+        count = 0
+        for marker in self.release_markers:
+            count += screenplay.lower().count(marker)
+
+        moments = count
+
+        # Adequate = 3-6 release moments (breathing room)
+        adequate = 3 <= moments <= 6
+        breathing_room = moments >= 2
+
+        return {
+            "moments": moments,
+            "adequate": adequate,
+            "breathing_room": breathing_room
+        }
+
+    def _analyze_sustained_tension(self, screenplay: str, scenes: List[Dict]) -> Dict[str, Any]:
+        """
+        Analyze consistency across acts.
+
+        Tension must be sustained - not sporadic.
+        """
+        if not scenes:
+            return {
+                "score": 0.0,
+                "consistent": False,
+                "by_act": {}
+            }
+
+        # Count tension markers by act
+        total_scenes = len(scenes)
+        act1_end = total_scenes // 4
+        act2_end = 3 * total_scenes // 4
+
+        act1_tension = 0
+        act2_tension = 0
+        act3_tension = 0
+
+        for i, scene in enumerate(scenes):
+            scene_text = '\n'.join(scene['content'])
+            tension_count = sum(1 for marker in self.tension_markers if marker in scene_text.lower())
+
+            if i < act1_end:
+                act1_tension += tension_count
+            elif i < act2_end:
+                act2_tension += tension_count
+            else:
+                act3_tension += tension_count
+
+        # Calculate average tension per act
+        act1_avg = act1_tension / max(1, act1_end) if act1_end > 0 else 0
+        act2_avg = act2_tension / max(1, act2_end - act1_end) if (act2_end - act1_end) > 0 else 0
+        act3_avg = act3_tension / max(1, total_scenes - act2_end) if (total_scenes - act2_end) > 0 else 0
+
+        # Overall average
+        overall_avg = (act1_avg + act2_avg + act3_avg) / 3.0
+
+        # Consistent if all acts have reasonable tension
+        consistent = act1_avg >= 1.0 and act2_avg >= 1.5 and act3_avg >= 2.0
+
+        # Calculate score (0-1)
+        score = min(1.0, overall_avg / 3.0)
+
+        return {
+            "score": score,
+            "consistent": consistent,
+            "by_act": {
+                "act1": act1_avg,
+                "act2": act2_avg,
+                "act3": act3_avg
+            }
+        }
+
+    def _analyze_emotional_tension(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze character-driven tension.
+
+        Emotional tension = tension from character relationships, feelings, stakes.
+        """
+        # Count emotional tension markers (subset of general tension)
+        emotional_markers = [
+            "fear", "anxiety", "worried", "concerned", "dread",
+            "medo", "ansiedade", "preocupado", "apreensão", "pavor"
+        ]
+
+        count = 0
+        for marker in emotional_markers:
+            count += screenplay.lower().count(marker)
+
+        # Calculate score (0-1)
+        score = min(1.0, count / 10.0)
+
+        present = count >= 3
+        character_driven = score >= 0.5
+
+        return {
+            "score": score,
+            "present": present,
+            "character_driven": character_driven,
+            "count": count
+        }
+
+    def _analyze_situational_tension(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze plot-driven tension.
+
+        Situational tension = tension from plot events, circumstances, obstacles.
+        """
+        # Count situational tension markers
+        situational_markers = [
+            "danger", "threat", "risk", "obstacle", "problem",
+            "perigo", "ameaça", "risco", "obstáculo", "problema"
+        ]
+
+        count = 0
+        for marker in situational_markers:
+            count += screenplay.lower().count(marker)
+
+        # Calculate score (0-1)
+        score = min(1.0, count / 12.0)
+
+        present = count >= 4
+        plot_driven = score >= 0.5
+
+        return {
+            "score": score,
+            "present": present,
+            "plot_driven": plot_driven,
+            "count": count
+        }
+
+    def _analyze_tension_rhythm(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze peaks and valleys pattern.
+
+        Good rhythm = alternating tension peaks and valleys (not flat).
+        """
+        # Divide screenplay into sections and count tension
+        lines = screenplay.split('\n')
+        section_size = len(lines) // 10  # 10 sections
+
+        if section_size == 0:
+            return {
+                "quality": "poor",
+                "peak_count": 0,
+                "valley_count": 0,
+                "balanced": False
+            }
+
+        section_tensions = []
+
+        for i in range(10):
+            start = i * section_size
+            end = (i + 1) * section_size if i < 9 else len(lines)
+            section = '\n'.join(lines[start:end])
+            tension_count = sum(1 for marker in self.tension_markers if marker in section.lower())
+            section_tensions.append(tension_count)
+
+        # Find peaks and valleys
+        peak_count = 0
+        valley_count = 0
+
+        for i in range(1, len(section_tensions) - 1):
+            # Peak = higher than neighbors
+            if section_tensions[i] > section_tensions[i-1] and section_tensions[i] > section_tensions[i+1]:
+                peak_count += 1
+            # Valley = lower than neighbors
+            elif section_tensions[i] < section_tensions[i-1] and section_tensions[i] < section_tensions[i+1]:
+                valley_count += 1
+
+        # Good rhythm = 2-4 peaks, 2-4 valleys
+        balanced = (2 <= peak_count <= 4) and (2 <= valley_count <= 4)
+
+        # Determine quality
+        if balanced:
+            quality = "excellent"
+        elif peak_count >= 2 and valley_count >= 1:
+            quality = "good"
+        elif peak_count >= 1:
+            quality = "adequate"
+        else:
+            quality = "poor"
+
+        return {
+            "quality": quality,
+            "peak_count": peak_count,
+            "valley_count": valley_count,
+            "balanced": balanced,
+            "section_tensions": section_tensions
+        }
+
+    def _detect_information_withholding(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect strategic revelation - withholding information creates suspense.
+
+        Mamet: "Tension through withholding information."
+        """
+        # Count withholding markers
+        count = 0
+        for marker in self.withholding_markers:
+            count += screenplay.lower().count(marker)
+
+        present = count >= 2
+        strategic = count >= 4
+
+        return {
+            "present": present,
+            "strategic": strategic,
+            "count": count
+        }
+
+    def _assess_tension_resolution(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Assess whether climax releases tension (catharsis).
+
+        Aristotle: "Catharsis - emotional release at climax."
+        """
+        # Look for tension resolution in last 20%
+        lines = screenplay.split('\n')
+        last_20_percent = '\n'.join(lines[int(len(lines)*0.8):])
+
+        # Count release/resolution markers
+        release_count = sum(1 for marker in self.release_markers if marker in last_20_percent.lower())
+        resolution_count = sum(1 for marker in self.revelation_markers if marker in last_20_percent.lower())
+
+        # Check for peak tension markers in last 20% (before release)
+        peak_count = sum(1 for marker in self.peak_markers if marker in last_20_percent.lower())
+
+        climax_release = peak_count >= 1 and release_count >= 1
+        resolved = release_count >= 1 or resolution_count >= 2
+        catharsis = climax_release and release_count >= 2
+
+        # Determine quality
+        if catharsis:
+            quality = "excellent"
+        elif climax_release:
+            quality = "good"
+        elif resolved:
+            quality = "adequate"
+        else:
+            quality = "poor"
+
+        return {
+            "resolved": resolved,
+            "climax_release": climax_release,
+            "catharsis": catharsis,
+            "quality": quality,
+            "release_count": release_count
+        }
+
+    def _calculate_overall_tension_quality(self, profile: TensionProfile) -> float:
+        """Calculate overall tension quality score."""
+        scores = [
+            1.0 if len(profile.dramatic_questions) >= 1 else 0.0,
+            profile.stakes_clarity,
+            profile.uncertainty_level,
+            profile.suspense_score,
+            profile.anticipation_score,
+            1.0 if profile.ticking_clock_present else 0.5,
+            min(1.0, profile.dramatic_irony_count / 3.0),
+            1.0 if profile.tension_escalation else 0.0,
+            min(1.0, profile.tension_release_moments / 4.0),
+            profile.sustained_tension_score,
+            profile.emotional_tension_score,
+            profile.situational_tension_score,
+            1.0 if profile.tension_resolution else 0.0
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_tension_rules(self, profile: TensionProfile, dramatic_questions: Dict,
+                            stakes_analysis: Dict, suspense_analysis: Dict,
+                            tension_escalation: Dict, sustained_tension: Dict,
+                            tension_resolution: Dict) -> List[Dict]:
+        """Check tension against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "TENSION.R001":
+                # Tension Present
+                if profile.overall_tension_quality < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Overall tension weak or absent",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R002":
+                # Dramatic Question Clear
+                if profile.unanswered_questions < 1:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No clear dramatic question",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R003":
+                # Stakes Established
+                if profile.stakes_clarity < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Stakes unclear: {profile.stakes_clarity:.1%}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R004":
+                # Uncertainty Maintained
+                if profile.uncertainty_level < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Uncertainty level too low",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R005":
+                # Suspense Built
+                if profile.suspense_score < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Suspense weak: {profile.suspense_score:.1%}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R006":
+                # Anticipation Created
+                if profile.anticipation_score < 0.2:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Anticipation weak or absent",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R007":
+                # Ticking Clock Present
+                if not profile.ticking_clock_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No ticking clock - lacks urgency",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R008":
+                # Dramatic Irony Used
+                # Low priority - not required
+                pass
+
+            elif rule["id"] == "TENSION.R009":
+                # Tension Escalates
+                if not profile.tension_escalation:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Tension doesn't escalate",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R010":
+                # Tension Release Present
+                if profile.tension_release_moments < 2:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Only {profile.tension_release_moments} release moment(s) - needs breathing room",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R011":
+                # Sustained Tension
+                if profile.sustained_tension_score < 0.4:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Tension not sustained across acts",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R012":
+                # Emotional Tension
+                if profile.emotional_tension_score < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Emotional tension weak",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R013":
+                # Situational Tension
+                if profile.situational_tension_score < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Situational tension weak",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R014":
+                # Tension Peaks and Valleys
+                if profile.tension_peak_count < 1:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Flat tension - no peaks/valleys rhythm",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "TENSION.R015":
+                # Tension Resolution at Climax
+                if not profile.tension_resolution:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Tension not resolved at climax - no catharsis",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_tension_score(self, profile: TensionProfile, violations: List) -> float:
+        """Calculate overall tension score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Bonus for excellence
+        if profile.overall_tension_quality > 0.8:
+            score += 5
+        elif profile.overall_tension_quality > 0.7:
+            score += 3
+
+        if profile.tension_escalation and profile.sustained_tension_score > 0.6:
+            score += 3
+
+        if profile.ticking_clock_present and profile.stakes_clarity > 0.7:
+            score += 3
+
+        if profile.dramatic_irony_count >= 2:
+            score += 2
+
+        if profile.tension_resolution and profile.climax_releases_tension:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: TensionProfile,
+                          violations: List) -> str:
+        """Generate tension diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Tension is strong, escalating, and well-sustained"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Tension present but could be stronger"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Tension weak or inconsistent"
+        else:
+            level = "POOR"
+            summary = "Major tension problems - weak or absent"
+
+        diagnosis = f"TENSION {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if profile.unanswered_questions < 1:
+            issues.append("no dramatic question")
+        if not profile.tension_escalation:
+            issues.append("flat tension")
+        if profile.stakes_clarity < 0.3:
+            issues.append("unclear stakes")
+        if not profile.ticking_clock_present:
+            issues.append("no urgency")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: TensionProfile) -> List[str]:
+        """Generate specific tension recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if profile.unanswered_questions < 1:
+            recommendations.append("Create clear dramatic question - will protagonist succeed? (McKee/Field)")
+
+        if profile.stakes_clarity < 0.3:
+            recommendations.append("Establish clear stakes - what protagonist stands to lose/gain (McKee)")
+
+        if not profile.tension_escalation:
+            recommendations.append("Escalate tension progressively - build intensity throughout (McKee/Field)")
+
+        if profile.suspense_score < 0.3:
+            recommendations.append("Build suspense - Hitchcock: 'Suspense is when audience knows bomb will explode'")
+
+        if not profile.ticking_clock_present:
+            recommendations.append("Add ticking clock - deadline creates urgency (Truby)")
+
+        if profile.sustained_tension_score < 0.4:
+            recommendations.append("Sustain tension across acts - maintain consistency (Seger)")
+
+        if not profile.tension_resolution:
+            recommendations.append("Resolve tension at climax - catharsis needed (Aristotle)")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - tension = gap between expectation and result")
+            recommendations.append("Study Field's Screenplay - dramatic question keeps audience engaged")
+
+        return recommendations[:5]
+
+    def export_tension_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export tension features for correlation/analysis.
+
+        Returns structured data with tension metrics.
+        Useful for external indexing, correlation engines, or ML pipelines.
+
+        Args:
+            screenplay_text: Full screenplay text
+
+        Returns:
+            Dict with tension metrics
+        """
+        dramatic_questions = self._detect_dramatic_questions(screenplay_text)
+        stakes_analysis = self._analyze_stakes(screenplay_text)
+        suspense_analysis = self._analyze_suspense(screenplay_text)
+        ticking_clock = self._detect_ticking_clock(screenplay_text)
+
+        return {
+            "dramatic_questions": {
+                "count": dramatic_questions["unanswered_count"],
+                "clear": dramatic_questions.get("clear", False)
+            },
+            "stakes": {
+                "clarity": stakes_analysis["clarity"],
+                "high_stakes": stakes_analysis.get("high_stakes", False)
+            },
+            "suspense": {
+                "score": suspense_analysis["score"],
+                "present": suspense_analysis.get("present", False)
+            },
+            "ticking_clock": {
+                "present": ticking_clock["present"],
+                "urgency": ticking_clock.get("urgency", "low")
+            },
+            "meta": {
+                "source": "DrTension",
+                "focus": "Dramatic tension and suspense"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrTensionAnalysis(DrTension):
+    """Alias for compatibility with test framework."""
+    pass

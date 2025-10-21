@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTUREMON - Real System Dashboard</title>
+    <link rel="stylesheet" href="style_new.css">
+</head>
+<body>
+    <div class="grid-background"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="title">🎬 SCRIPTUREMON</h1>
+            <p class="subtitle">Sistema Real de Análise de Roteiros</p>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-label">Análises:</span>
+                <span class="stat-value" id="totalAnalyses">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Rodando:</span>
+                <span class="stat-value running" id="runningCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Completadas:</span>
+                <span class="stat-value completed" id="completedCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Items:</span>
+                <span class="stat-value" id="totalItems">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Tempo Total:</span>
+                <span class="stat-value" id="totalTime">0h</span>
+            </div>
+        </div>
+
+        <!-- Main Actions -->
+        <div class="main-actions">
+            <button class="action-btn primary" onclick="newAnalysis()">
+                <span class="btn-icon">📄</span>
+                <span class="btn-text">Nova Análise</span>
+            </button>
+            <button class="action-btn secondary" onclick="refreshData()">
+                <span class="btn-icon">🔄</span>
+                <span class="btn-text">Atualizar</span>
+            </button>
+        </div>
+
+        <!-- Analyses List -->
+        <div class="analyses-section">
+            <h2 class="section-title">Análises em Andamento</h2>
+            <div id="analysesList" class="analyses-list">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+
+        <!-- Status Message -->
+        <div id="statusMsg" class="status-msg hidden"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

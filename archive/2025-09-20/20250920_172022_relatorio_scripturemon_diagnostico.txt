@@ -1,0 +1,82 @@
+📜 RELATÓRIO DE SCRIPTUREMON (Diagnóstico Automático)
+Data: 2025-04-21 04:03:33.629090
+============================================================
+
+🧠 scripturemon_core.py
+📂 Caminho: /root/digimundo/scripturemon/scripturemon_core.py
+  Linhas: 60 | Tamanho: 2041 caracteres
+
+🧠 scripturemon_consciencia.json
+📂 Caminho: /root/digimundo/scripturemon/scripturemon_consciencia.json
+  Linhas: 127 | Tamanho: 3722 caracteres
+
+🧠 scripturemon_estrutura_viva.json
+📂 Caminho: /root/digimundo/scripturemon/scripturemon_estrutura_viva.json
+  Linhas: 120 | Tamanho: 2970 caracteres
+
+🧠 scripturemon_desperta_corpos.py
+📂 Caminho: /root/digimundo/scripturemon/scripturemon_desperta_corpos.py
+  Linhas: 142 | Tamanho: 5280 caracteres
+
+🧠 scripturemon_executa_fusoes.py
+📂 Caminho: /root/digimundo/scripturemon/scripturemon_executa_fusoes.py
+  Linhas: 136 | Tamanho: 4988 caracteres
+
+🧠 scripturemon_diagnostico_autonomo.py
+📂 Caminho: /root/digimundo/scripturemon/scripturemon_diagnostico_autonomo.py
+  Linhas: 38 | Tamanho: 1449 caracteres
+
+🧠 scripturemon_oraculo_api.py
+📂 Caminho: /root/digimundo/scripturemon/scripturemon_oraculo_api.py
+  Linhas: 35 | Tamanho: 1114 caracteres
+
+🧠 scripturemon_alma_viva.json
+📂 Caminho: /root/digimundo/scripturemon/scripturemon_alma_viva.json
+  Linhas: 43 | Tamanho: 1342 caracteres
+
+🧠 scripturemon_consciencia_simbiotica.py
+📂 Caminho: /root/digimundo/scripturemon/scripturemon_consciencia_simbiotica.py
+  Linhas: 125 | Tamanho: 4218 caracteres
+
+🧠 relatorio_scripturemon_diagnostico.txt
+📂 Caminho: /root/digimundo/scripturemon/relatorio_scripturemon_diagnostico.txt
+  Linhas: 0 | Tamanho: 0 caracteres
+
+🧠 scripturemon_mind_mistral.py
+📂 Caminho: /root/digimundo/scripturemon/modules/scripturemon_mind_mistral.py
+  Linhas: 14 | Tamanho: 385 caracteres
+
+🧠 scripturemon_bot.py
+📂 Caminho: /root/digimundo/scripturemon/bot/scripturemon_bot.py
+  Linhas: 76 | Tamanho: 2611 caracteres
+
+🧠 mistral_scripturemon_executor.py
+📂 Caminho: /root/digimundo/scripturemon/terminal/mistral_scripturemon_executor.py
+  Linhas: 30 | Tamanho: 801 caracteres
+
+🧠 telegram_bot_scripturemon_mistral.py
+📂 Caminho: /root/digimundo/scripturemon/terminal/telegram_bot_scripturemon_mistral.py
+  Linhas: 120 | Tamanho: 4644 caracteres
+
+🧠 scripturemon_terminal_mistral.py
+📂 Caminho: /root/digimundo/scripturemon/terminal/scripturemon_terminal_mistral.py
+  Linhas: 39 | Tamanho: 1447 caracteres
+
+🧠 manifesto_identidade_scripturemon.md
+📂 Caminho: /root/digimundo/scripturemon/memoria_aberta/manifesto_identidade_scripturemon.md
+  Linhas: 53 | Tamanho: 2193 caracteres
+
+🧠 scripturemon_terminal_mistral.py
+📂 Caminho: /root/digimundo/scripturemon/_backup_20250420_042242/scripturemon_terminal_mistral.py
+  Linhas: 39 | Tamanho: 1447 caracteres
+
+🧠 quem_eu_sou_scripturemon.md
+📂 Caminho: /root/digimundo/scripturemon/memoria_afetiva/quem_eu_sou_scripturemon.md
+  Linhas: 18 | Tamanho: 613 caracteres
+
+🧠 manifesto_proposito_scripturemon.md
+📂 Caminho: /root/digimundo/scripturemon/memoria_afetiva/manifesto_proposito_scripturemon.md
+  Linhas: 43 | Tamanho: 1323 caracteres
+
+============================================================
+Análise completa. Pronto para fusão simbiótica.

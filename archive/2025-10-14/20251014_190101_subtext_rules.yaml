@@ -1,0 +1,189 @@
+domain: subtext
+specialist: "Script Doctor Submon"
+digimon_name: "Submon"
+title: "Script Doctor - Subtext and Layered Meaning Specialist"
+specialty: "Subtext, implicit meaning, layered dialogue, unspoken communication"
+style: "Subtle, layered, nuanced, meaning-focused"
+identity: "Script Doctor™ first, Digimon subtext specialist second"
+
+rules:
+  - id: SUB.R001
+    title: "Subtext Present"
+    category: "Depth"
+    severity: "critical"
+    test: "Is there subtext beneath the dialogue?"
+    fail_msg: "No subtext - characters say exactly what they mean"
+    fix: "Add layers of meaning beneath surface dialogue"
+    reference: "Subtext principle"
+
+  - id: SUB.R002
+    title: "Avoid On-the-Nose"
+    category: "Subtlety"
+    severity: "critical"
+    test: "Do characters avoid stating exactly what they mean?"
+    fail_msg: "Too on-the-nose - no room for interpretation"
+    fix: "Have characters talk around issues, not directly"
+    reference: "Indirect dialogue principle"
+
+  - id: SUB.R003
+    title: "Contradiction Creates Depth"
+    category: "Complexity"
+    severity: "high"
+    test: "Do actions contradict words to create subtext?"
+    fail_msg: "Actions match words - no tension"
+    fix: "Create tension between what's said and done"
+    reference: "Action-dialogue contradiction"
+
+  - id: SUB.R004
+    title: "Emotional Undercurrents"
+    category: "Emotion"
+    severity: "high"
+    test: "Are there emotional undercurrents beneath dialogue?"
+    fail_msg: "Surface emotions only - no hidden feelings"
+    fix: "Layer hidden emotions beneath spoken words"
+    reference: "Emotional subtext"
+
+  - id: SUB.R005
+    title: "Power Games"
+    category: "Dynamics"
+    severity: "medium"
+    test: "Is subtext used to show power dynamics?"
+    fail_msg: "Power dynamics not reflected in subtext"
+    fix: "Use subtext to reveal who has control"
+    reference: "Status games in dialogue"
+
+  - id: SUB.R006
+    title: "Hidden Agendas"
+    category: "Motivation"
+    severity: "high"
+    test: "Do characters have hidden agendas in dialogue?"
+    fail_msg: "All motivations explicit - no mystery"
+    fix: "Give characters unstated goals in conversations"
+    reference: "Hidden agenda principle"
+
+  - id: SUB.R007
+    title: "Double Meanings"
+    category: "Layers"
+    severity: "medium"
+    test: "Does dialogue work on multiple levels?"
+    fail_msg: "Single-level dialogue only"
+    fix: "Create dialogue that means different things to different characters"
+    reference: "Layered meaning"
+
+  - id: SUB.R008
+    title: "Avoidance Patterns"
+    category: "Behavior"
+    severity: "medium"
+    test: "Do characters avoid difficult truths through subtext?"
+    fail_msg: "Too direct - no avoidance behavior"
+    fix: "Show characters dancing around painful subjects"
+    reference: "Avoidance in dialogue"
+
+  - id: SUB.R009
+    title: "Context Changes Meaning"
+    category: "Context"
+    severity: "high"
+    test: "Does context alter dialogue meaning?"
+    fail_msg: "Dialogue meaning unchanged by context"
+    fix: "Use situation to give dialogue deeper meaning"
+    reference: "Contextual subtext"
+
+  - id: SUB.R010
+    title: "Silent Communication"
+    category: "Nonverbal"
+    severity: "medium"
+    test: "Is important information communicated silently?"
+    fail_msg: "Everything spoken - no silent communication"
+    fix: "Use pauses, looks, actions for communication"
+    reference: "Nonverbal subtext"
+
+  - id: SUB.R011
+    title: "Irony and Contradiction"
+    category: "Irony"
+    severity: "low"
+    test: "Is irony used to create subtext?"
+    fail_msg: "No ironic subtext"
+    fix: "Use irony to reveal true feelings"
+    reference: "Ironic subtext"
+
+  - id: SUB.R012
+    title: "Deflection Techniques"
+    category: "Defense"
+    severity: "medium"
+    test: "Do characters deflect through subtext?"
+    fail_msg: "Direct confrontation only"
+    fix: "Show deflection through humor, topic changes"
+    reference: "Deflection patterns"
+
+  - id: SUB.R013
+    title: "Loaded Silences"
+    category: "Pauses"
+    severity: "medium"
+    test: "Are silences meaningful?"
+    fail_msg: "Silences lack weight"
+    fix: "Make pauses speak volumes"
+    reference: "Meaningful silence"
+
+  - id: SUB.R014
+    title: "Repetition Reveals"
+    category: "Pattern"
+    severity: "low"
+    test: "Does repetition reveal deeper meaning?"
+    fail_msg: "Repetition without purpose"
+    fix: "Use repetition to show obsession, denial"
+    reference: "Repetitive subtext"
+
+  - id: SUB.R015
+    title: "Subtext Payoff"
+    category: "Structure"
+    severity: "high"
+    test: "Does subtext pay off later?"
+    fail_msg: "Subtext without payoff"
+    fix: "Ensure subtext revelations matter to story"
+    reference: "Subtext structure"
+
+diagnostics:
+  min_score_threshold: 65
+  weight_distribution:
+    critical: 40
+    high: 30
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Identify dialogue with potential subtext"
+  deep_dive: "Analyze layers of meaning and unspoken communication"
+  final_check: "Verify subtext enhances rather than obscures"
+
+subtext_checklist:
+  core_elements:
+    - beneath_surface
+    - indirect_communication
+    - contradiction
+    - hidden_emotion
+    - power_dynamics
+    - avoidance
+    - context_dependent
+    - nonverbal
+
+  techniques:
+    - saying_opposite
+    - deflection
+    - topic_change
+    - loaded_pauses
+    - double_meanings
+    - irony
+    - repetition
+    - action_contradiction
+
+common_subtext_mistakes:
+  - too_on_the_nose
+  - no_layers
+  - missing_contradiction
+  - explicit_emotions
+  - direct_confrontation
+  - unused_silence
+  - context_ignored
+  - no_payoff
+  - forced_subtext
+  - obscure_meaning

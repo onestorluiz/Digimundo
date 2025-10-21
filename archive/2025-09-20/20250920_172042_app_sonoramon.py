@@ -1,0 +1,1 @@
+# Arquivo simbólico: app_sonoramon.py de sonoramon

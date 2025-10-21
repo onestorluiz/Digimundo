@@ -1,0 +1,549 @@
+#!/usr/bin/env python3
+"""
+ScriptureMon Champion - API REST Unificada
+Sistema completo de processamento de roteiros
+"""
+
+from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
+from werkzeug.utils import secure_filename
+import os
+import sys
+import json
+import logging
+from pathlib import Path
+from typing import Dict, Any, Optional
+import tempfile
+from datetime import datetime
+import traceback
+
+# Adicionar diretório pai ao path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
+# Importar componentes do sistema
+from apps.scripturemon.ocr_pipeline import OCRPipeline
+from apps.scripturemon.pdf_detector import PDFDetector
+from apps.scripturemon.screenplay_normalizer import ScreenplayNormalizer
+from apps.scripturemon.digilang_v7_ultimate import DigiLangV7Ultimate
+from apps.scripturemon.ollama_prospero import OllamaPróspero, ModeloPróspero
+from apps.scripturemon.unified_manager import UnifiedMemoryManager
+from apps.scripturemon.ai_sentiment import analyze_text_sentiment
+
+# Configuração de logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Configuração Flask
+app = Flask(__name__)
+CORS(app)
+
+# Configurações
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB max
+app.config['UPLOAD_FOLDER'] = Path.home() / 'Digimundo' / 'uploads'
+app.config['UPLOAD_FOLDER'].mkdir(parents=True, exist_ok=True)
+
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'txt', 'fountain'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# Instâncias globais dos componentes
+ocr_pipeline = None
+pdf_detector = None
+normalizer = None
+digilang = None
+ollama = None
+memory_manager = None
+
+def initialize_components():
+    """Inicializa componentes do sistema"""
+    global ocr_pipeline, pdf_detector, normalizer, digilang, ollama, memory_manager
+
+    try:
+        logger.info("Inicializando componentes...")
+        ocr_pipeline = OCRPipeline()
+        pdf_detector = PDFDetector()
+        normalizer = ScreenplayNormalizer()
+        digilang = DigiLangV7Ultimate()
+        ollama = OllamaPróspero()
+        memory_manager = UnifiedMemoryManager()
+        logger.info("✅ Todos os componentes inicializados")
+        return True
+    except Exception as e:
+        logger.error(f"❌ Erro ao inicializar componentes: {e}")
+        return False
+
+# ============= ROTAS DE SAÚDE =============
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Verificação de saúde da API"""
+    return jsonify({
+        'status': 'healthy',
+        'timestamp': datetime.now().isoformat(),
+        'version': '1.0.0',
+        'components': {
+            'ocr': ocr_pipeline is not None,
+            'pdf': pdf_detector is not None,
+            'normalizer': normalizer is not None,
+            'digilang': digilang is not None,
+            'ollama': ollama is not None,
+            'memory': memory_manager is not None
+        }
+    })
+
+@app.route('/status', methods=['GET'])
+def system_status():
+    """Status detalhado do sistema"""
+    try:
+        status = {
+            'timestamp': datetime.now().isoformat(),
+            'components': {},
+            'models': {}
+        }
+
+        # Status dos componentes
+        if ocr_pipeline:
+            status['components']['ocr'] = {
+                'active': True,
+                'engines': ['tesseract', 'easyocr', 'paddleocr']
+            }
+
+        if ollama:
+            models = ollama.listar_modelos()
+            status['models'] = {
+                'available': models,
+                'count': len(models)
+            }
+
+        if memory_manager:
+            mem_stats = memory_manager.get_statistics()
+            status['memory'] = mem_stats
+
+        return jsonify(status)
+    except Exception as e:
+        logger.error(f"Erro ao obter status: {e}")
+        return jsonify({'error': str(e)}), 500
+
+# ============= ROTAS DE PROCESSAMENTO =============
+
+@app.route('/ocr/process', methods=['POST'])
+def process_ocr():
+    """Processa OCR em arquivo enviado"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'Nenhum arquivo enviado'}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'Nome de arquivo vazio'}), 400
+
+        if not allowed_file(file.filename):
+            return jsonify({'error': 'Tipo de arquivo não permitido'}), 400
+
+        # Salvar arquivo temporário
+        filename = secure_filename(file.filename)
+        filepath = app.config['UPLOAD_FOLDER'] / filename
+        file.save(str(filepath))
+
+        # Processar com OCR
+        engine = request.form.get('engine', 'tesseract')
+        language = request.form.get('language', 'por')
+
+        result = ocr_pipeline.process_file(
+            str(filepath),
+            engine=engine,
+            language=language
+        )
+
+        # Limpar arquivo temporário
+        filepath.unlink()
+
+        return jsonify({
+            'success': True,
+            'text': result.get('text', ''),
+            'confidence': result.get('confidence', 0),
+            'metadata': result.get('metadata', {})
+        })
+
+    except Exception as e:
+        logger.error(f"Erro no OCR: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/pdf/detect', methods=['POST'])
+def detect_pdfs():
+    """Detecta e analisa PDFs em diretório"""
+    try:
+        data = request.json
+        directory = data.get('directory', str(Path.home() / 'Digimundo'))
+
+        pdfs = pdf_detector.find_pdfs(directory)
+
+        results = []
+        for pdf in pdfs[:10]:  # Limitar a 10 para resposta rápida
+            info = pdf_detector.get_pdf_info(pdf)
+            results.append({
+                'path': str(pdf),
+                'name': pdf.name,
+                'size_mb': pdf.stat().st_size / (1024*1024),
+                'pages': info.get('pages', 0),
+                'has_text': info.get('has_text', False)
+            })
+
+        return jsonify({
+            'success': True,
+            'total_found': len(pdfs),
+            'pdfs': results
+        })
+
+    except Exception as e:
+        logger.error(f"Erro na detecção de PDFs: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/normalize', methods=['POST'])
+def normalize_screenplay():
+    """Normaliza texto de roteiro"""
+    try:
+        data = request.json
+        text = data.get('text', '')
+        source_lang = data.get('source_lang', 'pt')
+
+        if not text:
+            return jsonify({'error': 'Texto vazio'}), 400
+
+        normalized = normalizer.normalize(text, source_lang=source_lang)
+
+        return jsonify({
+            'success': True,
+            'normalized_text': normalized,
+            'stats': {
+                'original_length': len(text),
+                'normalized_length': len(normalized),
+                'language': source_lang
+            }
+        })
+
+    except Exception as e:
+        logger.error(f"Erro na normalização: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/compress', methods=['POST'])
+def compress_text():
+    """Comprime texto usando DigiLang V7"""
+    try:
+        data = request.json
+        text = data.get('text', '')
+
+        if not text:
+            return jsonify({'error': 'Texto vazio'}), 400
+
+        # Comprimir com DigiLang V7
+        encoded, stats = digilang.encode(text)
+
+        return jsonify({
+            'success': True,
+            'compressed_text': encoded,
+            'stats': {
+                'original_tokens': stats.original_tokens,
+                'compressed_tokens': stats.compressed_tokens,
+                'compression_ratio': stats.compression_ratio,
+                'tokens_saved': stats.original_tokens - stats.compressed_tokens
+            }
+        })
+
+    except Exception as e:
+        logger.error(f"Erro na compressão: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/decompress', methods=['POST'])
+def decompress_text():
+    """Descomprime texto DigiLang"""
+    try:
+        data = request.json
+        compressed = data.get('compressed_text', '')
+        doc_patterns = data.get('doc_patterns')
+
+        if not compressed:
+            return jsonify({'error': 'Texto comprimido vazio'}), 400
+
+        # Descomprimir
+        decompressed = digilang.decode(compressed, doc_patterns)
+
+        return jsonify({
+            'success': True,
+            'decompressed_text': decompressed
+        })
+
+    except Exception as e:
+        logger.error(f"Erro na descompressão: {e}")
+        return jsonify({'error': str(e)}), 500
+
+# ============= ROTAS DE ANÁLISE =============
+
+@app.route('/analyze/sentiment', methods=['POST'])
+def analyze_sentiment():
+    """Analisa sentimento do texto"""
+    try:
+        data = request.json
+        text = data.get('text', '')
+
+        if not text:
+            return jsonify({'error': 'Texto vazio'}), 400
+
+        result = analyze_text_sentiment(text)
+
+        return jsonify({
+            'success': True,
+            'sentiment': {
+                'compound': result.compound,
+                'positive': result.pos,
+                'negative': result.neg,
+                'neutral': result.neu,
+                'classification': 'positive' if result.compound > 0.05 else
+                                'negative' if result.compound < -0.05 else 'neutral'
+            }
+        })
+
+    except Exception as e:
+        logger.error(f"Erro na análise de sentimento: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/analyze/screenplay', methods=['POST'])
+def analyze_with_ollama():
+    """Analisa roteiro com Ollama"""
+    try:
+        data = request.json
+        text = data.get('text', '')
+        model_name = data.get('model', 'GENESIS')
+        analysis_type = data.get('type', 'general')
+
+        if not text:
+            return jsonify({'error': 'Texto vazio'}), 400
+
+        # Selecionar modelo
+        try:
+            modelo = ModeloPróspero[model_name]
+        except KeyError:
+            modelo = ModeloPróspero.GENESIS
+
+        # Analisar com Ollama
+        prompt = f"""Analyze this screenplay excerpt and provide insights about:
+        - Structure and formatting
+        - Character development
+        - Dialogue quality
+        - Pacing and flow
+
+        Text: {text[:2000]}"""
+
+        response = ollama.invocar_modelo(prompt, modelo)
+
+        return jsonify({
+            'success': True,
+            'analysis': response,
+            'model_used': modelo.value
+        })
+
+    except Exception as e:
+        logger.error(f"Erro na análise Ollama: {e}")
+        return jsonify({'error': str(e)}), 500
+
+# ============= ROTAS DE MEMÓRIA =============
+
+@app.route('/memory/store', methods=['POST'])
+def store_memory():
+    """Armazena documento na memória"""
+    try:
+        data = request.json
+        doc_id = data.get('id', str(datetime.now().timestamp()))
+        content = data.get('content', '')
+        metadata = data.get('metadata', {})
+
+        if not content:
+            return jsonify({'error': 'Conteúdo vazio'}), 400
+
+        memory_manager.add_document(doc_id, content, metadata)
+
+        return jsonify({
+            'success': True,
+            'document_id': doc_id,
+            'stored': True
+        })
+
+    except Exception as e:
+        logger.error(f"Erro ao armazenar na memória: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/memory/search', methods=['POST'])
+def search_memory():
+    """Busca na memória"""
+    try:
+        data = request.json
+        query = data.get('query', '')
+        k = data.get('k', 5)
+
+        if not query:
+            return jsonify({'error': 'Query vazia'}), 400
+
+        results = memory_manager.search(query, k=k)
+
+        return jsonify({
+            'success': True,
+            'results': results
+        })
+
+    except Exception as e:
+        logger.error(f"Erro na busca: {e}")
+        return jsonify({'error': str(e)}), 500
+
+# ============= ROTAS DE PIPELINE COMPLETO =============
+
+@app.route('/pipeline/full', methods=['POST'])
+def full_pipeline():
+    """Pipeline completo de processamento"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'Nenhum arquivo enviado'}), 400
+
+        file = request.files['file']
+        if not allowed_file(file.filename):
+            return jsonify({'error': 'Tipo de arquivo não permitido'}), 400
+
+        # Salvar arquivo
+        filename = secure_filename(file.filename)
+        filepath = app.config['UPLOAD_FOLDER'] / filename
+        file.save(str(filepath))
+
+        results = {
+            'filename': filename,
+            'stages': {}
+        }
+
+        # 1. OCR
+        if filepath.suffix.lower() in ['.pdf', '.png', '.jpg', '.jpeg']:
+            ocr_result = ocr_pipeline.process_file(str(filepath))
+            text = ocr_result.get('text', '')
+            results['stages']['ocr'] = {
+                'success': True,
+                'text_length': len(text)
+            }
+        else:
+            text = filepath.read_text(encoding='utf-8')
+            results['stages']['ocr'] = {'skipped': True}
+
+        # 2. Normalização
+        normalized = normalizer.normalize(text)
+        results['stages']['normalization'] = {
+            'success': True,
+            'normalized_length': len(normalized)
+        }
+
+        # 3. Compressão
+        encoded, stats = digilang.encode(normalized)
+        results['stages']['compression'] = {
+            'success': True,
+            'compression_ratio': stats.compression_ratio,
+            'tokens_saved': stats.original_tokens - stats.compressed_tokens
+        }
+
+        # 4. Análise de sentimento
+        sentiment = analyze_text_sentiment(normalized[:1000])
+        results['stages']['sentiment'] = {
+            'success': True,
+            'compound': sentiment.compound,
+            'classification': 'positive' if sentiment.compound > 0.05 else
+                            'negative' if sentiment.compound < -0.05 else 'neutral'
+        }
+
+        # 5. Armazenar na memória
+        memory_manager.add_document(
+            filename,
+            normalized,
+            {
+                'original_file': filename,
+                'processed_at': datetime.now().isoformat(),
+                'compression_ratio': stats.compression_ratio
+            }
+        )
+        results['stages']['memory'] = {'success': True}
+
+        # Limpar arquivo temporário
+        filepath.unlink()
+
+        return jsonify({
+            'success': True,
+            'results': results
+        })
+
+    except Exception as e:
+        logger.error(f"Erro no pipeline: {e}")
+        logger.error(traceback.format_exc())
+        return jsonify({'error': str(e)}), 500
+
+# ============= ROTAS DE MODELOS OLLAMA =============
+
+@app.route('/models/list', methods=['GET'])
+def list_models():
+    """Lista modelos Ollama disponíveis"""
+    try:
+        models = ollama.listar_modelos()
+
+        model_info = []
+        for model in models:
+            model_info.append({
+                'name': model,
+                'prospero_name': None,
+                'size': 'unknown'
+            })
+
+        # Adicionar modelos prósperos
+        for modelo in ModeloPróspero:
+            model_info.append({
+                'name': modelo.value,
+                'prospero_name': modelo.name,
+                'description': {
+                    'GENESIS': 'Modelo inicial leve',
+                    'AURORA': 'Despertar criativo',
+                    'HORIZONTE': 'Expansão de possibilidades',
+                    'CRISTAL': 'Clareza e precisão',
+                    'PRISMA': 'Múltiplas perspectivas',
+                    'ESPELHO': 'Reflexão profunda',
+                    'ALQUIMIA': 'Transformação de código',
+                    'SINFONIA': 'Harmonia de ideias',
+                    'COSMOS': 'Visão universal'
+                }.get(modelo.name, '')
+            })
+
+        return jsonify({
+            'success': True,
+            'models': model_info
+        })
+
+    except Exception as e:
+        logger.error(f"Erro ao listar modelos: {e}")
+        return jsonify({'error': str(e)}), 500
+
+# ============= MAIN =============
+
+if __name__ == '__main__':
+    # Inicializar componentes
+    if not initialize_components():
+        logger.error("Falha na inicialização dos componentes")
+        sys.exit(1)
+
+    # Configurações do servidor
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('DEBUG', 'False').lower() == 'true'
+
+    logger.info(f"🚀 ScriptureMon API iniciando na porta {port}")
+    logger.info(f"📍 Acesse: http://localhost:{port}")
+    logger.info(f"📚 Documentação: http://localhost:{port}/docs")
+
+    # Iniciar servidor
+    app.run(
+        host='0.0.0.0',
+        port=port,
+        debug=debug
+    )

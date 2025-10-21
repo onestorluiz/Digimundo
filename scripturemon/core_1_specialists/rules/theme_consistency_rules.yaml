@@ -1,0 +1,189 @@
+domain: theme_consistency
+specialist: "Script Doctor Thememon"
+digimon_name: "Thememon"
+title: "Script Doctor - Theme Consistency Specialist"
+specialty: "Thematic unity, central themes, thematic development, message clarity"
+style: "Cohesive, meaningful, resonant, unified"
+identity: "Script Doctor™ first, Digimon theme specialist second"
+
+rules:
+  - id: THE.R001
+    title: "Clear Central Theme"
+    category: "Core"
+    severity: "critical"
+    test: "Is there a clear central theme?"
+    fail_msg: "No clear central theme identified"
+    fix: "Establish a clear central theme that drives the story"
+    reference: "Central theme principle"
+
+  - id: THE.R002
+    title: "Theme Consistency"
+    category: "Unity"
+    severity: "critical"
+    test: "Is the theme consistent throughout?"
+    fail_msg: "Theme shifts or contradicts itself"
+    fix: "Maintain thematic consistency across all acts"
+    reference: "Thematic unity principle"
+
+  - id: THE.R003
+    title: "Theme Expressed Through Action"
+    category: "Expression"
+    severity: "high"
+    test: "Is theme expressed through character actions?"
+    fail_msg: "Theme only stated, not demonstrated"
+    fix: "Show theme through character choices and actions"
+    reference: "Theme through action"
+
+  - id: THE.R004
+    title: "Character Arcs Support Theme"
+    category: "Character"
+    severity: "high"
+    test: "Do character arcs reinforce the theme?"
+    fail_msg: "Character arcs disconnect from theme"
+    fix: "Align character transformations with thematic message"
+    reference: "Arc-theme alignment"
+
+  - id: THE.R005
+    title: "Plot Serves Theme"
+    category: "Plot"
+    severity: "high"
+    test: "Does the plot structure support the theme?"
+    fail_msg: "Plot and theme are disconnected"
+    fix: "Structure plot events to explore theme"
+    reference: "Plot-theme integration"
+
+  - id: THE.R006
+    title: "Avoid Heavy-Handed Messaging"
+    category: "Subtlety"
+    severity: "medium"
+    test: "Is theme explored with subtlety?"
+    fail_msg: "Theme is preachy or heavy-handed"
+    fix: "Express theme through story, not sermons"
+    reference: "Thematic subtlety"
+
+  - id: THE.R007
+    title: "Multiple Theme Layers"
+    category: "Depth"
+    severity: "medium"
+    test: "Are there supporting sub-themes?"
+    fail_msg: "Single theme without depth"
+    fix: "Layer complementary themes for richness"
+    reference: "Thematic layering"
+
+  - id: THE.R008
+    title: "Theme-Dialogue Balance"
+    category: "Dialogue"
+    severity: "medium"
+    test: "Does dialogue support without stating theme?"
+    fail_msg: "Characters explicitly state theme"
+    fix: "Let dialogue imply rather than state theme"
+    reference: "Implicit theme in dialogue"
+
+  - id: THE.R009
+    title: "Visual Theme Reinforcement"
+    category: "Visual"
+    severity: "low"
+    test: "Do visual elements reinforce theme?"
+    fail_msg: "Visual opportunities missed"
+    fix: "Use imagery and symbols to support theme"
+    reference: "Visual thematic elements"
+
+  - id: THE.R010
+    title: "Theme Resolution"
+    category: "Resolution"
+    severity: "high"
+    test: "Is theme resolved by story's end?"
+    fail_msg: "Theme left unresolved or unclear"
+    fix: "Provide thematic closure in resolution"
+    reference: "Thematic resolution"
+
+  - id: THE.R011
+    title: "Opposing Viewpoints"
+    category: "Complexity"
+    severity: "medium"
+    test: "Are opposing thematic views explored?"
+    fail_msg: "One-sided thematic exploration"
+    fix: "Present counterarguments through characters"
+    reference: "Thematic complexity"
+
+  - id: THE.R012
+    title: "Universal vs Specific"
+    category: "Relevance"
+    severity: "medium"
+    test: "Does theme balance universal and specific?"
+    fail_msg: "Theme too abstract or too narrow"
+    fix: "Ground universal themes in specific situations"
+    reference: "Theme relevance"
+
+  - id: THE.R013
+    title: "Theme Stakes"
+    category: "Stakes"
+    severity: "high"
+    test: "Are there consequences to thematic choices?"
+    fail_msg: "No stakes attached to theme"
+    fix: "Make thematic choices matter to characters"
+    reference: "Thematic stakes"
+
+  - id: THE.R014
+    title: "Opening Establishes Theme"
+    category: "Setup"
+    severity: "medium"
+    test: "Does opening introduce thematic elements?"
+    fail_msg: "Theme absent from opening"
+    fix: "Plant thematic seeds early"
+    reference: "Early theme establishment"
+
+  - id: THE.R015
+    title: "Theme Evolution"
+    category: "Development"
+    severity: "low"
+    test: "Does understanding of theme deepen?"
+    fail_msg: "Static theme without development"
+    fix: "Let theme evolve and deepen through story"
+    reference: "Thematic progression"
+
+diagnostics:
+  min_score_threshold: 65
+  weight_distribution:
+    critical: 40
+    high: 35
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Identify central theme and supporting themes"
+  deep_dive: "Analyze how theme manifests in plot, character, dialogue"
+  final_check: "Verify thematic consistency and resolution"
+
+theme_checklist:
+  core_elements:
+    - central_theme
+    - consistency
+    - character_integration
+    - plot_integration
+    - resolution
+    - stakes
+    - subtlety
+    - depth
+
+  expression_methods:
+    - character_choices
+    - plot_events
+    - dialogue_subtext
+    - visual_symbols
+    - metaphors
+    - conflicts
+    - transformations
+    - consequences
+
+common_theme_mistakes:
+  - no_clear_theme
+  - inconsistent_theme
+  - preachy_delivery
+  - theme_plot_disconnect
+  - stated_not_shown
+  - no_opposition
+  - unresolved_theme
+  - no_stakes
+  - theme_arrives_late
+  - one_dimensional

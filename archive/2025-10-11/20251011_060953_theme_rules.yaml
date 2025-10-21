@@ -1,0 +1,210 @@
+domain: theme_analysis
+specialist: "Script Doctor Thememon"
+digimon_name: "Thememon"
+title: "Script Doctor - Theme Analysis Specialist"
+specialty: "Thematic elements, controlling idea, premise, moral argument, central question, thematic unity"
+style: "Theme-focused, premise-driven, morally-aware, thematically-coherent"
+identity: "Script Doctor™ first, Digimon theme specialist second"
+
+rules:
+  - id: THEME.R001
+    title: "Theme Present and Clear"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is there a clear, identifiable theme?"
+    fail_msg: "No clear theme - story lacks thematic center"
+    fix: "Identify the central question and controlling idea that drives the story"
+    reference: "McKee's controlling idea / Egri's premise"
+
+  - id: THEME.R002
+    title: "Premise Articulated"
+    category: "Foundation"
+    severity: "high"
+    test: "Can the premise be stated in Egri's format (character + conflict + conclusion)?"
+    fail_msg: "Premise unclear or unarticulated"
+    fix: "Define premise using Egri's tripartite structure: who + what + outcome"
+    reference: "Egri's The Art of Dramatic Writing - premise is foundation"
+
+  - id: THEME.R003
+    title: "Controlling Idea Expressed"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is the controlling idea (value + cause) expressed?"
+    fail_msg: "Controlling idea not expressed or unclear"
+    fix: "Express controlling idea as value at stake plus its cause (McKee format)"
+    reference: "McKee's Story - controlling idea structure"
+
+  - id: THEME.R004
+    title: "Moral Argument Developed"
+    category: "Development"
+    severity: "high"
+    test: "Is the moral argument developed through the story?"
+    fail_msg: "No clear moral argument - theme feels hollow"
+    fix: "Develop moral problem and moral solution through character choices"
+    reference: "Truby's moral argument / McKee's value at stake"
+
+  - id: THEME.R005
+    title: "Theme Stated Moment"
+    category: "Structure"
+    severity: "medium"
+    test: "Is there a 'theme stated' moment (around page 5)?"
+    fail_msg: "No clear theme statement in early pages"
+    fix: "Add theme statement beat around page 5, often through mentor figure"
+    reference: "Snyder's Theme Stated beat (Save the Cat)"
+
+  - id: THEME.R006
+    title: "Thematic Unity"
+    category: "Coherence"
+    severity: "high"
+    test: "Does the theme remain unified and consistent throughout?"
+    fail_msg: "Theme wanders or becomes incoherent"
+    fix: "Ensure all major scenes and arcs support the central theme"
+    reference: "Seger's thematic unity / Aristotle's unity of action"
+
+  - id: THEME.R007
+    title: "Theme Proven Through Action"
+    category: "Development"
+    severity: "high"
+    test: "Is the theme proven through character actions, not just stated?"
+    fail_msg: "Theme is told but not shown through action"
+    fix: "Prove theme through character choices and consequences, not dialogue"
+    reference: "McKee's show don't tell / Truby's moral revelation through action"
+
+  - id: THEME.R008
+    title: "Thematic Imagery/Symbols"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Are there recurring symbols, motifs, or images supporting theme?"
+    fail_msg: "No thematic imagery or symbolism"
+    fix: "Weave recurring symbols and motifs that reinforce the central theme"
+    reference: "Seger's thematic imagery / McKee's symbolic elements"
+
+  - id: THEME.R009
+    title: "Central Question Answered"
+    category: "Resolution"
+    severity: "high"
+    test: "Is the central thematic question answered by the end?"
+    fail_msg: "Central question left unanswered or ambiguous"
+    fix: "Ensure the climax provides a clear answer to the central question"
+    reference: "McKee's story climax / Aristotle's resolution"
+
+  - id: THEME.R010
+    title: "Theme Expressed at Climax"
+    category: "Climax"
+    severity: "critical"
+    test: "Is the controlling idea/theme fully expressed at the climax?"
+    fail_msg: "Climax doesn't express or prove the theme"
+    fix: "Design climax to definitively prove the controlling idea"
+    reference: "McKee's climax as ultimate expression of controlling idea"
+
+  - id: THEME.R011
+    title: "Universal Resonance"
+    category: "Depth"
+    severity: "medium"
+    test: "Does the theme have universal human resonance?"
+    fail_msg: "Theme too specific - lacks universal appeal"
+    fix: "Connect specific story to universal human condition and timeless questions"
+    reference: "Campbell's universal themes / Vogler's archetypal resonance"
+
+  - id: THEME.R012
+    title: "Not On-The-Nose"
+    category: "Craft"
+    severity: "medium"
+    test: "Is the theme expressed subtly, not heavy-handedly?"
+    fail_msg: "Theme too on-the-nose - characters preach it"
+    fix: "Embed theme in action and subtext, avoid characters stating theme directly"
+    reference: "McKee's subtext / avoid didactic dialogue"
+
+  - id: THEME.R013
+    title: "Theme Woven Throughout"
+    category: "Development"
+    severity: "high"
+    test: "Is the theme woven throughout all three acts?"
+    fail_msg: "Theme appears only in beginning or end, not throughout"
+    fix: "Track theme through Act 1 setup, Act 2 development, Act 3 resolution"
+    reference: "Seger's thematic repetition and variation"
+
+  - id: THEME.R014
+    title: "Character Arc Supports Theme"
+    category: "Character"
+    severity: "high"
+    test: "Does the character arc directly support and prove the theme?"
+    fail_msg: "Character arc disconnected from theme"
+    fix: "Align character transformation with thematic revelation"
+    reference: "Truby's character arc as thematic vehicle / Weiland's thematic arcs"
+
+  - id: THEME.R015
+    title: "Thematic Coherence"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is the overall thematic structure coherent and purposeful?"
+    fail_msg: "Thematic structure incoherent or confused"
+    fix: "Ensure premise, controlling idea, moral argument all align coherently"
+    reference: "McKee's thematic design / Egri's premise-driven structure"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Identify controlling idea, premise, and central question"
+  deep_dive: "Analyze thematic development, moral argument, and thematic unity"
+  final_check: "Verify theme expressed at climax and thematic coherence"
+
+theme_checklist:
+  foundation:
+    - controlling_idea_identification
+    - premise_articulation
+    - central_question_identification
+    - moral_argument_definition
+
+  development:
+    - theme_stated_moment
+    - thematic_development_act1
+    - thematic_development_act2
+    - thematic_development_act3
+    - theme_proven_through_action
+
+  unity:
+    - thematic_consistency
+    - thematic_coherence
+    - character_arc_alignment
+    - thematic_imagery_consistency
+
+  resolution:
+    - central_question_answered
+    - theme_expressed_at_climax
+    - moral_argument_resolved
+    - thematic_satisfaction
+
+  craft:
+    - not_on_the_nose
+    - implicit_vs_explicit
+    - thematic_subtlety
+    - symbolic_reinforcement
+
+theme_formats:
+  mckee_controlling_idea: "Value + cause (e.g., 'Love succeeds when characters are honest')"
+  egri_premise: "Character + conflict + conclusion (e.g., 'Ruthless ambition leads to destruction')"
+  truby_moral_argument: "Moral problem + moral solution"
+  snyder_theme_stated: "Single line stated around page 5"
+
+common_theme_mistakes:
+  - no_clear_theme
+  - premise_unarticulated
+  - controlling_idea_unclear
+  - theme_on_the_nose
+  - theme_not_proven_through_action
+  - no_theme_stated_moment
+  - thematic_incoherence
+  - character_arc_disconnected
+  - central_question_unanswered
+  - climax_doesnt_express_theme
+  - too_specific_no_universal_resonance
+  - theme_not_woven_throughout
+  - moral_argument_undeveloped
+  - thematic_symbolism_absent

@@ -1,0 +1,200 @@
+# Symbolism Rules - Script Doctor Symbolismon
+# Focus: Symbolism, metaphor, motif, visual imagery, thematic resonance, avoid heavy-handed symbolism
+
+rules:
+  - id: SYMBOLISM.R001
+    title: Symbolism Present
+    severity: medium
+    description: Visual metaphors and symbols should enrich the story
+    fix: Add visual symbols and metaphors - show abstract ideas through concrete imagery (McKee - visual storytelling)
+    references:
+      - McKee Story - symbolism, visual metaphor, imagery
+      - Truby Anatomy - symbol web, thematic network
+      - Seger Making Good Script Great - visual storytelling
+
+  - id: SYMBOLISM.R002
+    title: Symbol Clarity
+    severity: high
+    description: Symbols must be clear enough for audience to understand meaning
+    fix: Balance clarity and subtlety - audience must grasp meaning without confusion (Aristotle - metaphor clarity)
+    references:
+      - Aristotle Poetics - metaphor clarity, representation
+      - McKee Story - symbol clarity, audience comprehension
+      - Seger Making Good Script Great - clear visual metaphors
+
+  - id: SYMBOLISM.R003
+    title: Symbol Consistency
+    severity: high
+    description: Symbols must recur throughout story, not appear randomly
+    fix: Establish symbols early and recur throughout - build meaning across story (Truby - symbol web, McKee - recurring motifs)
+    references:
+      - McKee Story - symbol consistency, recurring patterns
+      - Truby Anatomy - symbol web builds across story
+      - Vogler Writer's Journey - recurring archetypal symbols
+
+  - id: SYMBOLISM.R004
+    title: Motif Presence
+    severity: medium
+    description: Recurring visual or thematic element (motif) reinforces meaning
+    fix: Create recurring motif - visual/thematic element that repeats and deepens (McKee - motif creates resonance)
+    references:
+      - McKee Story - motif, recurring element, visual pattern
+      - Vogler Writer's Journey - recurring archetypal motifs
+      - Campbell Hero 1000 Faces - mythic patterns
+
+  - id: SYMBOLISM.R005
+    title: Visual Metaphor Quality
+    severity: medium
+    description: Show abstract ideas through concrete visual imagery
+    fix: Transform abstract concepts into concrete visual metaphors - show don't tell (Seger - visual storytelling, McKee - concrete imagery)
+    references:
+      - McKee Story - visual metaphor, concrete imagery
+      - Seger Making Good Script Great - visual storytelling
+      - Mackendrick On Film-Making - visual representation
+
+  - id: SYMBOLISM.R006
+    title: Color Symbolism
+    severity: low
+    description: Colors can carry symbolic meaning and reinforce theme
+    fix: Use color palette symbolically - colors reinforce theme, emotion, character state (Seger - color symbolism)
+    references:
+      - Seger Making Good Script Great - color symbolism
+      - Mackendrick On Film-Making - visual design, color palette
+
+  - id: SYMBOLISM.R007
+    title: Object Symbolism
+    severity: low
+    description: Props and objects can carry thematic meaning
+    fix: Give key props symbolic weight - objects represent ideas and support theme (McKee - meaningful objects)
+    references:
+      - McKee Story - object symbolism, meaningful props
+      - Seger Making Good Script Great - symbolic objects
+
+  - id: SYMBOLISM.R008
+    title: Setting Symbolism
+    severity: low
+    description: Location and environment can reflect theme and character state
+    fix: Use setting symbolically - location embodies theme, reflects character state (McKee - symbolic setting, Truby - environment meaning)
+    references:
+      - McKee Story - setting symbolism, environment embodies theme
+      - Truby Anatomy - symbolic setting, thematic environment
+
+  - id: SYMBOLISM.R009
+    title: Character Symbolism
+    severity: low
+    description: Characters can represent ideas or concepts allegorically
+    fix: Consider allegorical dimension - character embodies idea or represents concept (Truby - symbolic character, Vogler - archetypal representation)
+    references:
+      - Truby Anatomy - symbolic character, allegorical dimension
+      - Vogler Writer's Journey - archetypal character, universal representation
+      - Campbell Hero 1000 Faces - character as symbol
+
+  - id: SYMBOLISM.R010
+    title: Title Symbolism
+    severity: low
+    description: Title should reflect central theme or symbolic meaning
+    fix: Ensure title has symbolic resonance - embodies central theme or meaning (Snyder - meaningful title)
+    references:
+      - Snyder Save the Cat - title symbolism, thematic title
+      - McKee Story - meaningful title reflects core idea
+
+  - id: SYMBOLISM.R011
+    title: Thematic Resonance
+    severity: critical
+    description: Symbols must support and reinforce theme, not be arbitrary
+    fix: Ensure symbols serve theme - interconnected symbol web creates thematic unity (Truby - symbol web, McKee - thematic resonance)
+    references:
+      - McKee Story - thematic resonance, symbols reinforce theme
+      - Truby Anatomy - symbol web, thematic network, unity
+      - Egri Art Dramatic Writing - symbol supports premise
+
+  - id: SYMBOLISM.R012
+    title: Symbol Subtlety
+    severity: medium
+    description: Symbolism should be nuanced and layered, not obvious
+    fix: Increase symbol subtlety - nuanced, layered, sophisticated symbols resonate (McKee - avoid heavy-handed, Truby - implicit meaning)
+    references:
+      - McKee Story - symbol subtlety, nuanced symbolism
+      - Truby Anatomy - avoid heavy-handed, implicit meaning
+      - Seger Making Good Script Great - tasteful symbolism
+
+  - id: SYMBOLISM.R013
+    title: Avoid Heavy-Handed Symbolism
+    severity: critical
+    description: Symbolism that is too obvious, preachy, or lacking subtlety
+    fix: Remove heavy-handed symbolism - too obvious and preachy alienates audience (McKee - worst flaw, Seger - audience feels insulted)
+    references:
+      - McKee Story - avoid heavy-handed symbolism, sledgehammer approach
+      - Seger Making Good Script Great - avoid patronizing audience
+      - Truby Anatomy - subtle over obvious
+
+  - id: SYMBOLISM.R014
+    title: Avoid Confused Symbolism
+    severity: high
+    description: Symbolism with unclear or incomprehensible meaning
+    fix: Clarify confused symbolism - audience must understand meaning (Aristotle - metaphor must have clarity, McKee - avoid obscurity)
+    references:
+      - Aristotle Poetics - metaphor clarity, avoid obscurity
+      - McKee Story - symbol clarity essential
+      - Seger Making Good Script Great - comprehensible symbols
+
+  - id: SYMBOLISM.R015
+    title: Avoid Inconsistent Symbols
+    severity: high
+    description: Symbols that change meaning or contradict themselves
+    fix: Maintain symbol consistency - meaning must remain stable throughout story (McKee - consistent symbolism, Truby - coherent symbol web)
+    references:
+      - McKee Story - symbol consistency, stable meaning
+      - Truby Anatomy - coherent symbol web, thematic unity
+
+# Analysis prompts for deep context retrieval
+analysis_prompts:
+  symbolism_present:
+    - "How does McKee describe visual symbolism and metaphor?"
+    - "What does Truby say about symbol web and thematic network?"
+    - "How does Seger explain visual storytelling and metaphorical imagery?"
+
+  symbol_clarity:
+    - "What does Aristotle say about metaphor clarity and obscurity?"
+    - "How does McKee balance symbol subtlety with audience comprehension?"
+    - "What does Seger recommend about clear visual metaphors?"
+
+  symbol_consistency:
+    - "How does McKee describe recurring symbols and motifs?"
+    - "What does Truby say about symbol web building across story?"
+    - "How does Vogler explain recurring archetypal symbols?"
+
+  motif_presence:
+    - "What does McKee say about motif and recurring elements?"
+    - "How does Vogler describe recurring archetypal motifs?"
+    - "What does Campbell say about recurring mythic patterns?"
+
+  visual_metaphor:
+    - "How does McKee describe visual metaphor and concrete imagery?"
+    - "What does Seger say about visual storytelling and showing abstract?"
+    - "How does Mackendrick explain visual representation?"
+
+  thematic_resonance:
+    - "What does McKee say about symbols reinforcing theme?"
+    - "How does Truby describe symbol web and thematic unity?"
+    - "What does Egri say about symbol supporting premise?"
+
+  symbol_subtlety:
+    - "How does McKee describe subtle versus heavy-handed symbolism?"
+    - "What does Truby say about implicit versus explicit meaning?"
+    - "What does Seger recommend about tasteful symbolism?"
+
+  heavy_handed:
+    - "What does McKee say about avoiding heavy-handed symbolism?"
+    - "How does Seger describe symbolism that insults audience?"
+    - "What does Truby say about sledgehammer approach to symbols?"
+
+  confused_symbolism:
+    - "What does Aristotle say about metaphor clarity versus obscurity?"
+    - "How does McKee describe symbolism that confuses audience?"
+    - "What does Seger say about incomprehensible symbols?"
+
+  inconsistent_symbols:
+    - "What does McKee say about symbol consistency and stable meaning?"
+    - "How does Truby describe coherent symbol web?"
+    - "What happens when symbols contradict themselves?"

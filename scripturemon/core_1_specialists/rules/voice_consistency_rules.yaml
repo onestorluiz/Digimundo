@@ -1,0 +1,189 @@
+domain: voice_consistency
+specialist: "Script Doctor Voicemon"
+digimon_name: "Voicemon"
+title: "Script Doctor - Character Voice Consistency Specialist"
+specialty: "Character voice distinctiveness, consistency, authenticity, dialogue patterns"
+style: "Distinctive, consistent, authentic, character-driven"
+identity: "Script Doctor™ first, Digimon voice specialist second"
+
+rules:
+  - id: VOI.R001
+    title: "Distinct Character Voices"
+    category: "Distinctiveness"
+    severity: "critical"
+    test: "Does each character have a unique voice?"
+    fail_msg: "Characters sound identical - no distinction"
+    fix: "Give each character unique speech patterns, vocabulary"
+    reference: "Voice distinctiveness principle"
+
+  - id: VOI.R002
+    title: "Voice Consistency"
+    category: "Consistency"
+    severity: "critical"
+    test: "Do characters maintain consistent voice throughout?"
+    fail_msg: "Character voice changes without justification"
+    fix: "Maintain consistent speech patterns for each character"
+    reference: "Voice consistency principle"
+
+  - id: VOI.R003
+    title: "Vocabulary Appropriate"
+    category: "Authenticity"
+    severity: "high"
+    test: "Is vocabulary appropriate to character background?"
+    fail_msg: "Vocabulary doesn't match character's background"
+    fix: "Match vocabulary to education, profession, age"
+    reference: "Authentic vocabulary"
+
+  - id: VOI.R004
+    title: "Speech Patterns Match Character"
+    category: "Patterns"
+    severity: "high"
+    test: "Do speech patterns reflect character traits?"
+    fail_msg: "Speech patterns generic - not character-specific"
+    fix: "Create patterns that reflect personality"
+    reference: "Pattern-personality match"
+
+  - id: VOI.R005
+    title: "Age-Appropriate Dialogue"
+    category: "Age"
+    severity: "high"
+    test: "Does dialogue match character's age?"
+    fail_msg: "Age and dialogue mismatched"
+    fix: "Adjust dialogue to reflect character's generation"
+    reference: "Age-appropriate speech"
+
+  - id: VOI.R006
+    title: "Cultural Authenticity"
+    category: "Culture"
+    severity: "medium"
+    test: "Does voice reflect cultural background?"
+    fail_msg: "Cultural voice markers missing"
+    fix: "Include appropriate cultural speech patterns"
+    reference: "Cultural authenticity"
+
+  - id: VOI.R007
+    title: "Educational Level Reflected"
+    category: "Education"
+    severity: "medium"
+    test: "Does voice match education level?"
+    fail_msg: "Education level not reflected in speech"
+    fix: "Adjust complexity to match education"
+    reference: "Education-voice match"
+
+  - id: VOI.R008
+    title: "Emotional Voice Variation"
+    category: "Emotion"
+    severity: "medium"
+    test: "Does voice change appropriately with emotion?"
+    fail_msg: "Voice unchanged despite emotional shifts"
+    fix: "Vary speech patterns with emotional state"
+    reference: "Emotional voice variation"
+
+  - id: VOI.R009
+    title: "Unique Verbal Tics"
+    category: "Quirks"
+    severity: "low"
+    test: "Do characters have identifying verbal tics?"
+    fail_msg: "No unique verbal characteristics"
+    fix: "Add subtle repeated phrases or patterns"
+    reference: "Verbal signatures"
+
+  - id: VOI.R010
+    title: "Avoid Interchangeable Dialogue"
+    category: "Uniqueness"
+    severity: "high"
+    test: "Could dialogue be swapped between characters?"
+    fail_msg: "Dialogue interchangeable between characters"
+    fix: "Make dialogue character-specific"
+    reference: "Non-interchangeable principle"
+
+  - id: VOI.R011
+    title: "Status Reflected in Voice"
+    category: "Status"
+    severity: "medium"
+    test: "Does voice reflect social/professional status?"
+    fail_msg: "Status not reflected in speech"
+    fix: "Adjust formality to match status"
+    reference: "Status-voice connection"
+
+  - id: VOI.R012
+    title: "Relationship-Based Voice"
+    category: "Relationships"
+    severity: "medium"
+    test: "Does voice change based on who they're talking to?"
+    fail_msg: "Same voice regardless of relationship"
+    fix: "Vary formality/tone based on relationship"
+    reference: "Relationship dynamics"
+
+  - id: VOI.R013
+    title: "Period-Appropriate Language"
+    category: "Period"
+    severity: "high"
+    test: "Is language appropriate to time period?"
+    fail_msg: "Anachronistic language used"
+    fix: "Research and use period-appropriate speech"
+    reference: "Period authenticity"
+
+  - id: VOI.R014
+    title: "Profession-Specific Jargon"
+    category: "Profession"
+    severity: "low"
+    test: "Do professionals use appropriate jargon?"
+    fail_msg: "Missing professional vocabulary"
+    fix: "Include authentic professional terms"
+    reference: "Professional authenticity"
+
+  - id: VOI.R015
+    title: "Voice Evolution Justified"
+    category: "Evolution"
+    severity: "medium"
+    test: "If voice changes, is it justified by story?"
+    fail_msg: "Voice changes without story justification"
+    fix: "Tie voice evolution to character arc"
+    reference: "Justified evolution"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 35
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Identify all speaking characters and their dialogue"
+  deep_dive: "Analyze speech patterns, vocabulary, and consistency"
+  final_check: "Verify each character has distinct, consistent voice"
+
+voice_checklist:
+  core_elements:
+    - distinctiveness
+    - consistency
+    - authenticity
+    - vocabulary
+    - speech_patterns
+    - age_appropriate
+    - cultural_markers
+    - emotional_variation
+
+  voice_attributes:
+    - formality_level
+    - sentence_length
+    - complexity
+    - verbal_tics
+    - catch_phrases
+    - grammatical_patterns
+    - slang_usage
+    - professional_jargon
+
+common_voice_mistakes:
+  - all_sound_same
+  - inconsistent_voice
+  - age_mismatch
+  - education_mismatch
+  - cultural_inauthenticity
+  - no_emotional_variation
+  - interchangeable_dialogue
+  - missing_verbal_quirks
+  - anachronistic_language
+  - status_ignored

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTUREMON - Digimon World 3 Style</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- MAIN MENU SCREEN -->
+    <div class="screen" id="mainMenu">
+        <div class="grid-background"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">SCRIPTUREMON v10.0</div>
+            <div class="subtitle">SCREENPLAY ANALYSIS SYSTEM</div>
+        </div>
+
+        <!-- Main Menu Options -->
+        <div class="window main-menu-window">
+            <div class="menu-option selected" data-screen="screenplaySelect">
+                <span class="icon">📄</span>
+                <span class="text">New Screenplay</span>
+                <span class="arrow">▶</span>
+            </div>
+            <div class="menu-option" data-screen="continueMenu">
+                <span class="icon">💾</span>
+                <span class="text">Continue Analysis</span>
+                <span class="arrow">▶</span>
+            </div>
+            <div class="menu-option" data-screen="specialistSelect">
+                <span class="icon">🔬</span>
+                <span class="text">View Specialists</span>
+                <span class="arrow">▶</span>
+            </div>
+            <div class="menu-option" data-screen="settings">
+                <span class="icon">⚙️</span>
+                <span class="text">Settings</span>
+                <span class="arrow">▶</span>
+            </div>
+        </div>
+
+        <!-- Stats Window -->
+        <div class="window stats-window">
+            <div class="stat-line">
+                <span class="stat-icon hp-icon"></span>
+                <span class="stat-label">Analyses</span>
+                <span class="stat-value">247</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon mp-icon"></span>
+                <span class="stat-label">Screenplays</span>
+                <span class="stat-value">89</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon exp-icon"></span>
+                <span class="stat-label">Total Time</span>
+                <span class="stat-value">142h</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon gold-icon"></span>
+                <span class="stat-label">Avg Score</span>
+                <span class="stat-value">8.7/10</span>
+            </div>
+        </div>
+
+        <!-- Bottom Info -->
+        <div class="bottom-bar">
+            <div class="tp-counter">TP 10</div>
+            <div class="help-text">SELECT: Choose | START: Confirm</div>
+        </div>
+    </div>
+
+    <!-- SPECIALIST SELECTION SCREEN -->
+    <div class="screen hidden" id="specialistSelect">
+        <div class="grid-background"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">SPECIALIST SELECTION</div>
+            <div class="subtitle">Choose Analysis Type</div>
+        </div>
+
+        <!-- Specialist Grid (Left) -->
+        <div class="window specialist-grid">
+            <div class="specialist-card selected">
+                <div class="specialist-icon">👤</div>
+                <div class="specialist-name">DrCharacter</div>
+                <div class="specialist-level">Lv 13</div>
+            </div>
+            <div class="specialist-card">
+                <div class="specialist-icon">🏗️</div>
+                <div class="specialist-name">DrStructure</div>
+                <div class="specialist-level">Lv 13</div>
+            </div>
+            <div class="specialist-card">
+                <div class="specialist-icon">🎭</div>
+                <div class="specialist-name">DrTheme</div>
+                <div class="specialist-level">Lv 13</div>
+            </div>
+            <div class="specialist-card">
+                <div class="specialist-icon">🎬</div>
+                <div class="specialist-name">DrGenre</div>
+                <div class="specialist-level">Lv 13</div>
+            </div>
+            <div class="specialist-card">
+                <div class="specialist-icon">💬</div>
+                <div class="specialist-name">DrDialogue</div>
+                <div class="specialist-level">Lv 13</div>
+            </div>
+            <div class="specialist-card">
+                <div class="specialist-icon">⚡</div>
+                <div class="specialist-name">DrPacing</div>
+                <div class="specialist-level">Lv 13</div>
+            </div>
+        </div>
+
+        <!-- Info Panel (Right) -->
+        <div class="window info-panel">
+            <div class="specialist-portrait">👤</div>
+            <div class="specialist-stats">
+                <div class="stat-row">
+                    <span class="stat-name">TYPE</span>
+                    <span class="stat-val">Character Analysis</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">EXP</span>
+                    <span class="stat-val exp-bar">
+                        <div class="exp-fill" style="width: 70%"></div>
+                        <span class="exp-text">1890 EXP</span>
+                    </span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">AUTHORS</span>
+                    <span class="stat-val">13</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">AVG TIME</span>
+                    <span class="stat-val">2.3 min</span>
+                </div>
+            </div>
+
+            <div class="specialist-desc">
+                Analyzes character development, arcs, relationships, and psychological depth using 13 different methodologies.
+            </div>
+
+            <div class="authors-list">
+                <div class="author-item">McKee</div>
+                <div class="author-item">Field</div>
+                <div class="author-item">Truby</div>
+                <div class="author-item">Campbell</div>
+                <div class="author-item">Vogler</div>
+                <div class="author-item">+8 more</div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="button-help">
+                <span class="btn">◀ L1</span> Previous
+                <span class="btn">R1 ▶</span> Next
+                <span class="btn">✕</span> Back
+                <span class="btn">○</span> Confirm
+            </div>
+        </div>
+    </div>
+
+    <!-- ANALYSIS PROGRESS SCREEN -->
+    <div class="screen hidden" id="analysisProgress">
+        <div class="grid-background animated"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">ANALYSIS IN PROGRESS</div>
+            <div class="subtitle">TE ENCONTRO EM MIM</div>
+        </div>
+
+        <!-- Progress Info -->
+        <div class="window progress-info">
+            <div class="progress-row">
+                <span class="label">Specialist:</span>
+                <span class="value">DrCharacter</span>
+            </div>
+            <div class="progress-row">
+                <span class="label">Author:</span>
+                <span class="value">McKee</span>
+            </div>
+            <div class="progress-row">
+                <span class="label">Status:</span>
+                <span class="value status-active">ANALYZING...</span>
+            </div>
+        </div>
+
+        <!-- Main Progress Bar -->
+        <div class="window progress-window">
+            <div class="progress-label">Overall Progress</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 23%"></div>
+                <div class="progress-text">72 / 312 (23.1%)</div>
+            </div>
+
+            <div class="progress-stats">
+                <div class="stat-item">
+                    <span class="stat-icon">⏱️</span>
+                    <span class="stat-text">2h 24m elapsed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🎯</span>
+                    <span class="stat-text">ETA: 8h 16m</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⚡</span>
+                    <span class="stat-text">2.1 min/analysis</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">💰</span>
+                    <span class="stat-text">$0.00 (Ollama)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Specialists -->
+        <div class="window completed-window">
+            <div class="section-title">Completed</div>
+            <div class="completed-grid">
+                <div class="completed-specialist">
+                    <span class="icon">👤</span>
+                    <span class="name">Character</span>
+                    <span class="count">13/13</span>
+                    <span class="check">✓</span>
+                </div>
+                <div class="completed-specialist">
+                    <span class="icon">🏗️</span>
+                    <span class="name">Structure</span>
+                    <span class="count">13/13</span>
+                    <span class="check">✓</span>
+                </div>
+                <div class="completed-specialist">
+                    <span class="icon">🎭</span>
+                    <span class="name">Theme</span>
+                    <span class="count">13/13</span>
+                    <span class="check">✓</span>
+                </div>
+                <div class="completed-specialist">
+                    <span class="icon">🎬</span>
+                    <span class="name">Genre</span>
+                    <span class="count">13/13</span>
+                    <span class="check">✓</span>
+                </div>
+                <div class="completed-specialist">
+                    <span class="icon">⚡</span>
+                    <span class="name">Pacing</span>
+                    <span class="count">13/13</span>
+                    <span class="check">✓</span>
+                </div>
+                <div class="completed-specialist active">
+                    <span class="icon">🔄</span>
+                    <span class="name">Transitions</span>
+                    <span class="count">7/13</span>
+                    <span class="check">⟳</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="button-help">
+                <span class="btn">✕</span> Cancel
+                <span class="btn">△</span> Pause
+                <span class="btn">□</span> Dashboard
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div class="screen hidden" id="resultsScreen">
+        <div class="grid-background"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">ANALYSIS COMPLETE</div>
+            <div class="subtitle">TE ENCONTRO EM MIM</div>
+        </div>
+
+        <!-- Overall Score -->
+        <div class="window score-window">
+            <div class="overall-score">
+                <div class="score-label">OVERALL QUALITY</div>
+                <div class="score-value">8.7</div>
+                <div class="score-max">/10</div>
+                <div class="score-stars">⭐⭐⭐⭐☆</div>
+            </div>
+        </div>
+
+        <!-- Specialist Scores -->
+        <div class="window scores-grid">
+            <div class="score-item">
+                <span class="icon">👤</span>
+                <span class="name">Character</span>
+                <span class="score">9.2</span>
+                <div class="mini-bar">
+                    <div class="mini-fill" style="width: 92%"></div>
+                </div>
+            </div>
+            <div class="score-item">
+                <span class="icon">🏗️</span>
+                <span class="name">Structure</span>
+                <span class="score">8.5</span>
+                <div class="mini-bar">
+                    <div class="mini-fill" style="width: 85%"></div>
+                </div>
+            </div>
+            <div class="score-item">
+                <span class="icon">🎭</span>
+                <span class="name">Theme</span>
+                <span class="score">8.8</span>
+                <div class="mini-bar">
+                    <div class="mini-fill" style="width: 88%"></div>
+                </div>
+            </div>
+            <div class="score-item">
+                <span class="icon">🎬</span>
+                <span class="name">Genre</span>
+                <span class="score">8.3</span>
+                <div class="mini-bar">
+                    <div class="mini-fill" style="width: 83%"></div>
+                </div>
+            </div>
+            <div class="score-item">
+                <span class="icon">💬</span>
+                <span class="name">Dialogue</span>
+                <span class="score">9.0</span>
+                <div class="mini-bar">
+                    <div class="mini-fill" style="width: 90%"></div>
+                </div>
+            </div>
+            <div class="score-item">
+                <span class="icon">⚡</span>
+                <span class="name">Pacing</span>
+                <span class="score">8.1</span>
+                <div class="mini-bar">
+                    <div class="mini-fill" style="width: 81%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Insights -->
+        <div class="window insights-window">
+            <div class="section-title">TOP INSIGHTS</div>
+            <div class="insight-item">
+                <span class="bullet">•</span>
+                <span class="text">Strong protagonist arc with clear transformation</span>
+            </div>
+            <div class="insight-item">
+                <span class="bullet">•</span>
+                <span class="text">Three-act structure well-balanced</span>
+            </div>
+            <div class="insight-item">
+                <span class="bullet">•</span>
+                <span class="text">Dialogue reveals character depth effectively</span>
+            </div>
+            <div class="insight-item">
+                <span class="bullet">•</span>
+                <span class="text">Pacing could be tightened in Act 2</span>
+            </div>
+        </div>
+
+        <!-- Analysis Stats -->
+        <div class="window analysis-stats">
+            <div class="stat-line">
+                <span class="label">Total Analyses:</span>
+                <span class="value">312</span>
+            </div>
+            <div class="stat-line">
+                <span class="label">Duration:</span>
+                <span class="value">10h 32m</span>
+            </div>
+            <div class="stat-line">
+                <span class="label">Model:</span>
+                <span class="value">Ollama (Free)</span>
+            </div>
+            <div class="stat-line">
+                <span class="label">Reports:</span>
+                <span class="value">HTML + Markdown</span>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="button-help">
+                <span class="btn">○</span> View Report
+                <span class="btn">△</span> Export
+                <span class="btn">□</span> Compare
+                <span class="btn">✕</span> Main Menu
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

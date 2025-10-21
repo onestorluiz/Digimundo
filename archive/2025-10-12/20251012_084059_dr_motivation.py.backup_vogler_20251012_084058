@@ -1,0 +1,1500 @@
+"""
+Script Doctor Motivationmon - Character Motivation Analysis Specialist
+A Script Doctor™ in Digimon form specializing in want/desire, need, goal clarity, motivation drives action, obstacles.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class MotivationProfile:
+    """Overall motivation analysis."""
+    want_clear: bool  # Conscious goal/desire (what protagonist wants)
+    need_identified: bool  # Unconscious/deeper need (what protagonist needs)
+    want_vs_need_distinction: bool  # Want ≠ need (Truby's key insight)
+    goal_specific: bool  # Goal is specific and measurable
+    goal_clarity: float  # 0-1 (how clear/specific is the goal)
+    motivation_established_early: bool  # First 10-15 pages
+    motivation_consistent: bool  # Doesn't change arbitrarily
+    obstacles_to_goal: bool  # Active opposition to protagonist's goal
+    motivation_drives_action: bool  # Protagonist actively pursues goal
+    emotional_motivation: bool  # Why protagonist cares (emotional stake)
+    motivation_relatable: bool  # Audience understands/relates to motivation
+    antagonist_motivation_clear: bool  # Antagonist has clear opposing goal
+    supporting_motivations: bool  # Allies have their own motivations
+    unclear_motivation_detected: bool  # PENALTY (audience doesn't know what protagonist wants)
+    passive_protagonist_detected: bool  # PENALTY (no clear drive/desire)
+    inconsistent_motivation_detected: bool  # PENALTY (motivation changes arbitrarily)
+    overall_motivation_quality: float
+
+
+@dataclass
+class MotivationAnalysisResults:
+    """Complete motivation analysis results."""
+    motivation_profile: MotivationProfile
+    want_list: List[str]  # Protagonist's conscious desires
+    need_list: List[str]  # Protagonist's unconscious needs
+    goal_statements: List[str]  # Specific goal articulations
+    obstacles_list: List[str]  # Obstacles to achieving goal
+    motivation_moments: List[str]  # Moments showing motivation
+    score: float
+    diagnosis: str
+    recommendations: List[str]
+
+
+class DrMotivation:
+    """
+    Script Doctor Motivationmon - The Character Motivation Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing want/desire clarity,
+    need identification, goal specificity, motivation drives action, obstacles to goal.
+
+    Identity: Script Doctor first, Digimon motivation specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Motivationmon with rules and configuration."""
+        self.name = "Script Doctor Motivationmon"
+        self.digimon_name = "Motivationmon"
+        self.title = "Script Doctor - Character Motivation Analysis Specialist"
+        self.specialty = "Want/desire clarity, need identification, goal specificity, motivation drives action, obstacles"
+        self.identity = "I am Script Doctor Motivationmon, a professional Script Doctor™ specializing in character motivation analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "motivation_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - MOTIVATION SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Character desire and active pursuit
+            "McKee Story character desire want goal conscious drive protagonist",
+            "McKee Story motivation drives action character actively pursues goal",
+            "McKee Story conscious want unconscious need distinction inner outer",
+            "McKee Story protagonist active pursuit goal relentless driven determined",
+            "McKee Story desire line through story consistent sustained clear",
+            "McKee Story motivation established early first 10-15 pages clear",
+            "McKee Story emotional stake why character cares motivation personal",
+            "McKee Story obstacle opposition forces block desire create conflict",
+
+            # McKee Story - DESIRE vs NEED & GAP CLOSURE (ultra-specific manual reading)
+            "McKee Story desire conscious goal protagonist want pursuit object clear",
+            "McKee Story need unconscious desire deeper want beneath surface true",
+            "McKee Story motivation desire pursuit gap close expectation reality align",
+
+            # Truby Anatomy - Want vs need (critical distinction)
+            "Truby Anatomy want versus need critical distinction conscious unconscious",
+            "Truby Anatomy conscious desire external goal what character wants",
+            "Truby Anatomy unconscious need internal what character really needs",
+            "Truby Anatomy ghost shapes want need past wound drives behavior",
+            "Truby Anatomy moral weakness creates need character flaw blind spot",
+            "Truby Anatomy desire line protagonist goal specific tangible clear",
+            "Truby Anatomy protagonist must want something specific measurable goal",
+            "Truby Anatomy motivation drives plot action character pursuit creates story",
+            "Truby Anatomy obstacle opposition desire antagonist blocks goal forces",
+
+            # Field Screenplay - Character want drives narrative
+            "Field Screenplay character want goal desire drives narrative forward",
+            "Field protagonist desire motivates action pursuit creates momentum",
+            "Field character need want distinction inner outer goal layers",
+            "Field protagonist active not passive character drives story pursues",
+            "Field goal clear specific audience understands protagonist wants",
+            "Field motivation established early first act protagonist desire clear",
+            "Field obstacles to goal opposition forces block protagonist desire",
+
+            # Snyder Save the Cat - Relatable primal motivation
+            "Snyder Save the Cat character want goal clear specific tangible",
+            "Snyder protagonist goal relatable primal universal audience connects",
+            "Snyder character motivation drives story active protagonist pursuit",
+            "Snyder save the cat moment establishes character likable root for",
+            "Snyder catalyst call adventure establishes goal desire protagonist",
+            "Snyder break into two protagonist commits decision pursuit goal",
+            "Snyder primal motivation universal emotions beneath specific want",
+
+            # Vogler Writer's Journey - Hero's desire and call
+            "Vogler Writer's Journey hero desire want something clearly stated",
+            "Vogler hero active not passive character pursues goal driven",
+            "Vogler call to adventure establishes desire goal quest begins",
+            "Vogler refusal call resistance fear hesitation shows stakes care",
+            "Vogler meeting mentor guidance helps hero clarify goal strengthen",
+            "Vogler crossing threshold commitment decision hero pursues goal",
+
+            # Campbell Hero 1000 Faces - Quest motivated by need
+            "Campbell Hero 1000 Faces hero desire seeks something quest goal",
+            "Campbell quest motivated need inner drive compulsion must go",
+            "Campbell call adventure summons hero establishes goal desire",
+            "Campbell belly whale commitment point no return hero committed",
+            "Campbell road trials tests obstacles block hero pursuit goal",
+            "Campbell ultimate boon goal achieved wisdom treasure gained",
+
+            # Aristotle Poetics - Character desire drives plot
+            "Aristotle Poetics character desire hamartia drives plot action forward",
+            "Aristotle protagonist wants drives plot character pursuit creates story",
+            "Aristotle necessity probability character desire logical believable organic",
+            "Aristotle character flaw hamartia creates inner need conflict want",
+
+            # Egri Art Dramatic Writing - Willpower and drive
+            "Egri Art Dramatic Writing character want desire drives action spine",
+            "Egri premise includes character goal what protagonist wants achieves",
+            "Egri willpower character drive determination relentless pursuit goal",
+            "Egri character three dimensions physiology sociology psychology motivation",
+            "Egri orchestration contrasting wants characters different goals clash",
+
+            # Seger Making Good Script Great - Goal clarity
+            "Seger Making Good Script Great character goal what protagonist wants clear",
+            "Seger protagonist wants what specific tangible measurable goal",
+            "Seger active protagonist pursues goal driven relentless determined",
+            "Seger character motivation clear audience understands why cares",
+            "Seger supporting character motivations allies own goals desires",
+            "Seger antagonist opposing goal clear motivation conflicts protagonist",
+            "Seger motivation consistent doesn't change arbitrarily sustained",
+
+            # Weiland Creating Character Arcs - Lie believed and truth needed
+            "Weiland Creating Character Arcs want external goal what character pursues",
+            "Weiland need internal what character really needs truth overcome lie",
+            "Weiland lie character believes drives want wrong goal false",
+            "Weiland ghost wound past trauma shapes want need motivation",
+            "Weiland moment truth character realizes need more important than want",
+            "Weiland positive arc want transforms aligned with need truth",
+
+            # Goldman Adventures Screen Trade - Protagonist goal clear to audience
+            "Goldman Adventures Screen Trade protagonist want goal clear audience",
+            "Goldman character goal specific tangible measurable audience tracks",
+            "Goldman protagonist active driven pursues goal creates story forward",
+            "Goldman nobody knows anything protagonist certainty drive conviction",
+
+            # Rhimes Year of Yes - Emotional motivation authentic
+            "Rhimes Year of Yes character motivation emotional authentic real",
+            "Rhimes protagonist desire want driven by emotional truth vulnerability",
+            "Rhimes character goals diverse perspectives variety representation",
+            "Rhimes saying yes to truth want aligned with need authentic",
+
+            # Mamet - Character want creates action
+            "Mamet Three Uses character want action behavior reveals desire",
+            "Mamet essential task what character wants pursues through action",
+            "Mamet protagonist objective goal clear pursuit creates conflict",
+            "Mamet action reveals want not dialogue behavior shows desire",
+
+            # Mackendrick On Film-Making - Visual objective behavior
+            "Mackendrick On Film-Making character objective goal shown behavior",
+            "Mackendrick protagonist pursuit visual action behavior reveals want",
+            "Mackendrick character desire shown not told visual storytelling",
+            "Mackendrick obstacle opposition visual forces block protagonist",
+
+            # General motivation concepts - Comprehensive coverage
+            "want desire clear protagonist conscious goal external tangible",
+            "need versus want distinction unconscious inner what really needs",
+            "conscious desire external goal unconscious need internal truth",
+            "goal specific measurable tangible clear audience understands tracks",
+            "motivation drives action character actively pursues goal relentless",
+            "protagonist active not passive character drives story pursues",
+            "obstacles to desire goal opposition forces block create conflict",
+            "emotional motivation why care personal stake invested reason",
+            "motivation relatable universal primal audience connects roots for",
+            "antagonist opposing goal motivation clear conflicts protagonist",
+            "motivation established early first 10-15 pages clear immediate",
+            "motivation consistent sustained doesn't change arbitrarily earned",
+            "avoid unclear motivation penalty audience doesn't know what wants",
+            "avoid passive protagonist penalty no clear drive desire inactive",
+            "avoid inconsistent motivation penalty changes arbitrarily unearned"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story conscious desire versus unconscious desire contradiction drives",
+        "McKee Story spine deep desire unifies story from incident to climax",
+        "McKee Story object of desire needed to rebalance life condition",
+        "McKee Story motivation understood avoid mono explanation case study",
+        "McKee Story want versus need choice reveals true character",
+        "McKee Story quest launched to pursue desire against antagonism obstacles",
+
+        # Campbell Hero 1000 Faces - GPT-5 (12 Oct 2025)
+        "Campbell Hero longing lack imbalance call desire necessity,",
+        "Campbell Hero injustice tyranny compassion liberation motive,",
+        "Campbell Hero curiosity wonder mystery pursuit knowledge,",
+        "Campbell Hero love wooing beloved reunion sacred marriage,",
+        "Campbell Hero hunger famine drought restoration abundance quest,",
+        "Campbell Hero healing illness affliction cure medicine boon,",
+        "Campbell Hero honor oath vow obligation debt repayment,",
+        "Campbell Hero identity origin father search naming truth,",
+        "Campbell Hero vision dream omen mandate destiny acceptance,",
+        "Campbell Hero exile homelessness belonging homecoming return,",
+
+        # Truby Anatomy 22 Steps - GPT-5 (12 Oct 2025)
+        "Truby Anatomy dramatic code desire fuels change acting learning moment transformation",
+        "Truby Anatomy need versus desire internal flaw versus external goal distinction",
+        "Truby Anatomy psychological need moral need parallel hurt self hurt others",
+        "Truby Anatomy basic action defines spine opposites determine W and C",
+        "Truby Anatomy intensity of want escalating stakes increasing pressure design",
+        "Truby Anatomy levels of desire survival love honor justice self mastery ladder",
+        "Truby Anatomy motive stated versus hidden indirect plan deception exposure",
+        "Truby Anatomy counterdesire ghost internal opponent paralysis tension",
+        "Truby Anatomy desire line specific measurable endpoint binary success",
+        "Truby Anatomy one desire line through story avoid split premise unification",
+        "Truby Anatomy desire surface need hidden audience ride train alignment",
+        "Truby Anatomy obsession threshold second revelation propulsion escalation",
+        "Truby Anatomy false desire to true desire pivot revelation identity shift",
+        "Truby Anatomy goal reframe post reveal changed motive ethical turn",
+        "Truby Anatomy motivating incident inciting event frying pan into fire",
+        "Truby Anatomy hero empathy motive clarity why action understandable not approval",
+        "Truby Anatomy desire timing start low build capacity runway escalation",
+        "Truby Anatomy desire conflict same goal opponent structural necessity",
+        "Truby Anatomy genre desire templates detective solve mystery love union",
+        "Truby Anatomy basic decision points revelation driven motive recalibration",
+
+        # Field Screenplay Paradigm - GPT-5 (12 Oct 2025)
+        "Field Screenplay dramatic need wants win gain get achieve goal objective",
+        "Field Screenplay engine powers character through story toward destination",
+        "Field Screenplay internal need versus external need align or conflict",
+        "Field Screenplay question what does character want drives design",
+        "Field Screenplay need can change at plot point one new direction",
+        "Field Screenplay obstacles calibrated against dramatic need rising difficulty",
+        "Field Screenplay action is character pursuit of need behavior choices",
+        "Field Screenplay stakes tied to need success or failure outcome",
+        "Field Screenplay mid point refocus need escalation commitment",
+        "Field Screenplay antagonist pressures test sincerity of need",
+        "Field Screenplay scene objective beat level pursuit of want",
+        "Field Screenplay goal destination ending tied to achieving need",
+        "Field Screenplay need stated early in setup implicit or explicit",
+        "Field Screenplay reversal threatens need forces new strategy",
+        "Field Screenplay internal conflict doubts fear undermine need",
+        "Field Screenplay external conflict environment blocks path to need",
+        "Field Screenplay decision points choice under pressure reveals desire",
+        "Field Screenplay through line continuous pursuit of dramatic need",
+        "Field Screenplay transformation redefines need acceptance growth",
+        "Field Screenplay function of main character embodies central need",
+
+
+
+
+        ]
+
+        # Motivation analysis patterns (bilingual: EN + PT) - 150-170+ markers
+
+        # Want/desire clear markers (conscious goal)
+        self.want_clear_markers = [
+            # English
+            "I want", "I need to", "I have to", "I must", "my goal is",
+            "I'm going to", "I will", "I desire", "I wish", "I plan to",
+            "my dream", "my ambition", "I hope to", "I intend to", "I seek",
+            # Portuguese
+            "eu quero", "eu preciso", "eu tenho que", "eu devo", "meu objetivo é",
+            "vou", "eu vou", "eu desejo", "eu almejo", "eu planejo",
+            "meu sonho", "minha ambição", "eu espero", "eu pretendo", "eu busco"
+        ]
+
+        # Need markers (unconscious/deeper need - Truby)
+        self.need_markers = [
+            # English
+            "what I really need", "deep down", "truly need", "learn to", "discover",
+            "realize", "understand", "accept", "find peace", "heal from",
+            "overcome", "let go", "forgive", "grow", "change",
+            # Portuguese
+            "o que realmente preciso", "no fundo", "verdadeiramente preciso", "aprender a", "descobrir",
+            "perceber", "entender", "aceitar", "encontrar paz", "curar de",
+            "superar", "deixar ir", "perdoar", "crescer", "mudar"
+        ]
+
+        # Want vs need distinction markers (Truby's key insight)
+        self.want_vs_need_markers = [
+            # English
+            "but what I really need", "thought I wanted", "discover what I need",
+            "realize what matters", "learn true desire", "find what I really want",
+            "what I seek is not", "the real answer", "what I was looking for",
+            # Portuguese
+            "mas o que realmente preciso", "pensei que queria", "descobrir o que preciso",
+            "perceber o que importa", "aprender verdadeiro desejo", "encontrar o que realmente quero",
+            "o que busco não é", "a verdadeira resposta", "o que procurava"
+        ]
+
+        # Goal specific/clear markers (measurable objective)
+        self.goal_specific_markers = [
+            # English
+            "exactly", "specifically", "precisely", "my plan is", "the objective",
+            "the target", "achieve", "accomplish", "reach", "obtain",
+            "win", "get", "find", "save", "rescue", "destroy", "defeat",
+            # Portuguese
+            "exatamente", "especificamente", "precisamente", "meu plano é", "o objetivo",
+            "o alvo", "alcançar", "conquistar", "atingir", "obter",
+            "ganhar", "conseguir", "encontrar", "salvar", "resgatar", "destruir", "derrotar"
+        ]
+
+        # Motivation established early markers (first 10-15 pages)
+        self.motivation_early_markers = [
+            # English
+            "from the start", "from the beginning", "always wanted", "since childhood",
+            "my whole life", "as long as I can remember", "ever since", "always dreamed",
+            # Portuguese
+            "desde o início", "desde o começo", "sempre quis", "desde criança",
+            "minha vida toda", "desde que me lembro", "desde então", "sempre sonhei"
+        ]
+
+        # Motivation consistent markers (doesn't change arbitrarily)
+        self.motivation_consistent_markers = [
+            # English
+            "still want", "haven't given up", "won't quit", "determined",
+            "committed to", "focused on", "dedicated to", "driven by",
+            # Portuguese
+            "ainda quero", "não desisti", "não vou desistir", "determinado",
+            "comprometido com", "focado em", "dedicado a", "motivado por"
+        ]
+
+        # Obstacles to goal markers (active opposition)
+        self.obstacles_markers = [
+            # English
+            "stands in my way", "blocks me", "prevents me", "opposes me",
+            "obstacle", "barrier", "challenge", "difficulty", "problem",
+            "can't because", "won't let me", "tries to stop", "interferes",
+            # Portuguese
+            "está no meu caminho", "me bloqueia", "me impede", "se opõe a mim",
+            "obstáculo", "barreira", "desafio", "dificuldade", "problema",
+            "não posso porque", "não me deixa", "tenta parar", "interfere"
+        ]
+
+        # Motivation drives action markers (protagonist active pursuit)
+        self.drives_action_markers = [
+            # English
+            "I do", "I act", "I take action", "I pursue", "I fight for",
+            "I work toward", "I strive", "I push", "I chase", "I go after",
+            "I make it happen", "I won't wait", "I take charge", "I decide",
+            # Portuguese
+            "eu faço", "eu ajo", "eu tomo ação", "eu persigo", "eu luto por",
+            "eu trabalho para", "eu me esforço", "eu empurro", "eu persigo", "eu vou atrás",
+            "eu faço acontecer", "não vou esperar", "eu tomo controle", "eu decido"
+        ]
+
+        # Emotional motivation markers (why protagonist cares)
+        self.emotional_motivation_markers = [
+            # English
+            "because I love", "because I care", "it means everything", "personal",
+            "important to me", "matters to me", "passionate about", "care deeply",
+            "my heart", "my soul", "emotionally invested", "can't live without",
+            # Portuguese
+            "porque eu amo", "porque eu me importo", "significa tudo", "pessoal",
+            "importante para mim", "importa para mim", "apaixonado por", "me importo profundamente",
+            "meu coração", "minha alma", "investido emocionalmente", "não posso viver sem"
+        ]
+
+        # Motivation relatable markers (audience understands)
+        self.motivation_relatable_markers = [
+            # English
+            "everyone wants", "we all", "universal desire", "human need",
+            "anyone would", "natural to want", "understandable", "relatable",
+            # Portuguese
+            "todos querem", "todos nós", "desejo universal", "necessidade humana",
+            "qualquer um", "natural querer", "compreensível", "relacionável"
+        ]
+
+        # Antagonist motivation clear markers (opposing goal)
+        self.antagonist_motivation_markers = [
+            # English
+            "he wants", "she wants", "they want", "his goal", "her goal",
+            "their objective", "seeks to", "aims to", "determined to",
+            # Portuguese
+            "ele quer", "ela quer", "eles querem", "objetivo dele", "objetivo dela",
+            "objetivo deles", "busca", "visa", "determinado a"
+        ]
+
+        # Supporting character motivations markers (allies have goals)
+        self.supporting_motivations_markers = [
+            # English
+            "I also want", "my own reasons", "my goal is", "I need to",
+            "for myself", "my purpose", "what I seek", "I have to",
+            # Portuguese
+            "eu também quero", "minhas próprias razões", "meu objetivo é", "eu preciso",
+            "para mim mesmo", "meu propósito", "o que eu busco", "eu tenho que"
+        ]
+
+        # Unclear motivation markers (PENALTY - audience doesn't know)
+        self.unclear_motivation_markers = [
+            # English
+            "not sure what", "don't know what I want", "unclear goal", "confused",
+            "no idea", "uncertain", "what do I want", "haven't decided",
+            # Portuguese
+            "não sei o que", "não sei o que quero", "objetivo não claro", "confuso",
+            "sem ideia", "incerto", "o que eu quero", "não decidi"
+        ]
+
+        # Passive protagonist markers (PENALTY - no clear drive)
+        self.passive_protagonist_markers = [
+            # English
+            "things happen to me", "I wait", "I hope someone", "maybe someone will",
+            "I don't know what to do", "I'm waiting for", "someone else will",
+            "it just happened", "by accident", "by chance", "passive",
+            # Portuguese
+            "coisas acontecem comigo", "eu espero", "espero que alguém", "talvez alguém",
+            "não sei o que fazer", "estou esperando por", "outra pessoa vai",
+            "simplesmente aconteceu", "por acidente", "por acaso", "passivo"
+        ]
+
+        # Inconsistent motivation markers (PENALTY - changes arbitrarily)
+        self.inconsistent_motivation_markers = [
+            # English
+            "changed my mind", "actually want", "now I want", "forget that",
+            "different goal now", "new objective", "what I wanted before", "no longer want",
+            # Portuguese
+            "mudei de ideia", "na verdade quero", "agora eu quero", "esqueça isso",
+            "objetivo diferente agora", "novo objetivo", "o que queria antes", "não quero mais"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze character motivation in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete motivation diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract opening (first 10-15 pages) for early motivation establishment
+        opening_text = self._extract_pages(screenplay_text, 0, 15)
+
+        # Extract Act 1 (first 25%) for motivation setup
+        act1_text = self._extract_pages(screenplay_text, 0, int(page_count * 0.25))
+
+        # Extract climax (last 15 pages) for need fulfillment
+        climax_text = self._extract_pages(screenplay_text, max(0, page_count - 15), page_count)
+
+        # Analyze want clear (conscious goal/desire)
+        want_clear = self._analyze_want_clear(screenplay_text, opening_text)
+
+        # Analyze need identified (unconscious/deeper need - Truby)
+        need_identified = self._analyze_need_identified(screenplay_text, climax_text)
+
+        # Analyze want vs need distinction (Truby's key insight)
+        want_vs_need = self._analyze_want_vs_need_distinction(screenplay_text)
+
+        # Analyze goal specific (measurable objective)
+        goal_specific = self._analyze_goal_specific(screenplay_text)
+
+        # Analyze goal clarity (how clear/specific)
+        goal_clarity = self._analyze_goal_clarity(screenplay_text, opening_text)
+
+        # Analyze motivation established early (first 10-15 pages)
+        motivation_early = self._analyze_motivation_established_early(opening_text)
+
+        # Analyze motivation consistent (doesn't change arbitrarily)
+        motivation_consistent = self._analyze_motivation_consistent(screenplay_text)
+
+        # Analyze obstacles to goal (active opposition)
+        obstacles = self._analyze_obstacles_to_goal(screenplay_text)
+
+        # Analyze motivation drives action (protagonist active)
+        drives_action = self._analyze_motivation_drives_action(screenplay_text)
+
+        # Analyze emotional motivation (why protagonist cares)
+        emotional_motivation = self._analyze_emotional_motivation(screenplay_text)
+
+        # Analyze motivation relatable (audience understands)
+        motivation_relatable = self._analyze_motivation_relatable(screenplay_text)
+
+        # Analyze antagonist motivation (opposing goal)
+        antagonist_motivation = self._analyze_antagonist_motivation(screenplay_text)
+
+        # Analyze supporting motivations (allies have goals)
+        supporting_motivations = self._analyze_supporting_motivations(screenplay_text)
+
+        # Detect unclear motivation (PENALTY)
+        unclear_motivation = self._detect_unclear_motivation(screenplay_text)
+
+        # Detect passive protagonist (PENALTY)
+        passive_protagonist = self._detect_passive_protagonist(screenplay_text)
+
+        # Detect inconsistent motivation (PENALTY)
+        inconsistent_motivation = self._detect_inconsistent_motivation(screenplay_text)
+
+        # Build motivation profile
+        motivation_profile = MotivationProfile(
+            want_clear=want_clear["clear"],
+            need_identified=need_identified["identified"],
+            want_vs_need_distinction=want_vs_need["distinct"],
+            goal_specific=goal_specific["specific"],
+            goal_clarity=goal_clarity["clarity"],
+            motivation_established_early=motivation_early["established"],
+            motivation_consistent=motivation_consistent["consistent"],
+            obstacles_to_goal=obstacles["present"],
+            motivation_drives_action=drives_action["drives"],
+            emotional_motivation=emotional_motivation["present"],
+            motivation_relatable=motivation_relatable["relatable"],
+            antagonist_motivation_clear=antagonist_motivation["clear"],
+            supporting_motivations=supporting_motivations["present"],
+            unclear_motivation_detected=unclear_motivation["detected"],
+            passive_protagonist_detected=passive_protagonist["detected"],
+            inconsistent_motivation_detected=inconsistent_motivation["detected"],
+            overall_motivation_quality=0.0  # calculated below
+        )
+
+        # Calculate overall motivation quality
+        motivation_profile.overall_motivation_quality = self._calculate_overall_motivation_quality(motivation_profile)
+
+        # Check against rules
+        rule_violations = self._check_motivation_rules(
+            motivation_profile, want_clear, need_identified, want_vs_need,
+            goal_specific, goal_clarity, motivation_early, motivation_consistent,
+            obstacles, drives_action, emotional_motivation, motivation_relatable,
+            antagonist_motivation, supporting_motivations, unclear_motivation,
+            passive_protagonist, inconsistent_motivation
+        )
+
+        # Calculate score
+        score = self._calculate_motivation_score(motivation_profile, rule_violations)
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(score, motivation_profile, rule_violations)
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "want_clear": {
+                "clear": want_clear["clear"],
+                "count": want_clear["count"],
+                "want_list": want_clear["want_list"][:10]
+            },
+            "need_identified": {
+                "identified": need_identified["identified"],
+                "count": need_identified["count"],
+                "need_list": need_identified["need_list"][:10]
+            },
+            "want_vs_need": {
+                "distinct": want_vs_need["distinct"],
+                "count": want_vs_need["count"]
+            },
+            "goal_specific": {
+                "specific": goal_specific["specific"],
+                "goal_statements": goal_specific["goal_statements"][:10]
+            },
+            "goal_clarity": {
+                "clarity": goal_clarity["clarity"]
+            },
+            "motivation_established_early": {
+                "established": motivation_early["established"],
+                "description": motivation_early.get("description", "")
+            },
+            "motivation_consistent": {
+                "consistent": motivation_consistent["consistent"]
+            },
+            "obstacles": {
+                "present": obstacles["present"],
+                "obstacles_list": obstacles["obstacles_list"][:10]
+            },
+            "motivation_drives_action": {
+                "drives": drives_action["drives"],
+                "action_count": drives_action["count"]
+            },
+            "emotional_motivation": {
+                "present": emotional_motivation["present"]
+            },
+            "motivation_relatable": {
+                "relatable": motivation_relatable["relatable"]
+            },
+            "antagonist_motivation": {
+                "clear": antagonist_motivation["clear"]
+            },
+            "supporting_motivations": {
+                "present": supporting_motivations["present"]
+            },
+            "unclear_motivation": {
+                "detected": unclear_motivation["detected"],
+                "penalty": unclear_motivation.get("penalty", False)
+            },
+            "passive_protagonist": {
+                "detected": passive_protagonist["detected"],
+                "penalty": passive_protagonist.get("penalty", False)
+            },
+            "inconsistent_motivation": {
+                "detected": inconsistent_motivation["detected"],
+                "penalty": inconsistent_motivation.get("penalty", False)
+            },
+            "overall_motivation_quality": motivation_profile.overall_motivation_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, motivation_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_pages(self, screenplay: str, start_page: int, end_page: int) -> str:
+        """Extract specific page range from screenplay."""
+        lines = screenplay.split('\n')
+        start_line = start_page * 55
+        end_line = end_page * 55
+        return '\n'.join(lines[start_line:end_line])
+
+    def _analyze_want_clear(self, screenplay: str, opening_text: str) -> Dict[str, Any]:
+        """
+        Analyze want/desire clarity (conscious goal).
+
+        Truby: "Protagonist must want something - desire line drives story."
+        McKee: "Protagonist's conscious desire is what story tracks."
+        """
+        clear = False
+        want_list = []
+
+        # Check for want/desire markers
+        want_count = 0
+        for marker in self.want_clear_markers:
+            count = screenplay.lower().count(marker)
+            want_count += count
+            if count > 0:
+                # Extract want context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        want_list.append(line.strip()[:100])
+                        if len(want_list) >= 20:
+                            break
+
+        if want_count >= 8:
+            clear = True
+        elif want_count >= 5:
+            clear = True
+
+        return {
+            "clear": clear,
+            "count": want_count,
+            "want_list": want_list
+        }
+
+    def _analyze_need_identified(self, screenplay: str, climax_text: str) -> Dict[str, Any]:
+        """
+        Analyze need identification (unconscious/deeper need).
+
+        Truby: "Need is what protagonist must learn/gain - often unconscious."
+        McKee: "True character emerges under pressure - reveals deeper need."
+        """
+        identified = False
+        need_list = []
+
+        # Check for need markers
+        need_count = 0
+        for marker in self.need_markers:
+            count = screenplay.lower().count(marker)
+            need_count += count
+            if count > 0:
+                # Extract need context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        need_list.append(line.strip()[:100])
+                        if len(need_list) >= 20:
+                            break
+
+        # Higher weight for need markers in climax (Truby: need often fulfilled at climax)
+        climax_need_count = 0
+        for marker in self.need_markers:
+            climax_need_count += climax_text.lower().count(marker)
+
+        if need_count >= 5 or climax_need_count >= 2:
+            identified = True
+        elif need_count >= 3:
+            identified = True
+
+        return {
+            "identified": identified,
+            "count": need_count,
+            "climax_count": climax_need_count,
+            "need_list": need_list
+        }
+
+    def _analyze_want_vs_need_distinction(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze want vs need distinction (Truby's key insight).
+
+        Truby: "Want ≠ Need - protagonist wants X but needs Y. Best stories show this distinction."
+        """
+        distinct = False
+
+        # Check for want vs need distinction markers
+        distinction_count = 0
+        for marker in self.want_vs_need_markers:
+            distinction_count += screenplay.lower().count(marker)
+
+        if distinction_count >= 2:
+            distinct = True
+        elif distinction_count >= 1:
+            distinct = True
+
+        return {
+            "distinct": distinct,
+            "count": distinction_count
+        }
+
+    def _analyze_goal_specific(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze goal specificity (measurable objective).
+
+        Field/Truby: "Goal must be specific, concrete, measurable - vague goals = weak story."
+        """
+        specific = False
+        goal_statements = []
+
+        # Check for goal specific markers
+        goal_count = 0
+        for marker in self.goal_specific_markers:
+            count = screenplay.lower().count(marker)
+            goal_count += count
+            if count > 0:
+                # Extract goal statements
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        goal_statements.append(line.strip()[:100])
+                        if len(goal_statements) >= 20:
+                            break
+
+        if goal_count >= 10:
+            specific = True
+        elif goal_count >= 7:
+            specific = True
+
+        return {
+            "specific": specific,
+            "count": goal_count,
+            "goal_statements": goal_statements
+        }
+
+    def _analyze_goal_clarity(self, screenplay: str, opening_text: str) -> Dict[str, Any]:
+        """
+        Analyze goal clarity (how clear/specific is goal).
+
+        McKee/Field: "Audience must know protagonist's goal clearly - what are they after?"
+        """
+        clarity = 0.0
+
+        # Count want + goal markers
+        total_markers = 0
+        for marker in self.want_clear_markers + self.goal_specific_markers:
+            total_markers += opening_text.lower().count(marker)
+
+        # Calculate clarity score
+        if total_markers >= 10:
+            clarity = 1.0
+        elif total_markers >= 7:
+            clarity = 0.8
+        elif total_markers >= 5:
+            clarity = 0.6
+        elif total_markers >= 3:
+            clarity = 0.4
+        else:
+            clarity = 0.2
+
+        return {
+            "clarity": clarity,
+            "marker_count": total_markers
+        }
+
+    def _analyze_motivation_established_early(self, opening_text: str) -> Dict[str, Any]:
+        """
+        Analyze motivation established early (first 10-15 pages).
+
+        Field/Snyder: "Protagonist's goal must be clear in first 10-15 pages."
+        Truby: "Desire should be established as early as possible."
+        """
+        established = False
+        description = ""
+
+        # Check for want/goal markers in opening
+        opening_count = 0
+        for marker in self.want_clear_markers + self.goal_specific_markers:
+            opening_count += opening_text.lower().count(marker)
+
+        if opening_count >= 5:
+            established = True
+            description = "Motivation clearly established in opening"
+        elif opening_count >= 3:
+            established = True
+            description = "Motivation established but could be clearer"
+        else:
+            description = "Motivation not clearly established in opening"
+
+        return {
+            "established": established,
+            "count": opening_count,
+            "description": description
+        }
+
+    def _analyze_motivation_consistent(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze motivation consistency (doesn't change arbitrarily).
+
+        Truby: "Protagonist's desire should remain consistent - not change arbitrarily."
+        McKee: "Character consistency - motivation shouldn't flip without reason."
+        """
+        consistent = True
+
+        # Check for motivation consistent markers (positive)
+        consistent_count = 0
+        for marker in self.motivation_consistent_markers:
+            consistent_count += screenplay.lower().count(marker)
+
+        # Check for inconsistent markers (negative - penalize)
+        inconsistent_count = 0
+        for marker in self.inconsistent_motivation_markers:
+            inconsistent_count += screenplay.lower().count(marker)
+
+        # More inconsistent markers = not consistent
+        if inconsistent_count >= 3:
+            consistent = False
+        elif inconsistent_count >= 2:
+            consistent = False
+
+        return {
+            "consistent": consistent,
+            "consistent_count": consistent_count,
+            "inconsistent_count": inconsistent_count
+        }
+
+    def _analyze_obstacles_to_goal(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze obstacles to goal (active opposition).
+
+        McKee: "Protagonist must face obstacles - opposition tests desire."
+        Field: "Conflict = obstacles to protagonist's goal."
+        """
+        present = False
+        obstacles_list = []
+
+        # Check for obstacle markers
+        obstacle_count = 0
+        for marker in self.obstacles_markers:
+            count = screenplay.lower().count(marker)
+            obstacle_count += count
+            if count > 0:
+                # Extract obstacle context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        obstacles_list.append(line.strip()[:100])
+                        if len(obstacles_list) >= 20:
+                            break
+
+        if obstacle_count >= 5:
+            present = True
+        elif obstacle_count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": obstacle_count,
+            "obstacles_list": obstacles_list
+        }
+
+    def _analyze_motivation_drives_action(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze motivation drives action (protagonist actively pursues goal).
+
+        Truby: "Desire drives plot - protagonist actively pursues goal."
+        McKee: "Protagonist must be active, not passive - drives story."
+        """
+        drives = False
+
+        # Check for drives action markers
+        action_count = 0
+        for marker in self.drives_action_markers:
+            action_count += screenplay.lower().count(marker)
+
+        if action_count >= 10:
+            drives = True
+        elif action_count >= 7:
+            drives = True
+
+        return {
+            "drives": drives,
+            "count": action_count
+        }
+
+    def _analyze_emotional_motivation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze emotional motivation (why protagonist cares).
+
+        McKee: "Audience cares when protagonist cares - emotional investment."
+        Truby: "Emotional motivation = why protagonist wants/needs this."
+        """
+        present = False
+
+        # Check for emotional motivation markers
+        emotional_count = 0
+        for marker in self.emotional_motivation_markers:
+            emotional_count += screenplay.lower().count(marker)
+
+        if emotional_count >= 5:
+            present = True
+        elif emotional_count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": emotional_count
+        }
+
+    def _analyze_motivation_relatable(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze motivation relatable (audience understands).
+
+        McKee: "Universal human desires - audience relates to protagonist's want."
+        Campbell: "Mythic resonance - desire speaks to universal human needs."
+        """
+        relatable = False
+
+        # Check for relatable markers
+        relatable_count = 0
+        for marker in self.motivation_relatable_markers:
+            relatable_count += screenplay.lower().count(marker)
+
+        # Also check for universal desires (love, safety, belonging, achievement, etc.)
+        universal_desires = ["love", "family", "home", "safety", "freedom", "justice", "revenge", "redemption"]
+        for desire in universal_desires:
+            relatable_count += screenplay.lower().count(desire)
+
+        if relatable_count >= 5:
+            relatable = True
+        elif relatable_count >= 3:
+            relatable = True
+
+        return {
+            "relatable": relatable,
+            "count": relatable_count
+        }
+
+    def _analyze_antagonist_motivation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze antagonist motivation (opposing goal).
+
+        Seger: "Antagonist must have clear motivation - opposing goal to protagonist."
+        McKee: "Best antagonists have their own goals, not just opposition."
+        """
+        clear = False
+
+        # Check for antagonist motivation markers
+        antagonist_count = 0
+        for marker in self.antagonist_motivation_markers:
+            antagonist_count += screenplay.lower().count(marker)
+
+        if antagonist_count >= 5:
+            clear = True
+        elif antagonist_count >= 3:
+            clear = True
+
+        return {
+            "clear": clear,
+            "count": antagonist_count
+        }
+
+    def _analyze_supporting_motivations(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze supporting character motivations (allies have goals).
+
+        McKee: "Supporting characters have their own desires - not just helping protagonist."
+        Truby: "Each character should have their own desire line."
+        """
+        present = False
+
+        # Check for supporting motivation markers
+        supporting_count = 0
+        for marker in self.supporting_motivations_markers:
+            supporting_count += screenplay.lower().count(marker)
+
+        if supporting_count >= 3:
+            present = True
+        elif supporting_count >= 2:
+            present = True
+
+        return {
+            "present": present,
+            "count": supporting_count
+        }
+
+    def _detect_unclear_motivation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect unclear motivation (PENALTY - audience doesn't know what protagonist wants).
+
+        Truby: "If audience doesn't know what protagonist wants, they're lost."
+        """
+        detected = False
+        penalty = False
+
+        # Check for unclear motivation markers
+        unclear_count = 0
+        for marker in self.unclear_motivation_markers:
+            unclear_count += screenplay.lower().count(marker)
+
+        if unclear_count >= 3:
+            detected = True
+            penalty = True
+        elif unclear_count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": unclear_count
+        }
+
+    def _detect_passive_protagonist(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect passive protagonist (PENALTY - no clear drive/desire).
+
+        McKee: "Passive protagonist = weak story. Protagonist must drive action."
+        Field: "Active protagonist essential - things don't just happen to them."
+        """
+        detected = False
+        penalty = False
+
+        # Check for passive protagonist markers
+        passive_count = 0
+        for marker in self.passive_protagonist_markers:
+            passive_count += screenplay.lower().count(marker)
+
+        if passive_count >= 5:
+            detected = True
+            penalty = True
+        elif passive_count >= 3:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": passive_count
+        }
+
+    def _detect_inconsistent_motivation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect inconsistent motivation (PENALTY - changes arbitrarily).
+
+        Truby: "Protagonist's desire shouldn't change arbitrarily - motivation must be consistent."
+        """
+        detected = False
+        penalty = False
+
+        # Check for inconsistent motivation markers
+        inconsistent_count = 0
+        for marker in self.inconsistent_motivation_markers:
+            inconsistent_count += screenplay.lower().count(marker)
+
+        if inconsistent_count >= 3:
+            detected = True
+            penalty = True
+        elif inconsistent_count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": inconsistent_count
+        }
+
+    def _calculate_overall_motivation_quality(self, profile: MotivationProfile) -> float:
+        """Calculate overall motivation quality score."""
+        scores = [
+            1.0 if profile.want_clear else 0.2,  # CRITICAL
+            1.0 if profile.need_identified else 0.6,  # Important but not all stories
+            1.0 if profile.want_vs_need_distinction else 0.7,  # Sophisticated storytelling
+            1.0 if profile.goal_specific else 0.4,  # CRITICAL
+            profile.goal_clarity,  # Variable
+            1.0 if profile.motivation_established_early else 0.3,  # CRITICAL
+            1.0 if profile.motivation_consistent else 0.4,  # Important
+            1.0 if profile.obstacles_to_goal else 0.5,  # Important
+            1.0 if profile.motivation_drives_action else 0.2,  # CRITICAL
+            1.0 if profile.emotional_motivation else 0.6,  # Important
+            1.0 if profile.motivation_relatable else 0.7,  # Nice to have
+            1.0 if profile.antagonist_motivation_clear else 0.6,  # Important
+            1.0 if profile.supporting_motivations else 0.8,  # Nice to have
+            0.0 if profile.unclear_motivation_detected else 1.0,  # PENALTY
+            0.0 if profile.passive_protagonist_detected else 1.0,  # PENALTY
+            0.0 if profile.inconsistent_motivation_detected else 1.0  # PENALTY
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_motivation_rules(self, profile: MotivationProfile, want_clear: Dict,
+                                need_identified: Dict, want_vs_need: Dict,
+                                goal_specific: Dict, goal_clarity: Dict,
+                                motivation_early: Dict, motivation_consistent: Dict,
+                                obstacles: Dict, drives_action: Dict,
+                                emotional_motivation: Dict, motivation_relatable: Dict,
+                                antagonist_motivation: Dict, supporting_motivations: Dict,
+                                unclear_motivation: Dict, passive_protagonist: Dict,
+                                inconsistent_motivation: Dict) -> List[Dict]:
+        """Check motivation against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "MOTIVATION.R001":
+                # Want/Desire Clear
+                if not profile.want_clear:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Want/desire unclear - audience doesn't know what protagonist wants",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R002":
+                # Need Identified
+                if not profile.need_identified:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Need not identified - protagonist lacks deeper unconscious need",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R003":
+                # Want vs Need Distinction
+                if not profile.want_vs_need_distinction:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Want vs need not distinguished - lacks Truby's sophisticated storytelling",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R004":
+                # Goal Specific
+                if not profile.goal_specific:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Goal not specific - vague goals = weak story",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R005":
+                # Goal Clarity
+                if profile.goal_clarity < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Goal clarity weak ({profile.goal_clarity:.1f}/1.0) - audience unclear on protagonist's goal",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R006":
+                # Motivation Established Early
+                if not profile.motivation_established_early:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Motivation not established in first 10-15 pages",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R007":
+                # Motivation Consistent
+                if not profile.motivation_consistent:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Motivation inconsistent - changes arbitrarily without reason",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R008":
+                # Obstacles to Goal
+                if not profile.obstacles_to_goal:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Insufficient obstacles - protagonist's desire not tested",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R009":
+                # Motivation Drives Action
+                if not profile.motivation_drives_action:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Motivation doesn't drive action - passive protagonist",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R010":
+                # Emotional Motivation
+                if not profile.emotional_motivation:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Emotional motivation weak - why protagonist cares not clear",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R011":
+                # Motivation Relatable
+                if not profile.motivation_relatable:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Motivation not relatable - audience can't connect with protagonist's desire",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R012":
+                # Antagonist Motivation Clear
+                if not profile.antagonist_motivation_clear:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Antagonist motivation unclear - opposing goal not defined",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R013":
+                # Avoid Unclear Motivation
+                if profile.unclear_motivation_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Unclear motivation detected - audience lost on what protagonist wants",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R014":
+                # Avoid Passive Protagonist
+                if profile.passive_protagonist_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Passive protagonist detected - lacks clear drive and desire",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "MOTIVATION.R015":
+                # Avoid Inconsistent Motivation
+                if profile.inconsistent_motivation_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Inconsistent motivation detected - changes arbitrarily",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_motivation_score(self, profile: MotivationProfile, violations: List) -> float:
+        """Calculate overall motivation score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for major issues
+        if profile.unclear_motivation_detected:
+            score -= 25  # critical penalty
+        if profile.passive_protagonist_detected:
+            score -= 25  # critical penalty
+        if profile.inconsistent_motivation_detected:
+            score -= 15
+
+        # Bonus for excellence
+        if profile.overall_motivation_quality > 0.85:
+            score += 5
+        elif profile.overall_motivation_quality > 0.75:
+            score += 3
+
+        if profile.want_clear and profile.motivation_established_early:
+            score += 3
+
+        if profile.want_vs_need_distinction:
+            score += 3  # Sophisticated storytelling (Truby)
+
+        if profile.motivation_drives_action:
+            score += 2
+
+        if profile.obstacles_to_goal:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: MotivationProfile,
+                          violations: List) -> str:
+        """Generate motivation diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Motivation clear with protagonist actively pursuing specific goal"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Motivation present but could be clearer or more active"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Motivation problems - unclear goal or passive protagonist"
+        else:
+            level = "POOR"
+            summary = "Major motivation problems - unclear desire or passive approach"
+
+        diagnosis = f"MOTIVATION {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.want_clear:
+            issues.append("unclear want")
+        if not profile.motivation_established_early:
+            issues.append("late establishment")
+        if profile.unclear_motivation_detected:
+            issues.append("confusing motivation")
+        if profile.passive_protagonist_detected:
+            issues.append("passive protagonist")
+        if profile.inconsistent_motivation_detected:
+            issues.append("inconsistent desire")
+        if not profile.motivation_drives_action:
+            issues.append("doesn't drive action")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: MotivationProfile) -> List[str]:
+        """Generate specific motivation recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.want_clear:
+            recommendations.append("Clarify want - Truby: 'Protagonist must want something - desire line drives story' - establish clear conscious goal")
+
+        if not profile.motivation_established_early:
+            recommendations.append("Establish motivation early - Field/Snyder: 'Protagonist's goal must be clear in first 10-15 pages' - don't wait")
+
+        if profile.passive_protagonist_detected:
+            recommendations.append("Activate protagonist - McKee: 'Passive protagonist = weak story. Protagonist must drive action' - make them pursue goal actively")
+
+        if profile.unclear_motivation_detected:
+            recommendations.append("Clarify motivation - Truby: 'If audience doesn't know what protagonist wants, they're lost' - make desire explicit")
+
+        if not profile.want_vs_need_distinction:
+            recommendations.append("Distinguish want vs need - Truby: 'Want ≠ Need - protagonist wants X but needs Y. Best stories show this distinction' - add deeper layer")
+
+        if not profile.motivation_drives_action:
+            recommendations.append("Let motivation drive action - Truby: 'Desire drives plot - protagonist actively pursues goal' - connect motivation to plot progression")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study Truby's Anatomy of Story - want, need, desire line fundamental")
+            recommendations.append("Study McKee's Story - character motivation essential")
+
+        return recommendations[:5]
+
+    def export_motivation_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export motivation features for correlation/analysis.
+
+        Returns structured data with motivation metrics.
+        """
+        page_count = self._estimate_page_count(screenplay_text)
+        opening_text = self._extract_pages(screenplay_text, 0, 15)
+        want_clear = self._analyze_want_clear(screenplay_text, opening_text)
+        drives_action = self._analyze_motivation_drives_action(screenplay_text)
+
+        return {
+            "motivation": {
+                "want_clear": want_clear["clear"],
+                "drives_action": drives_action["drives"]
+            },
+            "meta": {
+                "source": "DrMotivation",
+                "focus": "Character motivation and desire"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrMotivationAnalysis(DrMotivation):
+    """Alias for compatibility with test framework."""
+    pass

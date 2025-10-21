@@ -1,0 +1,23 @@
+# Configuração Estendida OMEGA-ASCENT
+version: 4.0.0
+stage: extended_core
+
+features:
+  coverage_tracking: true
+  spot_checking: true
+  arc_extraction: true
+  motif_tracking: true
+  locality_gates: true
+  kmedoids_clustering: true
+  citation_validation: true
+  motif_routing: true
+
+optimization:
+  cache_enabled: true
+  parallel_processing: true
+  memory_limit_gb: 4
+
+validation:
+  strict_mode: true
+  auto_correction: true
+  error_threshold: 0.1

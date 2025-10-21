@@ -1,0 +1,14 @@
+============================================================
+CASE: b
+TIMESTAMP: 2025-09-09T20:35:31.135389
+ELAPSED: 0.5s (simulated)
+============================================================
+
+INPUT:
+Faça uma análise profunda e detalhada sobre a evolução da montagem cinematográfica desde D.W. Griffith até Christopher Nolan.
+
+RESPONSE:
+[DEEP MODE] A evolução da montagem cinematográfica representa uma das transformações mais significativas da linguagem audiovisual...
+
+LENGTH: 132 chars
+NON-EMPTY: True

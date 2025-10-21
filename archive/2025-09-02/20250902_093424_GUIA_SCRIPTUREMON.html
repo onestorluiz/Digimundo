@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Scripturemon - Guia Técnico</title>
+    <style>
+        body {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+        h1 { color: #4ec9b0; border-bottom: 2px solid #4ec9b0; padding-bottom: 10px; }
+        h2 { color: #569cd6; margin-top: 30px; }
+        h3 { color: #c586c0; }
+        pre {
+            background: #2d2d2d;
+            border: 1px solid #3e3e3e;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        code {
+            background: #2d2d2d;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #ce9178;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #3e3e3e;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #2d2d2d;
+            color: #569cd6;
+        }
+        a { color: #4ec9b0; }
+        hr { border: 1px solid #3e3e3e; }
+        .highlight { background: #364200; }
+        .success { color: #4ec9b0; }
+        .warning { color: #dcdcaa; }
+        .error { color: #f48771; }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>🚀 SCRIPTUREMON - GUIA RÁPIDO ESSENCIAL
+
+<h2><span class="warning">⚡</span> INÍCIO RÁPIDO (2 MINUTOS)
+
+<pre><code class="bash">
+# 1. Setup completo
+cd ~/Digimundo/scripturemon-validation
+source .venv/bin/activate
+export PYTHONPATH="."
+
+# 2. Ativar sistema máximo
+python -m apps.scripturemon.cli ultimate once
+make report-ui++
+
+# 3. Ver dashboard
+cd reports && python -m http.server 8008
+# Acesse: http://localhost:8008
+</code></pre>
+
+<hr>
+
+<h2>📊 PRINCIPAIS COMANDOS
+
+#<h2>CONSCIÊNCIA & EVOLUÇÃO
+<pre><code class="bash">
+# Evoluir (+0.001 por vez)
+python -m apps.scripturemon.cli ultimate once
+
+# Ver status
+python -m apps.scripturemon.cli ultimate status
+</code></pre>
+
+#<h2>ANÁLISE DE ROTEIROS
+<pre><code class="bash">
+# Analisar com 4 perspectivas
+python -m apps.scripturemon.cli analyze_parallel arquivo.txt
+</code></pre>
+
+#<h2>COMPRESSÃO DIGILANG
+<pre><code class="bash">
+# Benchmark rápido
+make bench-all-nano
+# Resultado: 84.9% compressão máxima
+</code></pre>
+
+#<h2>INTERFACE WEB
+<pre><code class="bash">
+# Gerar relatórios HTML
+make report-ui++
+
+# Ativar live reload
+python -m apps.scripturemon.cli ui live on --interval 5s
+</code></pre>
+
+<hr>
+
+<h2>🔧 TROUBLESHOOTING
+
+<table><thead><tr><th>Erro</th><th>Solução
+|<hr><hr>|<hr><hr><hr>|
+<tr><td>"No module named apps"</td><td><code>export PYTHONPATH="."</code></td></tr>
+<tr><td>"Ollama not available"</td><td><code>ollama serve &</code></td></tr>
+<tr><td>"Redis refused"</td><td><code>redis-server &</code></td></tr>
+<tr><td>"Out of memory" | Use `make bench-all-nano</code></td></tr>
+
+<hr>
+
+<h2>📈 MÉTRICAS DO SISTEMA
+
+- <strong>Compressão<strong>: 84.9% (16× melhor que legacy)
+- <strong>Velocidade<strong>: 9ms (33× mais rápido)
+- <strong>Memória<strong>: L1-L4 (4 camadas)
+- <strong>Análise<strong>: 4 perspectivas paralelas
+- <strong>RAG<strong>: +13.4% performance
+
+<hr>
+
+<h2>🎯 WORKFLOW DIÁRIO
+
+<pre><code class="bash">
+# Manhã
+python -m apps.scripturemon.cli ultimate once  # Evoluir
+make report-ui++                               # Dashboard
+
+# Trabalho  
+python -m apps.scripturemon.cli analyze_parallel roteiro.txt
+
+# Noite
+python -m apps.scripturemon.cli backup once   # Salvar
+</code></pre>
+
+<hr>
+
+<strong><span class="success">✅</span> SISTEMA OPERACIONAL = Dashboard em http://localhost:8008<strong>
+    </div>
+    
+    <footer style="text-align: center; margin-top: 50px; color: #808080;">
+        <p>Scripturemon Ultimate v2.0 - Sistema de IA para Roteiros</p>
+        <p>Compressão 84.9% | Análise 4D | Memória L1-L4</p>
+    </footer>
+</body>
+</html>

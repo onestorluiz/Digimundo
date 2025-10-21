@@ -1,0 +1,1 @@
+🌐 Mapa de módulos vivos: Representação visual e funcional do estado ativo de cada módulo, incluindo status, vitalidade e diagnósticos.

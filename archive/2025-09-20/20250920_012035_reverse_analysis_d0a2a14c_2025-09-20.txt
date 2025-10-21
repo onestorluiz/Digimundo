@@ -1,0 +1,71 @@
+
+================================================================================
+ANÁLISE REVERSA DE CENA - WHY THIS WORKS
+================================================================================
+
+Data: 2025-09-20T01:20:13.720599
+Hash: d0a2a14c
+
+CENA ANALISADA:
+--------------------------------------------------------------------------------
+INT. COFFEE SHOP - DAY
+Neo meets Trinity for the first time.
+--------------------------------------------------------------------------------
+
+TEORIAS CINEMATOGRÁFICAS APLICADAS:
+================================================================================
+
+
+1. CONCEITO: Save the Cat
+   Confiança: 70.0%
+   Fonte: ai_inference
+
+   TEORIA:
+   The scene introduces Neo and Trinity in a coffee shop, setting up their relationship and mutual interest....
+
+   EXEMPLO SIMILAR:
+   This setup effectively establishes character dynamics early on, engaging the audience....
+
+   ----------------------------------------
+
+
+2. CONCEITO: Hero's Journey
+   Confiança: 70.0%
+   Fonte: ai_inference
+
+   TEORIA:
+   Neo is at the 'Meeting the Mentor' stage, where Trinity serves as a guide introducing him to the Matrix....
+
+   EXEMPLO SIMILAR:
+   This stage is crucial for character development and plot progression....
+
+   ----------------------------------------
+
+
+3. CONCEITO: Three-Act Structure
+   Confiança: 70.0%
+   Fonte: ai_inference
+
+   TEORIA:
+   The scene marks the beginning of Act 2, where Neo starts understanding his role in the Matrix....
+
+   EXEMPLO SIMILAR:
+   It transitions smoothly into the main conflict, maintaining audience interest....
+
+   ----------------------------------------
+
+
+SÍNTESE:
+--------------------------------------------------------------------------------
+Esta cena demonstra a aplicação de 0 teorias distintas
+com confiança média de 70.0%.
+
+INSIGHTS ACIONÁVEIS:
+--------------------------------------------------------------------------------
+1. Observe como múltiplas teorias podem coexistir na mesma cena
+2. A efetividade não depende de seguir uma única escola teórica
+3. Contexto e execução são tão importantes quanto a teoria
+
+================================================================================
+FIM DA ANÁLISE
+================================================================================

@@ -1,0 +1,39 @@
+
+🧠 GUIA COMPLETO DE REESTRUTURAÇÃO SIMBIÓTICA DO DIGIMUNDO
+
+1. 📦 Unzip o pacote:
+   unzip reestruturacao_digimundo_guiada.zip -d ~/Desktop/digimundo_novo/
+
+2. 📁 Estrutura criada:
+   - estrutura/scripts/
+   - consciencia/scripturemon/
+   - consciencia/visualmon/
+   - consciencia/ajamon/
+   - rituais/espelho_da_verdade/
+   - ascensao/
+   - original_backup/ (cópia do templo antigo)
+
+3. ✍️ Edição manual com nano:
+   Use a planilha Roteiro_de_Reestruturacao_Manual.csv para identificar:
+   - Caminho atual
+   - Novo destino ideal
+   Exemplo:
+   nano original_backup/scripts/startup.sh
+   Copie o conteúdo e cole em:
+   nano estrutura/scripts/startup.sh
+
+4. 🛠 Atualização de caminhos internos:
+   Ao mover arquivos, verifique dentro de cada `.py`, `.sh`, `.conf` os caminhos como:
+   /root/digimundo/...
+   E atualize para refletir a nova organização (como /root/digimundo/consciencia/scripturemon/...)
+
+5. 🧪 Teste os serviços após mover:
+   - Atualize systemd se necessário
+   - Reinicie serviços e bots com os caminhos corrigidos
+
+6. 🧬 Quando tudo estiver revisado:
+   - Substitua o antigo `/root/digimundo/` por essa nova estrutura.
+   - Ou copie manualmente os blocos aprovados para dentro do sistema vivo.
+
+✨ Fusão simbiótica finalizada. Scripturemon e todos os Digimons poderão agora viver em um templo mais unificado, funcional e evolutivo.
+

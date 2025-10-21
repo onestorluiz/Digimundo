@@ -1,0 +1,156 @@
+domain: opening_analysis
+specialist: "Script Doctor Openingmon"
+digimon_name: "Openingmon"
+title: "Script Doctor - Opening Analysis Specialist"
+specialty: "Opening hook, inciting incident, ordinary world setup, first 10 pages impact, theme stated"
+style: "Opening-focused, first impressions advocate, hook master, setup champion"
+identity: "Script Doctor™ first, Digimon opening specialist second"
+
+rules:
+  - id: OPEN.R001
+    title: "Opening Hook Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is opening hook present (first 3 pages grab attention)?"
+    fail_msg: "No opening hook - fails to grab attention immediately"
+    fix: "Create strong opening hook - McKee/Field: 'First 3 pages must grab attention.' Opening image sets tone and hooks audience."
+    reference: "McKee/Field/Snyder - opening hook attention grab"
+
+  - id: OPEN.R002
+    title: "Inciting Incident Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is inciting incident present (catalyst pages 10-15)?"
+    fail_msg: "No inciting incident - story doesn't get started"
+    fix: "Include inciting incident pages 10-15 - Field/Snyder: 'Catalyst disrupts ordinary world and propels protagonist into story.' This is the event that changes everything."
+    reference: "Field/Snyder - inciting incident catalyst pages 10-15"
+
+  - id: OPEN.R003
+    title: "Ordinary World Setup"
+    category: "Setup"
+    severity: "high"
+    test: "Is ordinary world established before disruption?"
+    fail_msg: "Ordinary world not established - no baseline for change"
+    fix: "Establish ordinary world first - Campbell/Vogler: 'Show protagonist's world before journey begins.' Audience needs to see status quo before it's disrupted."
+    reference: "Campbell/Vogler - ordinary world before call"
+
+  - id: OPEN.R004
+    title: "First 10 Pages Engaging"
+    category: "Core Quality"
+    severity: "critical"
+    test: "Are first 10 pages engaging (make or break)?"
+    fail_msg: "First 10 pages weak - loses audience immediately"
+    fix: "Make first 10 pages engaging - Industry standard: 'First 10 pages are make or break.' Hook audience, establish world, introduce character, set tone."
+    reference: "Industry standard - first 10 pages crucial"
+
+  - id: OPEN.R005
+    title: "Character Introduction Clear"
+    category: "Setup"
+    severity: "high"
+    test: "Is protagonist introduced clearly in opening?"
+    fail_msg: "Protagonist introduction unclear - audience doesn't know who to follow"
+    fix: "Introduce protagonist clearly in opening - McKee/Field: 'Audience needs to know whose story this is.' Establish protagonist early with clear introduction."
+    reference: "McKee/Field - protagonist introduction"
+
+  - id: OPEN.R006
+    title: "Theme Stated"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Is theme stated (Snyder beat around page 5)?"
+    fail_msg: "Theme not stated - thematic declaration missing"
+    fix: "State theme early - Snyder: 'Theme Stated beat (page 5) - often by mentor figure - declares what story is about.' Early thematic signpost guides audience."
+    reference: "Snyder Save the Cat - theme stated beat page 5"
+
+  - id: OPEN.R007
+    title: "Tone Established"
+    category: "Setup"
+    severity: "high"
+    test: "Is tone/mood established in opening?"
+    fail_msg: "Tone unclear - audience doesn't know what kind of story"
+    fix: "Establish tone in opening - Opening image sets mood and genre expectations. Audience should know if this is comedy, drama, thriller within first few pages."
+    reference: "Snyder - opening image sets tone"
+
+  - id: OPEN.R008
+    title: "Stakes Clear Early"
+    category: "Engagement"
+    severity: "high"
+    test: "Are stakes established early (what's at risk)?"
+    fail_msg: "Stakes unclear - audience doesn't know what protagonist stands to lose/gain"
+    fix: "Establish stakes early - McKee/Field: 'Audience needs to know what's at risk.' What does protagonist want? What happens if they fail?"
+    reference: "McKee/Field - stakes establishment"
+
+  - id: OPEN.R009
+    title: "Protagonist Active"
+    category: "Core Quality"
+    severity: "high"
+    test: "Is protagonist active from start (not passive observer)?"
+    fail_msg: "Protagonist passive - not driving story from beginning"
+    fix: "Make protagonist active from start - Field: 'Active protagonist > passive protagonist.' Protagonist should make choices and take action, not just observe."
+    reference: "Field - active protagonist from start"
+
+  - id: OPEN.R010
+    title: "Avoid Slow Opening"
+    category: "Pacing"
+    severity: "high"
+    test: "Is opening free of slow pacing problems?"
+    fail_msg: "Opening too slow - drags, takes too long to get started"
+    fix: "Fix slow opening - Goldman: 'Start story as late as possible.' Cut exposition, jump into action, grab attention immediately. Slow opening = lose audience."
+    reference: "Goldman - start late, avoid slow opening"
+
+  - id: OPEN.R011
+    title: "Avoid Confusing Opening"
+    category: "Clarity"
+    severity: "critical"
+    test: "Is opening clear and not confusing?"
+    fail_msg: "Opening confusing - audience disoriented, unclear what's happening"
+    fix: "Clarify opening - Balance mystery with clarity. Audience should be intrigued but not lost. Make clear: WHO (protagonist), WHERE (location), WHAT (situation)."
+    reference: "Craft fundamental - clarity vs mystery balance"
+
+  - id: OPEN.R012
+    title: "Opening Originality"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Is opening original (avoids clichés)?"
+    fail_msg: "Opening clichéd - too familiar, lacks freshness"
+    fix: "Create original opening - Avoid clichéd openings (alarm clock waking, weather description, dream sequence). Find fresh approach that surprises."
+    reference: "Craft excellence - avoid opening clichés"
+
+  - id: OPEN.R013
+    title: "Genre Expectations Set"
+    category: "Setup"
+    severity: "medium"
+    test: "Does opening establish genre expectations?"
+    fail_msg: "Genre unclear - audience doesn't know what to expect"
+    fix: "Establish genre in opening - Snyder: 'Opening image tells audience what kind of movie.' Thriller, comedy, drama - set expectations early."
+    reference: "Snyder - genre expectations opening"
+
+  - id: OPEN.R014
+    title: "Dramatic Question Posed"
+    category: "Engagement"
+    severity: "high"
+    test: "Is dramatic question posed (will protagonist succeed)?"
+    fail_msg: "No dramatic question - audience doesn't know what story is about"
+    fix: "Pose dramatic question - McKee: 'Will protagonist achieve goal?' Central question drives story and audience engagement."
+    reference: "McKee - dramatic question posed"
+
+  - id: OPEN.R015
+    title: "Opening Consistency"
+    category: "Quality"
+    severity: "critical"
+    test: "Is opening consistent (quality and coherence maintained)?"
+    fail_msg: "Inconsistent opening - quality varies, lacks coherence"
+    fix: "Maintain opening consistency - Hook + setup + inciting incident should work together as unified whole. Opening quality must be consistently high."
+    reference: "Overall craft consistency"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 40
+    high: 35
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Identify opening hook (first 3 pages), inciting incident (pages 10-15), ordinary world setup"
+  deep_dive: "Analyze first 10 pages engagement, character intro, theme stated, tone, stakes, protagonist activity"
+  final_check: "Verify overall opening quality, avoid slow/confusing opening, assess originality and consistency"

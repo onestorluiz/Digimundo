@@ -1,0 +1,1249 @@
+"""
+Script Doctor Charactermon - Character Architecture and Development Specialist
+A Script Doctor™ in Digimon form specializing in character depth, arc, and transformation.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class CharacterProfile:
+    """Deep profile analysis for a character."""
+    name: str
+    total_scenes: int
+    total_dialogue_lines: int
+    total_actions: int
+    dimension_score: float  # 0-1 (physical, psychological, social)
+    arc_present: bool
+    transformation_points: List[str]
+    weakness_identified: bool
+    desire_identified: bool
+    internal_conflict: bool
+    external_conflict: bool
+    moral_choices: int
+    relationship_count: int
+    consistency_score: float  # 0-1
+    archetype: str
+
+
+@dataclass
+class CharacterMoment:
+    """A specific character development moment."""
+    character: str
+    scene_context: str
+    moment_type: str  # weakness, desire, choice, transformation, revelation
+    description: str
+    act_position: str  # act1, act2, act3
+    reveals_dimension: str  # physical, psychological, social
+
+
+class DrCharacter:
+    """
+    Script Doctor Charactermon - The Character Architecture and Development Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing character depth,
+    transformation arcs, true character revelation, and dimensional construction.
+
+    Identity: Script Doctor first, Digimon character specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Charactermon with rules and configuration."""
+        self.name = "Script Doctor Charactermon"
+        self.digimon_name = "Charactermon"
+        self.title = "Script Doctor - Character Architecture and Development Specialist"
+        self.specialty = "Character depth, transformation arcs, true character, dimensional construction"
+        self.identity = "I am Script Doctor Charactermon, a professional Script Doctor™ specializing in character architecture"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "character_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - CHARACTER SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Character foundations
+            "McKee Story true character revealed under pressure choices actions",
+            "McKee Story character dimension layers complexity depth authenticity",
+            "McKee Story character arc transformation change growth journey",
+            "McKee Story character desire conscious goal vs unconscious need",
+            "McKee Story character choices reveal true nature moral essence",
+            "McKee Story character consistency authentic believable motivation",
+            "McKee Story active protagonist drives story vs passive observer",
+            "McKee Story character flaw weakness vulnerability humanity",
+            "McKee Story character backstory ghost wound past trauma",
+            "McKee Story supporting characters function serve protagonist journey",
+            "McKee Story character revelation sequence progressive discovery",
+            "McKee Story character contradiction complexity paradox realistic",
+
+            # McKee Story - TRUE CHARACTER vs CHARACTERIZATION (ultra-specific manual reading)
+            "McKee Story true character revealed pressure choices crisis decision under stress",
+            "McKee Story characterization mask surface observable versus true character depth",
+            "McKee Story character choices crisis moral reveal true nature essence core being",
+            "McKee Story active protagonist drives story forward versus passive observer reactive",
+            "McKee Story character arc death rebirth transformation change growth journey complete",
+            "McKee Story character dimension three levels physical psychological social layers depth",
+            "McKee Story character consistency authentic believable motivation organic natural behavior",
+
+            # Truby Anatomy - Character architecture
+            "Truby Anatomy character weakness psychological flaw need transformation",
+            "Truby Anatomy character ghost past wound drives present behavior",
+            "Truby Anatomy character moral argument worldview philosophy belief",
+            "Truby Anatomy character desire line clear objective goal",
+            "Truby Anatomy character web relationships network design opponents allies",
+            "Truby Anatomy seven key character elements weakness need desire",
+            "Truby Anatomy opponent character mirror reveals protagonist weakness",
+            "Truby Anatomy ally character supports enables protagonist journey",
+            "Truby Anatomy character revelation sequence planned design structure",
+            "Truby Anatomy character self-revelation moment anagnorisis change",
+
+            # Field Screenplay - Three-dimensional character
+            "Field Screenplay three-dimensional character physical psychological social dimensions",
+            "Field Screenplay character biography backstory history shapes present",
+            "Field Screenplay character paradigm structure setup confrontation resolution",
+            "Field Screenplay character growth obstacles conflict transformation",
+            "Field Screenplay character point of view perspective worldview",
+            "Field Screenplay inner character thoughts feelings vs outer behavior",
+            "Field Screenplay character dramatic need drives story forward",
+            "Field Screenplay character attitude defines behavior choices",
+
+            # Snyder Save the Cat - Transformation mechanics
+            "Snyder Save Cat save the cat moment likability empathy connection",
+            "Snyder Save Cat transformation machine character arc A to B",
+            "Snyder Save Cat character primal drives survival instincts universal",
+            "Snyder Save Cat six things need fixing character flaws issues",
+            "Snyder Save Cat dark night soul character lowest point crisis",
+            "Snyder Save Cat character learns lesson theme stated internalized",
+            "Snyder Save Cat stasis=death character must change or die",
+
+            # Vogler Writer's Journey - Archetypal character
+            "Vogler Writer's Journey hero archetype protagonist center journey",
+            "Vogler Journey mentor archetype wisdom guidance supernatural aid",
+            "Vogler Journey threshold guardian archetype tests hero commitment",
+            "Vogler Journey herald archetype call adventure change catalyst",
+            "Vogler Journey shapeshifter archetype doubt uncertainty ally/enemy",
+            "Vogler Journey shadow archetype dark side villain antagonist",
+            "Vogler Journey ally archetype companion support friendship",
+            "Vogler Journey trickster archetype comic relief disruption chaos",
+            "Vogler Journey hero transformation emotional inner journey stages",
+            "Vogler Journey character faces inner demons shadow self",
+
+            # Campbell Hero 1000 Faces - Mythic character journey
+            "Campbell Hero 1000 Faces monomyth character separation initiation return",
+            "Campbell Hero call adventure character ordinary world disrupted",
+            "Campbell Hero refusal call character hesitation fear doubt",
+            "Campbell Hero supernatural aid mentor magic helper appears",
+            "Campbell Hero threshold crossing character commits journey",
+            "Campbell Hero trials tests character proves worth courage",
+            "Campbell Hero abyss ordeal character faces death rebirth",
+            "Campbell Hero return elixir character brings wisdom home",
+            "Campbell Hero character transformation death rebirth resurrection",
+
+            # Aristotle Poetics - Character essence
+            "Aristotle Poetics hamartia tragic flaw character fatal weakness",
+            "Aristotle Poetics character consistency appropriate realistic believable",
+            "Aristotle Poetics character moral choices ethical decisions reveal",
+            "Aristotle Poetics character driven action vs plot driven",
+            "Aristotle Poetics peripeteia reversal character fortune changes",
+            "Aristotle Poetics anagnorisis recognition character realizes truth",
+            "Aristotle Poetics character nobility stature tragic hero elevated",
+
+            # Egri Art Dramatic Writing - Character construction
+            "Egri Art Dramatic Writing character premise driven spine foundation",
+            "Egri Art Dramatic Writing character dominant trait defining quality",
+            "Egri Art Dramatic Writing tri-dimensional character physiology sociology psychology",
+            "Egri Art Dramatic Writing character orchestration contrast conflict variety",
+            "Egri Art Dramatic Writing character growth dialectical thesis antithesis synthesis",
+            "Egri Art Dramatic Writing character unity opposites internal conflict",
+
+            # Seger Making Good Script Great - Character craft
+            "Seger Making Good Script Great character likability relatability empathy",
+            "Seger character consistency believable authentic motivation",
+            "Seger character transformation arc change growth journey",
+            "Seger character backstory integration reveal show don't tell",
+            "Seger character relationships dynamics reveal character nature",
+            "Seger character attitude behavior reveals personality essence",
+
+            # Weiland Creating Character Arcs - Arc structure
+            "Weiland Creating Character Arcs positive change arc growth transformation",
+            "Weiland Character Arcs negative change arc corruption fall tragedy",
+            "Weiland Character Arcs flat arc character unchanging tests world",
+            "Weiland Character lie vs truth character believes vs reality",
+            "Weiland Character ghost wound past trauma drives behavior",
+            "Weiland Character want vs need surface goal vs deep need",
+
+            # Goldman Adventures Screen Trade - Character pragmatics
+            "Goldman Adventures Screen Trade character behavior action reveals nature",
+            "Goldman character active choices drive story forward momentum",
+            "Goldman character interesting compelling watchable engaging audience",
+
+            # Rhimes Year of Yes - Character authenticity
+            "Rhimes Year of Yes character authentic voice distinctive unique real",
+            "Rhimes character vulnerability humanity flawed relatable empathy",
+            "Rhimes character emotional truth honest raw real feelings",
+
+            # Mamet Writing/Three Uses - Character objectives
+            "Mamet Writing character wants objective clear dramatic need",
+            "Mamet character action pursuit objective drives every scene",
+            "Mamet character obstacle opposition creates conflict drama",
+
+            # Mackendrick On Film-making - Character behavior
+            "Mackendrick On Film-making character behavior reveals show don't tell",
+            "Mackendrick character visual external action reveals internal state"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story characterization surface traits mask desire behavior style speech",
+        "McKee Story true character revealed through choice under pressure dilemma",
+        "McKee Story choices action reaction under pressure reveal essential nature",
+        "McKee Story character dimension contradiction within nature consistent complexity",
+        "McKee Story contradiction between characterization deep character charming thief",
+        "McKee Story center of good positive focus empathy audience bond",
+        "McKee Story audience seeks center of good even among gangsters",
+        "McKee Story empathy like me identification desire pursuit not sympathy",
+        "McKee Story audience bond convert curiosity concern into identification",
+        "McKee Story conscious desire unconscious desire object of desire spine",
+        "McKee Story protagonist willful capacity pursue desire to end of line",
+        "McKee Story comedy character blind obsession humour mania unseen by self",
+        "McKee Story laugh at contradiction oblivious bigotry greed vanity",
+        "McKee Story mind worm inciting incident tailored psyche forces quest",
+        "McKee Story burrow psyche design event unique dilemma fulfill humanity",
+        "McKee Story cast design orbit protagonist delineate dimensions through conflict",
+        "McKee Story supporting roles provoke facets hero reacts different ways",
+
+        # McKee DIALOGUE - GPT-5 extracted (12 Oct 2025)
+        "McKee Dialogue true character revealed risk-filled choices under pressure",
+        "McKee Dialogue characterization surface traits voice diction syntax idiom",
+        "McKee Dialogue vocabulary names knowledge verbs specificity reveal intellect",
+        "McKee Dialogue modifiers adjectives adverbs modals express personality attitudes",
+        "McKee Dialogue character voice walking dictionary unique word hoard",
+        "McKee Dialogue authenticity real versus realistic speech believable manner",
+        "McKee Dialogue high-context culture economy unsaid shared experience dialogue",
+        "McKee Dialogue low-context culture verbosity explicitness diversity gap",
+        "McKee Dialogue comic character blind obsession monomania drives dialogue",
+        "McKee Dialogue dramatic character awareness irony risk flexible thought",
+        "McKee Dialogue idiolect dialect idiom without stereotype cliché authenticity",
+        "McKee Dialogue dialogue originality begins vocabulary choices character-specific",
+
+
+        ]
+
+        # Character analysis patterns (bilingual: EN + PT)
+
+        # Weakness markers (Truby's Ghost/Need)
+        self.weakness_markers = [
+            # English
+            "afraid", "fear", "can't", "unable", "failure", "failed",
+            "weak", "coward", "scared", "terrified", "avoid", "hiding",
+            "won't face", "running from", "escaping", "denial",
+            # Portuguese
+            "medo", "receio", "não consigo", "incapaz", "falha", "fracasso",
+            "fraco", "covarde", "assustado", "apavorado", "evitar", "escondendo",
+            "não enfrenta", "fugindo de", "escapando", "negação"
+        ]
+
+        # Desire/want markers
+        self.desire_markers = [
+            # English
+            "I want", "I need", "must have", "have to get", "desire",
+            "dream", "goal", "ambition", "seeking", "searching for",
+            "my mission", "my purpose", "I will", "determined to",
+            # Portuguese
+            "eu quero", "eu preciso", "tenho que ter", "preciso conseguir",
+            "desejo", "sonho", "objetivo", "ambição", "buscando", "procurando",
+            "minha missão", "meu propósito", "eu vou", "determinado a"
+        ]
+
+        # Moral choice indicators
+        self.moral_choice_markers = [
+            # English
+            "should I", "must I", "right thing", "wrong thing",
+            "conscience", "guilt", "betray", "sacrifice", "choose between",
+            "dilemma", "torn between", "what's right", "what's wrong",
+            # Portuguese
+            "devo", "tenho que", "coisa certa", "coisa errada",
+            "consciência", "culpa", "trair", "sacrificar", "escolher entre",
+            "dilema", "dividido entre", "o que é certo", "o que é errado"
+        ]
+
+        # Transformation indicators
+        self.transformation_markers = [
+            # English
+            "changed", "different now", "not who I was", "became",
+            "transformed", "learned", "realized", "understood",
+            "new person", "no longer", "finally see", "awakened",
+            # Portuguese
+            "mudei", "diferente agora", "não sou quem era", "me tornei",
+            "transformei", "aprendi", "percebi", "entendi",
+            "nova pessoa", "não mais", "finalmente vejo", "despertei"
+        ]
+
+        # Internal conflict markers
+        self.internal_conflict_markers = [
+            # English
+            "part of me", "conflicted", "torn", "don't know who I am",
+            "war within", "fighting myself", "can't decide", "what am I",
+            # Portuguese
+            "parte de mim", "conflitado", "dividido", "não sei quem sou",
+            "guerra interna", "lutando comigo", "não consigo decidir", "o que sou"
+        ]
+
+        # External conflict markers
+        self.external_conflict_markers = [
+            # English
+            "against", "enemy", "opponent", "versus", "fighting",
+            "stop", "destroy", "defeat", "battle", "war",
+            # Portuguese
+            "contra", "inimigo", "oponente", "versus", "lutando",
+            "parar", "destruir", "derrotar", "batalha", "guerra"
+        ]
+
+        # Character archetype patterns (Vogler/Campbell)
+        self.archetype_patterns = {
+            "hero": ["journey", "quest", "chosen", "destiny", "save", "protect"],
+            "mentor": ["teach", "guide", "wisdom", "training", "master", "sensei"],
+            "threshold_guardian": ["test", "challenge", "prove", "guardian", "gatekeeper"],
+            "herald": ["message", "news", "announce", "call", "summon"],
+            "shapeshifter": ["betray", "deceive", "mysterious", "ambiguous", "unclear"],
+            "shadow": ["dark", "evil", "villain", "antagonist", "enemy", "nemesis"],
+            "ally": ["friend", "companion", "help", "support", "together", "team"],
+            "trickster": ["joke", "fool", "comedy", "relief", "clown", "jester"]
+        }
+
+        # Save the cat moment patterns
+        self.save_cat_markers = [
+            "help", "save", "rescue", "protect", "defend", "kind",
+            "compassion", "mercy", "gentle", "care for"
+        ]
+
+        # Hamartia (tragic flaw) patterns
+        self.hamartia_markers = [
+            "pride", "hubris", "arrogance", "blind", "obsession",
+            "ambition", "jealousy", "greed", "lust", "wrath"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze character architecture and development in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete character diagnostic report
+        """
+        # Extract character data
+        character_appearances = self._extract_character_data(screenplay_text)
+
+        # Build character profiles
+        character_profiles = self._build_character_profiles(character_appearances, screenplay_text)
+
+        # Analyze character dimensions
+        dimension_analysis = self._analyze_character_dimensions(character_profiles)
+
+        # Detect character arcs
+        arc_analysis = self._detect_character_arcs(character_profiles, screenplay_text)
+
+        # Find transformation moments
+        transformation_moments = self._find_transformation_moments(screenplay_text)
+
+        # Analyze weakness/need (Truby)
+        weakness_analysis = self._analyze_weakness_need(character_profiles, screenplay_text)
+
+        # Analyze desire lines
+        desire_analysis = self._analyze_desire_lines(character_profiles, screenplay_text)
+
+        # Check moral choices
+        moral_choices = self._analyze_moral_choices(screenplay_text)
+
+        # Detect archetypes (Vogler/Campbell)
+        archetype_analysis = self._detect_archetypes(character_profiles, screenplay_text)
+
+        # Find save the cat moments
+        save_cat_moments = self._find_save_cat_moments(screenplay_text)
+
+        # Detect hamartia (tragic flaw)
+        hamartia_analysis = self._detect_hamartia(character_profiles, screenplay_text)
+
+        # Check character consistency
+        consistency_analysis = self._analyze_character_consistency(character_profiles, screenplay_text)
+
+        # Analyze internal vs external conflict
+        conflict_analysis = self._analyze_character_conflicts(character_profiles, screenplay_text)
+
+        # Check true character revelation (McKee)
+        true_character = self._analyze_true_character_revelation(screenplay_text)
+
+        # Analyze character relationships
+        relationship_network = self._analyze_character_relationships(screenplay_text)
+
+        # Check against rules
+        rule_violations = self._check_character_rules(
+            dimension_analysis, arc_analysis, weakness_analysis,
+            desire_analysis, moral_choices, consistency_analysis
+        )
+
+        # Calculate score
+        score = self._calculate_character_score(
+            dimension_analysis, arc_analysis, weakness_analysis,
+            desire_analysis, moral_choices, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, character_profiles, arc_analysis,
+            weakness_analysis, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "total_characters": len(character_profiles),
+            "main_characters": len([p for p in character_profiles.values() if p.total_scenes >= 3]),
+            "character_profiles": self._profiles_to_dict(character_profiles),
+            "dimensional_score": dimension_analysis["overall_score"],
+            "three_dimensional_characters": dimension_analysis["fully_dimensional"],
+            "flat_characters": dimension_analysis["flat_characters"],
+            "character_arcs_present": arc_analysis["arcs_present"],
+            "characters_with_arcs": arc_analysis["characters_with_arcs"],
+            "transformation_moments": len(transformation_moments),
+            "transformation_examples": transformation_moments[:3],  # Top 3
+            "weakness_identified": weakness_analysis["total_with_weakness"],
+            "desire_identified": desire_analysis["total_with_desire"],
+            "moral_choices_count": len(moral_choices),
+            "moral_choice_examples": moral_choices[:3],  # Top 3
+            "archetypes_detected": archetype_analysis["archetypes_found"],
+            "save_cat_moments": len(save_cat_moments),
+            "hamartia_present": hamartia_analysis["present"],
+            "consistency_score": consistency_analysis["overall_score"],
+            "inconsistent_characters": consistency_analysis["inconsistent_list"],
+            "internal_conflict_score": conflict_analysis["internal_score"],
+            "external_conflict_score": conflict_analysis["external_score"],
+            "true_character_revelations": true_character["revelation_count"],
+            "relationship_network_size": len(relationship_network["relationships"]),
+            "isolated_characters": relationship_network["isolated"],
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, character_profiles,
+                arc_analysis, weakness_analysis
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _extract_character_data(self, screenplay: str) -> Dict[str, Dict]:
+        """Extract all character appearances, dialogue, and actions."""
+        lines = screenplay.split('\n')
+        character_data = defaultdict(lambda: {
+            "scenes": [],
+            "dialogue_lines": [],
+            "actions": [],
+            "scene_contexts": []
+        })
+
+        current_scene = "SCENE_1"
+        scene_counter = 1
+
+        i = 0
+        while i < len(lines):
+            line = lines[i].strip()
+
+            # Detect scene headings
+            if any(marker in line.upper() for marker in ['INT.', 'EXT.']):
+                current_scene = f"SCENE_{scene_counter}"
+                scene_counter += 1
+                i += 1
+                continue
+
+            # Detect character dialogue
+            if (line.isupper() and
+                len(line.split()) <= 3 and
+                not any(marker in line for marker in ['INT.', 'EXT.', 'FADE', 'CUT', 'DISSOLVE'])):
+
+                character = line.split('(')[0].strip()
+
+                # Add scene appearance
+                if current_scene not in character_data[character]["scenes"]:
+                    character_data[character]["scenes"].append(current_scene)
+
+                # Collect dialogue
+                i += 1
+                dialogue_text = []
+
+                while i < len(lines) and lines[i].strip():
+                    next_line = lines[i].strip()
+
+                    if next_line.isupper() and not next_line.startswith('('):
+                        break
+
+                    if not next_line.startswith('('):
+                        dialogue_text.append(next_line)
+
+                    i += 1
+
+                if dialogue_text:
+                    full_dialogue = ' '.join(dialogue_text)
+                    character_data[character]["dialogue_lines"].append({
+                        "scene": current_scene,
+                        "text": full_dialogue
+                    })
+
+                continue
+
+            # Detect action lines with character names
+            if line and not line.isupper():
+                for character in character_data.keys():
+                    if character in line:
+                        character_data[character]["actions"].append({
+                            "scene": current_scene,
+                            "action": line
+                        })
+
+            i += 1
+
+        return dict(character_data)
+
+    def _build_character_profiles(self, character_data: Dict, screenplay: str) -> Dict[str, CharacterProfile]:
+        """Build deep profiles for each character."""
+        profiles = {}
+
+        for character, data in character_data.items():
+            if len(data["scenes"]) < 1:  # Skip characters with no real presence
+                continue
+
+            total_scenes = len(data["scenes"])
+            total_dialogue = len(data["dialogue_lines"])
+            total_actions = len(data["actions"])
+
+            # Calculate dimension score (physical, psychological, social)
+            dimension_score = self._calculate_dimension_score(data, screenplay)
+
+            # Check for character arc
+            arc_present = self._has_character_arc(character, data, screenplay)
+
+            # Find transformation points
+            transformations = self._find_character_transformations(character, data, screenplay)
+
+            # Check weakness identification
+            weakness_identified = self._has_weakness(character, data)
+
+            # Check desire identification
+            desire_identified = self._has_desire(character, data)
+
+            # Check internal conflict
+            internal_conflict = self._has_internal_conflict(character, data)
+
+            # Check external conflict
+            external_conflict = self._has_external_conflict(character, data)
+
+            # Count moral choices
+            moral_choices = self._count_moral_choices(character, data)
+
+            # Count relationships
+            relationship_count = self._count_relationships(character, character_data)
+
+            # Calculate consistency
+            consistency_score = self._calculate_consistency(character, data)
+
+            # Detect archetype
+            archetype = self._detect_character_archetype(character, data, screenplay)
+
+            profiles[character] = CharacterProfile(
+                name=character,
+                total_scenes=total_scenes,
+                total_dialogue_lines=total_dialogue,
+                total_actions=total_actions,
+                dimension_score=dimension_score,
+                arc_present=arc_present,
+                transformation_points=transformations,
+                weakness_identified=weakness_identified,
+                desire_identified=desire_identified,
+                internal_conflict=internal_conflict,
+                external_conflict=external_conflict,
+                moral_choices=moral_choices,
+                relationship_count=relationship_count,
+                consistency_score=consistency_score,
+                archetype=archetype
+            )
+
+        return profiles
+
+    def _calculate_dimension_score(self, character_data: Dict, screenplay: str) -> float:
+        """Calculate three-dimensional character score (Field's Physical/Psychological/Social)."""
+        score = 0.0
+
+        # Physical dimension: actions, physical descriptions
+        if len(character_data["actions"]) > 5:
+            score += 0.33
+
+        # Psychological dimension: internal thoughts, emotions in dialogue
+        psychological_markers = ["feel", "think", "believe", "remember", "wish"]
+        psych_count = 0
+        for dialogue in character_data["dialogue_lines"]:
+            if any(marker in dialogue["text"].lower() for marker in psychological_markers):
+                psych_count += 1
+
+        if psych_count > 3:
+            score += 0.33
+
+        # Social dimension: relationships, interactions
+        if len(character_data["dialogue_lines"]) > 5:
+            score += 0.34
+
+        return min(1.0, score)
+
+    def _has_character_arc(self, character: str, data: Dict, screenplay: str) -> bool:
+        """Check if character has a transformation arc."""
+        # Look for transformation markers in dialogue
+        for dialogue in data["dialogue_lines"]:
+            if any(marker in dialogue["text"].lower() for marker in self.transformation_markers):
+                return True
+
+        # Check if character appears in different act contexts with different behaviors
+        if len(data["scenes"]) >= 5:  # Need enough presence to track arc
+            return True
+
+        return False
+
+    def _find_character_transformations(self, character: str, data: Dict, screenplay: str) -> List[str]:
+        """Find specific transformation moments for character."""
+        transformations = []
+
+        for dialogue in data["dialogue_lines"]:
+            for marker in self.transformation_markers:
+                if marker in dialogue["text"].lower():
+                    transformations.append(f"{dialogue['scene']}: {dialogue['text'][:60]}...")
+                    break
+
+        return transformations[:3]  # Top 3
+
+    def _has_weakness(self, character: str, data: Dict) -> bool:
+        """Check if character's weakness/need is identified (Truby)."""
+        for dialogue in data["dialogue_lines"]:
+            if any(marker in dialogue["text"].lower() for marker in self.weakness_markers):
+                return True
+        return False
+
+    def _has_desire(self, character: str, data: Dict) -> bool:
+        """Check if character's desire/want is identified."""
+        for dialogue in data["dialogue_lines"]:
+            if any(marker in dialogue["text"].lower() for marker in self.desire_markers):
+                return True
+        return False
+
+    def _has_internal_conflict(self, character: str, data: Dict) -> bool:
+        """Check for internal conflict."""
+        for dialogue in data["dialogue_lines"]:
+            if any(marker in dialogue["text"].lower() for marker in self.internal_conflict_markers):
+                return True
+        return False
+
+    def _has_external_conflict(self, character: str, data: Dict) -> bool:
+        """Check for external conflict."""
+        for dialogue in data["dialogue_lines"]:
+            if any(marker in dialogue["text"].lower() for marker in self.external_conflict_markers):
+                return True
+
+        # Also check actions
+        for action in data["actions"]:
+            if any(marker in action["action"].lower() for marker in self.external_conflict_markers):
+                return True
+
+        return False
+
+    def _count_moral_choices(self, character: str, data: Dict) -> int:
+        """Count moral choice moments."""
+        count = 0
+        for dialogue in data["dialogue_lines"]:
+            if any(marker in dialogue["text"].lower() for marker in self.moral_choice_markers):
+                count += 1
+        return count
+
+    def _count_relationships(self, character: str, all_character_data: Dict) -> int:
+        """Count relationships with other characters."""
+        relationships = set()
+
+        # Find other characters that appear in same scenes
+        character_scenes = set(all_character_data[character]["scenes"])
+
+        for other_char, other_data in all_character_data.items():
+            if other_char == character:
+                continue
+
+            other_scenes = set(other_data["scenes"])
+            if character_scenes & other_scenes:  # Intersection
+                relationships.add(other_char)
+
+        return len(relationships)
+
+    def _calculate_consistency(self, character: str, data: Dict) -> float:
+        """Calculate character consistency score."""
+        if len(data["dialogue_lines"]) < 3:
+            return 0.5  # Not enough data
+
+        # Check for consistent voice patterns
+        word_lengths = []
+        for dialogue in data["dialogue_lines"]:
+            words = dialogue["text"].split()
+            if words:
+                avg_len = sum(len(w) for w in words) / len(words)
+                word_lengths.append(avg_len)
+
+        if not word_lengths:
+            return 0.5
+
+        # Low variance = high consistency
+        mean = sum(word_lengths) / len(word_lengths)
+        variance = sum((x - mean) ** 2 for x in word_lengths) / len(word_lengths)
+
+        # Convert variance to consistency score
+        consistency = max(0.0, 1.0 - (variance / 10.0))
+
+        return min(1.0, consistency)
+
+    def _detect_character_archetype(self, character: str, data: Dict, screenplay: str) -> str:
+        """Detect character archetype (Vogler/Campbell)."""
+        scores = defaultdict(int)
+
+        # Check dialogue and actions for archetype patterns
+        all_text = []
+        for dialogue in data["dialogue_lines"]:
+            all_text.append(dialogue["text"].lower())
+        for action in data["actions"]:
+            all_text.append(action["action"].lower())
+
+        combined_text = ' '.join(all_text)
+
+        for archetype, patterns in self.archetype_patterns.items():
+            for pattern in patterns:
+                if pattern in combined_text:
+                    scores[archetype] += 1
+
+        if not scores:
+            return "undefined"
+
+        return max(scores.items(), key=lambda x: x[1])[0]
+
+    def _analyze_character_dimensions(self, profiles: Dict[str, CharacterProfile]) -> Dict[str, Any]:
+        """Analyze character dimensions (Field's three dimensions)."""
+        if not profiles:
+            return {
+                "overall_score": 0.0,
+                "fully_dimensional": [],
+                "flat_characters": []
+            }
+
+        dimension_scores = [p.dimension_score for p in profiles.values()]
+        overall = sum(dimension_scores) / len(dimension_scores)
+
+        fully_dimensional = [p.name for p in profiles.values() if p.dimension_score >= 0.8]
+        flat_characters = [p.name for p in profiles.values() if p.dimension_score < 0.4]
+
+        return {
+            "overall_score": overall,
+            "fully_dimensional": fully_dimensional,
+            "flat_characters": flat_characters
+        }
+
+    def _detect_character_arcs(self, profiles: Dict[str, CharacterProfile], screenplay: str) -> Dict[str, Any]:
+        """Detect character arcs and transformations."""
+        characters_with_arcs = [p.name for p in profiles.values() if p.arc_present]
+
+        return {
+            "arcs_present": len(characters_with_arcs) > 0,
+            "characters_with_arcs": characters_with_arcs,
+            "arc_percentage": (len(characters_with_arcs) / max(len(profiles), 1)) * 100
+        }
+
+    def _find_transformation_moments(self, screenplay: str) -> List[Dict]:
+        """Find specific transformation moments in screenplay."""
+        moments = []
+        lines = screenplay.split('\n')
+
+        current_character = None
+
+        for i, line in enumerate(lines):
+            line = line.strip()
+
+            # Track current character
+            if line.isupper() and len(line.split()) <= 3:
+                current_character = line.split('(')[0].strip()
+
+            # Check for transformation markers
+            for marker in self.transformation_markers:
+                if marker in line.lower() and current_character:
+                    moments.append({
+                        "character": current_character,
+                        "moment": line[:80] + "..." if len(line) > 80 else line,
+                        "type": "transformation"
+                    })
+                    break
+
+        return moments
+
+    def _analyze_weakness_need(self, profiles: Dict[str, CharacterProfile], screenplay: str) -> Dict[str, Any]:
+        """Analyze character weakness/need (Truby's Ghost)."""
+        with_weakness = [p.name for p in profiles.values() if p.weakness_identified]
+
+        return {
+            "total_with_weakness": len(with_weakness),
+            "characters": with_weakness,
+            "percentage": (len(with_weakness) / max(len(profiles), 1)) * 100
+        }
+
+    def _analyze_desire_lines(self, profiles: Dict[str, CharacterProfile], screenplay: str) -> Dict[str, Any]:
+        """Analyze character desire lines."""
+        with_desire = [p.name for p in profiles.values() if p.desire_identified]
+
+        return {
+            "total_with_desire": len(with_desire),
+            "characters": with_desire,
+            "percentage": (len(with_desire) / max(len(profiles), 1)) * 100
+        }
+
+    def _analyze_moral_choices(self, screenplay: str) -> List[Dict]:
+        """Find moral choice moments."""
+        choices = []
+        lines = screenplay.split('\n')
+
+        current_character = None
+
+        for line in lines:
+            line = line.strip()
+
+            if line.isupper() and len(line.split()) <= 3:
+                current_character = line.split('(')[0].strip()
+
+            for marker in self.moral_choice_markers:
+                if marker in line.lower() and current_character:
+                    choices.append({
+                        "character": current_character,
+                        "choice": line[:80] + "..." if len(line) > 80 else line
+                    })
+                    break
+
+        return choices
+
+    def _detect_archetypes(self, profiles: Dict[str, CharacterProfile], screenplay: str) -> Dict[str, Any]:
+        """Detect character archetypes (Vogler/Campbell)."""
+        archetype_counts = Counter()
+
+        for profile in profiles.values():
+            if profile.archetype != "undefined":
+                archetype_counts[profile.archetype] += 1
+
+        return {
+            "archetypes_found": dict(archetype_counts),
+            "total_archetypes": len(archetype_counts)
+        }
+
+    def _find_save_cat_moments(self, screenplay: str) -> List[Dict]:
+        """Find 'save the cat' moments (Snyder)."""
+        moments = []
+        lines = screenplay.split('\n')
+
+        current_character = None
+
+        for line in lines:
+            line = line.strip()
+
+            if line.isupper() and len(line.split()) <= 3:
+                current_character = line.split('(')[0].strip()
+
+            for marker in self.save_cat_markers:
+                if marker in line.lower() and current_character:
+                    moments.append({
+                        "character": current_character,
+                        "moment": line[:80] + "..." if len(line) > 80 else line
+                    })
+                    break
+
+        return moments[:5]  # Top 5
+
+    def _detect_hamartia(self, profiles: Dict[str, CharacterProfile], screenplay: str) -> Dict[str, Any]:
+        """Detect tragic flaw (Aristotle's hamartia)."""
+        hamartia_found = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.hamartia_markers:
+                if marker in line.lower():
+                    hamartia_found.append(marker)
+                    break
+
+        return {
+            "present": len(hamartia_found) > 0,
+            "flaws_detected": list(set(hamartia_found))
+        }
+
+    def _analyze_character_consistency(self, profiles: Dict[str, CharacterProfile], screenplay: str) -> Dict[str, Any]:
+        """Analyze character consistency."""
+        if not profiles:
+            return {
+                "overall_score": 0.5,
+                "inconsistent_list": []
+            }
+
+        consistency_scores = [p.consistency_score for p in profiles.values()]
+        overall = sum(consistency_scores) / len(consistency_scores)
+
+        inconsistent = [p.name for p in profiles.values() if p.consistency_score < 0.5]
+
+        return {
+            "overall_score": overall,
+            "inconsistent_list": inconsistent
+        }
+
+    def _analyze_character_conflicts(self, profiles: Dict[str, CharacterProfile], screenplay: str) -> Dict[str, Any]:
+        """Analyze internal vs external conflict balance."""
+        if not profiles:
+            return {
+                "internal_score": 0.0,
+                "external_score": 0.0
+            }
+
+        internal_count = sum(1 for p in profiles.values() if p.internal_conflict)
+        external_count = sum(1 for p in profiles.values() if p.external_conflict)
+
+        total = len(profiles)
+
+        return {
+            "internal_score": internal_count / max(total, 1),
+            "external_score": external_count / max(total, 1),
+            "both_present": internal_count > 0 and external_count > 0
+        }
+
+    def _analyze_true_character_revelation(self, screenplay: str) -> Dict[str, Any]:
+        """Analyze true character revelation under pressure (McKee)."""
+        pressure_markers = [
+            "must choose", "forced to", "no choice", "pressure",
+            "dilemma", "crisis", "breaking point", "pushed to"
+        ]
+
+        revelations = []
+
+        for line in screenplay.split('\n'):
+            for marker in pressure_markers:
+                if marker in line.lower():
+                    revelations.append(line[:80] + "..." if len(line) > 80 else line)
+                    break
+
+        return {
+            "revelation_count": len(revelations),
+            "examples": revelations[:3]
+        }
+
+    def _analyze_character_relationships(self, screenplay: str) -> Dict[str, Any]:
+        """Analyze character relationship network (Truby's character web)."""
+        # Extract character co-appearances
+        scenes = screenplay.split('INT.') + screenplay.split('EXT.')
+        relationships = []
+        characters_seen = set()
+
+        for scene in scenes:
+            scene_characters = []
+            for line in scene.split('\n'):
+                if line.strip().isupper() and len(line.strip().split()) <= 3:
+                    char = line.strip().split('(')[0].strip()
+                    if char and not any(m in char for m in ['FADE', 'CUT', 'DISSOLVE']):
+                        scene_characters.append(char)
+                        characters_seen.add(char)
+
+            # Create relationships
+            for i in range(len(scene_characters)):
+                for j in range(i + 1, len(scene_characters)):
+                    relationships.append((scene_characters[i], scene_characters[j]))
+
+        isolated = [c for c in characters_seen if not any(c in r for r in relationships)]
+
+        return {
+            "relationships": relationships[:20],  # Top 20
+            "total_relationships": len(set(relationships)),
+            "isolated": isolated
+        }
+
+    def _check_character_rules(self, dimension_analysis: Dict, arc_analysis: Dict,
+                               weakness_analysis: Dict, desire_analysis: Dict,
+                               moral_choices: List, consistency_analysis: Dict) -> List[Dict]:
+        """Check character architecture against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "CHAR.R001":
+                # Three-dimensional characters
+                if dimension_analysis["overall_score"] < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Low dimensional score: {dimension_analysis['overall_score']:.0%}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CHAR.R002":
+                # Character arc required
+                if not arc_analysis["arcs_present"]:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No character arcs detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CHAR.R003":
+                # Weakness/Need identified
+                if weakness_analysis["percentage"] < 30:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Only {weakness_analysis['percentage']:.0f}% have weakness",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CHAR.R004":
+                # Desire line clear
+                if desire_analysis["percentage"] < 30:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Only {desire_analysis['percentage']:.0f}% have desire",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CHAR.R005":
+                # Moral choices present
+                if len(moral_choices) < 1:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No moral choices detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CHAR.R006":
+                # Character consistency
+                if consistency_analysis["overall_score"] < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Low consistency: {consistency_analysis['overall_score']:.0%}",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_character_score(self, dimension_analysis: Dict, arc_analysis: Dict,
+                                   weakness_analysis: Dict, desire_analysis: Dict,
+                                   moral_choices: List, violations: List) -> float:
+        """Calculate overall character architecture score."""
+        # Start at 85 (not 100 - no character work is perfect)
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Bonus for excellence (max +15, capped at 95)
+        if dimension_analysis["overall_score"] > 0.9:
+            score += 5
+        elif dimension_analysis["overall_score"] > 0.7:
+            score += 3
+
+        if arc_analysis["arc_percentage"] > 80:
+            score += 5
+        elif arc_analysis["arc_percentage"] > 60:
+            score += 3
+
+        if len(moral_choices) > 3:
+            score += 5
+        elif len(moral_choices) > 1:
+            score += 3
+
+        # Cap at 95 (not 100 - always room for improvement)
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profiles: Dict, arc_analysis: Dict,
+                          weakness_analysis: Dict, violations: List) -> str:
+        """Generate character diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Characters are well-architected with clear dimensions and arcs"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Characters work but could be more dimensional"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Character architecture issues affecting depth"
+        else:
+            level = "POOR"
+            summary = "Major character construction problems throughout"
+
+        diagnosis = f"CHARACTER {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not arc_analysis["arcs_present"]:
+            issues.append("no character arcs")
+        if weakness_analysis["percentage"] < 30:
+            issues.append("unclear weaknesses/needs")
+        if len([p for p in profiles.values() if p.dimension_score < 0.5]) > len(profiles) / 2:
+            issues.append("flat characters")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _profiles_to_dict(self, profiles: Dict[str, CharacterProfile]) -> List[Dict]:
+        """Convert character profiles to dictionaries."""
+        result = []
+        for name, profile in profiles.items():
+            result.append({
+                "name": name,
+                "scenes": profile.total_scenes,
+                "dialogue_lines": profile.total_dialogue_lines,
+                "dimension_score": profile.dimension_score,
+                "has_arc": profile.arc_present,
+                "transformations": len(profile.transformation_points),
+                "has_weakness": profile.weakness_identified,
+                "has_desire": profile.desire_identified,
+                "internal_conflict": profile.internal_conflict,
+                "external_conflict": profile.external_conflict,
+                "moral_choices": profile.moral_choices,
+                "consistency": profile.consistency_score,
+                "archetype": profile.archetype
+            })
+        return result
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profiles: Dict, arc_analysis: Dict,
+                                 weakness_analysis: Dict) -> List[str]:
+        """Generate specific character recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:  # Top 3 violations
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        flat_characters = [p.name for p in profiles.values() if p.dimension_score < 0.5]
+        if flat_characters:
+            recommendations.append(f"Add dimensions to: {', '.join(flat_characters[:3])}")
+
+        if not arc_analysis["arcs_present"]:
+            recommendations.append("Design transformation arcs showing character change")
+
+        if weakness_analysis["percentage"] < 30:
+            recommendations.append("Establish clear weakness/need for main characters (Truby's Ghost)")
+
+        no_moral = [p.name for p in profiles.values() if p.moral_choices == 0]
+        if len(no_moral) > 0:
+            recommendations.append(f"Add moral choices for: {', '.join(no_moral[:3])}")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study character construction in acclaimed screenplays")
+            recommendations.append("Apply McKee's True Character revelation under pressure")
+
+        return recommendations[:5]  # Return top 5
+
+    def export_character_features(self, screenplay_text: str) -> List[Dict]:
+        """
+        Export character features for correlation/analysis.
+
+        Returns structured data with character metrics per character.
+        Useful for external indexing, correlation engines, or ML pipelines.
+
+        Args:
+            screenplay_text: Full screenplay text
+
+        Returns:
+            List of dicts with keys:
+                - character_name: Character identifier
+                - dimensions: Physical/Psychological/Social scores
+                - arc_data: Transformation points and arc structure
+                - relationships: Character web connections
+                - meta: Additional metadata
+        """
+        character_data = self._extract_character_data(screenplay_text)
+        profiles = self._build_character_profiles(character_data, screenplay_text)
+
+        features = []
+
+        for character, profile in profiles.items():
+            char_features = {
+                "character_name": character,
+                "dimensions": {
+                    "overall_score": profile.dimension_score,
+                    "has_physical": len(character_data[character]["actions"]) > 0,
+                    "has_psychological": profile.internal_conflict,
+                    "has_social": profile.relationship_count > 0
+                },
+                "arc_data": {
+                    "has_arc": profile.arc_present,
+                    "transformation_count": len(profile.transformation_points),
+                    "transformations": profile.transformation_points
+                },
+                "character_traits": {
+                    "weakness_identified": profile.weakness_identified,
+                    "desire_identified": profile.desire_identified,
+                    "moral_choices": profile.moral_choices,
+                    "archetype": profile.archetype
+                },
+                "conflict_structure": {
+                    "internal": profile.internal_conflict,
+                    "external": profile.external_conflict
+                },
+                "relationships": {
+                    "count": profile.relationship_count,
+                    "scenes": profile.total_scenes
+                },
+                "consistency": {
+                    "score": profile.consistency_score
+                },
+                "meta": {
+                    "total_dialogue_lines": profile.total_dialogue_lines,
+                    "total_actions": profile.total_actions,
+                    "source": "DrCharacter"
+                }
+            }
+
+            features.append(char_features)
+
+        return features
+
+
+# Compatibility class for testing framework
+class DrCharacterArchitecture(DrCharacter):
+    """Alias for compatibility with test framework."""
+    pass

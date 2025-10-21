@@ -1,0 +1,18 @@
+# TEST: GPU 60 - More GPU usage
+FROM mixtral-dedicated-q5:latest
+
+PARAMETER num_ctx 200000
+PARAMETER num_batch 2048
+PARAMETER num_keep 2048
+PARAMETER num_thread 20
+PARAMETER num_gpu 60
+PARAMETER use_mmap true
+PARAMETER use_mlock true
+PARAMETER temperature 0.3
+PARAMETER top_p 0.9
+PARAMETER top_k 40
+PARAMETER repeat_penalty 1.05
+PARAMETER seed 42
+PARAMETER mirostat 2
+PARAMETER mirostat_tau 5.0
+PARAMETER mirostat_eta 0.1

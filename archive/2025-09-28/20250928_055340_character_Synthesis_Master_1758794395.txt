@@ -1,0 +1,82 @@
+1. UNIVERSAL STORY PRINCIPLES:
+
+- Aristotle: Marcus' tragic flaw (hamartia) is his inability to forgive himself, which leads him to commit an immoral act despite his religious vocation.
+   "Hamartia is a mistake or error of judgment leading to the downfall of the protagonist." - Elia Kazan
+- Campbell: Marcus is in the "Refusal of the Call" stage, where he acknowledges his past failures and takes responsibility for them, marking the beginning of his hero's journey.
+   "The hero embarks on the refusal of the summons and therefore sets the stage for the road back and the achievement of bliss." - Joseph Campbell
+- McKee: Through this confrontation, Marcus' true character is revealed as a flawed individual who has lost faith in his ability to save lives, resorting to immoral actions.
+   "True character is the decisions and choices a person makes under pressure." - Robert McKee
+
+2. CHARACTER ARCHITECTURE:
+
+- Truby: Marcus' weakness is his guilt over past failures; his need is to forgive himself; his desire is to restore his faith in his abilities; his struggle is the moral dilemma of sacrificing one life for many; and his revelation will be accepting that he can't save everyone.
+   "A character without a flaw is as uninteresting as a world without conflict." - John Truby
+- Field: Marcus' setup is his past failures, confrontation is the moral dilemma of tonight, and resolution will come when he accepts his inability to save everyone.
+   "The three-act, eight-sequence structure is a clockwork or machinery for narratives that wishes to reveal character." - Syd Field
+- Vogler: Marcus' archetypal function as the protagonist requires him to face this moral dilemma and grow from it.
+   "The hero's journey describes the stages we all go through in our own personal journeys of self-discovery and self-growth." - Christopher Vogler
+
+3. PRACTICAL CRAFT ELEMENTS:
+
+- Snyder: The Save the Cat moment is Marcus confessing his actions to Elena, seeking forgiveness from someone he respects and trusts.
+   "Save the Cat is an easy way to understand the structure of stories." - Blake Snyder
+- Dialogue: Their conversation reveals subtextual tension between them; Elena still holds guilt over her past actions, while Marcus feels responsible for his.
+   "Dialogue should simply be a sound among other sounds, just something that comes out of the mouths of people whose eyes tell the story." - Orson Welles
+- Visual Storytelling: The blood-stained confession note and Marcus' shaking hands show instead of telling us about his guilt.
+   "Showing is always better than telling." - James M. Cain
+- Scene Work: The beat change occurs when Elena learns about the Morrison boy, while the turn happens when she realizes what Marcus has done tonight.
+   "A scene is a unit of conflict, required to advance the story or reveal character." - Aaron Sorkin
+
+4. INTEGRATED DIAGNOSIS:
+
+Among these theories, McKee's concept of true character best explains Marcus as it emphasizes growth under pressure. Truby's model provides a comprehensive understanding of his emotional journey, while Field's structure organizes the narrative into a coherent three-act format.
+
+Standard analysis often lacks an integrated approach, favoring one theory over another or neglecting character architecture in favor of craft elements. Thus, I recommend synthesizing all approaches to gain a holistic understanding of characters and narratives.
+
+In this case, Marcus' tragic flaw (Aristotle), moral dilemma (Campbell/Field), self-revelation (Truby), and confessional moment (Snyder) contribute to his complex characterization. Meanwhile, subtextual dialogue (Orson Welles), visual storytelling techniques (James M. Cain), and scene beats (Aaron Sorkin) enhance the narrative's depth and tension.
+
+FADE IN:
+
+INT. ABANDONED CHURCH - NIGHT
+
+MARCUS (42), priest's collar loose, whiskey bottle in hand,
+sits in the front pew. His hands shake.
+
+ELENA (38), leather jacket over scrubs, enters quietly.
+She sits beside him, doesn't look at him.
+
+ELENA
+You called me here to watch you drink?
+
+MARCUS
+I called you here to confess.
+
+ELENA
+I'm not a priest anymore, Marcus.
+Haven't been for five years.
+
+MARCUS
+Neither am I. Not after tonight.
+
+ELENA
+(finally looking at him)
+What did you do?
+
+Marcus reveals the blood-stained confession note.
+
+MARCUS (CONT'D)
+I gave a man communion wine... with something extra.
+He confessed to killing three children.
+
+ELENA
+(standing)
+He was brain dead. There was no—
+
+Marcus interrupts, bitterly laughing.
+
+MARCUS
+And tonight, I let someone die too.
+Someone who trusted me. Someone who
+came to me for salvation.
+
+FADE OUT.

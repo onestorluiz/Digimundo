@@ -1,0 +1,1521 @@
+"""
+Script Doctor Expositionmon - Exposition Analysis Specialist
+A Script Doctor™ in Digimon form specializing in exposition quality, information delivery, backstory revelation, world-building, avoiding info dumps.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class ExpositionMoment:
+    """Individual exposition instance."""
+    location: str  # scene/page
+    information: str  # what is revealed
+    technique: str  # "dialogue", "action", "visual", "flashback", "narration"
+    integration: float  # 0-1 (how well integrated)
+    is_info_dump: bool  # PENALTY if True
+    is_earned: bool  # whether revelation is earned
+    timing_appropriate: bool
+    notes: str
+
+
+@dataclass
+class ExpositionProfile:
+    """Overall exposition analysis."""
+    exposition_moments_count: int
+    info_dump_count: int  # PENALTY
+    integrated_exposition_score: float  # 0-1
+    backstory_strategic: bool
+    expositional_dialogue_count: int  # PENALTY
+    visual_exposition_score: float
+    setup_payoff_ratio: float
+    world_building_clarity: float
+    need_to_know_timing_score: float
+    confusion_risk: bool  # too little exposition
+    over_exposition_risk: bool  # too much exposition
+    earned_revelation_score: float
+    clarity_vs_mystery_balance: float
+    exposition_pacing_score: float
+    audience_understanding_score: float
+    overall_exposition_quality: float
+    show_vs_tell_ratio: float
+    exposition_through_conflict_score: float
+    plant_count: int
+    payoff_count: int
+    exposition_richness: float
+
+
+class DrExposition:
+    """
+    Script Doctor Expositionmon - The Exposition Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing exposition quality,
+    information delivery, backstory revelation, world-building, avoiding info dumps.
+
+    Identity: Script Doctor first, Digimon exposition specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Expositionmon with rules and configuration."""
+        self.name = "Script Doctor Expositionmon"
+        self.digimon_name = "Expositionmon"
+        self.title = "Script Doctor - Exposition Analysis Specialist"
+        self.specialty = "Exposition quality, information delivery, backstory revelation, world-building, avoiding info dumps"
+        self.identity = "I am Script Doctor Expositionmon, a professional Script Doctor™ specializing in exposition analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "exposition_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - EXPOSITION SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Exposition mastery
+            "McKee Story exposition dramatic vs expositional writing integrated seamless",
+            "McKee Story backstory revelation through conflict action not narration telling",
+            "McKee Story exposition is dullest of all screen tasks avoid minimize",
+            "McKee Story never stop action to explain keep moving forward momentum",
+            "McKee Story exposition must be dramatic integrated organic earned natural",
+            "McKee Story dialogue exposition through subtext not direct statement on-nose",
+            "McKee Story expositional dialogue amateur as you know Bob deadly sin",
+            "McKee Story setup payoff planting information early harvesting later callback",
+
+            # McKee Story - DISGUISED EXPOSITION & INFORMATION CONTROL (ultra-specific manual reading)
+            "McKee Story exposition disguised natural organic avoid heavy-handed stating",
+            "McKee Story backstory revealed context present relevant timing strategic drip",
+            "McKee Story information control withholding revelation timing strategic suspense",
+
+            # Truby Anatomy - Strategic revelation
+            "Truby Anatomy backstory ghost revelation strategic timing need-to-know basis",
+            "Truby exposition through dramatic action not narration integrated conflict",
+            "Truby backstory revelation need-to-know basis when necessary not before",
+            "Truby ghost wound revealed gradually strategically earned not dumped upfront",
+            "Truby weakness need established opening exposition character flaw clear",
+            "Truby desire established early exposition protagonist wants goal clear stakes",
+            "Truby opponent backstory revealed strategically antagonist motivation understood",
+            "Truby world-building exposition integrated naturally rules established organically",
+
+            # Field Screenplay - Setup/payoff mastery
+            "Field Screenplay exposition plant payoff setup information early harvest later",
+            "Field exposition integrated into action character organic seamless invisible",
+            "Field exposition techniques visual storytelling show don't tell cinematic",
+            "Field opening exposition establishes world character situation context immediately",
+            "Field backstory revealed gradually strategically earned not info dump upfront",
+            "Field dialogue exposition natural organic subtext not on-the-nose direct",
+            "Field visual exposition cinematic show through action environment objects details",
+
+            # Snyder Save the Cat - Beat exposition
+            "Snyder Save the Cat opening image exposition world snapshot establishes tone",
+            "Snyder theme stated beat exposition moment page 5 moral premise declared",
+            "Snyder setup beats exposition 1-10 ordinary world protagonist status quo",
+            "Snyder catalyst exposition inciting incident disrupts life consequences initiated",
+            "Snyder exposition integrated naturally beats flow organic seamless invisible",
+            "Snyder save the cat exposition protagonist likable relatable human sympathetic",
+            "Snyder world-building exposition genre expectations setting tone established",
+
+            # Vogler Writer's Journey - Ordinary world exposition
+            "Vogler Writer's Journey ordinary world exposition setup hero familiar before",
+            "Vogler backstory revelation strategic placement when needed not before timing",
+            "Vogler exposition through mentor character guide wisdom teacher provides context",
+            "Vogler call to adventure exposition opportunity threat challenge presented clear",
+            "Vogler special world exposition rules established new unfamiliar explained organic",
+            "Vogler refusal call exposition reluctance fear doubt hesitation protagonist resists",
+
+            # Campbell Hero 1000 Faces - Mythic context
+            "Campbell Hero 1000 Faces mythic context exposition archetypal universal resonance",
+            "Campbell ordinary world exposition familiar mundane everyday established clear",
+            "Campbell special world exposition supernatural realm magical otherworldly rules",
+            "Campbell departure exposition call herald announces journey begins context",
+            "Campbell supernatural aid exposition mentor guide helper appears wisdom offered",
+            "Campbell belly whale exposition threshold passage death rebirth transformation",
+
+            # Aristotle Poetics - Necessary information
+            "Aristotle Poetics exposition necessary information delivery audience understanding required",
+            "Aristotle beginning middle end structure exposition placement strategic timing",
+            "Aristotle unity of action exposition serves plot organic necessary functional",
+            "Aristotle recognition anagnorisis exposition revelation discovery truth exposed earned",
+            "Aristotle exposition magnitude appropriate scale proportions balanced fitting story",
+
+            # Egri Art Dramatic Writing - Embedded exposition
+            "Egri Art Dramatic Writing exposition embedded in conflict action not static",
+            "Egri premise and exposition relationship character conflict establishes context",
+            "Egri orchestration exposition diverse characters backgrounds revealed naturally organic",
+            "Egri time period exposition historical context era atmosphere details accurate",
+            "Egri point of attack exposition opening where begins context established immediately",
+
+            # Seger Making Good Script Great - Show don't tell
+            "Seger Making Good Script Great exposition techniques show don't tell visual",
+            "Seger exposition backstory through action dialogue not flashback integrated organic",
+            "Seger visual exposition cinematic storytelling show through environment objects action",
+            "Seger setup payoff exposition planting early harvesting later callback earned",
+            "Seger expositional dialogue avoided on-the-nose as you know amateur deadly",
+            "Seger backstory revealed gradually strategically earned need-to-know basis timing",
+            "Seger world-building exposition integrated naturally rules established organically seamless",
+
+            # Weiland Creating Character Arcs - Arc exposition
+            "Weiland Creating Character Arcs lie believed exposition opening protagonist false",
+            "Weiland ghost wound exposition backstory past trauma revealed gradually earned",
+            "Weiland characteristic moment exposition reveals protagonist nature personality essence",
+            "Weiland want vs need exposition external desire vs internal necessity established",
+            "Weiland normal world exposition status quo life before inciting incident context",
+            "Weiland truth revealed exposition lie rejected reality perceived correctly earned",
+
+            # Goldman Adventures Screen Trade - Economy mastery
+            "Goldman Adventures Screen Trade exposition economy efficiency minimize trust audience",
+            "Goldman exposition minimize enter late exit early get in quickly momentum",
+            "Goldman visual exposition cinematic storytelling show don't tell action speaks",
+            "Goldman backstory revealed need-to-know basis when necessary not upfront dumped",
+            "Goldman dialogue exposition natural organic subtext not on-the-nose direct amateur",
+
+            # Rhimes Year of Yes - Natural integration
+            "Rhimes Year of Yes exposition integrated naturally organic seamless invisible flow",
+            "Rhimes backstory revealed gradually strategically character-driven earned timing perfect",
+            "Rhimes world-building exposition universe consistency rules established organically natural",
+            "Rhimes dialogue exposition natural organic subtext not expositional on-the-nose",
+
+            # Mamet Three Uses of the Knife - Action speaks
+            "Mamet Three Uses Knife no exposition only action show don't tell",
+            "Mamet action speaks truth don't explain let audience understand visually",
+            "Mamet exposition economy essential necessary minimal trust audience intelligence",
+            "Mamet visual storytelling exposition cinematic show through action environment objects",
+
+            # Mackendrick On Film-Making - Visual exposition
+            "Mackendrick On Film-Making visual exposition cinematic show environment objects action",
+            "Mackendrick show don't tell exposition visual storytelling cinematic details rich",
+            "Mackendrick exposition through mise-en-scène environment objects spatial reveals information",
+
+            # General exposition concepts - comprehensive
+            "exposition vs information dump integrated organic vs static boring dump",
+            "backstory revelation timing strategy need-to-know basis when necessary earned",
+            "world-building integrated exposition rules established organically naturally seamless",
+            "character background exposition techniques revealed gradually strategically earned",
+            "setup and payoff exposition planting early harvesting later callback earned",
+            "planting information early establishing details seeds future harvest payoff",
+            "avoiding on-the-nose exposition as you know Bob amateur deadly sin",
+            "exposition through conflict and tension action driven not static talking",
+            "exposition through dialogue subtext not direct statement natural organic invisible",
+            "exposition through visual storytelling cinematic show don't tell environment action",
+            "expositional dialogue vs dramatic dialogue integrated vs static on-the-nose",
+            "info dump penalty bad writing static boring audience disengaged loses interest",
+            "earned revelation strategic backstory timing perfect need-to-know basis organic",
+            "need-to-know information timing when necessary not before strategic placement",
+            "audience curiosity vs confusion balance mystery clarity information withheld revealed",
+            "too much exposition pacing drag boring static slows momentum loses audience",
+            "too little exposition audience confusion lost disoriented doesn't understand",
+            "exposition balance clarity vs mystery optimal information withheld revealed timing"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story dramatize exposition convert information to ammunition conflict",
+        "McKee Story exposition as ammunition used to score points under pressure",
+        "McKee Story show dont tell avoid telling facts characters already know",
+        "McKee Story exposition pacing least important early critical secrets late",
+        "McKee Story avoid california scene strangers sharing deep dark secrets",
+        "McKee Story flashback minidrama inciting build turn payoff dramatized",
+        "McKee Story montage condense expand time avoid decorative padding",
+        "McKee Story voice over counterpoint economy avoid book on tape",
+
+        # McKee DIALOGUE - GPT-5 extracted (12 Oct 2025)
+        "McKee Dialogue exposition pacing timing minimal exactly when needed",
+        "McKee Dialogue narrative drive curiosity question hooks propel reading",
+        "McKee Dialogue exposition as ammunition characters weaponize facts turning points",
+        "McKee Dialogue forced exposition shoehorned facts fake reminiscence scenes",
+        "McKee Dialogue direct telling virtues speed counterpoint narration voice",
+
+
+        ]
+
+        # Exposition analysis patterns (bilingual: EN + PT)
+
+        # General exposition markers
+        self.exposition_markers = [
+            # English
+            "exposition", "backstory", "background", "history", "context",
+            "explains", "reveals", "information", "tells us", "establishes",
+            # Portuguese
+            "exposição", "história pregressa", "contexto", "passado", "história",
+            "explica", "revela", "informação", "nos conta", "estabelece"
+        ]
+
+        # Info dump markers (PENALTY)
+        self.info_dump_markers = [
+            # English
+            "info dump", "exposition dump", "tells too much", "explains everything",
+            "long explanation", "monologue about", "lecture about", "stops to explain",
+            # Portuguese
+            "despejo de informação", "exposição demais", "explica tudo",
+            "explicação longa", "monólogo sobre", "palestra sobre", "para para explicar"
+        ]
+
+        # Integrated exposition markers
+        self.integrated_expo_markers = [
+            # English
+            "shows through action", "reveals through conflict", "embedded naturally",
+            "integrated into", "woven into", "during conflict", "through action",
+            # Portuguese
+            "mostra através da ação", "revela através do conflito", "embutido naturalmente",
+            "integrado em", "tecido em", "durante conflito", "através da ação"
+        ]
+
+        # Backstory markers
+        self.backstory_markers = [
+            # English
+            "backstory", "past", "history", "before", "used to", "years ago",
+            "childhood", "origin", "previously", "former", "once was",
+            # Portuguese
+            "passado", "história", "antes", "costumava", "anos atrás",
+            "infância", "origem", "anteriormente", "antigo", "já foi"
+        ]
+
+        # World-building markers
+        self.world_building_markers = [
+            # English
+            "world-building", "rules of world", "how things work", "context",
+            "setting", "universe", "system", "society", "culture",
+            # Portuguese
+            "construção de mundo", "regras do mundo", "como funciona", "contexto",
+            "cenário", "universo", "sistema", "sociedade", "cultura"
+        ]
+
+        # Setup/payoff markers
+        self.setup_payoff_markers = [
+            # English
+            "plant", "setup", "foreshadow", "payoff later", "callback",
+            "established earlier", "planted seed", "pays off",
+            # Portuguese
+            "planta", "prepara", "prenuncia", "recompensa depois", "referência",
+            "estabelecido antes", "semente plantada", "recompensa"
+        ]
+
+        # Expositional dialogue markers (PENALTY)
+        self.expositional_dialogue_markers = [
+            # English
+            "as you know", "let me explain", "as I was saying", "as you remember",
+            "you know that", "I should tell you", "let me tell you about",
+            # Portuguese
+            "como você sabe", "deixe-me explicar", "como eu estava dizendo",
+            "como você lembra", "você sabe que", "devo te contar", "deixe-me contar sobre"
+        ]
+
+        # Earned revelation markers
+        self.earned_revelation_markers = [
+            # English
+            "earned reveal", "strategic timing", "need-to-know basis",
+            "forced to reveal", "under pressure reveals", "conflict forces out",
+            # Portuguese
+            "revelação merecida", "timing estratégico", "base de necessidade",
+            "forçado a revelar", "sob pressão revela", "conflito força"
+        ]
+
+        # Confusion markers (too little exposition)
+        self.confusion_markers = [
+            # English
+            "unclear", "confusing", "audience lost", "missing context",
+            "don't understand", "needs explanation", "unclear motivation",
+            # Portuguese
+            "pouco claro", "confuso", "audiência perdida", "faltando contexto",
+            "não entende", "precisa explicação", "motivação pouco clara"
+        ]
+
+        # Visual exposition markers
+        self.visual_exposition_markers = [
+            # English
+            "shows visually", "visual exposition", "environment reveals",
+            "objects show", "action demonstrates", "we see", "shows us",
+            # Portuguese
+            "mostra visualmente", "exposição visual", "ambiente revela",
+            "objetos mostram", "ação demonstra", "vemos", "nos mostra"
+        ]
+
+        # Show vs tell markers
+        self.show_markers = [
+            # English
+            "shows", "demonstrates", "reveals through action", "visual",
+            "we see", "displays", "exhibits", "manifests",
+            # Portuguese
+            "mostra", "demonstra", "revela através da ação", "visual",
+            "vemos", "exibe", "manifesta"
+        ]
+
+        self.tell_markers = [
+            # English
+            "tells", "explains", "states", "narrates", "describes verbally",
+            "dialogue explains", "character says",
+            # Portuguese
+            "conta", "explica", "afirma", "narra", "descreve verbalmente",
+            "diálogo explica", "personagem diz"
+        ]
+
+        # Through conflict markers
+        self.through_conflict_markers = [
+            # English
+            "during conflict", "through tension", "argument reveals",
+            "confrontation exposes", "under pressure", "forced out by",
+            # Portuguese
+            "durante conflito", "através de tensão", "argumento revela",
+            "confronto expõe", "sob pressão", "forçado por"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze exposition in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete exposition diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Detect exposition moments
+        exposition_moments = self._detect_exposition_moments(screenplay_text)
+
+        # Detect info dumps (PENALTY)
+        info_dumps = self._detect_info_dumps(screenplay_text)
+
+        # Analyze integrated exposition
+        integrated_exposition = self._analyze_integrated_exposition(screenplay_text)
+
+        # Analyze backstory revelation
+        backstory_revelation = self._analyze_backstory_revelation(screenplay_text)
+
+        # Analyze expositional dialogue (PENALTY)
+        expositional_dialogue = self._analyze_expositional_dialogue(screenplay_text)
+
+        # Analyze visual exposition
+        visual_exposition = self._analyze_visual_exposition(screenplay_text)
+
+        # Analyze setup/payoff
+        setup_payoff = self._analyze_setup_payoff(screenplay_text)
+
+        # Analyze world-building
+        world_building = self._analyze_world_building(screenplay_text)
+
+        # Analyze exposition timing
+        exposition_timing = self._analyze_exposition_timing(screenplay_text)
+
+        # Detect confusion risk (too little exposition)
+        confusion_risk = self._detect_confusion_risk(screenplay_text)
+
+        # Detect over-exposition (too much)
+        over_exposition = self._detect_over_exposition(screenplay_text)
+
+        # Analyze earned revelation
+        earned_revelation = self._analyze_earned_revelation(screenplay_text)
+
+        # Assess exposition balance
+        exposition_balance = self._assess_exposition_balance(screenplay_text)
+
+        # Assess exposition pacing
+        exposition_pacing = self._assess_exposition_pacing(screenplay_text, scenes)
+
+        # Assess audience understanding
+        audience_understanding = self._assess_audience_understanding(screenplay_text)
+
+        # Analyze show vs tell
+        show_vs_tell = self._analyze_show_vs_tell(screenplay_text)
+
+        # Analyze exposition through conflict
+        through_conflict = self._analyze_exposition_through_conflict(screenplay_text)
+
+        # Build exposition profile
+        exposition_profile = ExpositionProfile(
+            exposition_moments_count=exposition_moments["count"],
+            info_dump_count=info_dumps["count"],
+            integrated_exposition_score=integrated_exposition["score"],
+            backstory_strategic=backstory_revelation["strategic"],
+            expositional_dialogue_count=expositional_dialogue["count"],
+            visual_exposition_score=visual_exposition["score"],
+            setup_payoff_ratio=setup_payoff["ratio"],
+            world_building_clarity=world_building["clarity"],
+            need_to_know_timing_score=exposition_timing["score"],
+            confusion_risk=confusion_risk["risk"],
+            over_exposition_risk=over_exposition["risk"],
+            earned_revelation_score=earned_revelation["score"],
+            clarity_vs_mystery_balance=exposition_balance["balance"],
+            exposition_pacing_score=exposition_pacing["score"],
+            audience_understanding_score=audience_understanding["score"],
+            overall_exposition_quality=0.0,  # calculated below
+            show_vs_tell_ratio=show_vs_tell["ratio"],
+            exposition_through_conflict_score=through_conflict["score"],
+            plant_count=setup_payoff["plant_count"],
+            payoff_count=setup_payoff["payoff_count"],
+            exposition_richness=0.0  # calculated below
+        )
+
+        # Calculate overall exposition quality
+        exposition_profile.overall_exposition_quality = self._calculate_overall_exposition_quality(exposition_profile)
+        exposition_profile.exposition_richness = self._calculate_exposition_richness(exposition_profile)
+
+        # Check against rules
+        rule_violations = self._check_exposition_rules(
+            exposition_profile, exposition_moments, info_dumps,
+            expositional_dialogue, integrated_exposition, backstory_revelation,
+            visual_exposition, earned_revelation, exposition_balance,
+            exposition_pacing, audience_understanding
+        )
+
+        # Calculate score
+        score = self._calculate_exposition_score(
+            exposition_profile, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, exposition_profile, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "exposition_moments": {
+                "count": exposition_moments["count"],
+                "present": exposition_moments.get("present", False),
+                "quality": exposition_moments.get("quality", "medium"),
+                "examples": exposition_moments.get("examples", [])[:3]
+            },
+            "info_dumps": {
+                "count": info_dumps["count"],
+                "penalty": info_dumps.get("penalty", False),
+                "examples": info_dumps.get("examples", [])[:3]
+            },
+            "integrated_exposition": {
+                "score": integrated_exposition["score"],
+                "integrated": integrated_exposition.get("integrated", False),
+                "examples": integrated_exposition.get("examples", [])[:2]
+            },
+            "backstory_revelation": {
+                "strategic": backstory_revelation["strategic"],
+                "timing": backstory_revelation.get("timing", "unknown"),
+                "count": backstory_revelation.get("count", 0)
+            },
+            "expositional_dialogue": {
+                "count": expositional_dialogue["count"],
+                "penalty": expositional_dialogue.get("penalty", False),
+                "examples": expositional_dialogue.get("examples", [])[:3]
+            },
+            "visual_exposition": {
+                "score": visual_exposition["score"],
+                "present": visual_exposition.get("present", False),
+                "examples": visual_exposition.get("examples", [])[:2]
+            },
+            "setup_payoff": {
+                "ratio": setup_payoff["ratio"],
+                "plant_count": setup_payoff["plant_count"],
+                "payoff_count": setup_payoff["payoff_count"],
+                "balanced": setup_payoff.get("balanced", False)
+            },
+            "world_building": {
+                "clarity": world_building["clarity"],
+                "clear": world_building.get("clear", False),
+                "present": world_building.get("present", False)
+            },
+            "exposition_timing": {
+                "score": exposition_timing["score"],
+                "appropriate": exposition_timing.get("appropriate", False)
+            },
+            "confusion_risk": {
+                "risk": confusion_risk["risk"],
+                "severity": confusion_risk.get("severity", "none")
+            },
+            "over_exposition_risk": {
+                "risk": over_exposition["risk"],
+                "severity": over_exposition.get("severity", "none")
+            },
+            "earned_revelation": {
+                "score": earned_revelation["score"],
+                "earned": earned_revelation.get("earned", False),
+                "examples": earned_revelation.get("examples", [])[:2]
+            },
+            "exposition_balance": {
+                "balance": exposition_balance["balance"],
+                "balanced": exposition_balance.get("balanced", False)
+            },
+            "exposition_pacing": {
+                "score": exposition_pacing["score"],
+                "impact": exposition_pacing.get("impact", "neutral")
+            },
+            "audience_understanding": {
+                "score": audience_understanding["score"],
+                "sufficient": audience_understanding.get("sufficient", False)
+            },
+            "show_vs_tell": {
+                "ratio": show_vs_tell["ratio"],
+                "shows_more": show_vs_tell.get("shows_more", False)
+            },
+            "exposition_through_conflict": {
+                "score": through_conflict["score"],
+                "present": through_conflict.get("present", False)
+            },
+            "overall_exposition_quality": exposition_profile.overall_exposition_quality,
+            "exposition_richness": exposition_profile.exposition_richness,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, exposition_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _detect_exposition_moments(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Identify exposition passages.
+
+        McKee: "Exposition is necessary information delivery."
+        """
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            # Check for exposition patterns
+            for marker in self.exposition_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:100])
+                    break
+
+        present = count >= 3
+
+        # Determine quality
+        if count >= 8 and count <= 15:
+            quality = "optimal"
+        elif count >= 5 and count <= 20:
+            quality = "good"
+        elif count >= 3:
+            quality = "adequate"
+        elif count < 3:
+            quality = "insufficient"
+        else:
+            quality = "excessive"
+
+        return {
+            "count": count,
+            "present": present,
+            "quality": quality,
+            "examples": examples
+        }
+
+    def _detect_info_dumps(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Flag information dumps (PENALTY).
+
+        McKee: "Exposition is dullest of all screen tasks - never stop action to explain."
+        """
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            # Check for info dump patterns
+            for marker in self.info_dump_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:100])
+                    break
+
+        # Penalty if present
+        penalty = count >= 1
+
+        return {
+            "count": count,
+            "penalty": penalty,
+            "examples": examples
+        }
+
+    def _analyze_integrated_exposition(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze exposition through action/conflict.
+
+        McKee: "Exposition must be dramatic, not expositional - integrated into action."
+        """
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.integrated_expo_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:100])
+                    break
+
+        # Calculate score (0-1)
+        score = min(1.0, count / 5.0)
+
+        integrated = score >= 0.4
+
+        return {
+            "score": score,
+            "integrated": integrated,
+            "count": count,
+            "examples": examples
+        }
+
+    def _analyze_backstory_revelation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze strategic timing of backstory.
+
+        Truby: "Backstory ghost revelation strategic timing - not dumped."
+        """
+        # Count backstory markers
+        count = 0
+        for marker in self.backstory_markers:
+            count += screenplay.lower().count(marker)
+
+        # Check for strategic placement
+        strategic_markers = ["strategic", "earned", "forced to reveal", "under pressure"]
+        strategic_count = sum(1 for marker in strategic_markers if marker in screenplay.lower())
+
+        strategic = strategic_count >= 2 or (count > 0 and count <= 8)
+
+        # Determine timing quality
+        if count == 0:
+            timing = "absent"
+        elif count <= 5:
+            timing = "strategic"
+        elif count <= 10 and strategic_count >= 1:
+            timing = "good"
+        else:
+            timing = "dumped"
+
+        return {
+            "strategic": strategic,
+            "timing": timing,
+            "count": count
+        }
+
+    def _analyze_expositional_dialogue(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Flag 'as you know' dialogue (PENALTY).
+
+        McKee Dialogue: "Characters telling each other what they already know is amateur."
+        """
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            # Check for expositional dialogue patterns
+            for marker in self.expositional_dialogue_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:100])
+                    break
+
+        # Penalty if excessive
+        penalty = count >= 3
+
+        return {
+            "count": count,
+            "penalty": penalty,
+            "examples": examples
+        }
+
+    def _analyze_visual_exposition(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze show don't tell.
+
+        Seger/Mackendrick: "Visual exposition - show through action, environment, objects."
+        """
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.visual_exposition_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:100])
+                    break
+
+        # Calculate score (0-1)
+        score = min(1.0, count / 8.0)
+
+        present = count >= 3
+
+        return {
+            "score": score,
+            "present": present,
+            "count": count,
+            "examples": examples
+        }
+
+    def _analyze_setup_payoff(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze information planting.
+
+        Field/Snyder: "Plant and payoff - setup information before needed."
+        """
+        plant_count = 0
+        payoff_count = 0
+
+        # Count plants and payoffs
+        plant_markers = ["plant", "setup", "foreshadow", "establish"]
+        payoff_markers = ["payoff", "callback", "pays off", "established earlier"]
+
+        for marker in plant_markers:
+            plant_count += screenplay.lower().count(marker)
+
+        for marker in payoff_markers:
+            payoff_count += screenplay.lower().count(marker)
+
+        # Calculate ratio (ideally 1:1 or plants slightly higher)
+        if plant_count == 0:
+            ratio = 0.0
+        else:
+            ratio = min(1.0, payoff_count / plant_count)
+
+        balanced = (plant_count >= 2 and payoff_count >= 2 and ratio >= 0.5)
+
+        return {
+            "ratio": ratio,
+            "plant_count": plant_count,
+            "payoff_count": payoff_count,
+            "balanced": balanced
+        }
+
+    def _analyze_world_building(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze context and rules clarity.
+
+        Snyder: "Opening image establishes world - world-building."
+        """
+        count = 0
+
+        for marker in self.world_building_markers:
+            count += screenplay.lower().count(marker)
+
+        # Calculate clarity (0-1)
+        clarity = min(1.0, count / 5.0)
+
+        clear = clarity >= 0.4
+        present = count >= 2
+
+        return {
+            "clarity": clarity,
+            "clear": clear,
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_exposition_timing(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze need-to-know basis.
+
+        Truby: "Strategic timing - reveal when audience needs to know."
+        """
+        # Check for timing markers
+        timing_markers = ["need-to-know", "strategic timing", "reveals when needed", "just in time"]
+        count = sum(1 for marker in timing_markers if marker in screenplay.lower())
+
+        # Calculate score (0-1)
+        score = min(1.0, count / 3.0)
+
+        appropriate = score >= 0.3 or count >= 2
+
+        return {
+            "score": score,
+            "appropriate": appropriate,
+            "count": count
+        }
+
+    def _detect_confusion_risk(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect too little exposition.
+
+        Risk: Audience confusion from insufficient context.
+        """
+        count = 0
+
+        for marker in self.confusion_markers:
+            count += screenplay.lower().count(marker)
+
+        # Risk if confusion markers present
+        risk = count >= 3
+
+        if count >= 5:
+            severity = "high"
+        elif count >= 3:
+            severity = "medium"
+        else:
+            severity = "none"
+
+        return {
+            "risk": risk,
+            "severity": severity,
+            "count": count
+        }
+
+    def _detect_over_exposition(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect too much exposition.
+
+        Risk: Pacing drag from over-explanation.
+        """
+        # Count exposition-heavy indicators
+        over_markers = ["too much", "over-explained", "explains everything", "stops to explain"]
+        count = sum(1 for marker in over_markers if marker in screenplay.lower())
+
+        # Also check total exposition moments
+        total_expo = sum(1 for marker in self.exposition_markers if marker in screenplay.lower())
+
+        # Risk if excessive
+        risk = count >= 2 or total_expo > 20
+
+        if count >= 3 or total_expo > 25:
+            severity = "high"
+        elif count >= 2 or total_expo > 20:
+            severity = "medium"
+        else:
+            severity = "none"
+
+        return {
+            "risk": risk,
+            "severity": severity,
+            "count": count
+        }
+
+    def _analyze_earned_revelation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze backstory earned through tension.
+
+        McKee: "Backstory revealed when protagonist forced to confront past."
+        """
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.earned_revelation_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:100])
+                    break
+
+        # Calculate score (0-1)
+        score = min(1.0, count / 4.0)
+
+        earned = score >= 0.5 or count >= 2
+
+        return {
+            "score": score,
+            "earned": earned,
+            "count": count,
+            "examples": examples
+        }
+
+    def _assess_exposition_balance(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Assess clarity vs mystery.
+
+        McKee: "Balance between confusion and over-explanation."
+        """
+        # Count clarity indicators
+        clarity_markers = ["clear", "understands", "establishes", "explains"]
+        clarity_count = sum(1 for marker in clarity_markers if marker in screenplay.lower())
+
+        # Count mystery indicators
+        mystery_markers = ["mystery", "unknown", "hidden", "secret", "withholds"]
+        mystery_count = sum(1 for marker in mystery_markers if marker in screenplay.lower())
+
+        # Calculate balance (0-1, closer to 0.5 is better)
+        total = clarity_count + mystery_count
+        if total == 0:
+            balance = 0.0
+        else:
+            # Ideal ratio is roughly 60/40 clarity/mystery
+            clarity_ratio = clarity_count / total
+            # Score closer to 0.6 is better
+            balance = 1.0 - abs(clarity_ratio - 0.6)
+
+        balanced = balance >= 0.5
+
+        return {
+            "balance": balance,
+            "balanced": balanced,
+            "clarity_count": clarity_count,
+            "mystery_count": mystery_count
+        }
+
+    def _assess_exposition_pacing(self, screenplay: str, scenes: List[Dict]) -> Dict[str, Any]:
+        """
+        Assess impact on story flow.
+
+        McKee: "Exposition is dullest of all screen tasks - minimize."
+        """
+        if not scenes:
+            return {
+                "score": 0.5,
+                "impact": "neutral"
+            }
+
+        # Count exposition per scene
+        expo_per_scene = []
+        for scene in scenes:
+            scene_text = '\n'.join(scene['content'])
+            expo_count = sum(1 for marker in self.exposition_markers if marker in scene_text.lower())
+            expo_per_scene.append(expo_count)
+
+        # Calculate average
+        avg_expo = sum(expo_per_scene) / len(expo_per_scene) if expo_per_scene else 0
+
+        # Score based on average (0-2 is good, 3-5 is moderate, 6+ is drag)
+        if avg_expo <= 2:
+            score = 0.9
+            impact = "minimal"
+        elif avg_expo <= 5:
+            score = 0.6
+            impact = "moderate"
+        else:
+            score = 0.3
+            impact = "drags"
+
+        return {
+            "score": score,
+            "impact": impact,
+            "avg_expo_per_scene": avg_expo
+        }
+
+    def _assess_audience_understanding(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Assess information sufficiency.
+
+        Fundamental: Audience must understand story.
+        """
+        # Count understanding indicators
+        understanding_markers = [
+            "clear motivation", "clear stakes", "understands", "context established",
+            "audience knows", "establishes", "makes clear"
+        ]
+        count = sum(1 for marker in understanding_markers if marker in screenplay.lower())
+
+        # Count confusion indicators (negative)
+        confusion_count = sum(1 for marker in self.confusion_markers if marker in screenplay.lower())
+
+        # Calculate score (0-1)
+        positive = count
+        negative = confusion_count
+        score = min(1.0, max(0.0, (positive - negative) / 5.0))
+
+        sufficient = score >= 0.4 and confusion_count < 3
+
+        return {
+            "score": score,
+            "sufficient": sufficient,
+            "understanding_count": count,
+            "confusion_count": confusion_count
+        }
+
+    def _analyze_show_vs_tell(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze show vs tell ratio.
+
+        Seger: "Show don't tell - visual medium demands visual exposition."
+        """
+        show_count = sum(1 for marker in self.show_markers if marker in screenplay.lower())
+        tell_count = sum(1 for marker in self.tell_markers if marker in screenplay.lower())
+
+        # Calculate ratio (show / total, higher is better)
+        total = show_count + tell_count
+        if total == 0:
+            ratio = 0.5
+        else:
+            ratio = show_count / total
+
+        shows_more = ratio >= 0.6
+
+        return {
+            "ratio": ratio,
+            "shows_more": shows_more,
+            "show_count": show_count,
+            "tell_count": tell_count
+        }
+
+    def _analyze_exposition_through_conflict(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze exposition revealed through conflict.
+
+        McKee: "Exposition through conflict not narration."
+        """
+        count = 0
+
+        for marker in self.through_conflict_markers:
+            count += screenplay.lower().count(marker)
+
+        # Calculate score (0-1)
+        score = min(1.0, count / 5.0)
+
+        present = count >= 2
+
+        return {
+            "score": score,
+            "present": present,
+            "count": count
+        }
+
+    def _calculate_overall_exposition_quality(self, profile: ExpositionProfile) -> float:
+        """Calculate overall exposition quality score."""
+        scores = [
+            1.0 if profile.exposition_moments_count >= 3 else 0.0,
+            max(0.0, 1.0 - (profile.info_dump_count * 0.3)),  # PENALTY for info dumps
+            profile.integrated_exposition_score,
+            1.0 if profile.backstory_strategic else 0.5,
+            max(0.0, 1.0 - (profile.expositional_dialogue_count * 0.2)),  # PENALTY
+            profile.visual_exposition_score,
+            profile.setup_payoff_ratio,
+            profile.world_building_clarity,
+            profile.need_to_know_timing_score,
+            0.0 if profile.confusion_risk else 1.0,
+            0.0 if profile.over_exposition_risk else 1.0,
+            profile.earned_revelation_score,
+            profile.clarity_vs_mystery_balance,
+            profile.exposition_pacing_score,
+            profile.audience_understanding_score,
+            profile.show_vs_tell_ratio,
+            profile.exposition_through_conflict_score
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _calculate_exposition_richness(self, profile: ExpositionProfile) -> float:
+        """Calculate exposition richness (variety of techniques used)."""
+        techniques_used = 0
+
+        if profile.exposition_moments_count >= 3:
+            techniques_used += 1
+        if profile.integrated_exposition_score >= 0.4:
+            techniques_used += 1
+        if profile.backstory_strategic:
+            techniques_used += 1
+        if profile.visual_exposition_score >= 0.4:
+            techniques_used += 1
+        if profile.setup_payoff_ratio >= 0.5:
+            techniques_used += 1
+        if profile.world_building_clarity >= 0.4:
+            techniques_used += 1
+        if profile.earned_revelation_score >= 0.5:
+            techniques_used += 1
+        if profile.clarity_vs_mystery_balance >= 0.5:
+            techniques_used += 1
+        if profile.show_vs_tell_ratio >= 0.6:
+            techniques_used += 1
+        if profile.exposition_through_conflict_score >= 0.4:
+            techniques_used += 1
+
+        # Richness = variety of techniques (0-1)
+        richness = techniques_used / 10.0
+
+        return max(0.0, min(1.0, richness))
+
+    def _check_exposition_rules(self, profile: ExpositionProfile, exposition_moments: Dict,
+                                info_dumps: Dict, expositional_dialogue: Dict,
+                                integrated_exposition: Dict, backstory_revelation: Dict,
+                                visual_exposition: Dict, earned_revelation: Dict,
+                                exposition_balance: Dict, exposition_pacing: Dict,
+                                audience_understanding: Dict) -> List[Dict]:
+        """Check exposition against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "EXPO.R001":
+                # Exposition Present
+                if profile.exposition_moments_count < 3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Essential exposition missing - audience confusion",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R002":
+                # Avoid Info Dumps
+                if profile.info_dump_count >= 1:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Info dumps present ({profile.info_dump_count}) - stops action to explain",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R003":
+                # Integrated Exposition
+                if profile.integrated_exposition_score < 0.4:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Exposition not integrated - isolated from action",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R004":
+                # Backstory Strategic
+                if not profile.backstory_strategic:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Backstory not strategic - dumped early or all at once",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R005":
+                # Show Don't Tell
+                if profile.show_vs_tell_ratio < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Too much telling - relies on dialogue/narration",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R006":
+                # Exposition Through Conflict
+                if profile.exposition_through_conflict_score < 0.4:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Exposition without conflict - flat delivery",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R007":
+                # Avoid Expositional Dialogue
+                if profile.expositional_dialogue_count >= 3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Expositional dialogue present ({profile.expositional_dialogue_count}) - 'as you know' dialogue",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R008":
+                # Plant and Payoff
+                if profile.setup_payoff_ratio < 0.3 or profile.plant_count < 2:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Insufficient plant/payoff - information not setup",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R009":
+                # World-Building Clarity
+                if profile.world_building_clarity < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "World-building unclear - rules confusing",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R010":
+                # Need-to-Know Timing
+                if profile.need_to_know_timing_score < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Information timing poor - revealed too early or too late",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R011":
+                # Visual Exposition
+                if profile.visual_exposition_score < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Visual exposition weak - relies on dialogue",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R012":
+                # Earned Revelation
+                if profile.earned_revelation_score < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Backstory not earned - revealed arbitrarily",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R013":
+                # Balance Clarity vs Mystery
+                if profile.clarity_vs_mystery_balance < 0.4:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Imbalance - too much or too little exposition",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R014":
+                # Exposition Pacing
+                if profile.exposition_pacing_score < 0.4:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Exposition drags pacing - slows story momentum",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "EXPO.R015":
+                # Audience Understanding
+                if profile.audience_understanding_score < 0.4 or profile.confusion_risk:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Audience confusion risk - insufficient exposition",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_exposition_score(self, profile: ExpositionProfile, violations: List) -> float:
+        """Calculate overall exposition score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for info dumps
+        if profile.info_dump_count >= 1:
+            score -= profile.info_dump_count * 10  # -10 per info dump
+
+        # Extra penalty for expositional dialogue
+        if profile.expositional_dialogue_count >= 3:
+            score -= (profile.expositional_dialogue_count - 2) * 3  # -3 per extra instance
+
+        # Bonus for excellence
+        if profile.overall_exposition_quality > 0.8:
+            score += 5
+        elif profile.overall_exposition_quality > 0.7:
+            score += 3
+
+        if profile.integrated_exposition_score > 0.7:
+            score += 3
+
+        if profile.visual_exposition_score > 0.6:
+            score += 2
+
+        if profile.backstory_strategic and profile.earned_revelation_score > 0.6:
+            score += 3
+
+        if profile.exposition_richness > 0.7:
+            score += 2
+
+        if profile.show_vs_tell_ratio > 0.7:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: ExpositionProfile,
+                          violations: List) -> str:
+        """Generate exposition diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Exposition integrated dramatically - invisible and effective"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Exposition present but could be better integrated"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Exposition problems - info dumps or insufficient context"
+        else:
+            level = "POOR"
+            summary = "Major exposition problems - stops action to explain or confusing"
+
+        diagnosis = f"EXPOSITION {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if profile.info_dump_count >= 1:
+            issues.append(f"info dumps ({profile.info_dump_count})")
+        if profile.expositional_dialogue_count >= 3:
+            issues.append(f"expositional dialogue ({profile.expositional_dialogue_count})")
+        if not profile.backstory_strategic:
+            issues.append("backstory dumped")
+        if profile.confusion_risk:
+            issues.append("audience confusion risk")
+        if profile.over_exposition_risk:
+            issues.append("over-exposition")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: ExpositionProfile) -> List[str]:
+        """Generate specific exposition recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if profile.info_dump_count >= 1:
+            recommendations.append("Eliminate info dumps - McKee: 'Never stop action to explain' - spread information across scenes through conflict")
+
+        if profile.expositional_dialogue_count >= 3:
+            recommendations.append("Remove expositional dialogue - McKee: 'Characters telling each other what they know is amateur' - never 'as you know' dialogue")
+
+        if not profile.backstory_strategic:
+            recommendations.append("Reveal backstory strategically - Truby: 'Backstory ghost revelation strategic timing' - need-to-know basis")
+
+        if profile.integrated_exposition_score < 0.4:
+            recommendations.append("Integrate exposition into action - McKee: 'Exposition must be dramatic, not expositional' - reveal through conflict")
+
+        if profile.visual_exposition_score < 0.3:
+            recommendations.append("Use visual exposition - Seger/Mackendrick: 'Show don't tell' - visual medium demands visual storytelling")
+
+        if profile.show_vs_tell_ratio < 0.5:
+            recommendations.append("Show more, tell less - demonstrate through action rather than explaining through dialogue")
+
+        if profile.earned_revelation_score < 0.5:
+            recommendations.append("Earn revelations through tension - McKee: 'Backstory revealed when protagonist forced to confront past'")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - exposition is necessary but must be dramatically integrated")
+            recommendations.append("Study Seger's Making Good Script Great - exposition techniques, show don't tell")
+
+        return recommendations[:5]
+
+    def export_exposition_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export exposition features for correlation/analysis.
+
+        Returns structured data with exposition metrics.
+        Useful for external indexing, correlation engines, or ML pipelines.
+
+        Args:
+            screenplay_text: Full screenplay text
+
+        Returns:
+            Dict with exposition metrics
+        """
+        exposition_moments = self._detect_exposition_moments(screenplay_text)
+        info_dumps = self._detect_info_dumps(screenplay_text)
+        integrated_exposition = self._analyze_integrated_exposition(screenplay_text)
+        visual_exposition = self._analyze_visual_exposition(screenplay_text)
+
+        return {
+            "exposition_moments": {
+                "count": exposition_moments["count"],
+                "present": exposition_moments.get("present", False)
+            },
+            "info_dumps": {
+                "count": info_dumps["count"],
+                "penalty": info_dumps.get("penalty", False)
+            },
+            "integrated_exposition": {
+                "score": integrated_exposition["score"],
+                "integrated": integrated_exposition.get("integrated", False)
+            },
+            "visual_exposition": {
+                "score": visual_exposition["score"],
+                "present": visual_exposition.get("present", False)
+            },
+            "meta": {
+                "source": "DrExposition",
+                "focus": "Exposition quality and information delivery"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrExpositionAnalysis(DrExposition):
+    """Alias for compatibility with test framework."""
+    pass

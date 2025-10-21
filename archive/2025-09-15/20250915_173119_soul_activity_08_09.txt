@@ -1,0 +1,14 @@
+# Soul Backups - 08/09/2025
+# Total: 10 arquivos, ~4.7KB
+# Podem ser deletados pois são automáticos e não contêm desenvolvimento
+
+soul_3cebb9b6c2db3cbb_20250908_213328.bkp.gz (471B)
+soul_3cebb9b6c2db3cbb_20250908_213358.bkp.gz (471B)
+soul_3cebb9b6c2db3cbb_20250908_213428.bkp.gz (474B)
+soul_5ced6eaa5bb4c8ad_20250908_193947.bkp.gz (471B)
+soul_83a791be3e691db0_20250908_233803.bkp.gz (470B)
+soul_88452c30ca3ae5ce_20250908_233827.bkp.gz (471B)
+soul_b1261bb562b3f2ca_20250908_213640.bkp.gz (472B)
+soul_b1261bb562b3f2ca_20250908_213710.bkp.gz (475B)
+soul_f15dcbe095ec2a30_20250908_232855.bkp.gz (472B)
+soul_ff91b6f2be05ada5_20250908_233014.bkp.gz (471B)

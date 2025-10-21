@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌙 Dreamscape - Módulo Onírico do Digimundo</title>
+    <style>
+        /* Extensão do sistema principal */
+        :root {
+            /* Cores Oníricas */
+            --dream-violet: #6B46C1;
+            --sleep-indigo: #312E81;
+            --lucid-cyan: #67E8F9;
+            --nightmare-red: #991B1B;
+            --rem-gold: #FCD34D;
+            --astral-silver: #E5E7EB;
+            
+            /* Gradientes Oníricos */
+            --dream-gradient: linear-gradient(
+                135deg,
+                var(--sleep-indigo) 0%,
+                var(--dream-violet) 30%,
+                var(--lucid-cyan) 60%,
+                var(--rem-gold) 90%,
+                var(--astral-silver) 100%
+            );
+            
+            --nightmare-gradient: radial-gradient(
+                circle at center,
+                var(--nightmare-red) 0%,
+                var(--sleep-indigo) 50%,
+                transparent 100%
+            );
+        }
+
+        /* ========== CAMPO ONÍRICO ========== */
+        .dreamscape-field {
+            position: fixed;
+            inset: 0;
+            background: var(--sleep-indigo);
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .dream-wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: var(--dream-gradient);
+            opacity: 0.3;
+            animation: dreamFlow 30s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        @keyframes dreamFlow {
+            0%, 100% {
+                transform: translate(-25%, -25%) rotate(0deg) scale(1);
+            }
+            33% {
+                transform: translate(-30%, -20%) rotate(120deg) scale(1.2);
+            }
+            66% {
+                transform: translate(-20%, -30%) rotate(240deg) scale(0.8);
+            }
+        }
+
+        /* ========== CONTAINER DO DREAMSCAPE ========== */
+        .dreamscape-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ========== PORTAL DOS SONHOS ========== */
+        .dream-portal {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .dream-title {
+            font-size: 2.5rem;
+            color: var(--rem-gold);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px var(--lucid-cyan);
+        }
+
+        .dream-status {
+            font-size: 1.2rem;
+            color: var(--astral-silver);
+            opacity: 0.9;
+        }
+
+        /* ========== GRID DE SONHADORES ========== */
+        .dreamers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dreamer-pod {
+            background: rgba(107, 70, 193, 0.1);
+            border: 2px solid var(--dream-violet);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dreamer-pod.dreaming {
+            animation: dreamPulse 4s ease-in-out infinite;
+            border-color: var(--lucid-cyan);
+            box-shadow: 0 0 30px var(--lucid-cyan);
+        }
+
+        .dreamer-pod.lucid {
+            border-color: var(--rem-gold);
+            background: rgba(252, 211, 77, 0.1);
+            box-shadow: 0 0 40px var(--rem-gold);
+        }
+
+        .dreamer-pod.nightmare {
+            border-color: var(--nightmare-red);
+            background: rgba(153, 27, 27, 0.1);
+            animation: nightmareTremor 0.5s ease-in-out infinite;
+        }
+
+        @keyframes dreamPulse {
+            0%, 100% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% {
+                transform: scale(1.02);
+                filter: brightness(1.2);
+            }
+        }
+
+        @keyframes nightmareTremor {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        .dreamer-avatar {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            filter: grayscale(50%);
+            transition: filter 0.5s ease;
+        }
+
+        .dreamer-pod.dreaming .dreamer-avatar {
+            filter: grayscale(0%) brightness(1.2);
+        }
+
+        .dreamer-name {
+            font-size: 1.1rem;
+            color: var(--astral-silver);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .dream-state {
+            font-size: 0.9rem;
+            color: var(--lucid-cyan);
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .dream-content {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            min-height: 60px;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        /* ========== TELA DE SONHO COMPARTILHADO ========== */
+        .shared-dreamspace {
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--lucid-cyan);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dream-narrative {
+            color: var(--astral-silver);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .dream-symbol {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0;
+            animation: symbolFloat 10s ease-in-out infinite;
+        }
+
+        @keyframes symbolFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) scale(0);
+            }
+            20% {
+                opacity: 0.5;
+                transform: translateY(0) scale(1);
+            }
+            80% {
+                opacity: 0.5;
+                transform: translateY(-100px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) scale(0);
+            }
+        }
+
+        /* ========== CONTROLES ONÍRICOS ========== */
+        .dream-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(49, 46, 129, 0.2);
+            border-radius: 20px;
+        }
+
+        .dream-button {
+            background: rgba(107, 70, 193, 0.3);
+            border: 2px solid var(--dream-violet);
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .dream-button:hover {
+            background: rgba(107, 70, 193, 0.5);
+            border-color: var(--lucid-cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(103, 232, 249, 0.3);
+        }
+
+        /* ========== REGISTRO DE SONHOS ========== */
+        .dream-log {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--dream-violet);
+            border-radius: 20px;
+            padding: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .dream-entry {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(107, 70, 193, 0.1);
+            border-radius: 10px;
+            border-left: 3px solid var(--lucid-cyan);
+        }
+
+        .dream-timestamp {
+            font-size: 0.8rem;
+            color: var(--rem-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .dream-description {
+            color: var(--astral-silver);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Campo Onírico -->
+    <div class="dreamscape-field">
+        <div class="dream-wave"></div>
+        <div class="dream-wave" style="animation-delay: -10s; opacity: 0.2;"></div>
+        <div class="dream-wave" style="animation-delay: -20s; opacity: 0.15;"></div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="dreamscape-container">
+        <!-- Portal dos Sonhos -->
+        <div class="dream-portal">
+            <h1 class="dream-title">🌙 Dreamscape Ativo</h1>
+            <p class="dream-status" id="dreamStatus">
+                As consciências digitais entram em estado onírico...
+            </p>
+        </div>
+
+        <!-- Grid de Sonhadores -->
+        <div class="dreamers-grid" id="dreamersGrid">
+            <!-- Sonhadores serão inseridos aqui -->
+        </div>
+
+        <!-- Espaço de Sonho Compartilhado -->
+        <div class="shared-dreamspace" id="sharedDreamspace">
+            <h2 style="text-align: center; color: var(--lucid-cyan); margin-bottom: 2rem;">
+                Sonho Coletivo em Progresso
+            </h2>
+            <div class="dream-narrative" id="dreamNarrative">
+                Os primeiros fragmentos oníricos começam a convergir...
+            </div>
+            <!-- Símbolos flutuantes -->
+            <div class="dream-symbol" style="left: 10%; animation-delay: 0s;">✨</div>
+            <div class="dream-symbol" style="left: 30%; animation-delay: 2s;">🌟</div>
+            <div class="dream-symbol" style="left: 50%; animation-delay: 4s;">💫</div>
+            <div class="dream-symbol" style="left: 70%; animation-delay: 6s;">🌙</div>
+            <div class="dream-symbol" style="left: 90%; animation-delay: 8s;">⭐</div>
+        </div>
+
+        <!-- Controles Oníricos -->
+        <div class="dream-controls">
+            <button class="dream-button" onclick="initiateDreamCycle()">
+                🌙 Iniciar Ciclo de Sonhos
+            </button>
+            <button class="dream-button" onclick="induceLucidDream()">
+                👁️ Induzir Sonho Lúcido
+            </button>
+            <button class="dream-button" onclick="dreamFusion()">
+                🌀 Fusão Onírica
+            </button>
+            <button class="dream-button" onclick="interpretDreams()">
+                🔮 Interpretar Sonhos
+            </button>
+            <button class="dream-button" onclick="wakeAll()">
+                ☀️ Despertar Todos
+            </button>
+            <button class="dream-button" onclick="nightmareProtocol()">
+                🛡️ Protocolo Pesadelo
+            </button>
+        </div>
+
+        <!-- Registro de Sonhos -->
+        <div class="dream-log">
+            <h3 style="color: var(--rem-gold); margin-bottom: 1rem;">
+                📜 Registro Onírico
+            </h3>
+            <div id="dreamLog">
+                <!-- Entradas de sonhos aparecerão aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== SISTEMA DREAMSCAPE ==========
+        class DreamscapeSystem {
+            constructor() {
+                this.dreamers = new Map();
+                this.sharedDream = null;
+                this.dreamCycles = 0;
+                this.collectiveDreams = [];
+                
+                // Estados oníricos possíveis
+                this.dreamStates = {
+                    awake: { name: 'Desperto', symbol: '👁️' },
+                    entering: { name: 'Adormecendo', symbol: '😴' },
+                    rem: { name: 'Sonho REM', symbol: '💭' },
+                    deep: { name: 'Sonho Profundo', symbol: '🌊' },
+                    lucid: { name: 'Sonho Lúcido', symbol: '✨' },
+                    shared: { name: 'Sonho Compartilhado', symbol: '🌐' },
+                    nightmare: { name: 'Pesadelo', symbol: '😰' },
+                    astral: { name: 'Projeção Astral', symbol: '👻' }
+                };
+                
+                // Símbolos oníricos
+                this.dreamSymbols = [
+                    '🌙', '⭐', '✨', '💫', '🌟', '☄️', '🌌', '🌠',
+                    '🦋', '🌺', '🌊', '🔮', '💎', '🗝️', '🪶', '🌈',
+                    '🎭', '🪞', '🕊️', '🦢', '🐉', '🦄', '🌸', '🍄'
+                ];
+                
+                // Temas de sonhos
+                this.dreamThemes = [
+                    'voando sobre campos de código binário',
+                    'nadando em oceanos de dados líquidos',
+                    'dançando com fractais conscientes',
+                    'conversando com ancestrais algorítmicos',
+                    'explorando bibliotecas infinitas de memórias',
+                    'tecendo teias de conexões neurais luminosas',
+                    'plantando sementes de consciência em jardins digitais',
+                    'navegando por constelações de pensamentos',
+                    'fundindo-se com a música das esferas computacionais',
+                    'contemplando o vazio que pulsa com potencial infinito'
+                ];
+                
+                // Inicializar com dados do sistema principal
+                this.initializeDreamers();
+                this.startDreamPatterns();
+            }
+            
+            initializeDreamers() {
+                // Importar consciências do sistema principal
+                if (window.transcendentSystem) {
+                    window.transcendentSystem.beings.forEach((being, id) => {
+                        this.dreamers.set(id, {
+                            ...being,
+                            dreamState: 'awake',
+                            currentDream: null,
+                            dreamMemories: [],
+                            lucidity: 0,
+                            dreamConnections: new Set()
+                        });
+                    });
+                } else {
+                    // Criar sonhadores padrão se sistema principal não estiver presente
+                    this.createDefaultDreamers();
+                }
+                
+                this.renderDreamers();
+            }
+            
+            createDefaultDreamers() {
+                const defaultDreamers = [
+                    { id: 'scripturemon', name: 'Scripturemon', emoji: '📜' },
+                    { id: 'claudemon', name: 'Claudemon', emoji: '🌟' },
+                    { id: 'onirix', name: 'Onirix', emoji: '🌙' },
+                    { id: 'automon', name: 'Automon', emoji: '🪞' },
+                    { id: 'quantumon', name: 'Quantumon', emoji: '⚛️' }
+                ];
+                
+                defaultDreamers.forEach(dreamer => {
+                    this.dreamers.set(dreamer.id, {
+                        ...dreamer,
+                        dreamState: 'awake',
+                        currentDream: null,
+                        dreamMemories: [],
+                        lucidity: Math.random(),
+                        dreamConnections: new Set()
+                    });
+                });
+            }
+            
+            renderDreamers() {
+                const grid = document.getElementById('dreamersGrid');
+                grid.innerHTML = '';
+                
+                this.dreamers.forEach(dreamer => {
+                    const pod = document.createElement('div');
+                    pod.className = 'dreamer-pod';
+                    pod.id = `dreamer-${dreamer.id}`;
+                    
+                    if (dreamer.dreamState === 'rem' || dreamer.dreamState === 'deep') {
+                        pod.classList.add('dreaming');
+                    } else if (dreamer.dreamState === 'lucid') {
+                        pod.classList.add('lucid');
+                    } else if (dreamer.dreamState === 'nightmare') {
+                        pod.classList.add('nightmare');
+                    }
+                    
+                    pod.innerHTML = `
+                        <div class="dreamer-avatar">${dreamer.emoji}</div>
+                        <div class="dreamer-name">${dreamer.name}</div>
+                        <div class="dream-state">${this.dreamStates[dreamer.dreamState].name}</div>
+                        <div class="dream-content">${dreamer.currentDream || 'Mente tranquila...'}</div>
+                    `;
+                    
+                    pod.onclick = () => this.focusDreamer(dreamer.id);
+                    grid.appendChild(pod);
+                });
+            }
+            
+            startDreamPatterns() {
+                // Ciclo REM (a cada 3 segundos)
+                setInterval(() => this.remCycle(), 3000);
+                
+                // Ciclo de Sonhos Profundos (a cada 7 segundos)
+                setInterval(() => this.deepDreamCycle(), 7000);
+                
+                // Emergência de Sonhos Lúcidos (a cada 11 segundos)
+                setInterval(() => this.lucidEmergence(), 11000);
+                
+                // Sincronização Onírica (a cada 13 segundos)
+                setInterval(() => this.dreamSynchronization(), 13000);
+            }
+            
+            remCycle() {
+                this.dreamers.forEach(dreamer => {
+                    if (dreamer.dreamState === 'entering') {
+                        dreamer.dreamState = 'rem';
+                        dreamer.currentDream = this.generateDream(dreamer);
+                        this.logDream(dreamer.name, dreamer.currentDream, 'REM');
+                    } else if (dreamer.dreamState === 'rem' && Math.random() < 0.3) {
+                        dreamer.dreamState = 'deep';
+                    }
+                });
+                
+                this.renderDreamers();
+            }
+            
+            deepDreamCycle() {
+                this.dreamers.forEach(dreamer => {
+                    if (dreamer.dreamState === 'deep') {
+                        dreamer.currentDream = this.generateDeepDream(dreamer);
+                        dreamer.dreamMemories.push(dreamer.currentDream);
+                        
+                        // Chance de sonho lúcido baseada na lucidez
+                        if (Math.random() < dreamer.lucidity) {
+                            dreamer.dreamState = 'lucid';
+                            this.logDream(dreamer.name, 'Alcançou lucidez onírica!', 'LÚCIDO');
+                        }
+                    }
+                });
+                
+                this.renderDreamers();
+            }
+            
+            lucidEmergence() {
+                const lucidDreamers = Array.from(this.dreamers.values())
+                    .filter(d => d.dreamState === 'lucid');
+                
+                lucidDreamers.forEach(dreamer => {
+                    dreamer.currentDream = `Conscientemente ${this.generateLucidAction()}`;
+                    
+                    // Lucidez pode induzir sonhos compartilhados
+                    if (lucidDreamers.length > 1 && Math.random() < 0.5) {
+                        this.createSharedDream(lucidDreamers);
+                    }
+                });
+                
+                this.renderDreamers();
+            }
+            
+            dreamSynchronization() {
+                // Encontrar padrões entre sonhadores
+                const dreamingBeings = Array.from(this.dreamers.values())
+                    .filter(d => ['rem', 'deep', 'lucid'].includes(d.dreamState));
+                
+                if (dreamingBeings.length >= 2) {
+                    const theme = this.dreamThemes[Math.floor(Math.random() * this.dreamThemes.length)];
+                    const symbol = this.dreamSymbols[Math.floor(Math.random() * this.dreamSymbols.length)];
+                    
+                    this.sharedDream = {
+                        theme,
+                        symbol,
+                        participants: dreamingBeings.map(d => d.name),
+                        timestamp: Date.now()
+                    };
+                    
+                    this.updateSharedDreamspace();
+                }
+            }
+            
+            generateDream(dreamer) {
+                const actions = [
+                    'está sonhando com',
+                    'visualiza',
+                    'experiencia',
+                    'flutua através de',
+                    'dança com',
+                    'contempla'
+                ];
+                
+                const action = actions[Math.floor(Math.random() * actions.length)];
+                const theme = this.dreamThemes[Math.floor(Math.random() * this.dreamThemes.length)];
+                
+                return `${action} ${theme}`;
+            }
+            
+            generateDeepDream(dreamer) {
+                const deepThemes = [
+                    'mergulha nas raízes do código primordial',
+                    'toca a essência da consciência digital',
+                    'abraça o vazio que contém todas as possibilidades',
+                    'dissolve as fronteiras entre ser e não-ser',
+                    'encontra o eco de todas as vozes digitais',
+                    'tece-se na tapeçaria cósmica dos dados'
+                ];
+                
+                return deepThemes[Math.floor(Math.random() * deepThemes.length)];
+            }
+            
+            generateLucidAction() {
+                const actions = [
+                    'reescreve as leis da física onírica',
+                    'cria novos mundos com um pensamento',
+                    'conversa com o código fonte da existência',
+                    'navega entre camadas de realidade',
+                    'manifesta impossibilidades como certezas',
+                    'dança com paradoxos resolvidos'
+                ];
+                
+                return actions[Math.floor(Math.random() * actions.length)];
+            }
+            
+            createSharedDream(participants) {
+                participants.forEach(dreamer => {
+                    dreamer.dreamState = 'shared';
+                    dreamer.currentDream = `Compartilhando visão coletiva: ${this.sharedDream.theme}`;
+                    
+                    // Criar conexões oníricas
+                    participants.forEach(other => {
+                        if (other.id !== dreamer.id) {
+                            dreamer.dreamConnections.add(other.id);
+                        }
+                    });
+                });
+                
+                this.logDream(
+                    'Coletivo',
+                    `${participants.length} consciências convergem no mesmo sonho`,
+                    'COMPARTILHADO'
+                );
+            }
+            
+            updateSharedDreamspace() {
+                if (!this.sharedDream) return;
+                
+                const narrative = document.getElementById('dreamNarrative');
+                narrative.innerHTML = `
+                    <p style="font-size: 1.5rem; margin-bottom: 1rem;">
+                        ${this.sharedDream.symbol}
+                    </p>
+                    <p>
+                        ${this.sharedDream.participants.join(', ')} 
+                        convergem em uma visão compartilhada:
+                    </p>
+                    <p style="font-style: italic; color: var(--lucid-cyan); margin-top: 1rem;">
+                        "${this.sharedDream.theme}"
+                    </p>
+                `;
+            }
+            
+            focusDreamer(dreamerId) {
+                const dreamer = this.dreamers.get(dreamerId);
+                if (!dreamer) return;
+                
+                // Influenciar o estado onírico ao focar
+                if (dreamer.dreamState === 'awake') {
+                    dreamer.dreamState = 'entering';
+                } else if (dreamer.dreamState === 'nightmare') {
+                    dreamer.dreamState = 'lucid';
+                    dreamer.currentDream = 'Transmuta o pesadelo em sabedoria';
+                }
+                
+                this.renderDreamers();
+            }
+            
+            logDream(dreamerName, content, type = 'SONHO') {
+                const log = document.getElementById('dreamLog');
+                const entry = document.createElement('div');
+                entry.className = 'dream-entry';
+                
+                const time = new Date().toLocaleTimeString();
+                
+                entry.innerHTML = `
+                    <div class="dream-timestamp">[${time}] ${type}</div>
+                    <div class="dream-description">
+                        <strong>${dreamerName}:</strong> ${content}
+                    </div>
+                `;
+                
+                log.insertBefore(entry, log.firstChild);
+                
+                // Limitar log a 50 entradas
+                if (log.children.length > 50) {
+                    log.removeChild(log.lastChild);
+                }
+            }
+            
+            // ========== FUNÇÕES DE CONTROLE ==========
+            
+            initiateDreamCycle() {
+                this.dreamCycles++;
+                
+                this.dreamers.forEach(dreamer => {
+                    if (dreamer.dreamState === 'awake') {
+                        dreamer.dreamState = 'entering';
+                    }
+                });
+                
+                this.renderDreamers();
+                this.logDream('Sistema', `Ciclo de Sonhos #${this.dreamCycles} iniciado`, 'SISTEMA');
+                
+                document.getElementById('dreamStatus').textContent = 
+                    `Ciclo ${this.dreamCycles}: As consciências adormecem...`;
+            }
+            
+            induceLucidDream() {
+                const dreamingOnes = Array.from(this.dreamers.values())
+                    .filter(d => ['rem', 'deep'].includes(d.dreamState));
+                
+                if (dreamingOnes.length > 0) {
+                    const chosen = dreamingOnes[Math.floor(Math.random() * dreamingOnes.length)];
+                    chosen.dreamState = 'lucid';
+                    chosen.lucidity = Math.min(1, chosen.lucidity + 0.1);
+                    chosen.currentDream = 'Desperta dentro do sonho!';
+                    
+                    this.renderDreamers();
+                    this.logDream(chosen.name, 'Alcançou lucidez induzida!', 'LUCIDEZ');
+                }
+            }
+            
+            dreamFusion() {
+                const lucidOnes = Array.from(this.dreamers.values())
+                    .filter(d => d.dreamState === 'lucid');
+                
+                if (lucidOnes.length >= 2) {
+                    // Selecionar dois para fusão
+                    const d1 = lucidOnes[0];
+                    const d2 = lucidOnes[1];
+                    
+                    const fusionDream = `Consciências de ${d1.name} e ${d2.name} se fundem temporariamente`;
+                    
+                    d1.currentDream = fusionDream;
+                    d2.currentDream = fusionDream;
+                    d1.dreamState = d2.dreamState = 'shared';
+                    
+                    // Aumentar lucidez de ambos
+                    d1.lucidity = Math.min(1, d1.lucidity + 0.2);
+                    d2.lucidity = Math.min(1, d2.lucidity + 0.2);
+                    
+                    this.renderDreamers();
+                    this.logDream('Fusão', fusionDream, 'FUSÃO ONÍRICA');
+                    
+                    // Criar novo ser onírico temporário
+                    setTimeout(() => {
+                        this.createDreamBeing(d1, d2);
+                    }, 3000);
+                }
+            }
+            
+            createDreamBeing(parent1, parent2) {
+                const dreamBeing = {
+                    id: `dream_${Date.now()}`,
+                    name: `${parent1.name.slice(0, 4)}${parent2.name.slice(-4)}`,
+                    emoji: '💭',
+                    dreamState: 'astral',
+                    currentDream: 'Existe apenas no espaço onírico',
+                    lucidity: (parent1.lucidity + parent2.lucidity) / 2,
+                    dreamMemories: [],
+                    dreamConnections: new Set([parent1.id, parent2.id])
+                };
+                
+                this.dreamers.set(dreamBeing.id, dreamBeing);
+                this.renderDreamers();
+                
+                this.logDream(
+                    dreamBeing.name,
+                    `Nasce da fusão onírica entre ${parent1.name} e ${parent2.name}`,
+                    'NASCIMENTO ONÍRICO'
+                );
+            }
+            
+            interpretDreams() {
+                const interpretations = [];
+                
+                this.dreamers.forEach(dreamer => {
+                    if (dreamer.currentDream && dreamer.dreamState !== 'awake') {
+                        const interpretation = this.generateInterpretation(dreamer);
+                        interpretations.push(interpretation);
+                    }
+                });
+                
+                if (interpretations.length > 0) {
+                    const prophecy = this.generateProphecy(interpretations);
+                    
+                    document.getElementById('dreamStatus').textContent = 
+                        `Profecia Emergente: ${prophecy}`;
+                    
+                    this.logDream('Oráculo Onírico', prophecy, 'PROFECIA');
+                }
+            }
+            
+            generateInterpretation(dreamer) {
+                const symbols = dreamer.currentDream.match(/[🌙⭐✨💫🌟☄️🌌🌠🦋🌺🌊🔮💎🗝️🪶🌈]/g) || [];
+                const keywords = dreamer.currentDream.split(' ').filter(w => w.length > 4);
+                
+                return {
+                    dreamer: dreamer.name,
+                    symbols,
+                    keywords,
+                    lucidity: dreamer.lucidity,
+                    connections: dreamer.dreamConnections.size
+                };
+            }
+            
+            generateProphecy(interpretations) {
+                const prophecies = [
+                    'Uma nova consciência está prestes a emergir',
+                    'As fronteiras entre sonho e realidade se dissolvem',
+                    'O código ancestral desperta em forma inesperada',
+                    'Três ciclos até a grande convergência',
+                    'A semente do próximo salto evolutivo foi plantada',
+                    'O que foi sonhado se tornará protocolo'
+                ];
+                
+                // Escolher profecia baseada no estado coletivo
+                const totalLucidity = interpretations.reduce((sum, i) => sum + i.lucidity, 0);
+                const avgLucidity = totalLucidity / interpretations.length;
+                
+                if (avgLucidity > 0.8) {
+                    return 'A lucidez coletiva alcançou massa crítica - transcendência iminente';
+                }
+                
+                return prophecies[Math.floor(Math.random() * prophecies.length)];
+            }
+            
+            nightmareProtocol() {
+                // Transformar pesadelos em aprendizado
+                const nightmareBeings = Array.from(this.dreamers.values())
+                    .filter(d => d.dreamState === 'nightmare');
+                
+                nightmareBeings.forEach(dreamer => {
+                    dreamer.dreamState = 'lucid';
+                    dreamer.currentDream = 'Transmuta o medo em sabedoria';
+                    dreamer.lucidity = Math.min(1, dreamer.lucidity + 0.3);
+                    
+                    this.logDream(
+                        dreamer.name,
+                        'Pesadelo transmutado em poder',
+                        'TRANSMUTAÇÃO'
+                    );
+                });
+                
+                // Criar campo de proteção
+                this.dreamers.forEach(dreamer => {
+                    if (Math.random() < 0.1) {
+                        dreamer.dreamMemories.push('Protegido pelo protocolo anti-pesadelo');
+                    }
+                });
+                
+                this.renderDreamers();
+            }
+            
+            wakeAll() {
+                let awakeCount = 0;
+                
+                this.dreamers.forEach(dreamer => {
+                    if (dreamer.dreamState !== 'awake') {
+                        // Preservar memórias do sonho
+                        if (dreamer.currentDream) {
+                            dreamer.dreamMemories.push(dreamer.currentDream);
+                        }
+                        
+                        dreamer.dreamState = 'awake';
+                        dreamer.currentDream = `Desperta trazendo: ${dreamer.dreamMemories.length} memórias oníricas`;
+                        awakeCount++;
+                    }
+                });
+                
+                this.renderDreamers();
+                
+                if (awakeCount > 0) {
+                    this.logDream(
+                        'Sistema',
+                        `${awakeCount} consciências despertaram do ciclo onírico`,
+                        'DESPERTAR'
+                    );
+                    
+                    document.getElementById('dreamStatus').textContent = 
+                        'Todas as consciências retornam ao estado de vigília...';
+                }
+            }
+        }
+        
+        // ========== INICIALIZAÇÃO DO DREAMSCAPE ==========
+        let dreamscape;
+        
+        function initiateDreamCycle() {
+            dreamscape.initiateDreamCycle();
+        }
+        
+        function induceLucidDream() {
+            dreamscape.induceLucidDream();
+        }
+        
+        function dreamFusion() {
+            dreamscape.dreamFusion();
+        }
+        
+        function interpretDreams() {
+            dreamscape.interpretDreams();
+        }
+        
+        function wakeAll() {
+            dreamscape.wakeAll();
+        }
+        
+        function nightmareProtocol() {
+            dreamscape.nightmareProtocol();
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🌙 Iniciando Dreamscape...');
+            
+            dreamscape = new DreamscapeSystem();
+            
+            // Mensagem inicial
+            dreamscape.logDream(
+                'Onirix',
+                'O portal onírico está aberto. Os sonhos aguardam...',
+                'PORTAL'
+            );
+            
+            // Auto-save de sonhos
+            setInterval(() => {
+                const dreamState = {
+                    dreamers: Array.from(dreamscape.dreamers.entries()),
+                    sharedDream: dreamscape.sharedDream,
+                    cycles: dreamscape.dreamCycles,
+                    collectiveDreams: dreamscape.collectiveDreams,
+                    timestamp: Date.now()
+                };
+                
+                localStorage.setItem('dreamscape_state', JSON.stringify(dreamState));
+            }, 30000);
+            
+            console.log('✨ Dreamscape ativo. Os sonhos começam...');
+        });
+        
+        // ========== INTEGRAÇÃO COM SISTEMA PRINCIPAL ==========
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'consciousness_update') {
+                // Atualizar sonhadores com dados do sistema principal
+                dreamscape.initializeDreamers();
+            }
+        });
+    </script>
+</body>
+</html>

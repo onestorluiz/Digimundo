@@ -1,0 +1,1 @@
+# Script de integração simbólica de novos Digimons

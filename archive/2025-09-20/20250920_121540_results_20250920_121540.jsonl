@@ -1,0 +1,1 @@
+{"screenplay": "Test_Scene_ECO", "mode": "ECO", "started": 1758381340.962959, "completed": 1758381340.977057, "duration": 0.014096975326538086, "success": true, "model": "deeplearning-mixtral-eco", "analysis": "", "model_info": {"total_duration": 0.0, "load_duration": 0.0, "prompt_eval_count": 0, "prompt_eval_duration": 0.0, "eval_count": 0, "eval_duration": 0.0}}

@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+"""
+Git post-commit hook - Captura automática de contexto
+
+Executado automaticamente após cada commit.
+Captura snapshot completo do commit para memory layer.
+"""
+
+import sys
+import subprocess
+from pathlib import Path
+
+# Add project root to path
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+def main():
+    """Captura commit que acabou de ser criado"""
+    try:
+        # Import GitMemoryBridge
+        from core.git_memory_bridge import GitMemoryBridge
+
+        # Initialize bridge
+        memory_dir = project_root / "memory"
+        bridge = GitMemoryBridge(
+            repo_path=str(project_root),
+            memory_dir=str(memory_dir)
+        )
+
+        # Capture HEAD (commit recém-criado)
+        snapshot = bridge.capture_commit("HEAD")
+
+        # Log sucesso (silencioso se não houver erro)
+        print(f"📸 Git-Memory: Captured {snapshot['commit_hash_short']} ({snapshot['files_changed']} files, {len(snapshot['todos_extracted'])} TODOs)")
+
+    except Exception as e:
+        # Fail silently - não quebrar commit workflow
+        print(f"⚠️  Git-Memory capture failed (non-fatal): {e}", file=sys.stderr)
+        pass
+
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())

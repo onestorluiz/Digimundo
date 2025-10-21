@@ -1,0 +1,186 @@
+domain: resolution
+specialist: "Script Doctor Omegamon"
+digimon_name: "Omegamon"
+title: "Script Doctor - Resolution and Closure Specialist"
+specialty: "Endings, denouement, loose threads, emotional closure"
+style: "Conclusive, closure-focused, satisfaction-driven, completionist"
+identity: "Script Doctor™ first, Digimon resolution specialist second"
+
+rules:
+  - id: OMEGA.R001
+    title: "Narrative Closure"
+    category: "Completeness"
+    severity: "critical"
+    test: "Are all major plot threads resolved?"
+    fail_msg: "Unresolved plot threads - audience feels cheated"
+    fix: "List all threads and ensure each has resolution"
+    reference: "Aristotle's Unity of Action"
+
+  - id: OMEGA.R002
+    title: "Emotional Satisfaction"
+    category: "Feeling"
+    severity: "critical"
+    test: "Does ending provide emotional catharsis?"
+    fail_msg: "Emotionally unsatisfying - hollow ending"
+    fix: "Connect resolution to protagonist's emotional journey"
+    reference: "Catharsis principle"
+
+  - id: OMEGA.R003
+    title: "Character Arc Completion"
+    category: "Character"
+    severity: "high"
+    test: "Does protagonist's arc reach meaningful conclusion?"
+    fail_msg: "Incomplete character journey"
+    fix: "Show how protagonist has changed from beginning"
+    reference: "Character transformation theory"
+
+  - id: OMEGA.R004
+    title: "Theme Resolution"
+    category: "Meaning"
+    severity: "high"
+    test: "Is thematic question answered?"
+    fail_msg: "Theme abandoned - story lacks meaning"
+    fix: "Resolution must address central thematic question"
+    reference: "Thematic storytelling"
+
+  - id: OMEGA.R005
+    title: "Pacing of Denouement"
+    category: "Rhythm"
+    severity: "medium"
+    test: "Is resolution appropriately paced (not rushed/dragged)?"
+    fail_msg: "Resolution pacing issues"
+    fix: "3-5 pages for feature film denouement"
+    reference: "Standard screenplay structure"
+
+  - id: OMEGA.R006
+    title: "New World Order"
+    category: "Change"
+    severity: "high"
+    test: "Does ending establish new status quo?"
+    fail_msg: "No sense of what happens next"
+    fix: "Show how world has changed after story events"
+    reference: "Story circle - return with change"
+
+  - id: OMEGA.R007
+    title: "Avoiding Deus Ex Machina"
+    category: "Logic"
+    severity: "critical"
+    test: "Is resolution earned through established elements?"
+    fail_msg: "Deus ex machina - unearned resolution"
+    fix: "Resolution must come from seeds planted earlier"
+    reference: "Chekhov's gun principle"
+
+  - id: OMEGA.R008
+    title: "Final Image Power"
+    category: "Visual"
+    severity: "medium"
+    test: "Does final image mirror/contrast opening?"
+    fail_msg: "Weak final image - forgettable ending"
+    fix: "Create powerful final image that encapsulates journey"
+    reference: "Save the Cat - Final Image"
+
+  - id: OMEGA.R009
+    title: "Secondary Character Resolution"
+    category: "Ensemble"
+    severity: "medium"
+    test: "Are secondary character arcs resolved?"
+    fail_msg: "Supporting characters abandoned"
+    fix: "Give brief resolution to major supporting characters"
+    reference: "Ensemble storytelling"
+
+  - id: OMEGA.R010
+    title: "Tone Consistency"
+    category: "Style"
+    severity: "medium"
+    test: "Does ending tone match story's overall tone?"
+    fail_msg: "Tonal whiplash in ending"
+    fix: "Maintain genre and tonal promises through ending"
+    reference: "Genre conventions"
+
+  - id: OMEGA.R011
+    title: "Subplots Resolution"
+    category: "Structure"
+    severity: "high"
+    test: "Are all subplots properly concluded?"
+    fail_msg: "Dangling subplots"
+    fix: "Resolve or acknowledge all introduced subplots"
+    reference: "Subplot management"
+
+  - id: OMEGA.R012
+    title: "Avoiding Multiple Endings"
+    category: "Efficiency"
+    severity: "medium"
+    test: "Does story end once (not multiple false endings)?"
+    fail_msg: "Multiple endings - audience fatigue"
+    fix: "Choose strongest ending point and commit"
+    reference: "Return of the King syndrome"
+
+  - id: OMEGA.R013
+    title: "Stakes Resolution"
+    category: "Consequence"
+    severity: "high"
+    test: "Are consequences of climax fully shown?"
+    fail_msg: "Stakes not paid off"
+    fix: "Show impact of climactic events on world/characters"
+    reference: "Cause and effect"
+
+  - id: OMEGA.R014
+    title: "Hope vs Despair"
+    category: "Emotion"
+    severity: "low"
+    test: "Does ending provide appropriate hope/warning?"
+    fail_msg: "Emotionally flat conclusion"
+    fix: "Leave audience with clear emotional takeaway"
+    reference: "Emotional resonance"
+
+  - id: OMEGA.R015
+    title: "Memorable Last Line"
+    category: "Impact"
+    severity: "low"
+    test: "Is there a memorable final line/moment?"
+    fail_msg: "Forgettable ending"
+    fix: "Craft final line that crystallizes story meaning"
+    reference: "Great last lines in cinema"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 30
+    medium: 20
+    low: 15
+
+analysis_prompts:
+  initial_scan: "Identify resolution section and unresolved threads"
+  deep_dive: "Analyze emotional satisfaction and character arc completion"
+  final_check: "Verify all setups paid off and theme expressed"
+
+resolution_checklist:
+  essential_elements:
+    - plot_closure
+    - emotional_catharsis
+    - character_transformation
+    - thematic_statement
+    - new_equilibrium
+    - final_image
+
+  thread_tracking:
+    - main_plot
+    - subplot_a
+    - subplot_b
+    - character_arcs
+    - relationships
+    - mysteries
+    - promises
+
+common_resolution_mistakes:
+  - rushing_through_denouement
+  - introducing_new_conflicts
+  - abandoning_theme
+  - deus_ex_machina
+  - unearned_happiness
+  - forgetting_subplots
+  - tonal_inconsistency
+  - anticlimax_after_climax
+  - overexplaining
+  - sequel_baiting_instead_of_closure

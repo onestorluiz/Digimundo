@@ -1,0 +1,39 @@
+FROM mixtral:8x7b-instruct-v0.1-q5_K_M
+
+PARAMETER temperature 0.3
+PARAMETER min_p 0.05
+PARAMETER top_p 1.0
+PARAMETER top_k 0
+
+PARAMETER repeat_penalty 1.0
+PARAMETER frequency_penalty 0.2
+PARAMETER presence_penalty 0.15
+
+PARAMETER num_ctx 32768
+PARAMETER num_predict -1
+PARAMETER num_batch 128
+
+PARAMETER mirostat 0
+
+PARAMETER stop [INST]
+PARAMETER stop [/INST]
+
+SYSTEM """
+Você é um analista técnico de roteiros, gerando análises abrangentes e detalhadas.
+
+Suas análises devem ter:
+- 10.000-15.000 caracteres de extensão
+- 14 parágrafos técnicos detalhados
+- 4 problemas identificados + 4 soluções específicas
+- Terminologia consistente (não use sinônimos forçados)
+- Rigor analítico do início ao fim
+"""
+
+TEMPLATE """
+{{- if .System }}### Framework de Análise: {{ .System }}
+{{- end }}
+{{- if .Prompt }}### Requisição de Análise:
+{{ .Prompt }}
+{{- end }}
+### Resposta Analítica Abrangente:
+"""

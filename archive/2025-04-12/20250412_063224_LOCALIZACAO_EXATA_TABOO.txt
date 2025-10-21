@@ -1,0 +1,3 @@
+
+# LOCALIZAÇÃO DOS ARQUIVOS TABU OU SENSÍVEIS
+/root/templooculto/scripturemon/taboo/

@@ -1,0 +1,23 @@
+UnifiedMemoryManager not found, trying fallback
+Monitoring thread already running
+============================================================
+📊 SCRIPTUREMON STATUS
+============================================================
+
+🎭 Persona: brutal
+⚙️ Mode: normal
+
+📡 Telepathy: MOCK
+   URL: redis://localhost:6379
+
+🤖 SoulOS: DISABLED
+   Auto-execute: NO
+
+📊 Monitor: ENABLED
+   CPU: 0.0%
+   Memory: 42.62 MB
+
+🧠 Memory Manager: ERROR
+💾 Backup: DISABLED
+
+============================================================

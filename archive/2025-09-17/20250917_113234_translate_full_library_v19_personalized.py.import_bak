@@ -1,0 +1,198 @@
+"""
+FASE 19 - DigiLang V19 Personalizado - Tradução Completa
+Sistema ScriptureMon Champion
+
+Compressão personalizada por documento:
+- Mineração específica de cada PDF
+- Dicionário único otimizado por arquivo
+- Máxima compressão possível
+
+Assinado: Nestor Luiz, CEO - Digimundo/ScriptureMon Champion
+Data: 14/09/2025
+"""
+import sys
+from pathlib import Path
+import json
+import logging
+from typing import Dict, List, Optional
+from dataclasses import dataclass, asdict
+import time
+import shutil
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+project_root = Path(__file__).parent.parent
+sys.path.append(str(project_root))
+from apps.scripturemon.digilang_v19_personalized import DigiLangV19Personalized
+
+@dataclass
+class TranslationResult:
+    """Resultado de tradução personalizada"""
+    file_path: str
+    success: bool
+    original_chars: int = 0
+    compressed_chars: int = 0
+    original_tokens: int = 0
+    compressed_tokens: int = 0
+    char_compression: float = 0.0
+    token_compression: float = 0.0
+    dictionary_size: int = 0
+    patterns_used: int = 0
+    document_type: str = 'unknown'
+    execution_time: float = 0.0
+    error: Optional[str] = None
+
+class DigiLangV19LibraryTranslator:
+    """Tradutor completo com compressão personalizada"""
+
+    def __init__(self, base_path: str='./digilibrary/BIBLIOTECA_ROTEIROS'):
+        """
+        Inicializar tradutor personalizado
+        
+        Args:
+            base_path: Caminho base da biblioteca
+        """
+        self.base_path = Path(base_path)
+        self.output_path = Path('./digilibrary/BIBLIOTECA_DIGILANG_V19_PERSONALIZED')
+        if self.output_path.exists():
+            logger.info(f'🗑️ Removendo diretório antigo: {self.output_path}')
+            shutil.rmtree(self.output_path)
+        self.output_path.mkdir(parents=True, exist_ok=True)
+        self.v19 = DigiLangV19Personalized()
+        self.global_stats = {'total_files': 0, 'successful': 0, 'failed': 0, 'total_original_chars': 0, 'total_compressed_chars': 0, 'total_original_tokens': 0, 'total_compressed_tokens': 0, 'total_execution_time': 0.0, 'best_compression': 0.0, 'worst_compression': 100.0, 'average_compression': 0.0, 'best_file': '', 'worst_file': ''}
+
+    def find_pdf_files(self) -> List[Path]:
+        """Encontrar todos arquivos PDF"""
+        if not self.base_path.exists():
+            logger.error(f'Diretório {self.base_path} não existe!')
+            return []
+        pdf_files = list(self.base_path.rglob('*.pdf'))
+        logger.info(f'📚 Encontrados {len(pdf_files)} arquivos PDF')
+        return pdf_files
+
+    def translate_single_pdf(self, pdf_path: Path) -> TranslationResult:
+        """
+        Traduzir PDF com compressão personalizada
+        
+        Args:
+            pdf_path: Caminho do PDF
+            
+        Returns:
+            TranslationResult
+        """
+        start_time = time.time()
+        try:
+            logger.info(f'\n🔄 Processando: {pdf_path.name}')
+            result = self.v19.process_pdf(str(pdf_path))
+            if not result or not result.get('success'):
+                return TranslationResult(file_path=str(pdf_path), success=False, execution_time=time.time() - start_time, error='Falha no processamento V19')
+            stats = result.get('stats', {})
+            doc_info = result.get('document_info', {})
+            relative_path = pdf_path.relative_to(self.base_path)
+            output_dir = self.output_path / relative_path.parent
+            output_dir.mkdir(parents=True, exist_ok=True)
+            output_file = output_dir / f'{pdf_path.stem}_v19_personalized.dlg19'
+            dict_file = output_dir / f'{pdf_path.stem}_v19_dictionary.json'
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(result['compressed_text'])
+            dict_data = {'version': 'V19 Personalized', 'source_file': str(pdf_path), 'document_type': doc_info.get('type', 'unknown'), 'created': time.strftime('%Y-%m-%d %H:%M:%S'), 'statistics': stats, 'dictionary': result['dictionary'], 'signature': 'Nestor Luiz, CEO - Digimundo/ScriptureMon Champion'}
+            with open(dict_file, 'w', encoding='utf-8') as f:
+                json.dump(dict_data, f, ensure_ascii=False, indent=2)
+            execution_time = time.time() - start_time
+            logger.info(f"✅ {pdf_path.name}: {stats.get('token_compression', 0):.2f}% compressão")
+            logger.info(f"   Dicionário: {doc_info.get('dictionary_size', 0)} padrões")
+            return TranslationResult(file_path=str(pdf_path), success=True, original_chars=stats.get('original_chars', 0), compressed_chars=stats.get('compressed_chars', 0), original_tokens=stats.get('original_tokens', 0), compressed_tokens=stats.get('compressed_tokens', 0), char_compression=stats.get('char_compression', 0.0), token_compression=stats.get('token_compression', 0.0), dictionary_size=doc_info.get('dictionary_size', 0), patterns_used=stats.get('patterns_used', 0), document_type=doc_info.get('type', 'unknown'), execution_time=execution_time)
+        except Exception as e:
+            error_msg = f'Erro processando {pdf_path.name}: {str(e)}'
+            logger.error(error_msg)
+            return TranslationResult(file_path=str(pdf_path), success=False, execution_time=time.time() - start_time, error=error_msg)
+
+    def translate_all(self) -> Dict:
+        """
+        Traduzir toda a biblioteca com compressão personalizada
+        
+        Returns:
+            Estatísticas finais
+        """
+        logger.info('🚀 INICIANDO TRADUÇÃO PERSONALIZADA - DigiLang V19')
+        logger.info('=' * 60)
+        pdf_files = self.find_pdf_files()
+        if not pdf_files:
+            logger.error('❌ Nenhum PDF encontrado!')
+            return self.global_stats
+        self.global_stats['total_files'] = len(pdf_files)
+        detailed_results = []
+        for i, pdf_path in enumerate(pdf_files, 1):
+            logger.info(f'\n📄 [{i}/{len(pdf_files)}] {pdf_path.name}')
+            result = self.translate_single_pdf(pdf_path)
+            detailed_results.append(result)
+            if result.success:
+                self.global_stats['successful'] += 1
+                self.global_stats['total_original_chars'] += result.original_chars
+                self.global_stats['total_compressed_chars'] += result.compressed_chars
+                self.global_stats['total_original_tokens'] += result.original_tokens
+                self.global_stats['total_compressed_tokens'] += result.compressed_tokens
+                self.global_stats['total_execution_time'] += result.execution_time
+                if result.token_compression > self.global_stats['best_compression']:
+                    self.global_stats['best_compression'] = result.token_compression
+                    self.global_stats['best_file'] = Path(result.file_path).name
+                if result.token_compression < self.global_stats['worst_compression']:
+                    self.global_stats['worst_compression'] = result.token_compression
+                    self.global_stats['worst_file'] = Path(result.file_path).name
+            else:
+                self.global_stats['failed'] += 1
+        if self.global_stats['successful'] > 0:
+            if self.global_stats['total_original_tokens'] > 0:
+                total_saved = self.global_stats['total_original_tokens'] - self.global_stats['total_compressed_tokens']
+                self.global_stats['average_compression'] = total_saved / self.global_stats['total_original_tokens'] * 100
+        self.save_final_report(detailed_results)
+        self.cleanup_old_translations()
+        return self.global_stats
+
+    def save_final_report(self, detailed_results: List[TranslationResult]):
+        """Salvar relatório final detalhado"""
+        report_data = {'project': 'FASE 19 - DigiLang V19 Personalized Translation', 'version': 'V19 Personalized', 'processed_date': time.strftime('%Y-%m-%d %H:%M:%S'), 'signature': 'Nestor Luiz, CEO - Digimundo/ScriptureMon Champion', 'global_statistics': self.global_stats, 'detailed_results': []}
+        for result in detailed_results:
+            report_data['detailed_results'].append(asdict(result))
+        report_file = self.output_path / 'FASE_19_V19_PERSONALIZED_REPORT.json'
+        with open(report_file, 'w', encoding='utf-8') as f:
+            json.dump(report_data, f, ensure_ascii=False, indent=2)
+        logger.info(f'\n📊 Relatório salvo: {report_file}')
+
+    def cleanup_old_translations(self):
+        """Deletar traduções antigas (exceto V19)"""
+        logger.info('\n🗑️ Limpando traduções antigas...')
+        old_dirs = ['./digilibrary/BIBLIOTECA_DIGILANG', './digilibrary/BIBLIOTECA_DIGILANG_V2', './digilibrary/BIBLIOTECA_DIGILANG_V8_SUPREME', './digilibrary/BIBLIOTECA_DIGILANG_V8_1_FINAL', './digilibrary/BIBLIOTECA_DIGILANG_V9_ACADEMIC', './output/v8_1', './output/v9', './output/v10_supreme', './output/v11_ultimate']
+        for dir_path in old_dirs:
+            path = Path(dir_path)
+            if path.exists():
+                try:
+                    shutil.rmtree(path)
+                    logger.info(f'   ✅ Deletado: {dir_path}')
+                except Exception as e:
+                    logger.warning(f'   ⚠️ Não foi possível deletar {dir_path}: {e}')
+
+def main():
+    """Função principal"""
+    print('🌟 FASE 19 - DigiLang V19 PERSONALIZADO')
+    print('Tradução Completa com Compressão Personalizada')
+    print('=' * 50)
+    print('Assinado: Nestor Luiz, CEO - Digimundo/ScriptureMon Champion')
+    print()
+    translator = DigiLangV19LibraryTranslator()
+    final_stats = translator.translate_all()
+    print('\n' + '=' * 60)
+    print('📊 RESULTADOS FINAIS - V19 PERSONALIZADO')
+    print('=' * 60)
+    print(f"📁 Arquivos processados: {final_stats['successful']}/{final_stats['total_files']}")
+    print(f"❌ Falhas: {final_stats['failed']}")
+    if final_stats['successful'] > 0:
+        print(f"💾 Compressão média: {final_stats['average_compression']:.2f}%")
+        print(f"🏆 Melhor compressão: {final_stats['best_compression']:.2f}% ({final_stats['best_file']})")
+        print(f"📉 Pior compressão: {final_stats['worst_compression']:.2f}% ({final_stats['worst_file']})")
+        print(f"🔢 Tokens economizados: {final_stats['total_original_tokens'] - final_stats['total_compressed_tokens']:,}")
+        print(f"⏱️ Tempo total: {final_stats['total_execution_time']:.2f}s")
+    print('\n✅ TRADUÇÃO V19 PERSONALIZADA CONCLUÍDA!')
+    print('Cada PDF agora tem seu próprio dicionário otimizado!')
+    return 0 if final_stats['failed'] == 0 else 1
+if __name__ == '__main__':
+    sys.exit(main())

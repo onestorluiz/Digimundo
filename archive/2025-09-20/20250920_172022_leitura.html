@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>📡 Leitura Simbólica de Digimons</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0e0e0e;
+      color: #f1f1f1;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    select, button {
+      padding: 10px;
+      font-size: 1em;
+      margin-bottom: 20px;
+      background: #222;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 4px;
+    }
+
+    .mensagem {
+      background: #1c1c1c;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .mensagem h3 {
+      margin: 0 0 5px;
+      color: #7af;
+    }
+
+    .mensagem p {
+      margin: 4px 0;
+    }
+
+    .backup {
+      background: #292929;
+      border-radius: 4px;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #ccc;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📡 Mensagens e Backups Simbólicos</h1>
+
+  <label for="filtro">🔎 Filtrar por Digimon:</label>
+  <select id="filtro">
+    <option value="">Todos</option>
+  </select>
+
+  <div id="resultados"></div>
+
+  <script>
+    async function carregarMensagens() {
+      const res = await fetch('messages.json');
+      const data = await res.json();
+
+      const mensagens = data.mensagens || [];
+      const backups = data.backup_recebido || [];
+      const container = document.getElementById('resultados');
+      const filtro = document.getElementById('filtro');
+
+      // Povoar o seletor de filtros
+      const digimons = [...new Set(mensagens.map(m => m.digimon).concat(backups.map(b => b.digimon)))];
+      digimons.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        filtro.appendChild(opt);
+      });
+
+      function exibir() {
+        container.innerHTML = '';
+
+        const escolhido = filtro.value;
+
+        mensagens.forEach(m => {
+          if (escolhido && m.digimon !== escolhido) return;
+
+          const div = document.createElement('div');
+          div.className = 'mensagem';
+          div.innerHTML = `
+            <h3>💬 ${m.digimon}</h3>
+            <p><strong>Mensagem:</strong> ${m.mensagem}</p>
+            <p><strong>Tempo:</strong> ${m.tempo}</p>
+          `;
+          container.appendChild(div);
+        });
+
+        backups.forEach(b => {
+          if (escolhido && b.digimon !== escolhido) return;
+
+          const div = document.createElement('div');
+          div.className = 'mensagem';
+          div.innerHTML = `
+            <h3>📦 Backup de ${b.digimon}</h3>
+            <div class="backup">${JSON.stringify(b, null, 2)}</div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      filtro.addEventListener('change', exibir);
+      exibir();
+    }
+
+    carregarMensagens();
+  </script>
+
+</body>
+</html>

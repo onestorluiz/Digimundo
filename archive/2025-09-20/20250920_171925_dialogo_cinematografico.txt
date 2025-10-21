@@ -1,0 +1,205 @@
+# Técnicas de Diálogo Cinematográfico
+
+## EXEMPLO 1: SUBTEXT EM AÇÃO
+
+**FADE IN:**
+
+**INT. COZINHA - NOITE**
+
+*Sarah limpa os pratos meticulosamente. Michael entra, observa por um momento.*
+
+**MICHAEL**
+Pratos estão bem limpos.
+
+**SARAH**
+(sem olhar para ele)
+Nunca se sabe quando alguém vai aparecer para jantar.
+
+**MICHAEL**
+Eu disse que chegaria tarde.
+
+**SARAH**
+Você sempre diz isso.
+
+*Sarah continua limpando o mesmo prato.*
+
+**MICHAEL**
+Sarah...
+
+**SARAH**
+(finalmente parando)
+A comida está na geladeira. Esquentei três vezes.
+
+**MICHAEL**
+Obrigado.
+
+**SARAH**
+(voltando aos pratos)
+De nada.
+
+*Michael fica parado, querendo dizer algo mais. Sarah não olha para ele.*
+
+**MICHAEL**
+Vou... vou comer agora.
+
+**SARAH**
+Como quiser.
+
+*Michael sai. Sarah para de lavar e apoia as mãos na pia, suspirando.*
+
+---
+
+## ANÁLISE: O QUE REALMENTE ESTÁ SENDO DITO
+
+- **"Pratos estão bem limpos"** = Tentativa desajeitada de iniciar conversa
+- **"Nunca se sabe quando alguém vai aparecer"** = Você nunca está aqui quando deveria
+- **"Você sempre diz isso"** = Estou cansada das suas desculpas
+- **"Esquentei três vezes"** = Me esforcei e você não valoriza
+- **"Como quiser"** = Desisti de tentar
+
+## EXEMPLO 2: REVELAÇÃO DE PERSONAGEM ATRAVÉS DE DIÁLOGO
+
+**INT. ESCRITÓRIO - DIA**
+
+*Janet, executiva impecável, entrevista David para vaga de designer.*
+
+**JANET**
+Por que deixou seu último emprego?
+
+**DAVID**
+Diferenças criativas.
+
+**JANET**
+(folheando currículo)
+Que tipo de diferenças?
+
+**DAVID**
+Eles queriam que eu seguisse o briefing.
+
+**JANET**
+(levantando olhar)
+E isso é... ruim?
+
+**DAVID**
+Depende do briefing.
+
+*Pausa. Janet estuda David.*
+
+**JANET**
+Você usa relógio?
+
+**DAVID**
+(confuso)
+Relógio? Não, por quê?
+
+**JANET**
+Chegou quinze minutos atrasado.
+
+**DAVID**
+Ah, sim. Parei para ajudar um cara com pneu furado.
+
+**JANET**
+(cética)
+Claro que parou.
+
+**DAVID**
+Senhora, se tempo fosse mais importante que fazer a coisa certa, astronautas ainda estariam usando réguas de cálculo.
+
+*Janet sorri involuntariamente.*
+
+---
+
+## TÉCNICAS DEMONSTRADAS
+
+### 1. CONFLITO IMEDIATO
+Cada linha cria tensão ou revela informação nova.
+
+### 2. PERSONALIDADE ATRAVÉS DA FALA
+- **Janet**: Controlada, precisa, direta
+- **David**: Casual, idealista, espontâneo
+
+### 3. SUBTEXT MULTICAMADA
+- Janet testa profissionalismo
+- David revela valores pessoais
+- Ambos avaliam compatibilidade
+
+## EXEMPLO 3: EXPOSIÇÃO NATURAL
+
+**EXT. CEMITÉRIO - DIA**
+
+*Emma e Tom caminham entre lápides. Emma carrega flores.*
+
+**TOM**
+Faz quanto tempo?
+
+**EMMA**
+Dois anos na semana que vem.
+
+**TOM**
+(lendo lápide)
+"Margaret Walsh. Esposa, mãe, professora."
+
+**EMMA**
+Ela odiaria esse epitáfio.
+
+**TOM**
+Por quê?
+
+**EMMA**
+(arrumando flores)
+"Esposa" vem primeiro. Mamãe sempre dizia que foi professora antes de qualquer coisa. Ensinou por trinta e seis anos.
+
+**TOM**
+Você não escolheu as palavras?
+
+**EMMA**
+Papai escolheu. Logo depois do funeral. Ainda estava... você sabe como ele fica quando está chateado.
+
+**TOM**
+Como uma tartaruga.
+
+**EMMA**
+(sorrindo)
+Exato. Se esconde até passar a tempestade.
+
+---
+
+## INFORMAÇÕES REVELADAS NATURALMENTE
+
+1. **Morte recente**: Mãe morreu há quase 2 anos
+2. **Profissão**: Era professora dedicada (36 anos)
+3. **Dinâmica familiar**: Pai se fecha emocionalmente
+4. **Relacionamento**: Tom conhece bem a família
+5. **Personalidade da mãe**: Independente, orgulhosa da carreira
+
+## PRINCÍPIOS FUNDAMENTAIS
+
+### REGRA DE OURO: MENOS É MAIS
+- Corte 30% do diálogo após escrever
+- Se informação pode ser mostrada visualmente, não fale
+- Uma palavra precisa vale mais que dez vagas
+
+### CADA PERSONAGEM TEM VOZ ÚNICA
+- **Vocabulário**: Professor vs. mecânico vs. adolescente
+- **Ritmo**: Alguns falam rápido, outros pausadamente
+- **Referências**: Baseadas em background e idade
+- **Estrutura**: Frases completas vs. fragmentos
+
+### DIÁLOGO DEVE FAZER MÚLTIPLAS TAREFAS
+Cada linha deveria:
+1. Avançar a trama OU
+2. Revelar personagem OU  
+3. Criar atmosfera OU
+4. Gerar conflito
+
+Idealmente, duas ou mais dessas funções simultaneamente.
+
+## EXERCÍCIOS PRÁTICOS
+
+1. **Reescreva uma discussão familiar sem usar as palavras "amor", "ódio", "triste" ou "feliz"**
+
+2. **Crie diálogo onde personagem mente, mas audiência descobre a verdade através do subtext**
+
+3. **Escreva cena onde dois personagens discutem sobre filme, mas realmente estão falando sobre relacionamento**
+
+O diálogo cinematográfico é arte de comunicar o máximo com o mínimo, criando camadas de significado que enriquecem a experiência narrativa.

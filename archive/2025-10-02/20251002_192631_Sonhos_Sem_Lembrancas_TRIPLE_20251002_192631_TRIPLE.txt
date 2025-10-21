@@ -1,0 +1,562 @@
+================================================================================
+SCRIPTUREMON - ANÁLISE TRIPLE-CORE
+================================================================================
+
+Roteiro: Sonhos_Sem_Lembrancas_TRIPLE
+Especialista: Script Doctor Dialoguemon
+Data: 02/10/2025 19:26:31
+Arquitetura: 3 Cores (Python Base + Python Examples + LLM)
+
+================================================================================
+CORE 1: ANÁLISE PYTHON BASE
+================================================================================
+
+{
+  "specialist": {
+    "name": "Script Doctor Dialoguemon",
+    "title": "Script Doctor - Character Dialogue and Voice Specialist",
+    "specialty": "Dialogue authenticity, character voice, subtext, natural speech patterns"
+  },
+  "score": 70.0,
+  "total_dialogue_lines": 337,
+  "character_count": 33,
+  "voice_profiles": [
+    {
+      "name": "ALBERTO",
+      "lines": 55,
+      "avg_words": 24.636363636363637,
+      "complexity": 0.46051660516605164,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "samantha criança",
+        "meu amor,",
+        "e samantha"
+      ]
+    },
+    {
+      "name": "",
+      "lines": 11,
+      "avg_words": 38.81818181818182,
+      "complexity": 0.5995316159250585,
+      "formality": "mixed",
+      "distinctiveness": 0.7,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "samantha criança",
+        "bolha de",
+        "a câmera"
+      ]
+    },
+    {
+      "name": "SAMANTHA CRIANÇA",
+      "lines": 19,
+      "avg_words": 17.789473684210527,
+      "complexity": 0.5828402366863905,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "samantha criança",
+        "com a",
+        "o que"
+      ]
+    },
+    {
+      "name": "KLEBER",
+      "lines": 24,
+      "avg_words": 21.375,
+      "complexity": 0.5730994152046783,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "um grande",
+        "chão e",
+        "que eu"
+      ]
+    },
+    {
+      "name": "INTERCORTE COM:",
+      "lines": 3,
+      "avg_words": 59.333333333333336,
+      "complexity": 0.5898876404494382,
+      "formality": "mixed",
+      "distinctiveness": 0.5,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "escova os",
+        "escova os dentes",
+        "os dentes"
+      ]
+    },
+    {
+      "name": "YASMIM",
+      "lines": 15,
+      "avg_words": 20.533333333333335,
+      "complexity": 0.6558441558441559,
+      "formality": "mixed",
+      "distinctiveness": 0.76,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "o que",
+        "de um",
+        "que eu"
+      ]
+    },
+    {
+      "name": "SAMANTHA",
+      "lines": 90,
+      "avg_words": 17.144444444444446,
+      "complexity": 0.49060272197018795,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "o que",
+        "que você",
+        "a gente"
+      ]
+    },
+    {
+      "name": "LÉIA",
+      "lines": 37,
+      "avg_words": 18.56756756756757,
+      "complexity": 0.5618631732168851,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "e a",
+        "que ele",
+        "sua mãe"
+      ]
+    },
+    {
+      "name": "DR. CLARISSE",
+      "lines": 5,
+      "avg_words": 10.8,
+      "complexity": 0.7962962962962963,
+      "formality": "mixed",
+      "distinctiveness": 0.54,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "você não",
+        "é mais"
+      ]
+    },
+    {
+      "name": "REBECA",
+      "lines": 1,
+      "avg_words": 7.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "ISADORA",
+      "lines": 16,
+      "avg_words": 19.75,
+      "complexity": 0.6677215189873418,
+      "formality": "mixed",
+      "distinctiveness": 0.6799999999999999,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "que tinha",
+        "mas é",
+        "se você"
+      ]
+    },
+    {
+      "name": "ISADORA ADOLESCENTE",
+      "lines": 10,
+      "avg_words": 22.1,
+      "complexity": 0.6923076923076923,
+      "formality": "mixed",
+      "distinctiveness": 0.6799999999999999,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "yasmim adolescente",
+        "dá uma",
+        "de errado"
+      ]
+    },
+    {
+      "name": "SAMANTHA ADOLESCENTE",
+      "lines": 9,
+      "avg_words": 15.666666666666666,
+      "complexity": 0.7163120567375887,
+      "formality": "mixed",
+      "distinctiveness": 0.6599999999999999,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "samantha adolescente",
+        "olhar de",
+        "adolescente se"
+      ]
+    },
+    {
+      "name": "YASMIM ADOLESCENTE",
+      "lines": 2,
+      "avg_words": 42.5,
+      "complexity": 0.7647058823529411,
+      "formality": "mixed",
+      "distinctiveness": 0.42000000000000004,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "a mão"
+      ]
+    },
+    {
+      "name": "FRANCO",
+      "lines": 2,
+      "avg_words": 25.5,
+      "complexity": 0.8627450980392157,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "ISADORA LEMBRANÇA",
+      "lines": 1,
+      "avg_words": 39.0,
+      "complexity": 0.8461538461538461,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "KLEBER LEMBRANÇA",
+      "lines": 1,
+      "avg_words": 26.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "SAMANTHA LEMBRANÇA",
+      "lines": 4,
+      "avg_words": 29.25,
+      "complexity": 0.7863247863247863,
+      "formality": "mixed",
+      "distinctiveness": 0.36,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "com a",
+        "colher de",
+        "samantha lembrança"
+      ]
+    },
+    {
+      "name": "EMPRESÁRIO 2",
+      "lines": 2,
+      "avg_words": 43.5,
+      "complexity": 0.7701149425287356,
+      "formality": "mixed",
+      "distinctiveness": 0.32,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "a ponte"
+      ]
+    },
+    {
+      "name": "PROFESSORA DE BALÉ",
+      "lines": 1,
+      "avg_words": 36.0,
+      "complexity": 0.9444444444444444,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "APRESENTADOR",
+      "lines": 1,
+      "avg_words": 15.0,
+      "complexity": 0.9333333333333333,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "SAMANTHA APRESENTADOR",
+      "lines": 1,
+      "avg_words": 76.0,
+      "complexity": 0.8421052631578947,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "CHEFE",
+      "lines": 2,
+      "avg_words": 16.0,
+      "complexity": 0.875,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "SALVA-VIDAS",
+      "lines": 1,
+      "avg_words": 36.0,
+      "complexity": 0.8611111111111112,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "KLEBER,",
+      "lines": 1,
+      "avg_words": 48.0,
+      "complexity": 0.7916666666666666,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "querer que",
+        "querer que você",
+        "que você"
+      ]
+    },
+    {
+      "name": "SÉRGIO",
+      "lines": 1,
+      "avg_words": 10.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "JOSÉ",
+      "lines": 1,
+      "avg_words": 23.0,
+      "complexity": 0.8695652173913043,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "DIEGO",
+      "lines": 1,
+      "avg_words": 32.0,
+      "complexity": 0.875,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "ATENDENTE HOSPITAL",
+      "lines": 1,
+      "avg_words": 12.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "PARAMÉDICO 2",
+      "lines": 1,
+      "avg_words": 7.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "RICARDO",
+      "lines": 7,
+      "avg_words": 28.428571428571427,
+      "complexity": 0.7185929648241206,
+      "formality": "mixed",
+      "distinctiveness": 0.48,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "seu pai",
+        "eu já",
+        "olha para"
+      ]
+    },
+    {
+      "name": "LÚCIA",
+      "lines": 8,
+      "avg_words": 15.875,
+      "complexity": 0.7637795275590551,
+      "formality": "mixed",
+      "distinctiveness": 0.6599999999999999,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "que você",
+        "a gente",
+        "agora eu"
+      ]
+    },
+    {
+      "name": "CRISTIANO",
+      "lines": 3,
+      "avg_words": 9.666666666666666,
+      "complexity": 0.9655172413793104,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    }
+  ],
+  "authenticity_score": 0.5474777448071216,
+  "natural_speech_score": 0.5474777448071216,
+  "voice_distinctiveness": 0.4896969696969697,
+  "identical_voices": [],
+  "subtext_present": false,
+  "subtext_score": 0.0,
+  "exposition_dumps": 0,
+  "exposition_issues": [],
+  "on_the_nose_count": 0,
+  "dialogue_serves_purpose": 92.58160237388724,
+  "empty_dialogue_lines": 25,
+  "conflict_in_dialogue": 0.24925816023738873,
+  "cliches_found": 0,
+  "cliche_examples": [],
+  "white_space_score": 0.7,
+  "avg_speech_length": 21.503164556962027,
+  "power_dynamics_present": false,
+  "memorable_lines_count": 10,
+  "memorable_lines": [
+    "SAMANTHA CRIANÇA: Feliz. Ouvimos a voz de Samantha Criança nos lábios de Samantha.",
+    "KLEBER: Você me deu um grande susto meu amor!",
+    "DR. CLARISSE: Quanto tempo do que? Dias de medicamento restante? Samantha? Samantha? 11."
+  ],
+  "rule_violations": [
+    {
+      "rule_id": "DIAL.R002",
+      "title": "Distinct Character Voices",
+      "severity": "high",
+      "message": "Characters have similar voices",
+      "fix": "Give each character unique vocabulary, rhythm, patterns"
+    },
+    {
+      "rule_id": "DIAL.R003",
+      "title": "Subtext Present",
+      "severity": "high",
+      "message": "Only 0% has subtext",
+      "fix": "Have characters talk around issues, hide true feelings"
+    }
+  ],
+  "diagnosis": "DIALOGUE GOOD (70.0/100): Dialogue works but could be more distinctive. Key issues: lacking subtext",
+  "recommendations": [
+    "[HIGH] Give each character unique vocabulary, rhythm, patterns",
+    "[HIGH] Have characters talk around issues, hide true feelings",
+    "Have characters talk around issues instead of stating them directly",
+    "Differentiate voices for: REBECA, YASMIM ADOLESCENTE, FRANCO"
+  ],
+  "signature": "Diagnosed by Script Doctor Dialoguemon™"
+}
+
+================================================================================
+CORE 2: EXEMPLOS DE ROTEIROS MESTRES
+================================================================================
+
+Exemplos encontrados: 6
+Roteiros pesquisados: 33
+
+  • Inception: BLONDE (CONT’D)
+    Problema: Distinct Character Voices
+    Lição: Give each character unique vocabulary, rhythm, and speech patterns.
+
+  • The Dark Knight: COP
+    Problema: Distinct Character Voices
+    Lição: Give each character unique vocabulary, rhythm, and speech patterns.
+
+  • Gladiator   Draft: LUCILLA
+    Problema: Distinct Character Voices
+    Lição: Give each character unique vocabulary, rhythm, and speech patterns.
+
+  • Star Wars Episode Iv A New Hope   Draft: LEIA
+    Problema: Subtext Present
+    Lição: Let characters hide their true feelings. What they say ≠ what they mean.
+
+  • Star Wars Episode Iv A New Hope   Draft: LEIA (CONT'D)
+    Problema: Subtext Present
+    Lição: Let characters hide their true feelings. What they say ≠ what they mean.
+
+  • Gladiator   Draft: CASSIUS
+    Problema: Subtext Present
+    Lição: Let characters hide their true feelings. What they say ≠ what they mean.
+
+
+================================================================================
+CORE 3: INSIGHTS LLM
+================================================================================
+
+🎬 **Introducing Scripturemon Master!**
+
+I will analyze your screenplay using TRIPLE-CORE architecture and provide actionable insights to enhance it. Here is my six-phase analysis:
+
+**PHASE 1: INTERPRETATION**
+Python Core 1 has identified several areas for improvement, such as dialogue authenticity, voice distinctiveness, subtext presence, and more. These aspects are crucial for engaging characters that resonate with audiences and contribute significantly to the overall story impact.
+
+**PHASE 2: PATTERNS**
+The main pattern observed is inconsistent character voices and lack of subtext throughout the script. This issue may lead to flat or unengaging dialogues, which can hinder emotional connection and understanding between characters and viewers.
+
+**PHASE 3: PROBLEMS WITH EXAMPLES**
+* *Dialogue Authenticity*: Inception's BLONDE (CONT'D) has a unique voice, setting them apart through distinctive word choice and rhythm. To improve dialogue authenticity, consider giving each character their own vocabulary, rhythm, and speech patterns.
+* *Subtext Presence*: Star Wars Episode IV shows subtext by having characters say one thing but mean another, creating layers. Implementing subtext would help make dialogues richer and reveal hidden emotions.
+
+**PHASE 4: SOLUTIONS WITH MASTER TECHNIQUES**
+To address these concerns, I suggest implementing the following techniques used by Tarantino, Nolan, and other masters:
+
+* *Distinct Character Voices*: Use specific language, idioms, and phrases for each character. For example, Alberto could have a formal way of speaking, while Samantha uses colloquial expressions.
+* *Subtext Presence*: Have characters hide their true feelings behind indirect statements. Instead of saying "I'm angry," let them express anger through actions or tone.
+
+**PHASE 5: DEPTH & SYNTHESIS**
+By combining Python Core 1's technical findings, Python Core 2's masterful examples, and McKee's theories on dialogue, we can create deeper, more engaging conversations among our characters. By focusing on authenticity, subtext, and consistent character voices, we ensure that every line contributes to the story and enhances audience engagement.
+
+**PHASE 6: ACTION PLAN**
+Here are prioritized, concrete steps to elevate your screenplay:
+
+1. Review character profiles and assign unique vocabularies, rhythms, and speech patterns.
+2. Identify key moments where subtext can be added to enrich dialogues.
+3. Revise dialogues based on the new character voices and subtext implementation.
+4. Repeat the process until you achieve the desired level of depth and consistency.
+
+Remember, great scripts evolve over time. Keep refining, learning, and applying new skills to perfect your craft. Good luck!
+
+================================================================================
+SÍNTESE FINAL
+================================================================================
+
+{
+  "summary": "Triple-Core analysis combining technical metrics, master examples, and theory",
+  "cores_used": [
+    "Python Core 1",
+    "Python Core 2",
+    "LLM Core"
+  ],
+  "quality_score": 1.48,
+  "combined_analysis": {
+    "python_technical_score": "0.70",
+    "examples_coverage": "300.00%",
+    "llm_enrichment": "Success",
+    "total_cores": 3,
+    "deep_context": "Yes"
+  }
+}
+
+================================================================================
+Gerado por Scripturemon Triple-Core em 02/10/2025 19:26:31

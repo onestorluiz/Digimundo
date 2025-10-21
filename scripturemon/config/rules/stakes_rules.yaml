@@ -1,0 +1,148 @@
+# Stakes Rules - Script Doctor Stakesmon
+# Based on McKee (Story), Field (Screenplay), Snyder (Save the Cat), Truby (Anatomy), Vogler (Writer's Journey)
+
+rules:
+  - id: STAKES.R001
+    title: Stakes Clear
+    severity: critical
+    description: "Stakes must be clear - audience knows what protagonist stands to lose/gain"
+    theory: "McKee/Field: Stakes clarity is foundation of audience investment"
+    fix: "Clarify stakes - make explicit what protagonist stands to lose/gain if fails/succeeds"
+
+  - id: STAKES.R002
+    title: Stakes Established Early
+    severity: high
+    description: "Stakes must be established in first 15-20 pages (Field: Act 1)"
+    theory: "Field/Snyder: Stakes established early create immediate investment"
+    fix: "Establish stakes in first 15-20 pages - audience needs to know what's at risk early"
+
+  - id: STAKES.R003
+    title: Personal Stakes Present
+    severity: high
+    description: "Personal stakes present - what protagonist stands to lose/gain personally"
+    theory: "McKee/Truby: Personal stakes create emotional investment"
+    fix: "Add personal stakes - protagonist must have personal investment (life, family, career, reputation, dream)"
+
+  - id: STAKES.R004
+    title: Emotional Stakes Present
+    severity: high
+    description: "Emotional stakes present - relationships at risk (love, trust, friendship)"
+    theory: "McKee: Emotional stakes create deeper audience connection"
+    fix: "Add emotional stakes - put relationships at risk (love, trust, friendship, family bonds)"
+
+  - id: STAKES.R005
+    title: Stakes Escalation
+    severity: high
+    description: "Stakes escalate progressively throughout story (McKee: progressive complications)"
+    theory: "McKee/Field: Stakes must progressively raise - get worse through Act 2"
+    fix: "Escalate stakes progressively - make things worse through Act 2, complications raise stakes"
+
+  - id: STAKES.R006
+    title: Consequences Clear
+    severity: high
+    description: "Consequences of failure clear - audience knows what happens if protagonist fails"
+    theory: "McKee/Field: Clear consequences create tension"
+    fix: "Clarify consequences - make explicit what happens if protagonist fails"
+
+  - id: STAKES.R007
+    title: Audience Investment
+    severity: high
+    description: "Audience investment - we care because protagonist cares deeply"
+    theory: "McKee: Audience cares when protagonist cares - show protagonist's investment"
+    fix: "Increase protagonist investment - show protagonist cares deeply about what's at risk (passion, desperation)"
+
+  - id: STAKES.R008
+    title: Stakes Reinforced Throughout
+    severity: medium
+    description: "Stakes reinforced throughout - remind audience what's at risk"
+    theory: "Field: Stakes must be reinforced throughout - audience can forget"
+    fix: "Reinforce stakes throughout - remind audience what's at risk in Act 2 (ticking clock, reminders)"
+
+  - id: STAKES.R009
+    title: Stakes Maximized at Climax
+    severity: high
+    description: "Stakes maximized at climax - everything protagonist has at risk"
+    theory: "McKee: Climax = ultimate stakes - everything protagonist has should be at risk"
+    fix: "Maximize stakes at climax - put everything protagonist has at risk (all or nothing moment)"
+
+  - id: STAKES.R010
+    title: Avoid Low Stakes
+    severity: critical
+    description: "Avoid low stakes - nothing meaningful at risk creates audience disengagement"
+    theory: "McKee: Low stakes = audience doesn't care - need meaningful consequences"
+    fix: "Raise stakes - increase consequences of failure to meaningful level (not trivial)"
+
+  - id: STAKES.R011
+    title: Avoid Unclear Stakes
+    severity: critical
+    description: "Avoid unclear stakes - audience must know what's at risk"
+    theory: "McKee/Field: Unclear stakes create confusion and disengagement"
+    fix: "Clarify stakes - make explicit and clear what protagonist stands to lose/gain"
+
+  - id: STAKES.R012
+    title: Avoid Non-Escalating Stakes
+    severity: high
+    description: "Avoid non-escalating stakes - stakes must progressively raise"
+    theory: "McKee/Field: Flat stakes = flat story - need progressive complications"
+    fix: "Escalate stakes - progressively raise stakes through Act 2 (complications make things worse)"
+
+  - id: STAKES.R013
+    title: Multiple Stakes Layers
+    severity: medium
+    description: "Multiple stakes layers - personal + emotional + external (if applicable)"
+    theory: "McKee/Truby: Multiple stakes layers create richer drama"
+    fix: "Add stakes layers - combine personal (protagonist), emotional (relationships), external (world) stakes"
+
+  - id: STAKES.R014
+    title: Stakes Proportional to Genre
+    severity: medium
+    description: "Stakes proportional to genre - action needs higher stakes, drama can be intimate"
+    theory: "Truby: Genre determines appropriate stakes level"
+    fix: "Adjust stakes to genre - action/thriller needs life/death, drama can be personal/emotional"
+
+  - id: STAKES.R015
+    title: External Stakes (if applicable)
+    severity: low
+    description: "External stakes present if genre requires - world-level consequences (action, sci-fi, fantasy)"
+    theory: "Truby: External stakes appropriate for certain genres (action, sci-fi, fantasy)"
+    fix: "Add external stakes if genre appropriate - put world/others at risk (not just protagonist)"
+
+# Analysis prompts for LLM
+analysis_prompts:
+  stakes_clarity: |
+    Analyze stakes clarity:
+    - What is at risk? (specific and clear)
+    - What does protagonist stand to lose/gain?
+    - Are consequences of failure clear?
+    - Is audience confused about stakes?
+
+  personal_stakes: |
+    Analyze personal stakes:
+    - What does protagonist stand to lose personally? (life, family, career, reputation, dream)
+    - How much does protagonist care? (passion, desperation)
+    - Is protagonist's investment clear to audience?
+
+  emotional_stakes: |
+    Analyze emotional stakes:
+    - What relationships are at risk? (love, trust, friendship, family bonds)
+    - Can protagonist lose someone they care about?
+    - Are emotional consequences clear?
+
+  stakes_escalation: |
+    Analyze stakes escalation:
+    - Do stakes progressively raise throughout story?
+    - Does Act 2 make things worse? (progressive complications)
+    - Are stakes maximized at climax? (all or nothing)
+    - Or do stakes remain flat/unchanging? (PENALTY)
+
+  audience_investment: |
+    Analyze audience investment:
+    - Do we care about what's at risk?
+    - Does protagonist care deeply? (we care because they care)
+    - Is protagonist's investment shown through action/emotion?
+
+  low_stakes_check: |
+    Check for low stakes problems:
+    - Is nothing meaningful at risk? (PENALTY)
+    - Are consequences trivial? (PENALTY)
+    - Does audience not care? (PENALTY)

@@ -1,0 +1,60 @@
+{
+  "chars": {
+    "DENT": "\u03b1",
+    "BATMAN": "\u03b2",
+    "JOKER": "\u03b3",
+    "GORDON": "\u03b4",
+    "THE JOKER": "\u03b5",
+    "WAYNE": "\u03b6",
+    "RACHEL": "\u03b7",
+    "FOX": "\u03b8",
+    "ALFRED": "\u03b9",
+    "LAU": "\u03ba",
+    "HARVEY": "\u03bb",
+    "MAN": "\u03bc",
+    "MARONI": "\u03bd",
+    "RAMIREZ": "\u03be",
+    "CHECHEN": "\u03bf"
+  },
+  "locs": {},
+  "actions": {
+    "looks": "\u03c0",
+    "turns": "\u03c1",
+    "pulls": "\u03c3",
+    "moves": "\u03c4",
+    "walks": "\u03c5",
+    "fires": "\u03c6",
+    "stands": "\u03c7",
+    "sits": "\u03c8",
+    "opens": "\u03c9",
+    "grabs": "\u0391"
+  },
+  "transitions": {
+    "CUT TO:": "\u0392",
+    "LATER": "\u0393",
+    "MOMENTS LATER": "\u0394",
+    "CONTINUOUS": "\u0395"
+  },
+  "moods": {
+    "O.S.": "\u0396",
+    "V.O.": "\u0397",
+    "CONT\u2019D": "\u0398",
+    "MORE": "\u0399",
+    "cont'd": "\u039a",
+    "smiles": "\u039b",
+    "off look": "\u039c",
+    "laughs": "\u039d",
+    "nothing": "\u039e",
+    "grins": "\u039f"
+  },
+  "grammar": {
+    "I": "INT.",
+    "E": "EXT.",
+    "IE": "INT/EXT.",
+    "D": "DAY",
+    "N": "NIGHT",
+    "C": "CONTINUOUS",
+    "L": "LATER",
+    "ML": "MOMENTS LATER"
+  }
+}

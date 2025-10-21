@@ -1,0 +1,1555 @@
+"""
+Script Doctor Conflictmon - Conflict Analysis Specialist
+A Script Doctor™ in Digimon form specializing in dramatic conflict, antagonistic force, obstacles, opposition, dramatic tension through conflict.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class ConflictElement:
+    """Individual conflict instance."""
+    conflict_type: str  # "internal", "external", "moral", "relational", "ideological"
+    location: str  # scene/page
+    description: str
+    intensity: float  # 0-1
+    parties: List[str]  # who is in conflict
+    resolution: str  # how it resolves (or "unresolved")
+
+
+@dataclass
+class ConflictProfile:
+    """Overall conflict analysis."""
+    central_conflict: str
+    antagonist_present: bool
+    antagonist_strength: float  # 0-1 (worthy opponent score)
+    internal_conflict_score: float
+    external_conflict_score: float
+    conflict_layers: int  # how many types present
+    conflict_escalation: bool
+    scene_conflict_ratio: float  # % of scenes with conflict
+    moral_conflict_present: bool
+    relational_conflict_present: bool
+    ideological_conflict_present: bool
+    obstacle_strength: float
+    progressive_complications: bool
+    climactic_confrontation: bool
+    conflict_resolution: str
+    overall_conflict_quality: float
+    worthy_opponent: bool
+    conflict_in_every_scene: bool
+    multiple_conflict_types: bool
+
+
+class DrConflict:
+    """
+    Script Doctor Conflictmon - The Conflict Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing dramatic conflict,
+    antagonistic force, obstacles, opposition, dramatic tension, and conflict layers.
+
+    Identity: Script Doctor first, Digimon conflict specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Conflictmon with rules and configuration."""
+        self.name = "Script Doctor Conflictmon"
+        self.digimon_name = "Conflictmon"
+        self.title = "Script Doctor - Conflict Analysis Specialist"
+        self.specialty = "Dramatic conflict, antagonistic force, obstacles, opposition, tension through conflict"
+        self.identity = "I am Script Doctor Conflictmon, a professional Script Doctor™ specializing in conflict analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "conflict_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - CONFLICT SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Conflict architecture
+            "McKee Story conflict gap expectation result desire vs reality",
+            "McKee Story internal conflict character vs self inner struggle",
+            "McKee Story personal conflict character vs character interpersonal",
+            "McKee Story extra-personal conflict character vs society institution",
+            "McKee Story conflict layers multiple simultaneous conflicts depth",
+            "McKee Story antagonist design antagonistic force opposition strength",
+            "McKee Story conflict engine story drives quest close gap",
+            "McKee Story rising conflict escalation complications intensification",
+            "McKee Story conflict gap widens complications escalate pressure",
+            "McKee Story conflict resolution climax gap closed or widened",
+
+            # McKee Story - GAP THEORY (ultra-specific manual reading)
+            "McKee Story gap conflict source expectation result divide opposition core",
+            "McKee Story gap desire versus reality protagonist want versus outcome receives",
+            "McKee Story gap widens conflict escalates expectation result divide increases",
+            "McKee Story antagonist gap creates cannot close protagonist desire blocks prevents",
+            "McKee Story conflict engine story drives forward protagonist pursuit close gap",
+            "McKee Story gap theory all conflict rooted expectation versus result chasm",
+
+            # Field Screenplay - Dramatic conflict
+            "Field Screenplay conflict dramatic tension obstacle opposition",
+            "Field Screenplay protagonist antagonist confrontation conflict dynamics",
+            "Field Screenplay conflict drives story forward momentum engine",
+            "Field Screenplay dramatic need conflict obstacle stands way",
+            "Field Screenplay conflict Act 2 confrontation obstacles complications",
+            "Field Screenplay rising conflict escalation intensity build climax",
+            "Field Screenplay conflict resolution Act 3 confrontation outcome",
+
+            # Snyder Save Cat - Antagonist design
+            "Snyder Save Cat antagonist design worthy opponent strength",
+            "Snyder Save Cat bad guys close in conflict escalation beat",
+            "Snyder Save Cat all is lost conflict defeat lowest point",
+            "Snyder Save Cat antagonist oppositional force mirror protagonist",
+            "Snyder Save Cat conflict every beat obstacles complications",
+            "Snyder Save Cat finale conflict climax confrontation resolution",
+
+            # Truby Anatomy - Opponent architecture
+            "Truby Anatomy opponent character conflict design mirror weakness",
+            "Truby Anatomy opponent reveals protagonist weakness through opposition",
+            "Truby Anatomy moral conflict ethical dilemmas right vs right",
+            "Truby Anatomy opponent strength creates worthy opposition challenge",
+            "Truby Anatomy battle climax conflict peak confrontation moment",
+            "Truby Anatomy attack opponent proactive creates conflict pressure",
+            "Truby Anatomy apparent defeat conflict setback false failure",
+
+            # Vogler Writer's Journey - Archetypal conflict
+            "Vogler Journey threshold guardian conflict test commitment resolve",
+            "Vogler Journey shadow archetype conflict dark side villain",
+            "Vogler Journey shapeshifter conflict doubt uncertainty trust",
+            "Vogler Journey ordeal supreme conflict death rebirth crisis",
+            "Vogler Journey tests allies enemies conflict learning obstacles",
+            "Vogler Journey approach inmost cave conflict prepare danger",
+            "Vogler Journey resurrection conflict final test purification",
+
+            # Campbell Hero 1000 Faces - Mythic trials
+            "Campbell Hero 1000 Faces trials conflict ordeals tests courage",
+            "Campbell Hero tests ordeals conflict supernatural forces obstacles",
+            "Campbell Hero abyss ordeal conflict death crisis transformation",
+            "Campbell Hero threshold crossing conflict commitment point no return",
+            "Campbell Hero belly whale conflict consumed darkness trial",
+            "Campbell Hero road trials conflict sequence progressive tests",
+
+            # Aristotle Poetics - Classical conflict
+            "Aristotle Poetics agon conflict struggle opposing forces clash",
+            "Aristotle Poetics tragic conflict hamartia fatal flaw consequence",
+            "Aristotle Poetics complication conflict rising action tying knot",
+            "Aristotle Poetics reversal conflict peripeteia fortune change",
+            "Aristotle Poetics conflict necessity probability causal inevitable",
+
+            # Seger Making Good Script Great - Conflict craft
+            "Seger Making Good Script Great conflict opposition creates tension",
+            "Seger worthy opponent antagonist design equal strong formidable",
+            "Seger conflict every scene beat level micro conflict constant",
+            "Seger protagonist active creates conflict not passive reactive",
+            "Seger obstacle strong enough worthy challenge protagonist skill",
+            "Seger conflict escalation rising complications progressive intensity",
+
+            # Egri Art Dramatic Writing - Unity opposites
+            "Egri Art Dramatic Writing unity opposites conflict thesis antithesis",
+            "Egri Art clash wills conflict opposing desires goals wants",
+            "Egri Art rising conflict escalation crisis to crisis building",
+            "Egri Art orchestration conflict variety contrast opposition types",
+            "Egri Art premise conflict conclusion inevitable logical outcome",
+            "Egri Art character conflict spine foundation driving force",
+
+            # Weiland Creating Character Arcs - Internal conflict
+            "Weiland Creating Character Arcs internal conflict lie vs truth",
+            "Weiland lie believe conflict character false belief limits",
+            "Weiland want vs need conflict surface goal vs deep need",
+            "Weiland ghost wound conflict past trauma drives behavior",
+
+            # Goldman/Rhimes/Mamet/Mackendrick - Practical conflict
+            "Goldman Adventures Screen Trade conflict story engine tension",
+            "Goldman worthy opponent creates tension dramatic conflict",
+            "Rhimes Year of Yes conflict tension drama emotional stakes",
+            "Rhimes conflict authentic real stakes emotional investment",
+            "Mamet Three Uses Knife dramatic conflict want obstacle",
+            "Mamet scene conflict negotiation opposing wants desires",
+            "Mackendrick On Film-Making conflict escalation visual building",
+            "Mackendrick conflict visual external behavior reveals internal",
+
+            # General conflict concepts - comprehensive
+            "internal conflict character vs self psychological struggle",
+            "external conflict character vs character interpersonal opposition",
+            "societal conflict character vs society institution system",
+            "environmental conflict character vs nature circumstances fate",
+            "ideological conflict belief systems worldviews philosophies clash",
+            "moral conflict ethical dilemmas right vs right difficult choice",
+            "relational conflict interpersonal tension relationships dynamics",
+            "conflict layers simultaneous multiple conflicts complexity depth",
+            "conflict escalation progressive complications rising intensity",
+            "worthy opponent antagonist equal strength formidable challenge",
+            "conflict every scene beat level micro conflict constant",
+            "obstacle strength barrier effectiveness worthy challenge",
+            "progressive complications rising conflict build climax peak",
+            "conflict resolution climactic confrontation outcome consequences",
+            "antagonist mirror protagonist reveals weakness through opposition",
+            "conflict motivation clear wants desires opposition stakes"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story law of conflict nothing moves forward except antagonism",
+        "McKee Story music of story conflict hooks holds carries audience",
+        "McKee Story levels conflict inner personal extra personal concentric circles",
+        "McKee Story inner mind body emotion betray expectation self antagonist",
+        "McKee Story personal relationships family friendship love collide desires",
+        "McKee Story extra personal institutions environment time space objects resist",
+        "McKee Story principle antagonism protagonist only as compelling as opposition",
+        "McKee Story forces antagonism sum total oppose will desire underdog",
+        "McKee Story conservative action fails greater jeopardy risk demanded",
+        "McKee Story negation of negation tyranny beyond injustice justice ladder",
+        "McKee Story love indifference hate self hate double negative limit",
+        "McKee Story truth half truths lies self deception limit of negative",
+        "McKee Story freedom restraint slavery slavery perceived as freedom",
+        "McKee Story progressive complications build escalate antagonism widen gap",
+        "McKee Story dilemma true choice irreconcilable goods lesser of evils",
+
+        # McKee DIALOGUE - GPT-5 extracted (12 Oct 2025)
+        "McKee Dialogue verbal conflict balanced equals duel escalation hard-fought",
+        "McKee Dialogue comic conflict exaggeration setup punch timing clarity",
+        "McKee Dialogue asymmetric conflict aggressive versus quiet resistant tactics",
+        "McKee Dialogue indirect conflict covert insults politeness injures relationship",
+        "McKee Dialogue reflexive conflict inner dilemma boomerang self against self",
+        "McKee Dialogue minimal conflict confession intimacy arc understated tension",
+        "McKee Dialogue conflict levels physical social personal private layering",
+        "McKee Dialogue trialogue third thing object funnels verbal battle",
+
+        # Campbell Hero 1000 Faces - GPT-5 (12 Oct 2025)
+        "Campbell Hero threshold guardian test confrontation gatekeeper,",
+        "Campbell Hero ogre tyrant dragon monopolizes boon oppression,",
+        "Campbell Hero rival suitor tournament trials impossible tasks,",
+        "Campbell Hero inner conflict doubt fear temptation paralysis,",
+        "Campbell Hero betrayal shapeshifter ambiguity trust rupture,",
+        "Campbell Hero taboo transgression punishment ordeal purification,",
+        "Campbell Hero monster swarm chaotic forces storm flood,",
+        "Campbell Hero trickster interference misrule escalation inversion,",
+
+
+
+        ]
+
+        # Conflict analysis patterns (bilingual: EN + PT)
+
+        # General conflict markers
+        self.conflict_markers = [
+            # English
+            "conflict", "clash", "opposition", "confrontation", "struggle",
+            "fight", "battle", "dispute", "tension", "friction",
+            "disagreement", "argument", "contest", "challenge", "resist",
+            # Portuguese
+            "conflito", "embate", "oposição", "confronto", "luta",
+            "disputa", "tensão", "fricção", "desacordo", "argumento",
+            "desafio", "resistir", "combate", "contestação", "choque"
+        ]
+
+        # Antagonist markers
+        self.antagonist_markers = [
+            # English
+            "antagonist", "opponent", "enemy", "adversary", "villain",
+            "rival", "foe", "nemesis", "opposition", "opposing force",
+            "bad guy", "opposing character", "threat", "menace",
+            # Portuguese
+            "antagonista", "oponente", "inimigo", "adversário", "vilão",
+            "rival", "força opositora", "ameaça", "perigo", "mal",
+            "personagem oposto", "força contrária", "opositor"
+        ]
+
+        # Obstacle markers
+        self.obstacle_markers = [
+            # English
+            "obstacle", "barrier", "block", "impediment", "hurdle",
+            "roadblock", "hindrance", "obstruction", "difficulty", "challenge",
+            "complication", "setback", "problem", "trouble",
+            # Portuguese
+            "obstáculo", "barreira", "bloqueio", "impedimento", "entrave",
+            "dificuldade", "desafio", "complicação", "contratempo",
+            "problema", "empecilho", "atravancamento"
+        ]
+
+        # Tension markers
+        self.tension_markers = [
+            # English
+            "tension", "friction", "strain", "stress", "pressure",
+            "unease", "anxiety", "suspense", "tense", "strained",
+            "fraught", "volatile", "explosive", "charged",
+            # Portuguese
+            "tensão", "fricção", "pressão", "estresse", "ansiedade",
+            "suspense", "tenso", "estressado", "volátil",
+            "explosivo", "carregado", "inquietação"
+        ]
+
+        # Opposition markers
+        self.opposition_markers = [
+            # English
+            "opposes", "resists", "fights against", "stands against",
+            "counters", "defies", "challenges", "contests", "objects",
+            "contradicts", "goes against", "works against",
+            # Portuguese
+            "opõe", "resiste", "luta contra", "se coloca contra",
+            "contraria", "desafia", "contesta", "objeta",
+            "contradiz", "vai contra", "trabalha contra"
+        ]
+
+        # Internal conflict markers
+        self.internal_conflict_markers = [
+            # English
+            "inner struggle", "internal conflict", "torn between",
+            "inner turmoil", "self-doubt", "conflicted", "uncertain",
+            "wrestles with", "battles with himself", "inner demons",
+            "moral dilemma", "conscience", "guilt", "shame",
+            # Portuguese
+            "luta interna", "conflito interno", "dividido entre",
+            "turbulência interna", "auto-dúvida", "conflitado", "incerto",
+            "luta consigo mesmo", "demônios internos", "dilema moral",
+            "consciência", "culpa", "vergonha", "debate interno"
+        ]
+
+        # External conflict markers
+        self.external_conflict_markers = [
+            # English
+            "external conflict", "outside force", "opposing force",
+            "against the world", "versus", "against", "faces",
+            "confronts", "opposes", "battles", "fights",
+            # Portuguese
+            "conflito externo", "força externa", "força opositora",
+            "contra o mundo", "versus", "contra", "enfrenta",
+            "confronta", "opõe-se", "batalha", "luta contra"
+        ]
+
+        # Escalation markers
+        self.escalation_markers = [
+            # English
+            "escalates", "intensifies", "worsens", "compounds",
+            "grows", "builds", "increases", "heightens", "accelerates",
+            "spirals", "mounts", "rises", "gets worse", "deteriorates",
+            # Portuguese
+            "escala", "intensifica", "piora", "agrava",
+            "cresce", "constrói", "aumenta", "eleva", "acelera",
+            "espirala", "sobe", "deteriora", "complica-se"
+        ]
+
+        # Worthy opponent markers
+        self.worthy_opponent_markers = [
+            # English
+            "worthy opponent", "formidable", "powerful enemy",
+            "equal match", "strong adversary", "worthy adversary",
+            "matched", "evenly matched", "dangerous foe",
+            # Portuguese
+            "oponente digno", "formidável", "inimigo poderoso",
+            "adversário à altura", "adversário forte", "adversário digno",
+            "igualmente forte", "inimigo perigoso", "oponente poderoso"
+        ]
+
+        # Moral conflict markers
+        self.moral_conflict_markers = [
+            # English
+            "moral conflict", "ethical dilemma", "right vs wrong",
+            "moral choice", "conscience", "ethics", "morality",
+            "values", "principles", "integrity", "moral question",
+            # Portuguese
+            "conflito moral", "dilema ético", "certo vs errado",
+            "escolha moral", "consciência", "ética", "moralidade",
+            "valores", "princípios", "integridade", "questão moral"
+        ]
+
+        # Relational conflict markers
+        self.relational_conflict_markers = [
+            # English
+            "relational conflict", "relationship tension", "between them",
+            "interpersonal", "family conflict", "romantic conflict",
+            "friendship conflict", "trust issues", "betrayal",
+            # Portuguese
+            "conflito relacional", "tensão no relacionamento", "entre eles",
+            "interpessoal", "conflito familiar", "conflito romântico",
+            "conflito de amizade", "problemas de confiança", "traição"
+        ]
+
+        # Ideological conflict markers
+        self.ideological_conflict_markers = [
+            # English
+            "ideological conflict", "belief systems", "worldview clash",
+            "philosophy", "ideology", "values clash", "cultural conflict",
+            "political conflict", "religious conflict", "beliefs",
+            # Portuguese
+            "conflito ideológico", "sistemas de crenças", "choque de visões",
+            "filosofia", "ideologia", "choque de valores", "conflito cultural",
+            "conflito político", "conflito religioso", "crenças"
+        ]
+
+        # Climactic confrontation markers
+        self.climactic_confrontation_markers = [
+            # English
+            "final confrontation", "climactic battle", "ultimate showdown",
+            "final battle", "ultimate confrontation", "climax", "showdown",
+            "final conflict", "decisive moment", "ultimate test",
+            # Portuguese
+            "confronto final", "batalha climática", "confronto definitivo",
+            "batalha final", "clímax", "momento decisivo", "teste final",
+            "conflito final", "enfrentamento final"
+        ]
+
+        # Resolution markers
+        self.resolution_markers = [
+            # English
+            "resolved", "resolution", "settled", "solved", "overcome",
+            "reconciled", "peace", "agreement", "compromise", "ended",
+            # Portuguese
+            "resolvido", "resolução", "ajustado", "solucionado", "superado",
+            "reconciliado", "paz", "acordo", "compromisso", "terminado"
+        ]
+
+        # Progressive complications markers
+        self.progressive_complications_markers = [
+            # English
+            "complication", "gets worse", "new problem", "additional",
+            "further complication", "another obstacle", "more difficult",
+            "progressively worse", "mounting problems", "spiraling",
+            # Portuguese
+            "complicação", "piora", "novo problema", "adicional",
+            "mais complicação", "outro obstáculo", "mais difícil",
+            "progressivamente pior", "problemas crescentes", "espiral"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze conflict in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete conflict diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Detect central conflict
+        central_conflict = self._detect_central_conflict(screenplay_text)
+
+        # Analyze antagonist
+        antagonist_analysis = self._analyze_antagonist(screenplay_text)
+
+        # Analyze internal conflict
+        internal_conflict = self._analyze_internal_conflict(screenplay_text)
+
+        # Analyze external conflict
+        external_conflict = self._analyze_external_conflict(screenplay_text)
+
+        # Analyze conflict layers
+        conflict_layers = self._analyze_conflict_layers(
+            screenplay_text, internal_conflict, external_conflict
+        )
+
+        # Analyze conflict escalation
+        conflict_escalation = self._analyze_conflict_escalation(screenplay_text)
+
+        # Assess worthy opponent
+        worthy_opponent = self._assess_worthy_opponent(screenplay_text, antagonist_analysis)
+
+        # Analyze scene conflict
+        scene_conflict = self._analyze_scene_conflict(screenplay_text, scenes)
+
+        # Detect moral conflict
+        moral_conflict = self._detect_moral_conflict(screenplay_text)
+
+        # Detect relational conflict
+        relational_conflict = self._detect_relational_conflict(screenplay_text)
+
+        # Detect ideological conflict
+        ideological_conflict = self._detect_ideological_conflict(screenplay_text)
+
+        # Analyze obstacle strength
+        obstacle_strength = self._analyze_obstacle_strength(screenplay_text)
+
+        # Analyze progressive complications
+        progressive_complications = self._analyze_progressive_complications(screenplay_text)
+
+        # Analyze climactic confrontation
+        climactic_confrontation = self._analyze_climactic_confrontation(screenplay_text)
+
+        # Assess conflict resolution
+        conflict_resolution = self._assess_conflict_resolution(screenplay_text)
+
+        # Build conflict profile
+        conflict_profile = ConflictProfile(
+            central_conflict=central_conflict["description"],
+            antagonist_present=antagonist_analysis["present"],
+            antagonist_strength=antagonist_analysis["strength"],
+            internal_conflict_score=internal_conflict["score"],
+            external_conflict_score=external_conflict["score"],
+            conflict_layers=conflict_layers["layer_count"],
+            conflict_escalation=conflict_escalation["present"],
+            scene_conflict_ratio=scene_conflict["ratio"],
+            moral_conflict_present=moral_conflict["present"],
+            relational_conflict_present=relational_conflict["present"],
+            ideological_conflict_present=ideological_conflict["present"],
+            obstacle_strength=obstacle_strength["strength"],
+            progressive_complications=progressive_complications["present"],
+            climactic_confrontation=climactic_confrontation["present"],
+            conflict_resolution=conflict_resolution["type"],
+            overall_conflict_quality=0.0,  # calculated below
+            worthy_opponent=worthy_opponent["worthy"],
+            conflict_in_every_scene=scene_conflict["ratio"] >= 0.8,
+            multiple_conflict_types=conflict_layers["layer_count"] >= 3
+        )
+
+        # Calculate overall conflict quality
+        conflict_profile.overall_conflict_quality = self._calculate_overall_conflict_quality(conflict_profile)
+
+        # Check against rules
+        rule_violations = self._check_conflict_rules(
+            conflict_profile, central_conflict, antagonist_analysis,
+            internal_conflict, external_conflict, scene_conflict,
+            climactic_confrontation, conflict_resolution
+        )
+
+        # Calculate score
+        score = self._calculate_conflict_score(
+            conflict_profile, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, conflict_profile, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "central_conflict": {
+                "description": central_conflict["description"],
+                "clear": central_conflict.get("clear", False),
+                "strength": central_conflict.get("strength", "medium")
+            },
+            "antagonist": {
+                "present": antagonist_analysis["present"],
+                "strength": antagonist_analysis["strength"],
+                "type": antagonist_analysis.get("type", "unknown"),
+                "worthy": worthy_opponent["worthy"],
+                "assessment": antagonist_analysis.get("assessment", "")
+            },
+            "internal_conflict": {
+                "score": internal_conflict["score"],
+                "present": internal_conflict.get("present", False),
+                "count": internal_conflict.get("count", 0),
+                "examples": internal_conflict.get("examples", [])[:3]
+            },
+            "external_conflict": {
+                "score": external_conflict["score"],
+                "present": external_conflict.get("present", False),
+                "count": external_conflict.get("count", 0),
+                "strength": external_conflict.get("strength", "medium")
+            },
+            "conflict_layers": {
+                "layer_count": conflict_layers["layer_count"],
+                "types": conflict_layers.get("types", []),
+                "multiple_layers": conflict_layers["layer_count"] >= 3,
+                "richness": conflict_layers.get("richness", "medium")
+            },
+            "conflict_escalation": {
+                "present": conflict_escalation["present"],
+                "escalation_count": conflict_escalation.get("count", 0),
+                "quality": conflict_escalation.get("quality", "medium")
+            },
+            "worthy_opponent": {
+                "worthy": worthy_opponent["worthy"],
+                "score": worthy_opponent.get("score", 0.0),
+                "notes": worthy_opponent.get("notes", "")
+            },
+            "scene_conflict": {
+                "ratio": scene_conflict["ratio"],
+                "scenes_with_conflict": scene_conflict.get("scenes_with_conflict", 0),
+                "total_scenes": scene_conflict.get("total_scenes", 0),
+                "quality": scene_conflict.get("quality", "medium")
+            },
+            "moral_conflict": {
+                "present": moral_conflict["present"],
+                "count": moral_conflict.get("count", 0),
+                "examples": moral_conflict.get("examples", [])[:2]
+            },
+            "relational_conflict": {
+                "present": relational_conflict["present"],
+                "count": relational_conflict.get("count", 0),
+                "types": relational_conflict.get("types", [])
+            },
+            "ideological_conflict": {
+                "present": ideological_conflict["present"],
+                "count": ideological_conflict.get("count", 0),
+                "clash_type": ideological_conflict.get("clash_type", "")
+            },
+            "obstacle_strength": {
+                "strength": obstacle_strength["strength"],
+                "obstacle_count": obstacle_strength.get("count", 0),
+                "effective": obstacle_strength.get("effective", False)
+            },
+            "progressive_complications": {
+                "present": progressive_complications["present"],
+                "complication_count": progressive_complications.get("count", 0),
+                "escalating": progressive_complications.get("escalating", False)
+            },
+            "climactic_confrontation": {
+                "present": climactic_confrontation["present"],
+                "location": climactic_confrontation.get("location", ""),
+                "intensity": climactic_confrontation.get("intensity", 0.0)
+            },
+            "conflict_resolution": {
+                "type": conflict_resolution["type"],
+                "satisfying": conflict_resolution.get("satisfying", False),
+                "earned": conflict_resolution.get("earned", False)
+            },
+            "overall_conflict_quality": conflict_profile.overall_conflict_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, conflict_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _detect_central_conflict(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Identify the central/main conflict.
+
+        McKee: "Story is the quest to close the gap between expectation and result."
+        The central conflict is the main dramatic question/tension of the story.
+        """
+        # Count general conflict markers
+        conflict_count = 0
+        for marker in self.conflict_markers:
+            conflict_count += screenplay.lower().count(marker)
+
+        # Look for explicit conflict descriptions (usually in first 10 pages)
+        lines = screenplay.split('\n')
+        first_10_pages = '\n'.join(lines[:550])  # ~10 pages
+
+        # Find most prominent conflict type
+        antagonist_mentions = sum(1 for marker in self.antagonist_markers if marker in screenplay.lower())
+        internal_mentions = sum(1 for marker in self.internal_conflict_markers if marker in screenplay.lower())
+        external_mentions = sum(1 for marker in self.external_conflict_markers if marker in screenplay.lower())
+
+        # Determine central conflict type
+        if antagonist_mentions > 5:
+            if internal_mentions > 3:
+                description = "Protagonist vs Antagonist with internal struggle"
+            else:
+                description = "Protagonist vs Antagonist"
+        elif internal_mentions > external_mentions:
+            description = "Internal conflict - protagonist vs self"
+        elif external_mentions > 5:
+            description = "External conflict - protagonist vs outside force"
+        else:
+            description = "Unclear central conflict"
+
+        # Assess clarity and strength
+        clear = conflict_count >= 10 and (antagonist_mentions >= 3 or internal_mentions >= 3)
+
+        if conflict_count >= 30:
+            strength = "strong"
+        elif conflict_count >= 15:
+            strength = "medium"
+        else:
+            strength = "weak"
+
+        return {
+            "description": description,
+            "clear": clear,
+            "strength": strength,
+            "conflict_markers": conflict_count
+        }
+
+    def _analyze_antagonist(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze antagonist/antagonistic force.
+
+        Seger: "Worthy opponent makes stronger story."
+        McKee: "Protagonist needs formidable opposition."
+        """
+        # Count antagonist markers
+        antagonist_count = 0
+        for marker in self.antagonist_markers:
+            antagonist_count += screenplay.lower().count(marker)
+
+        present = antagonist_count >= 3
+
+        # Calculate strength (0-1)
+        strength = min(1.0, antagonist_count / 20.0)
+
+        # Determine antagonist type
+        if "villain" in screenplay.lower() or "evil" in screenplay.lower():
+            antagonist_type = "villain"
+        elif "rival" in screenplay.lower() or "competitor" in screenplay.lower():
+            antagonist_type = "rival"
+        elif "system" in screenplay.lower() or "society" in screenplay.lower():
+            antagonist_type = "system/society"
+        elif "self" in screenplay.lower() and any(marker in screenplay.lower() for marker in self.internal_conflict_markers):
+            antagonist_type = "self (internal)"
+        else:
+            antagonist_type = "opposing force"
+
+        # Assessment
+        if strength >= 0.7:
+            assessment = "Strong antagonistic force - worthy opponent"
+        elif strength >= 0.5:
+            assessment = "Adequate antagonist - provides opposition"
+        elif strength >= 0.3:
+            assessment = "Weak antagonist - needs more presence/power"
+        else:
+            assessment = "Antagonist unclear or absent"
+
+        return {
+            "present": present,
+            "strength": strength,
+            "type": antagonist_type,
+            "count": antagonist_count,
+            "assessment": assessment
+        }
+
+    def _analyze_internal_conflict(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze internal conflict (protagonist vs self).
+
+        McKee: "Best stories have both internal and external conflict."
+        Internal conflict = inner struggle, moral dilemma, self-doubt.
+        """
+        # Count internal conflict markers
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.internal_conflict_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:80])
+                    break
+
+        score = min(1.0, count / 10.0)
+        present = count >= 3
+
+        return {
+            "score": score,
+            "present": present,
+            "count": count,
+            "examples": examples
+        }
+
+    def _analyze_external_conflict(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze external conflict (protagonist vs outside force).
+
+        External conflict = protagonist against antagonist, society, nature, etc.
+        """
+        # Count external conflict markers
+        count = 0
+        for marker in self.external_conflict_markers:
+            count += screenplay.lower().count(marker)
+
+        # Also count antagonist presence as external conflict
+        antagonist_count = sum(1 for marker in self.antagonist_markers if marker in screenplay.lower())
+        count += antagonist_count // 2
+
+        score = min(1.0, count / 15.0)
+        present = count >= 5
+
+        # Determine strength
+        if count >= 20:
+            strength = "strong"
+        elif count >= 10:
+            strength = "medium"
+        else:
+            strength = "weak"
+
+        return {
+            "score": score,
+            "present": present,
+            "count": count,
+            "strength": strength
+        }
+
+    def _analyze_conflict_layers(self, screenplay: str, internal: Dict, external: Dict) -> Dict[str, Any]:
+        """
+        Analyze multiple conflict layers.
+
+        McKee/Egri: "Multiple conflict layers create dramatic richness."
+        Best stories have internal + external + moral/relational conflicts.
+        """
+        layers = []
+
+        # Internal conflict layer
+        if internal["present"]:
+            layers.append("internal")
+
+        # External conflict layer
+        if external["present"]:
+            layers.append("external")
+
+        # Moral conflict layer
+        moral_count = sum(1 for marker in self.moral_conflict_markers if marker in screenplay.lower())
+        if moral_count >= 2:
+            layers.append("moral")
+
+        # Relational conflict layer
+        relational_count = sum(1 for marker in self.relational_conflict_markers if marker in screenplay.lower())
+        if relational_count >= 2:
+            layers.append("relational")
+
+        # Ideological conflict layer
+        ideological_count = sum(1 for marker in self.ideological_conflict_markers if marker in screenplay.lower())
+        if ideological_count >= 2:
+            layers.append("ideological")
+
+        layer_count = len(layers)
+
+        # Determine richness
+        if layer_count >= 4:
+            richness = "excellent"
+        elif layer_count >= 3:
+            richness = "good"
+        elif layer_count >= 2:
+            richness = "adequate"
+        else:
+            richness = "thin"
+
+        return {
+            "layer_count": layer_count,
+            "types": layers,
+            "richness": richness
+        }
+
+    def _analyze_conflict_escalation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze conflict escalation (progressive complications).
+
+        McKee/Field: "Conflict must escalate - build in intensity."
+        Progressive complications = conflict gets worse, stakes rise.
+        """
+        # Count escalation markers
+        escalation_count = 0
+        for marker in self.escalation_markers:
+            escalation_count += screenplay.lower().count(marker)
+
+        # Count progressive complication markers
+        complication_count = sum(1 for marker in self.progressive_complications_markers if marker in screenplay.lower())
+
+        total = escalation_count + complication_count
+        present = total >= 5
+
+        # Determine quality
+        if total >= 15:
+            quality = "excellent"
+        elif total >= 8:
+            quality = "good"
+        elif total >= 5:
+            quality = "adequate"
+        else:
+            quality = "poor"
+
+        return {
+            "present": present,
+            "count": total,
+            "quality": quality
+        }
+
+    def _assess_worthy_opponent(self, screenplay: str, antagonist_analysis: Dict) -> Dict[str, Any]:
+        """
+        Assess worthy opponent quality.
+
+        Seger: "Worthy opponent = antagonist as strong or stronger than protagonist."
+        A worthy opponent makes the story more compelling.
+        """
+        # Count worthy opponent markers
+        worthy_count = 0
+        for marker in self.worthy_opponent_markers:
+            worthy_count += screenplay.lower().count(marker)
+
+        # Antagonist strength from previous analysis
+        antagonist_strength = antagonist_analysis.get("strength", 0.0)
+
+        # Combined score
+        score = (antagonist_strength + min(1.0, worthy_count / 5.0)) / 2.0
+
+        worthy = score >= 0.6
+
+        if worthy:
+            notes = "Antagonist is worthy opponent - strong opposition"
+        else:
+            notes = "Antagonist too weak - needs more power/presence"
+
+        return {
+            "worthy": worthy,
+            "score": score,
+            "worthy_count": worthy_count,
+            "notes": notes
+        }
+
+    def _analyze_scene_conflict(self, screenplay: str, scenes: List[Dict]) -> Dict[str, Any]:
+        """
+        Analyze conflict presence in every scene.
+
+        Seger: "Every scene should have conflict - even subtle."
+        Scene-level conflict creates continuous tension.
+        """
+        if not scenes:
+            return {
+                "ratio": 0.0,
+                "scenes_with_conflict": 0,
+                "total_scenes": 0,
+                "quality": "none"
+            }
+
+        scenes_with_conflict = 0
+
+        for scene in scenes:
+            scene_text = '\n'.join(scene['content'])
+
+            # Check for any conflict markers
+            has_conflict = any(marker in scene_text.lower() for marker in self.conflict_markers)
+
+            # Also check for tension, opposition, obstacles
+            has_tension = any(marker in scene_text.lower() for marker in self.tension_markers)
+            has_opposition = any(marker in scene_text.lower() for marker in self.opposition_markers)
+            has_obstacle = any(marker in scene_text.lower() for marker in self.obstacle_markers)
+
+            if has_conflict or has_tension or has_opposition or has_obstacle:
+                scenes_with_conflict += 1
+
+        ratio = scenes_with_conflict / len(scenes)
+
+        # Determine quality
+        if ratio >= 0.8:
+            quality = "excellent"
+        elif ratio >= 0.6:
+            quality = "good"
+        elif ratio >= 0.4:
+            quality = "adequate"
+        else:
+            quality = "poor"
+
+        return {
+            "ratio": ratio,
+            "scenes_with_conflict": scenes_with_conflict,
+            "total_scenes": len(scenes),
+            "quality": quality
+        }
+
+    def _detect_moral_conflict(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect moral/ethical conflict.
+
+        Truby: "Moral argument through moral conflict and choices."
+        Moral conflict = ethical dilemmas, right vs wrong, conscience.
+        """
+        # Count moral conflict markers
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.moral_conflict_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 3:
+                        examples.append(line.strip()[:80])
+                    break
+
+        present = count >= 2
+
+        return {
+            "present": present,
+            "count": count,
+            "examples": examples
+        }
+
+    def _detect_relational_conflict(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect relational/interpersonal conflict.
+
+        Relational conflict = tension in relationships (family, romantic, friendship).
+        """
+        # Count relational conflict markers
+        count = 0
+        for marker in self.relational_conflict_markers:
+            count += screenplay.lower().count(marker)
+
+        present = count >= 2
+
+        # Identify relationship types
+        types = []
+        if "family" in screenplay.lower() or "father" in screenplay.lower() or "mother" in screenplay.lower():
+            types.append("family")
+        if "romantic" in screenplay.lower() or "love" in screenplay.lower():
+            types.append("romantic")
+        if "friend" in screenplay.lower() or "friendship" in screenplay.lower():
+            types.append("friendship")
+        if "betrayal" in screenplay.lower() or "trust" in screenplay.lower():
+            types.append("trust/betrayal")
+
+        return {
+            "present": present,
+            "count": count,
+            "types": types
+        }
+
+    def _detect_ideological_conflict(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect ideological conflict (belief systems clash).
+
+        Ideological conflict = worldview clash, values conflict, cultural/political/religious differences.
+        """
+        # Count ideological conflict markers
+        count = 0
+        for marker in self.ideological_conflict_markers:
+            count += screenplay.lower().count(marker)
+
+        present = count >= 2
+
+        # Determine clash type
+        if "political" in screenplay.lower():
+            clash_type = "political"
+        elif "religious" in screenplay.lower() or "faith" in screenplay.lower():
+            clash_type = "religious"
+        elif "cultural" in screenplay.lower() or "culture" in screenplay.lower():
+            clash_type = "cultural"
+        elif "belief" in screenplay.lower() or "worldview" in screenplay.lower():
+            clash_type = "philosophical"
+        else:
+            clash_type = "values"
+
+        return {
+            "present": present,
+            "count": count,
+            "clash_type": clash_type
+        }
+
+    def _analyze_obstacle_strength(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze obstacle strength and effectiveness.
+
+        Field/McKee: "Obstacles must be strong - test protagonist."
+        Strong obstacles = protagonist must struggle to overcome.
+        """
+        # Count obstacle markers
+        count = 0
+        for marker in self.obstacle_markers:
+            count += screenplay.lower().count(marker)
+
+        # Calculate strength (0-1)
+        strength = min(1.0, count / 20.0)
+
+        effective = strength >= 0.5
+
+        return {
+            "strength": strength,
+            "count": count,
+            "effective": effective
+        }
+
+    def _analyze_progressive_complications(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze progressive complications (conflict getting worse).
+
+        McKee: "Story is series of progressive complications."
+        Things must get worse before they get better.
+        """
+        # Count progressive complication markers
+        count = 0
+        for marker in self.progressive_complications_markers:
+            count += screenplay.lower().count(marker)
+
+        present = count >= 3
+
+        # Check if escalating (later mentions > earlier mentions)
+        lines = screenplay.split('\n')
+        first_half = '\n'.join(lines[:len(lines)//2])
+        second_half = '\n'.join(lines[len(lines)//2:])
+
+        first_half_count = sum(1 for marker in self.progressive_complications_markers if marker in first_half.lower())
+        second_half_count = sum(1 for marker in self.progressive_complications_markers if marker in second_half.lower())
+
+        escalating = second_half_count > first_half_count
+
+        return {
+            "present": present,
+            "count": count,
+            "escalating": escalating
+        }
+
+    def _analyze_climactic_confrontation(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze climactic confrontation (ultimate conflict).
+
+        McKee/Field: "Climax = ultimate confrontation between protagonist and antagonistic force."
+        """
+        # Look for climactic confrontation markers (usually in last 20% of script)
+        lines = screenplay.split('\n')
+        last_20_percent = '\n'.join(lines[int(len(lines)*0.8):])
+
+        # Count climactic confrontation markers
+        count = 0
+        for marker in self.climactic_confrontation_markers:
+            count += last_20_percent.lower().count(marker)
+
+        # Also check for high conflict density in last section
+        conflict_density = sum(1 for marker in self.conflict_markers if marker in last_20_percent.lower())
+
+        present = count >= 1 or conflict_density >= 10
+
+        # Estimate intensity
+        intensity = min(1.0, (count + conflict_density / 10.0) / 5.0)
+
+        # Estimate location (page)
+        if present:
+            location = f"Last 20% of script (estimated page {int(len(lines) * 0.8 / 55)}+)"
+        else:
+            location = "Not detected"
+
+        return {
+            "present": present,
+            "location": location,
+            "intensity": intensity,
+            "count": count
+        }
+
+    def _assess_conflict_resolution(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Assess how conflict resolves.
+
+        McKee: "Resolution must be earned - logical result of protagonist's choices."
+        """
+        # Look for resolution markers (usually in last 10% of script)
+        lines = screenplay.split('\n')
+        last_10_percent = '\n'.join(lines[int(len(lines)*0.9):])
+
+        # Count resolution markers
+        resolution_count = 0
+        for marker in self.resolution_markers:
+            resolution_count += last_10_percent.lower().count(marker)
+
+        # Determine resolution type
+        if "peace" in last_10_percent.lower() or "reconciled" in last_10_percent.lower():
+            resolution_type = "reconciliation"
+        elif "overcome" in last_10_percent.lower() or "victory" in last_10_percent.lower():
+            resolution_type = "victory"
+        elif "defeat" in last_10_percent.lower() or "loss" in last_10_percent.lower():
+            resolution_type = "defeat"
+        elif "compromise" in last_10_percent.lower() or "agreement" in last_10_percent.lower():
+            resolution_type = "compromise"
+        elif resolution_count >= 1:
+            resolution_type = "resolved"
+        else:
+            resolution_type = "unclear"
+
+        satisfying = resolution_count >= 1
+        earned = resolution_count >= 2  # Multiple resolution markers suggest earned resolution
+
+        return {
+            "type": resolution_type,
+            "satisfying": satisfying,
+            "earned": earned,
+            "resolution_count": resolution_count
+        }
+
+    def _calculate_overall_conflict_quality(self, profile: ConflictProfile) -> float:
+        """Calculate overall conflict quality score."""
+        scores = [
+            1.0 if profile.antagonist_present else 0.0,
+            profile.antagonist_strength,
+            profile.internal_conflict_score,
+            profile.external_conflict_score,
+            profile.conflict_layers / 5.0,  # Normalize to 0-1
+            1.0 if profile.conflict_escalation else 0.0,
+            profile.scene_conflict_ratio,
+            profile.obstacle_strength,
+            1.0 if profile.progressive_complications else 0.0,
+            1.0 if profile.climactic_confrontation else 0.0
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_conflict_rules(self, profile: ConflictProfile, central_conflict: Dict,
+                             antagonist_analysis: Dict, internal_conflict: Dict,
+                             external_conflict: Dict, scene_conflict: Dict,
+                             climactic_confrontation: Dict, conflict_resolution: Dict) -> List[Dict]:
+        """Check conflict against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "CONFLICT.R001":
+                # Conflict Present
+                if not central_conflict.get("clear", False):
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Central conflict unclear or absent",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R002":
+                # Clear Antagonist/Opposition
+                if not profile.antagonist_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No clear antagonist or opposing force",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R003":
+                # Internal Conflict
+                if profile.internal_conflict_score < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Internal conflict weak or absent",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R004":
+                # External Conflict
+                if profile.external_conflict_score < 0.4:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "External conflict weak or absent",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R005":
+                # Conflict Escalates
+                if not profile.conflict_escalation:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Conflict doesn't escalate - flat intensity",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R006":
+                # Worthy Opponent
+                if profile.antagonist_strength < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Antagonist too weak: {profile.antagonist_strength:.1%}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R007":
+                # Conflict in Every Scene
+                if profile.scene_conflict_ratio < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Only {profile.scene_conflict_ratio:.1%} scenes have conflict",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R008":
+                # Multiple Conflict Layers
+                if profile.conflict_layers < 2:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Only {profile.conflict_layers} conflict layer(s) - needs more depth",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R009":
+                # Moral/Ethical Conflict
+                if not profile.moral_conflict_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No moral/ethical conflict dimension",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R010":
+                # Relational Conflict
+                if not profile.relational_conflict_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No relational conflict dimension",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R011":
+                # Ideological Conflict
+                # This is low priority - not all stories need it
+                pass
+
+            elif rule["id"] == "CONFLICT.R012":
+                # Obstacle Strength
+                if profile.obstacle_strength < 0.4:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Obstacles too weak",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R013":
+                # Progressive Complications
+                if not profile.progressive_complications:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No progressive complications - conflict doesn't worsen",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R014":
+                # Climactic Confrontation
+                if not profile.climactic_confrontation:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No climactic confrontation detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CONFLICT.R015":
+                # Conflict Resolution
+                if conflict_resolution["type"] == "unclear":
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Conflict resolution unclear",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_conflict_score(self, profile: ConflictProfile, violations: List) -> float:
+        """Calculate overall conflict score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Bonus for excellence
+        if profile.overall_conflict_quality > 0.8:
+            score += 5
+        elif profile.overall_conflict_quality > 0.7:
+            score += 3
+
+        if profile.worthy_opponent and profile.conflict_escalation:
+            score += 3
+
+        if profile.conflict_layers >= 4:
+            score += 3
+
+        if profile.scene_conflict_ratio >= 0.8:
+            score += 2
+
+        if profile.progressive_complications and profile.climactic_confrontation:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: ConflictProfile,
+                          violations: List) -> str:
+        """Generate conflict diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Conflict is clear, escalating, and multi-layered"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Conflict is present but could be stronger"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Conflict weak or antagonist unclear"
+        else:
+            level = "POOR"
+            summary = "Major conflict problems - unclear or absent"
+
+        diagnosis = f"CONFLICT {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.antagonist_present:
+            issues.append("no clear antagonist")
+        if not profile.conflict_escalation:
+            issues.append("flat conflict")
+        if profile.conflict_layers < 2:
+            issues.append("thin conflict layers")
+        if not profile.worthy_opponent:
+            issues.append("weak antagonist")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: ConflictProfile) -> List[str]:
+        """Generate specific conflict recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.antagonist_present:
+            recommendations.append("Create clear antagonist or opposing force (McKee/Seger/Field)")
+
+        if profile.antagonist_strength < 0.5:
+            recommendations.append("Strengthen antagonist - must be worthy opponent (Seger: 'Worthy opponent = stronger story')")
+
+        if not profile.conflict_escalation:
+            recommendations.append("Escalate conflict progressively - conflict must build (McKee/Field)")
+
+        if profile.conflict_layers < 2:
+            recommendations.append("Add conflict layers - internal + external + moral creates richness (McKee)")
+
+        if profile.scene_conflict_ratio < 0.6:
+            recommendations.append("Add conflict to more scenes - every scene should have tension (Seger)")
+
+        if not profile.progressive_complications:
+            recommendations.append("Add progressive complications - things get worse before better (McKee)")
+
+        if not profile.climactic_confrontation:
+            recommendations.append("Create climactic confrontation - ultimate showdown (McKee/Field)")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - conflict is gap between expectation and result")
+            recommendations.append("Study Egri's Art of Dramatic Writing - unity of opposites creates dramatic power")
+
+        return recommendations[:5]
+
+    def export_conflict_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export conflict features for correlation/analysis.
+
+        Returns structured data with conflict metrics.
+        Useful for external indexing, correlation engines, or ML pipelines.
+
+        Args:
+            screenplay_text: Full screenplay text
+
+        Returns:
+            Dict with conflict metrics
+        """
+        central_conflict = self._detect_central_conflict(screenplay_text)
+        antagonist_analysis = self._analyze_antagonist(screenplay_text)
+        internal_conflict = self._analyze_internal_conflict(screenplay_text)
+        external_conflict = self._analyze_external_conflict(screenplay_text)
+
+        return {
+            "central_conflict": {
+                "description": central_conflict["description"],
+                "clear": central_conflict.get("clear", False)
+            },
+            "antagonist": {
+                "present": antagonist_analysis["present"],
+                "strength": antagonist_analysis["strength"]
+            },
+            "internal_conflict": {
+                "score": internal_conflict["score"],
+                "present": internal_conflict.get("present", False)
+            },
+            "external_conflict": {
+                "score": external_conflict["score"],
+                "present": external_conflict.get("present", False)
+            },
+            "meta": {
+                "source": "DrConflict",
+                "focus": "Dramatic conflict and antagonistic force"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrConflictAnalysis(DrConflict):
+    """Alias for compatibility with test framework."""
+    pass

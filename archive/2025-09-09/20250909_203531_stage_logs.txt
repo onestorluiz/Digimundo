@@ -1,0 +1,46 @@
+============================================================
+PIPELINE STAGE LOGS
+============================================================
+
+Stage: extract
+  Timeout: 30s (normal) / 60s (deep)
+  Models: deepseek-r1:70b → llama3.2:3b (fallback chain)
+  Status: OK
+  Time: ~2000ms avg
+
+Stage: analyze
+  Timeout: 60s (normal) / 120s (deep)
+  Models: deepseek-r1:32b → llama3.2:3b (fallback chain)
+  Status: OK
+  Time: ~3000ms avg
+
+Stage: evaluate
+  Timeout: 90s (normal) / 180s (deep)
+  Models: qwen2.5:32b → llama3.2:3b (fallback chain)
+  Status: OK
+  Time: ~4000ms avg
+
+Stage: synthesize
+  Timeout: 60s (normal) / 120s (deep)
+  Models: deepseek-r1:32b → llama3.2:3b (fallback chain)
+  Status: OK
+  Time: ~2500ms avg
+
+FALLBACK CHAINS:
+  Primary: 70B/32B models
+  Secondary: 13B/7B models
+  Tertiary: 3B model (always available)
+
+DEEP MODE DETECTION:
+  Keywords: profunda, detalhada, aprofundada, complexa
+  Length threshold: >300 chars
+  Timeout multiplier: 2x
+
+CONCURRENCY CONTROL:
+  Heavy models (70B/32B): Semaphore(1)
+  Light models (13B/7B/3B): Semaphore(2)
+
+GUARANTEES:
+  - Always returns non-empty response
+  - Fallback to simpler model on timeout
+  - Maximum total time: sum of all stage timeouts

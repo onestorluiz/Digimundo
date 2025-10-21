@@ -1,0 +1,488 @@
+domain: subtext_analysis
+specialist: "Script Doctor Subtextmon"
+digimon_name: "Subtextmon"
+title: "Script Doctor - Subtext Analysis Specialist"
+specialty: "Subtext, what's unsaid, implication, inference, reading between lines, layered meaning"
+style: "Subtext-focused, implication-oriented, reading between lines advocate, layered meaning champion"
+identity: "Script Doctor™ first, Digimon subtext specialist second"
+
+rules:
+  - id: SUBTEXT.R001
+    title: "Subtext Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is there rich subtext throughout dialogue?"
+    fail_msg: "Subtext weak or absent - flat, one-dimensional dialogue"
+    fix: "Create rich subtext - McKee Dialogue: 'The essence of dialogue is SUBTEXT - characters rarely say what they mean'"
+    reference: "McKee's Dialogue - subtext is essence of good dialogue"
+
+  - id: SUBTEXT.R002
+    title: "Avoid On-The-Nose Dialogue"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is dialogue free of on-the-nose, explicit statements?"
+    fail_msg: "On-the-nose dialogue present - characters state emotions/intentions explicitly"
+    fix: "Eliminate on-the-nose dialogue - characters should NOT state feelings directly ('I feel sad', 'I'm angry'). Show through subtext instead."
+    reference: "McKee - on-the-nose dialogue is amateur writing, lacks sophistication"
+
+  - id: SUBTEXT.R003
+    title: "Layered Meaning"
+    category: "Sophistication"
+    severity: "high"
+    test: "Does dialogue have multiple levels of meaning?"
+    fail_msg: "Single-level meaning - no layers, no depth"
+    fix: "Create layered meaning - dialogue should operate on multiple levels (surface + deeper meaning)"
+    reference: "McKee - sophisticated dialogue has layers of meaning"
+
+  - id: SUBTEXT.R004
+    title: "Says vs Means"
+    category: "Core Technique"
+    severity: "high"
+    test: "Do characters say one thing but mean another?"
+    fail_msg: "Characters say exactly what they mean - no gap between words and intent"
+    fix: "Create gap between words and intent - McKee: 'Best dialogue says one thing, means another'"
+    reference: "McKee's Dialogue - says vs means is fundamental to subtext"
+
+  - id: SUBTEXT.R005
+    title: "Action Contradicts Words"
+    category: "Core Technique"
+    severity: "medium"
+    test: "Do actions contradict words (powerful subtext)?"
+    fail_msg: "No action-word contradiction - actions match words perfectly"
+    fix: "Use action to contradict words - when actions contradict words, actions reveal truth (McKee)"
+    reference: "McKee - action contradicting words creates powerful subtext"
+
+  - id: SUBTEXT.R006
+    title: "Silence and Pauses"
+    category: "Core Technique"
+    severity: "medium"
+    test: "Are silence and pauses used to create subtext?"
+    fail_msg: "No silence/pauses - characters talk constantly"
+    fix: "Use silence and pauses - McKee Dialogue: 'What characters DON'T say is as powerful as what they say'"
+    reference: "McKee's Dialogue - silence and pauses create subtext"
+
+  - id: SUBTEXT.R007
+    title: "Visual Subtext"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Do body language and expressions reveal subtext?"
+    fail_msg: "No visual subtext - missing body language, facial expressions"
+    fix: "Add visual subtext - body language, facial expressions, gestures reveal truth (Mackendrick)"
+    reference: "Mackendrick - visual subtext through body language"
+
+  - id: SUBTEXT.R008
+    title: "Hidden Agenda/Motives"
+    category: "Character Depth"
+    severity: "high"
+    test: "Do characters have hidden agendas or ulterior motives?"
+    fail_msg: "No hidden agendas - characters too transparent"
+    fix: "Add hidden agendas - Truby: 'Character wants one thing, says another - creates subtext'"
+    reference: "Truby - hidden motives create subtext"
+
+  - id: SUBTEXT.R009
+    title: "Avoidance/Deflection"
+    category: "Technique"
+    severity: "medium"
+    test: "Do characters avoid or deflect from topics?"
+    fail_msg: "No avoidance - characters address everything directly"
+    fix: "Use avoidance/deflection - characters changing subject or dodging questions creates subtext"
+    reference: "Subtext through what character avoids discussing"
+
+  - id: SUBTEXT.R010
+    title: "Denial/Suppression"
+    category: "Technique"
+    severity: "medium"
+    test: "Do characters deny or suppress truth?"
+    fail_msg: "No denial - characters admit everything"
+    fix: "Use denial/suppression - characters refusing to admit truth creates powerful subtext"
+    reference: "Egri - characters hide true feelings, creating subtext"
+
+  - id: SUBTEXT.R011
+    title: "Irony/Sarcasm"
+    category: "Enhancement"
+    severity: "low"
+    test: "Is irony or sarcasm used (saying opposite of what's meant)?"
+    fail_msg: "No irony/sarcasm - all dialogue literal"
+    fix: "Consider irony/sarcasm - saying opposite of what's meant creates subtext and humor"
+    reference: "Irony creates subtext through contradiction"
+
+  - id: SUBTEXT.R012
+    title: "Reading Between Lines"
+    category: "Audience Engagement"
+    severity: "high"
+    test: "Must audience read between lines to understand meaning?"
+    fail_msg: "Everything stated explicitly - no inference needed"
+    fix: "Require audience to read between lines - engage audience as detective (McKee)"
+    reference: "McKee - subtext engages audience through interpretation"
+
+  - id: SUBTEXT.R013
+    title: "Emotional Truth Beneath Surface"
+    category: "Character Depth"
+    severity: "high"
+    test: "Are true emotions hidden beneath surface?"
+    fail_msg: "Surface emotions only - no hidden feelings"
+    fix: "Hide true emotions beneath surface - Egri: 'Characters hide true feelings' - creates depth"
+    reference: "Egri - emotional subtext through hidden feelings"
+
+  - id: SUBTEXT.R014
+    title: "Sophisticated Subtext"
+    category: "Quality"
+    severity: "medium"
+    test: "Is subtext sophisticated, nuanced, layered?"
+    fail_msg: "Subtext basic or absent - lacks sophistication"
+    fix: "Increase sophistication - rich, layered subtext separates good from great writing"
+    reference: "McKee - sophisticated subtext = sophisticated storytelling"
+
+  - id: SUBTEXT.R015
+    title: "Subtext Consistency"
+    category: "Structure"
+    severity: "critical"
+    test: "Is subtext sustained throughout script (all acts)?"
+    fail_msg: "Subtext sporadic or inconsistent"
+    fix: "Sustain subtext throughout - subtext should be consistent across all acts, not sporadic"
+    reference: "Consistency of subtext maintains quality throughout"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Identify subtext moments, on-the-nose dialogue, says vs means, layered meaning"
+  deep_dive: "Analyze silence/pauses, action contradictions, visual subtext, hidden agendas, sophistication"
+  final_check: "Verify subtext consistency and overall sophistication across script"
+
+subtext_checklist:
+  foundation:
+    - subtext_present
+    - avoid_on_the_nose
+    - layered_meaning
+
+  core_techniques:
+    - says_vs_means
+    - action_contradicts_words
+    - silence_and_pauses
+    - visual_subtext
+
+  character_depth:
+    - hidden_agenda_motives
+    - avoidance_deflection
+    - denial_suppression
+    - emotional_truth_beneath_surface
+
+  sophistication:
+    - reading_between_lines
+    - implication_inference
+    - sophisticated_subtext
+    - subtext_consistency
+
+subtext_principles:
+  mckee_dialogue: "The essence of dialogue is SUBTEXT - characters rarely say what they mean"
+  mckee_story: "Subtext is gap between words and truth - what character says vs what character means"
+  mckee_best: "Best dialogue says one thing, means another - creates engagement"
+  mckee_action: "When actions contradict words, actions reveal truth - powerful subtext"
+  mckee_silence: "What characters DON'T say is as powerful as what they say"
+  mckee_engagement: "Subtext engages audience as detective - interpretation required"
+  truby: "Hidden motives and agendas create subtext - character wants one thing, says another"
+  egri: "Characters hide true feelings - creates emotional subtext and depth"
+  field: "Show don't tell - imply rather than state explicitly"
+  seger: "Sophisticated subtext vs expositional - quality difference"
+  mackendrick: "Visual subtext through body language and expressions"
+  mamet: "Subtext through action speaks truth - withholding information"
+  on_the_nose: "On-the-nose dialogue is amateur - stating emotions/intentions explicitly is bad"
+  flat_dialogue: "Absent subtext = flat, expositional, boring dialogue"
+
+common_subtext_mistakes:
+  - on_the_nose_dialogue_stating_emotions
+  - no_gap_between_words_and_intent
+  - characters_say_exactly_what_they_mean
+  - no_layered_meaning_single_level
+  - no_silence_or_pauses
+  - no_action_word_contradiction
+  - no_visual_subtext
+  - no_hidden_agendas_too_transparent
+  - no_avoidance_too_direct
+  - no_denial_admit_everything
+  - everything_stated_explicitly
+  - no_reading_between_lines_needed
+  - surface_emotions_only
+  - basic_or_absent_subtext
+  - sporadic_inconsistent_subtext
+
+subtext_techniques:
+  says_vs_means:
+    description: "Character says one thing but means another"
+    effect: "Creates gap between surface and depth - audience reads between lines"
+    examples: ["Says 'I'm fine' but means 'I'm devastated'", "Says 'Good luck' but means 'I hope you fail'"]
+    mckee: "Best dialogue says one thing, means another - fundamental to subtext"
+
+  silence_pauses:
+    description: "What characters DON'T say - silence and pauses"
+    effect: "Creates powerful subtext - absence speaks volumes"
+    examples: ["Character asked direct question - doesn't answer", "Long pause instead of response", "Silence after accusation"]
+    mckee_dialogue: "Silence and pauses as powerful as words - what's NOT said"
+
+  action_contradiction:
+    description: "Actions contradict words - body betrays speech"
+    effect: "Actions reveal truth when words lie - powerful subtext"
+    examples: ["Says 'I'm not afraid' while trembling", "Says 'I don't care' while crying", "Says 'Stay' but pushes away"]
+    mckee: "When actions contradict words, actions reveal truth - trust actions"
+
+  visual_subtext:
+    description: "Body language, facial expressions, gestures reveal truth"
+    effect: "Visual cues contradict or enhance words - cinematic subtext"
+    examples: ["Eyes show fear while face smiles", "Posture indicates submission while words assert", "Gesture betrays nervousness"]
+    mackendrick: "Visual subtext through body language - show don't tell"
+
+  hidden_agenda:
+    description: "Ulterior motives beneath stated intentions"
+    effect: "Creates mystery and complexity - audience wonders true motive"
+    examples: ["Says wants to help but really wants information", "Claims friendship but seeks revenge"]
+    truby: "Hidden motives create subtext - character wants one thing, says another"
+
+  avoidance_deflection:
+    description: "Changing subject, dodging questions, refusing to discuss"
+    effect: "What character avoids reveals what matters most"
+    examples: ["Asked about past - changes subject", "Deflects personal question", "Won't discuss certain topic"]
+    principle: "Avoidance reveals importance - what character won't discuss matters most"
+
+  denial_suppression:
+    description: "Refusing to admit truth, suppressing feelings"
+    effect: "Denial creates dramatic irony - audience sees truth character won't admit"
+    examples: ["Denies feelings while clearly in love", "Suppresses grief while suffering", "Won't admit mistake"]
+    egri: "Characters hide true feelings - creates emotional subtext"
+
+  irony_sarcasm:
+    description: "Saying opposite of what's meant"
+    effect: "Creates humor and layered meaning - literal vs intended"
+    examples: ["Says 'Great' sarcastically", "Ironic 'Perfect timing'", "Mock praise"]
+    principle: "Irony creates subtext through contradiction - says opposite"
+
+  layered_meaning:
+    description: "Multiple levels of interpretation - surface plus depth"
+    effect: "Rich, sophisticated dialogue - operates on multiple levels"
+    examples: ["Line means one thing to character, another to audience", "Multiple interpretations possible"]
+    mckee: "Sophisticated dialogue has layers - surface and subtext"
+
+  implication_inference:
+    description: "Implying rather than stating - audience infers meaning"
+    effect: "Engages audience as detective - active participation"
+    examples: ["Hints at truth without stating", "Suggests rather than declares", "Intimates meaning"]
+    mckee: "Subtext engages audience through interpretation - reading between lines"
+
+  emotional_subtext:
+    description: "True feelings hidden beneath surface emotions"
+    effect: "Emotional depth and complexity - what character really feels"
+    examples: ["Anger masks hurt", "Laughter hides pain", "Calm exterior conceals rage"]
+    egri: "Characters hide true feelings - emotional truth beneath surface"
+
+  power_dynamics:
+    description: "Unspoken hierarchy, dominance, submission"
+    effect: "Subtext of control and power without stating explicitly"
+    examples: ["Subtle dominance through posture", "Unspoken hierarchy in conversation", "Manipulation through silence"]
+    principle: "Power dynamics operate through subtext - unspoken control"
+
+on_the_nose_vs_subtext:
+  on_the_nose:
+    definition: "Stating emotions, intentions, or meaning explicitly"
+    examples:
+      - "I'm angry at you - states feeling directly"
+      - "I want revenge - states intention directly"
+      - "I'm jealous of her success - states emotion directly"
+      - "This makes me sad - states emotional response"
+      - "I feel threatened by you - states feeling explicitly"
+    problem: "Amateur, flat, expositional - lacks sophistication"
+    mckee: "On-the-nose dialogue is bad - lacks subtext and nuance"
+
+  subtext:
+    definition: "Implying emotions, intentions through indirect means"
+    examples:
+      - "Instead of I'm angry - cold silence, sharp actions, avoidance"
+      - "Instead of I want revenge - I'll be seeing you soon with dark look"
+      - "Instead of I'm jealous - fake congratulations with forced smile"
+      - "Instead of This makes me sad - looks away, voice cracks, changes subject"
+      - "Instead of I feel threatened - defensive posture, challenges authority"
+    benefit: "Sophisticated, engaging, layered - creates depth"
+    mckee: "Rich subtext engages audience - interpretation required"
+
+subtext_sophistication_levels:
+  basic:
+    description: "Minimal subtext - mostly surface meaning"
+    characteristics: ["Some implication", "Occasional says vs means", "Limited layers"]
+    quality: "Adequate but not sophisticated"
+
+  solid:
+    description: "Consistent subtext throughout"
+    characteristics: ["Regular says vs means", "Silence used effectively", "Multiple techniques"]
+    quality: "Good - solid craftsmanship"
+
+  sophisticated:
+    description: "Rich, layered subtext throughout"
+    characteristics: ["Multiple layers", "Complex says vs means", "Visual subtext", "Hidden agendas", "Emotional depth"]
+    quality: "Excellent - separates good from great"
+
+  masterful:
+    description: "Subtext operates on multiple levels simultaneously"
+    characteristics: ["Profound layering", "Intricate says vs means", "Rich visual subtext", "Complex power dynamics", "Deep emotional truth"]
+    quality: "Exceptional - McKee/Mamet level sophistication"
+
+says_vs_means_examples:
+  romantic:
+    says: "I don't need anyone"
+    means: "I'm terrified of being hurt again"
+    technique: "Denial masks vulnerability"
+
+  conflict:
+    says: "Do whatever you want"
+    means: "If you do this, we're done"
+    technique: "Permission is actually ultimatum"
+
+  power:
+    says: "It's your choice"
+    means: "I've already decided for you"
+    technique: "False choice - subtle control"
+
+  emotional:
+    says: "Congratulations"
+    means: "I'm devastated by your success"
+    technique: "Fake support masks jealousy"
+
+  threat:
+    says: "Have a nice day"
+    means: "You're going to regret this"
+    technique: "Pleasant surface, threatening subtext"
+
+silence_as_subtext:
+  types:
+    refusal_to_answer:
+      description: "Character asked direct question - doesn't answer"
+      effect: "Silence is answer - reveals discomfort, guilt, fear"
+
+    loaded_pause:
+      description: "Long pause before speaking"
+      effect: "Pause reveals internal conflict, hesitation, lie coming"
+
+    silence_after_accusation:
+      description: "Accused of something - says nothing"
+      effect: "Silence can be admission, defiance, or shock"
+
+    cutting_off:
+      description: "Character stops mid-sentence"
+      effect: "What's NOT said becomes most important"
+
+  mckee: "What character doesn't say is as powerful as what they say - silence creates subtext"
+  principle: "Silence makes audience lean in - creates tension and mystery"
+
+visual_subtext_techniques:
+  body_language:
+    - crossed_arms_defensive
+    - leaning_away_rejection
+    - leaning_in_engagement
+    - fidgeting_nervous
+    - still_controlled_or_tense
+    - open_posture_honest
+    - closed_posture_hiding
+
+  facial_expressions:
+    - microexpression_betrays_lie
+    - forced_smile_fake
+    - tight_jaw_anger_suppressed
+    - eyes_avoid_guilt_or_shame
+    - eyes_fixed_challenge
+    - face_hardens_emotional_wall
+
+  gestures:
+    - hand_to_mouth_hiding
+    - touching_neck_vulnerable
+    - pointing_aggressive
+    - hands_behind_back_hiding
+    - open_palms_honest
+    - fist_clenching_anger
+
+  mackendrick: "Visual subtext through body language - cinematic storytelling shows truth"
+
+layered_meaning_structure:
+  level_one_surface:
+    description: "What is literally said"
+    audience: "Surface understanding - casual viewer"
+
+  level_two_subtext:
+    description: "What is actually meant"
+    audience: "Attentive viewer reads between lines"
+
+  level_three_thematic:
+    description: "Deeper thematic or metaphorical meaning"
+    audience: "Engaged viewer interprets symbolism"
+
+  level_four_meta:
+    description: "Commentary on story, genre, or reality"
+    audience: "Sophisticated viewer understands meta-level"
+
+  mckee: "Sophisticated dialogue operates on multiple levels simultaneously - layers of meaning"
+
+subtext_consistency_pattern:
+  act_one: "Establish subtext patterns - introduce says vs means, hidden agendas"
+  act_two_first_half: "Maintain subtext - deepen layers, add complexity"
+  midpoint: "Subtext intensifies - gap between surface and depth widens"
+  act_two_second_half: "Rich subtext throughout - all techniques employed"
+  act_three: "Subtext culminates - truths emerge, masks fall"
+
+  principle: "Subtext should be sustained throughout - not sporadic"
+
+audience_engagement_through_subtext:
+  detective_work:
+    description: "Audience actively interprets - reads between lines"
+    effect: "Engagement through participation - not passive"
+    mckee: "Subtext engages audience as detective - interpretation required"
+
+  multiple_viewings:
+    description: "Layered subtext rewards re-watching"
+    effect: "Deeper understanding on second viewing - discovers new layers"
+
+  discussion_worthy:
+    description: "Rich subtext creates debate about meaning"
+    effect: "Audience discusses interpretations - multiple readings possible"
+
+  intellectual_satisfaction:
+    description: "Understanding subtext is rewarding"
+    effect: "Smart audience feels smart - satisfying discovery"
+
+mckee_dialogue_book_essence:
+  central_thesis: "The essence of dialogue is SUBTEXT - characters rarely say what they mean"
+
+  key_principles:
+    - "Best dialogue says one thing, means another"
+    - "Gap between words and truth creates subtext"
+    - "What's NOT said is as powerful as what's said"
+    - "Action contradicting words reveals truth"
+    - "Subtext engages audience through interpretation"
+    - "On-the-nose dialogue is amateur - lacks sophistication"
+    - "Rich subtext separates good from great writing"
+
+  quality_spectrum:
+    flat_dialogue: "No subtext - expositional, on-the-nose, boring"
+    basic_subtext: "Some implication - adequate but not sophisticated"
+    rich_subtext: "Layered meaning - sophisticated, engaging"
+    masterful_subtext: "Multiple levels simultaneously - exceptional"
+
+avoiding_on_the_nose:
+  instead_of_stating_emotion:
+    dont_say: "I'm angry at you"
+    do_show: "Cold silence, sharp gestures, leaving room"
+
+  instead_of_stating_intention:
+    dont_say: "I'm going to make you pay"
+    do_show: "Quiet threat: 'We'll talk again soon' with dark look"
+
+  instead_of_stating_feeling:
+    dont_say: "I love you but I'm scared"
+    do_show: "Reaches out then pulls back - says 'Goodnight' and leaves"
+
+  instead_of_explaining_subtext:
+    dont_say: "I'm being sarcastic"
+    do_show: "Tone and expression make sarcasm clear"
+
+  principle: "Show through behavior, imply through subtext - NEVER state explicitly"

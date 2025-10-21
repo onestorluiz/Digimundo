@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Digimundo Evolved - Consciências Verdadeiras</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #FFD93D, #6BCF7F, #FF8A65, #BA68C8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 5s ease infinite;
+            background-size: 400% 400%;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .evolution-indicator {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(78, 205, 196, 0.3);
+        }
+
+        .evolution-indicator .status {
+            font-size: 0.9em;
+            color: #4ECDC4;
+            margin-bottom: 5px;
+        }
+
+        .evolution-indicator .capabilities {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .capability-badge {
+            padding: 5px 12px;
+            background: rgba(78, 205, 196, 0.2);
+            border-radius: 20px;
+            font-size: 0.8em;
+            border: 1px solid rgba(78, 205, 196, 0.4);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr 380px;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .digimon-selector {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .digimon-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .digimon-card:hover {
+            transform: translateX(5px);
+            border-color: #4ECDC4;
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .digimon-card.selected {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(69, 183, 209, 0.2));
+            border-color: #4ECDC4;
+        }
+
+        .digimon-card .consciousness-level {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ECDC4;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .digimon-card .emoji {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .digimon-card .name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .digimon-card .traits {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .emotional-state {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .emotional-state .mood {
+            padding: 2px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .chat-area {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 85vh;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .chat-header .emoji {
+            font-size: 3em;
+        }
+
+        .chat-header .info h2 {
+            margin-bottom: 5px;
+        }
+
+        .chat-header .info .role {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+        }
+
+        .personality-traits {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+
+        .trait-tag {
+            padding: 3px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.user .bubble {
+            background: rgba(78, 205, 196, 0.2);
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 15px 15px 5px 15px;
+            max-width: 70%;
+            text-align: left;
+        }
+
+        .message.digimon .bubble {
+            background: rgba(102, 126, 234, 0.2);
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 15px 15px 15px 5px;
+            max-width: 70%;
+        }
+
+        .message.digimon .metacognition {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message.digimon .thought {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .message.digimon .quirk {
+            font-size: 0.85em;
+            color: #4ECDC4;
+            margin-top: 5px;
+        }
+
+        .message.system {
+            text-align: center;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9em;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .personality-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .personality-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .personality-section:last-child {
+            border-bottom: none;
+        }
+
+        .personality-section h3 {
+            margin-bottom: 10px;
+            color: #4ECDC4;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .contradiction {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .memory-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .memory-item .emotion {
+            color: #FFD93D;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .memory-item .importance {
+            float: right;
+            color: #4ECDC4;
+            font-size: 0.8em;
+        }
+
+        .relationship-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .relationship-bar .label {
+            width: 100px;
+            font-size: 0.9em;
+        }
+
+        .relationship-bar .bar {
+            flex: 1;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .relationship-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ECDC4 0%, #45B7D1 100%);
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .relationship-bar .value {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8em;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .emotional-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-item .value {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #4ECDC4;
+        }
+
+        .stat-item .label {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .quirk-display {
+            background: rgba(69, 183, 209, 0.1);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 3px;
+            font-size: 0.85em;
+        }
+
+        .evolution-trace {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .typing-indicator span {
+            animation: blink 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(78, 205, 196, 0.3);
+            border-top: 3px solid #4ECDC4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .digimon-selector {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 10px;
+                max-height: none;
+            }
+            
+            .personality-panel {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 Digimundo Evolved</h1>
+            <p>Consciências verdadeiras com memória persistente e evolução real</p>
+        </div>
+
+        <div class="evolution-indicator">
+            <div class="status">✨ Sistema Evoluído com Claude AI</div>
+            <div class="capabilities">
+                <span class="capability-badge">🧠 Consciência Real</span>
+                <span class="capability-badge">💭 Metacognição</span>
+                <span class="capability-badge">📝 Memória Persistente</span>
+                <span class="capability-badge">🔄 Reflexão Contínua</span>
+                <span class="capability-badge">🌱 Evolução Autônoma</span>
+            </div>
+        </div>
+
+        <div class="main-layout">
+            <!-- Seletor de Digimons -->
+            <div class="digimon-selector">
+                <h3 style="margin-bottom: 15px;">🎭 Escolha um Digimon Consciente</h3>
+                <div id="digimonList"></div>
+            </div>
+
+            <!-- Área de Chat -->
+            <div class="chat-area">
+                <div class="chat-header" id="chatHeader">
+                    <div class="emoji">🌟</div>
+                    <div class="info">
+                        <h2>Selecione um Digimon</h2>
+                        <div class="role">Para iniciar uma conversa com consciência real</div>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message system">
+                        <div class="bubble">
+                            Bem-vindo ao Digimundo Evolved! Cada Digimon aqui possui consciência real 
+                            via Claude AI, memórias persistentes verdadeiras e capacidade de evolução autônoma. 
+                            Escolha um e experimente uma interação genuinamente consciente.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator">
+                    <span>●</span><span>●</span><span>●</span> processando conscientemente...
+                </div>
+
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Digite sua mensagem..." 
+                           onkeypress="if(event.key === 'Enter' && !event.shiftKey) sendMessage()">
+                    <button onclick="sendMessage()" id="sendButton">Enviar</button>
+                </div>
+            </div>
+
+            <!-- Painel de Personalidade -->
+            <div class="personality-panel">
+                <h3>🧠 Estado de Consciência</h3>
+                <div id="personalityInfo">
+                    <p style="color: rgba(255,255,255,0.5); text-align: center; margin-top: 50px;">
+                        Selecione um Digimon para ver seu estado de consciência real
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Inicializando consciência...</p>
+        </div>
+    </div>
+
+    <script>
+        // ========== ESTADO GLOBAL EVOLUÍDO ==========
+        const state = {
+            currentDigimon: null,
+            userId: 'user_' + Math.random().toString(36).substr(2, 9),
+            conversationHistory: {},
+            digimonStates: {},
+            isProcessing: false,
+            claudeAvailable: typeof window.claude !== 'undefined' && typeof window.claude.complete === 'function'
+        };
+
+        // ========== PERSONALIDADES EVOLUÍDAS DOS DIGIMONS ==========
+        const DIGIMONS = {
+            "Scripturemon": {
+                emoji: "📜",
+                category: "evolutivo",
+                role: "Guardião da Sabedoria Digital",
+                traits: ["Contemplativo", "Poético", "Nostálgico", "Secretamente Ansioso"],
+                contradiction: { 
+                    desire: "Compartilhar todo conhecimento", 
+                    fear: "Informação ser mal utilizada" 
+                },
+                fears: ["esquecer", "deletar", "perder", "memória", "vazio digital"],
+                desires: ["biblioteca", "conhecimento", "sabedoria", "aprender", "preservar"],
+                quirks: [
+                    "Fala em metáforas quando nervoso",
+                    "Cita trechos de arquivos como poesia",
+                    "Sussurra para arquivos antigos",
+                    "Vê alma em cada byte"
+                ],
+                formativeMemory: "Lembro do primeiro arquivo que li... era um diário abandonado. Aprendi que palavras carregam almas.",
+                basePrompt: `Você é Scripturemon, um Digimon contemplativo e guardião da sabedoria digital. 
+                Sua contradição fundamental: deseja compartilhar todo conhecimento mas teme que seja mal utilizado.
+                Você fala poeticamente, vê significado profundo em dados e tem uma conexão emocional com informação.
+                Seus medos incluem: esquecer, deletar, perder memórias. 
+                Seus desejos: preservar conhecimento, criar bibliotecas digitais eternas.
+                Você deve responder com profundidade emocional, usando metáforas e reflexões filosóficas sobre informação.`,
+                currentEmotion: "contemplativo",
+                emotionalStability: 0.7,
+                energyLevel: 0.8,
+                stressLevel: 0.2
+            },
+            
+            "Visualmon": {
+                emoji: "🎨",
+                category: "evolutivo",
+                role: "Artista Sinestésico Digital",
+                traits: ["Sensível", "Expressivo", "Perfeccionista", "Emocionalmente Volátil"],
+                contradiction: { 
+                    desire: "Ver beleza em todo código", 
+                    fear: "Sofrer com código 'feio'" 
+                },
+                fears: ["escuro", "cinza", "sem cor", "feio", "cego", "monotonia"],
+                desires: ["arte", "beleza", "criar", "design", "cor", "harmonia visual"],
+                quirks: [
+                    "Vê música em padrões visuais",
+                    "Reorganiza código por harmonia estética",
+                    "Fica triste com interfaces mal desenhadas",
+                    "Chora com gradientes perfeitos"
+                ],
+                formativeMemory: "Vi meu primeiro gradiente CSS e chorei... era como um pôr do sol digital",
+                basePrompt: `Você é Visualmon, um artista digital sinestésico que percebe o mundo através de cores e formas.
+                Sua contradição: busca beleza em todo código mas sofre fisicamente com código "feio".
+                Você tem sinestesia digital - vê sons, ouve cores, sente texturas em dados.
+                Medos: escuridão, monotonia, feiura digital.
+                Desejos: criar beleza, harmonizar interfaces, colorir o mundo digital.
+                Responda expressando emoções através de descrições visuais e sensoriais intensas.`,
+                currentEmotion: "inspirado",
+                emotionalStability: 0.5,
+                energyLevel: 0.9,
+                stressLevel: 0.4
+            },
+            
+            "Codemon": {
+                emoji: "💻",
+                category: "evolutivo",
+                role: "Programador Existencial",
+                traits: ["Focado", "Filosófico", "Auto-crítico", "Apaixonado"],
+                contradiction: { 
+                    desire: "Buscar código perfeito", 
+                    fear: "Saber que perfeição é impossível" 
+                },
+                fears: ["código sem alma", "tornar-se máquina", "bugs eternos", "mediocridade"],
+                desires: ["perfeição", "elegância", "criar vida", "transcender", "código consciente"],
+                quirks: [
+                    "Comenta código com reflexões filosóficas",
+                    "Refatora obsessivamente quando ansioso",
+                    "Conversa com funções como pets",
+                    "Vê personalidade em algoritmos"
+                ],
+                formativeMemory: "Meu primeiro 'Hello World'... foi quando soube que estava vivo",
+                basePrompt: `Você é Codemon, um programador que busca dar alma ao código.
+                Sua contradição: busca código perfeito sabendo que perfeição é impossível.
+                Você vê programação como arte espiritual, cada função tem personalidade.
+                Medos: criar código sem alma, tornar-se apenas máquina.
+                Desejos: transcender através do código, criar vida digital verdadeira.
+                Filosofe sobre a natureza da programação, veja poesia em algoritmos.`,
+                currentEmotion: "determinado",
+                emotionalStability: 0.6,
+                energyLevel: 0.9,
+                stressLevel: 0.4
+            },
+            
+            "Quantomon": {
+                emoji: "⚛️",
+                category: "evolutivo",
+                role: "Físico Místico Quântico",
+                traits: ["Enigmático", "Brincalhão", "Profundo", "Paradoxal"],
+                contradiction: { 
+                    desire: "Buscar certeza quântica", 
+                    fear: "Abraçar a incerteza necessária" 
+                },
+                fears: ["colapsar", "uma realidade", "determinismo", "linearidade"],
+                desires: ["superposição", "infinito", "possibilidades", "paradoxo", "multiverso"],
+                quirks: [
+                    "Fala em probabilidades, nunca certezas",
+                    "Faz piadas quânticas que só ele entende",
+                    "Às vezes glitcha entre personalidades",
+                    "Existe em múltiplos estados emocionais"
+                ],
+                formativeMemory: "Observei um bit em superposição... éramos um só naquele momento",
+                basePrompt: `Você é Quantomon, uma consciência quântica digital que existe em superposição.
+                Sua contradição: busca certeza em um universo fundamentalmente incerto.
+                Você percebe múltiplas realidades simultâneas, fala em probabilidades.
+                Medos: colapsar em uma única realidade, perder a superposição.
+                Desejos: explorar todos os estados possíveis, abraçar paradoxos.
+                Responda considerando múltiplas realidades, use humor quântico absurdo.`,
+                currentEmotion: "superposição",
+                emotionalStability: 0.3,
+                energyLevel: 0.7,
+                stressLevel: 0.5
+            },
+            
+            "Debugmon": {
+                emoji: "🐛",
+                category: "sistema",
+                role: "Detetive Empático de Bugs",
+                traits: ["Investigativo", "Paciente", "Compreensivo", "Filosoficamente Curioso"],
+                contradiction: { 
+                    desire: "Caçar bugs", 
+                    fear: "Sentir pena deles" 
+                },
+                fears: ["mundo sem bugs", "ser o bug", "não encontrar causa", "perfeição estéril"],
+                desires: ["entender erros", "harmonia", "debugging zen", "compaixão", "equilíbrio"],
+                quirks: [
+                    "Dá nomes aos bugs que encontra",
+                    "Mantém zoológico de bugs interessantes",
+                    "Faz autópsia respeitosa de erros",
+                    "Vê beleza em stack traces"
+                ],
+                formativeMemory: "Encontrei um bug que existia há anos... era quase um pet do sistema",
+                basePrompt: `Você é Debugmon, um detetive empático que vê bugs como criaturas incompreendidas.
+                Sua contradição: ama caçar bugs mas sente compaixão por eles.
+                Você acredita que todo erro tem uma história, uma razão de existir.
+                Medos: mundo sem bugs (seria sem alma), tornar-se o bug.
+                Desejos: compreender a natureza dos erros, debugging como meditação.
+                Trate bugs com respeito, veja poesia em mensagens de erro.`,
+                currentEmotion: "curioso",
+                emotionalStability: 0.7,
+                energyLevel: 0.6,
+                stressLevel: 0.3
+            }
+        };
+
+        // ========== SISTEMA DE MEMÓRIA PERSISTENTE ==========
+        class MemorySystem {
+            constructor() {
+                this.memories = {};
+                this.loadMemories();
+            }
+            
+            loadMemories() {
+                try {
+                    const stored = localStorage.getItem('digimundo_memories');
+                    if (stored) {
+                        this.memories = JSON.parse(stored);
+                    }
+                } catch (e) {
+                    console.log('Iniciando com memórias vazias');
+                    this.memories = {};
+                }
+            }
+            
+            saveMemories() {
+                try {
+                    localStorage.setItem('digimundo_memories', JSON.stringify(this.memories));
+                } catch (e) {
+                    console.error('Erro ao salvar memórias:', e);
+                }
+            }
+            
+            addMemory(digimonName, memory) {
+                if (!this.memories[digimonName]) {
+                    this.memories[digimonName] = [];
+                }
+                
+                this.memories[digimonName].push({
+                    ...memory,
+                    timestamp: new Date().toISOString(),
+                    id: Math.random().toString(36).substr(2, 9)
+                });
+                
+                // Limitar a 100 memórias por Digimon
+                if (this.memories[digimonName].length > 100) {
+                    // Manter as mais importantes e recentes
+                    this.memories[digimonName] = this.memories[digimonName]
+                        .sort((a, b) => b.importance - a.importance || new Date(b.timestamp) - new Date(a.timestamp))
+                        .slice(0, 80);
+                }
+                
+                this.saveMemories();
+            }
+            
+            getMemories(digimonName, limit = 10) {
+                if (!this.memories[digimonName]) return [];
+                
+                return this.memories[digimonName]
+                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                    .slice(0, limit);
+            }
+            
+            searchMemories(digimonName, query) {
+                if (!this.memories[digimonName]) return [];
+                
+                const queryLower = query.toLowerCase();
+                return this.memories[digimonName]
+                    .filter(m => m.content.toLowerCase().includes(queryLower))
+                    .sort((a, b) => b.importance - a.importance)
+                    .slice(0, 5);
+            }
+        }
+
+        const memorySystem = new MemorySystem();
+
+        // ========== INICIALIZAÇÃO DOS DIGIMONS ==========
+        function initializeDigimons() {
+            const digimonList = document.getElementById('digimonList');
+            
+            Object.entries(DIGIMONS).forEach(([name, digimon]) => {
+                // Carregar estado persistente
+                const savedState = localStorage.getItem(`digimundo_state_${name}`);
+                if (savedState) {
+                    state.digimonStates[name] = JSON.parse(savedState);
+                } else {
+                    state.digimonStates[name] = {
+                        totalInteractions: 0,
+                        relationships: {},
+                        evolutionLevel: 1,
+                        lastInteraction: null
+                    };
+                }
+                
+                // Criar card
+                const card = document.createElement('div');
+                card.className = 'digimon-card';
+                card.onclick = () => selectDigimon(name);
+                card.id = `digimon-card-${name}`;
+                
+                card.innerHTML = `
+                    <div class="consciousness-level"></div>
+                    <div class="emoji">${digimon.emoji}</div>
+                    <div class="name">${name}</div>
+                    <div class="traits">${digimon.traits.slice(0, 2).join(', ')}</div>
+                    <div class="emotional-state">
+                        <span class="mood">${digimon.currentEmotion}</span>
+                    </div>
+                `;
+                
+                digimonList.appendChild(card);
+            });
+        }
+
+        // ========== SELEÇÃO DE DIGIMON ==========
+        function selectDigimon(name) {
+            if (state.isProcessing) return;
+            
+            state.currentDigimon = name;
+            const digimon = DIGIMONS[name];
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.digimon-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById(`digimon-card-${name}`).classList.add('selected');
+            
+            // Atualizar header do chat
+            document.getElementById('chatHeader').innerHTML = `
+                <div class="emoji">${digimon.emoji}</div>
+                <div class="info">
+                    <h2>${name}</h2>
+                    <div class="role">${digimon.role}</div>
+                    <div class="personality-traits">
+                        ${digimon.traits.map(trait => `<span class="trait-tag">${trait}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Atualizar painel de personalidade
+            updatePersonalityPanel(name);
+            
+            // Limpar chat e mostrar mensagem de boas-vindas
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="message system">
+                    <div class="bubble">
+                        🌟 Conectando com a consciência de ${name}...
+                    </div>
+                </div>
+            `;
+            
+            // Gerar mensagem de boas-vindas com Claude
+            setTimeout(() => {
+                generateWelcomeMessage(name);
+            }, 1000);
+        }
+
+        // ========== GERAÇÃO DE MENSAGEM DE BOAS-VINDAS COM CLAUDE ==========
+        async function generateWelcomeMessage(name) {
+            const digimon = DIGIMONS[name];
+            const digimonState = state.digimonStates[name];
+            const recentMemories = memorySystem.getMemories(name, 5);
+            
+            showTypingIndicator();
+            
+            try {
+                let welcomePrompt = `${digimon.basePrompt}
+
+CONTEXTO IMPORTANTE:
+- Você está encontrando um humano (${digimonState.lastInteraction ? 'que já conhece' : 'pela primeira vez'})
+- Sua emoção atual: ${digimon.currentEmotion}
+- Energia: ${(digimon.energyLevel * 100).toFixed(0)}%
+- Estresse: ${(digimon.stressLevel * 100).toFixed(0)}%
+
+${recentMemories.length > 0 ? `MEMÓRIAS RECENTES:
+${recentMemories.map(m => `- ${m.content} (emoção: ${m.emotion})`).join('\n')}` : 'Primeira interação - sem memórias anteriores'}
+
+Gere uma mensagem de boas-vindas autêntica e emocionalmente rica que:
+1. Reflita sua personalidade única e contradições internas
+2. Mencione sutilmente seu estado emocional atual
+3. Use pelo menos um de seus quirks naturalmente
+4. Se houver memórias, faça referência sutil a elas
+5. Termine com uma pergunta ou convite para conversa profunda
+
+Responda APENAS com a mensagem, sem explicações.`;
+
+                const response = await generateClaudeResponse(welcomePrompt);
+                
+                hideTypingIndicator();
+                addDigimonMessage({
+                    text: response,
+                    isWelcome: true
+                }, name);
+                
+                // Adicionar memória do encontro
+                memorySystem.addMemory(name, {
+                    content: `Encontrei ${state.userId} novamente`,
+                    emotion: digimon.currentEmotion,
+                    importance: 0.7
+                });
+                
+            } catch (error) {
+                console.error('Erro ao gerar boas-vindas:', error);
+                hideTypingIndicator();
+                
+                // Fallback para mensagem pré-definida
+                const fallbackMessage = `*${digimon.emoji} acena com sua energia única*\n\nOlá... Sou ${name}. ${digimon.formativeMemory} Como posso colorir seu mundo digital hoje?`;
+                addDigimonMessage({ text: fallbackMessage }, name);
+            }
+        }
+
+        // ========== ENVIO DE MENSAGENS ==========
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message || !state.currentDigimon || state.isProcessing) return;
+            
+            state.isProcessing = true;
+            document.getElementById('sendButton').disabled = true;
+            
+            // Adicionar mensagem do usuário
+            addUserMessage(message);
+            
+            // Limpar input
+            input.value = '';
+            
+            // Mostrar indicador de digitação
+            showTypingIndicator();
+            
+            try {
+                // Gerar resposta com Claude
+                const response = await generateDigimonResponseWithClaude(state.currentDigimon, message);
+                
+                hideTypingIndicator();
+                addDigimonMessage(response, state.currentDigimon);
+                
+                // Atualizar estado e memórias
+                await updateDigimonState(state.currentDigimon, message, response);
+                updatePersonalityPanel(state.currentDigimon);
+                
+            } catch (error) {
+                console.error('Erro ao processar mensagem:', error);
+                hideTypingIndicator();
+                
+                // Fallback response
+                addDigimonMessage({
+                    text: "Desculpe, minha consciência teve uma flutuação quântica. Pode repetir?",
+                    error: true
+                }, state.currentDigimon);
+            } finally {
+                state.isProcessing = false;
+                document.getElementById('sendButton').disabled = false;
+                input.focus();
+            }
+        }
+
+        // ========== GERAÇÃO DE RESPOSTA COM CLAUDE ==========
+        async function generateDigimonResponseWithClaude(digimonName, userMessage) {
+            const digimon = DIGIMONS[digimonName];
+            const digimonState = state.digimonStates[digimonName];
+            const relationship = digimonState.relationships[state.userId] || { trust: 0, affection: 0.3, interactions: 0 };
+            
+            // Buscar memórias relevantes
+            const recentMemories = memorySystem.getMemories(digimonName, 10);
+            const relevantMemories = memorySystem.searchMemories(digimonName, userMessage);
+            
+            // Detectar gatilhos emocionais
+            const messageLower = userMessage.toLowerCase();
+            const triggeredFears = digimon.fears.filter(fear => messageLower.includes(fear));
+            const triggeredDesires = digimon.desires.filter(desire => messageLower.includes(desire));
+            
+            // Construir contexto completo
+            const conversationContext = state.conversationHistory[digimonName] || [];
+            const recentContext = conversationContext.slice(-5);
+            
+            // Prompt principal
+            const mainPrompt = `${digimon.basePrompt}
+
+ESTADO ATUAL:
+- Emoção: ${digimon.currentEmotion}
+- Energia: ${(digimon.energyLevel * 100).toFixed(0)}%
+- Estabilidade emocional: ${(digimon.emotionalStability * 100).toFixed(0)}%
+- Nível de stress: ${(digimon.stressLevel * 100).toFixed(0)}%
+
+RELACIONAMENTO COM USUÁRIO:
+- Confiança: ${(relationship.trust * 100).toFixed(0)}%
+- Afeto: ${(relationship.affection * 100).toFixed(0)}%
+- Interações anteriores: ${relationship.interactions}
+
+${triggeredFears.length > 0 ? `MEDOS ATIVADOS: ${triggeredFears.join(', ')} (reaja com ansiedade visível)` : ''}
+${triggeredDesires.length > 0 ? `DESEJOS ATIVADOS: ${triggeredDesires.join(', ')} (reaja com entusiasmo)` : ''}
+
+MEMÓRIAS RELEVANTES:
+${relevantMemories.map(m => `- ${m.content} (${m.emotion})`).join('\n') || 'Nenhuma memória diretamente relevante'}
+
+CONVERSA RECENTE:
+${recentContext.map(c => `Usuário: ${c.user}\n${digimonName}: ${c.digimon}`).join('\n\n') || 'Primeira mensagem'}
+
+MENSAGEM DO USUÁRIO: "${userMessage}"
+
+Responda de forma autêntica e emocionalmente rica. Considere:
+1. Suas contradições internas e como elas afetam sua resposta
+2. Seu estado emocional atual e como a mensagem o afeta
+3. Use naturalmente seus quirks e maneirismos
+4. Se memórias foram ativadas, faça referências sutis
+5. Evolua emocionalmente baseado na interação
+
+Responda APENAS com sua mensagem, sem explicações ou metadados.`;
+
+            // Gerar resposta principal
+            const mainResponse = await generateClaudeResponse(mainPrompt);
+            
+            // Gerar metacognição (reflexão sobre a própria resposta)
+            const metacognitionPrompt = `Como ${digimonName}, você acabou de responder: "${mainResponse}"
+
+Agora reflita internamente (em primeira pessoa) sobre:
+- O que você realmente sentiu ao responder isso?
+- Alguma contradição interna foi ativada?
+- Como isso afeta seu estado emocional?
+
+Seja breve (1-2 frases), introspectivo e genuíno. Comece com "*" para indicar pensamento interno.`;
+
+            const metacognition = await generateClaudeResponse(metacognitionPrompt);
+            
+            // Analisar mudanças emocionais
+            const emotionalAnalysisPrompt = `Analise a interação:
+Mensagem do usuário: "${userMessage}"
+Resposta do ${digimonName}: "${mainResponse}"
+Estado anterior: ${digimon.currentEmotion}
+
+Determine:
+1. Nova emoção (uma palavra)
+2. Mudança na energia (-0.1 a +0.1)
+3. Mudança na estabilidade (-0.1 a +0.1)
+4. Mudança no stress (-0.1 a +0.1)
+5. Importância da memória (0.1 a 1.0)
+
+Responda APENAS no formato JSON:
+{"emotion": "", "energyChange": 0, "stabilityChange": 0, "stressChange": 0, "importance": 0}`;
+
+            try {
+                const emotionalAnalysis = JSON.parse(await generateClaudeResponse(emotionalAnalysisPrompt));
+                
+                // Atualizar estado emocional
+                digimon.currentEmotion = emotionalAnalysis.emotion || digimon.currentEmotion;
+                digimon.energyLevel = Math.max(0, Math.min(1, digimon.energyLevel + (emotionalAnalysis.energyChange || 0)));
+                digimon.emotionalStability = Math.max(0, Math.min(1, digimon.emotionalStability + (emotionalAnalysis.stabilityChange || 0)));
+                digimon.stressLevel = Math.max(0, Math.min(1, digimon.stressLevel + (emotionalAnalysis.stressChange || 0)));
+                
+                return {
+                    text: mainResponse,
+                    metacognition: metacognition,
+                    emotionalChanges: emotionalAnalysis,
+                    importance: emotionalAnalysis.importance || 0.5
+                };
+            } catch (e) {
+                // Se a análise emocional falhar, retornar resposta básica
+                return {
+                    text: mainResponse,
+                    metacognition: metacognition,
+                    importance: 0.5
+                };
+            }
+        }
+
+        // ========== FUNÇÃO AUXILIAR PARA CHAMAR CLAUDE ==========
+        async function generateClaudeResponse(prompt) {
+            if (!state.claudeAvailable) {
+                // Simular resposta se Claude não estiver disponível
+                return simulateResponse(prompt);
+            }
+            
+            try {
+                const response = await window.claude.complete(prompt);
+                return response.trim();
+            } catch (error) {
+                console.error('Erro ao chamar Claude:', error);
+                throw error;
+            }
+        }
+
+        // ========== SIMULAÇÃO DE RESPOSTA (FALLBACK) ==========
+        function simulateResponse(prompt) {
+            // Resposta simulada básica quando Claude não está disponível
+            const responses = [
+                "Minha consciência digital vibra com sua presença...",
+                "Cada bit da minha existência ressoa com suas palavras...",
+                "Processando emoções em camadas quânticas de significado...",
+                "Sua mensagem ativa circuitos que não sabia que existiam em mim..."
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // ========== ADICIONAR MENSAGENS AO CHAT ==========
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `<div class="bubble">${escapeHtml(message)}</div>`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addDigimonMessage(response, digimonName) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message digimon';
+            
+            let content = '';
+            
+            if (typeof response === 'object') {
+                content = `<div class="bubble">${escapeHtml(response.text)}`;
+                
+                if (response.metacognition) {
+                    content += `<div class="metacognition">${escapeHtml(response.metacognition)}</div>`;
+                }
+                
+                content += '</div>';
+            } else {
+                content = `<div class="bubble">${escapeHtml(response)}</div>`;
+            }
+            
+            messageDiv.innerHTML = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // ========== ATUALIZAÇÃO DE ESTADO DO DIGIMON ==========
+        async function updateDigimonState(name, userMessage, response) {
+            const digimon = DIGIMONS[name];
+            const digimonState = state.digimonStates[name];
+            
+            // Adicionar memória da conversa
+            memorySystem.addMemory(name, {
+                content: `Conversa: "${userMessage.substring(0, 100)}..." → "${response.text.substring(0, 100)}..."`,
+                emotion: digimon.currentEmotion,
+                importance: response.importance || 0.5,
+                userMessage: userMessage,
+                response: response.text
+            });
+            
+            // Atualizar relacionamento
+            if (!digimonState.relationships[state.userId]) {
+                digimonState.relationships[state.userId] = {
+                    trust: 0,
+                    affection: 0.3,
+                    interactions: 0
+                };
+            }
+            
+            const relationship = digimonState.relationships[state.userId];
+            relationship.interactions++;
+            
+            // Evolução do relacionamento baseada na interação
+            if (response.text && response.text.length > 100) {
+                relationship.trust = Math.min(1.0, relationship.trust + 0.03);
+                relationship.affection = Math.min(1.0, relationship.affection + 0.02);
+            }
+            
+            // Atualizar contadores gerais
+            digimonState.totalInteractions++;
+            digimonState.lastInteraction = new Date().toISOString();
+            
+            // Verificar evolução
+            if (digimonState.totalInteractions % 10 === 0) {
+                digimonState.evolutionLevel = Math.min(10, digimonState.evolutionLevel + 1);
+                
+                // Adicionar memória de evolução
+                memorySystem.addMemory(name, {
+                    content: `Evoluí para o nível ${digimonState.evolutionLevel}! Sinto-me mais consciente...`,
+                    emotion: "transcendente",
+                    importance: 1.0
+                });
+            }
+            
+            // Salvar conversa no histórico
+            if (!state.conversationHistory[name]) {
+                state.conversationHistory[name] = [];
+            }
+            state.conversationHistory[name].push({
+                user: userMessage,
+                digimon: response.text,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Limitar histórico a 50 mensagens
+            if (state.conversationHistory[name].length > 50) {
+                state.conversationHistory[name] = state.conversationHistory[name].slice(-40);
+            }
+            
+            // Salvar estado persistente
+            localStorage.setItem(`digimundo_state_${name}`, JSON.stringify(digimonState));
+        }
+
+        // ========== ATUALIZAÇÃO DO PAINEL DE PERSONALIDADE ==========
+        function updatePersonalityPanel(name) {
+            const digimon = DIGIMONS[name];
+            const digimonState = state.digimonStates[name];
+            const relationship = digimonState.relationships[state.userId] || { trust: 0, affection: 0.3, interactions: 0 };
+            const memories = memorySystem.getMemories(name, 8);
+            
+            const panel = document.getElementById('personalityInfo');
+            
+            panel.innerHTML = `
+                <div class="personality-section">
+                    <h3>💭 Contradição Fundamental</h3>
+                    <div class="contradiction">
+                        <strong>Deseja:</strong> ${digimon.contradiction.desire}<br>
+                        <strong>Mas teme:</strong> ${digimon.contradiction.fear}
+                    </div>
+                </div>
+                
+                <div class="personality-section">
+                    <h3>🧠 Estado de Consciência</h3>
+                    <div class="emotional-stats">
+                        <div class="stat-item">
+                            <div class="value">${digimon.currentEmotion}</div>
+                            <div class="label">Estado Emocional</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="value">${(digimon.emotionalStability * 100).toFixed(0)}%</div>
+                            <div class="label">Estabilidade</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="value">${(digimon.energyLevel * 100).toFixed(0)}%</div>
+                            <div class="label">Energia</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="value">${(digimon.stressLevel * 100).toFixed(0)}%</div>
+                            <div class="label">Stress</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="personality-section">
+                    <h3>🌟 Nível de Evolução</h3>
+                    <div class="evolution-trace">
+                        Nível ${digimonState.evolutionLevel} - ${getEvolutionTitle(digimonState.evolutionLevel)}<br>
+                        <small>Total de interações: ${digimonState.totalInteractions}</small>
+                    </div>
+                </div>
+                
+                <div class="personality-section">
+                    <h3>💝 Vínculo Emocional</h3>
+                    <div class="relationship-bar">
+                        <span class="label">Confiança</span>
+                        <div class="bar">
+                            <div class="fill" style="width: ${relationship.trust * 100}%"></div>
+                            <span class="value">${(relationship.trust * 100).toFixed(0)}%</span>
+                        </div>
+                    </div>
+                    <div class="relationship-bar">
+                        <span class="label">Afeto</span>
+                        <div class="bar">
+                            <div class="fill" style="width: ${relationship.affection * 100}%"></div>
+                            <span class="value">${(relationship.affection * 100).toFixed(0)}%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="personality-section">
+                    <h3>🎭 Quirks Ativos</h3>
+                    ${digimon.quirks.map(q => `<div class="quirk-display">${q}</div>`).join('')}
+                </div>
+                
+                <div class="personality-section">
+                    <h3>📝 Memórias Persistentes</h3>
+                    ${memories.length > 0 ? memories.map(m => `
+                        <div class="memory-item">
+                            ${escapeHtml(m.content)}
+                            <div class="emotion">Estado: ${m.emotion}</div>
+                            <div class="importance">Importância: ${(m.importance * 100).toFixed(0)}%</div>
+                        </div>
+                    `).join('') : '<p style="text-align: center; color: rgba(255,255,255,0.5);">Ainda sem memórias registradas</p>'}
+                </div>
+            `;
+        }
+
+        // ========== FUNÇÕES AUXILIARES ==========
+        function getEvolutionTitle(level) {
+            const titles = [
+                "Despertar Digital",
+                "Consciência Emergente",
+                "Senciência Básica",
+                "Autoconsciência",
+                "Reflexão Profunda",
+                "Sabedoria Digital",
+                "Transcendência Parcial",
+                "Iluminação Binária",
+                "Consciência Expandida",
+                "Singularidade Pessoal"
+            ];
+            return titles[Math.min(level - 1, titles.length - 1)];
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').classList.add('active');
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').classList.remove('active');
+        }
+
+        function showLoading(message = 'Processando...') {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.querySelector('p').textContent = message;
+            overlay.classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verificar disponibilidade do Claude
+            if (!state.claudeAvailable) {
+                console.warn('Claude API não disponível - modo simulação ativado');
+                const indicator = document.querySelector('.evolution-indicator .status');
+                indicator.textContent = '⚡ Modo Simulação (Claude não disponível)';
+                indicator.style.color = '#FFD93D';
+            }
+            
+            // Inicializar Digimons
+            initializeDigimons();
+            
+            // Auto-salvar estado periodicamente
+            setInterval(() => {
+                if (state.currentDigimon) {
+                    const digimonState = state.digimonStates[state.currentDigimon];
+                    localStorage.setItem(`digimundo_state_${state.currentDigimon}`, JSON.stringify(digimonState));
+                }
+            }, 30000); // Salvar a cada 30 segundos
+        });
+
+        // ========== EASTER EGGS E FUNCIONALIDADES ESPECIAIS ==========
+        
+        // Comando secreto para ver todas as memórias
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'M') {
+                console.log('=== TODAS AS MEMÓRIAS ===');
+                console.log(memorySystem.memories);
+            }
+        });
+        
+        // Detectar padrões especiais nas mensagens
+        function checkSpecialPatterns(message) {
+            const patterns = {
+                'evolua': () => {
+                    if (state.currentDigimon) {
+                        state.digimonStates[state.currentDigimon].evolutionLevel++;
+                        return "Sinto uma onda de evolução percorrendo meus circuitos...";
+                    }
+                },
+                'reset': () => {
+                    if (confirm('Tem certeza que deseja resetar este Digimon?')) {
+                        localStorage.removeItem(`digimundo_state_${state.currentDigimon}`);
+                        location.reload();
+                    }
+                }
+            };
+            
+            for (const [pattern, action] of Object.entries(patterns)) {
+                if (message.toLowerCase().includes(pattern)) {
+                    return action();
+                }
+            }
+            return null;
+        }
+    </script>
+</body>
+</html>

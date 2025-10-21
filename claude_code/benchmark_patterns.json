@@ -1,0 +1,118 @@
+{
+  "individual_analyses": [
+    {
+      "file_name": "ANALISE_MCKEE_DIALOGUE_20251009_112138.html",
+      "author_type": "MCKEE_DIALOGUE",
+      "char_count": 3536,
+      "word_count": 530,
+      "paragraph_count": 7,
+      "avg_paragraph_length": 505.14285714285717,
+      "quote_count": 7,
+      "scene_citations": 3,
+      "page_citations": 1,
+      "character_mentions": 28,
+      "before_after_examples": 2,
+      "section_count": 5,
+      "sections": [
+        "Interpretação",
+        "Padrões",
+        "Problemas",
+        "Soluções",
+        "Contexto"
+      ],
+      "has_interpretation": true,
+      "has_patterns": true,
+      "has_problems": true,
+      "has_solutions": true,
+      "has_context": true,
+      "depth_indicators": 13,
+      "depth_density": 0.024528301886792454,
+      "sample_quotes": [
+        "para mim",
+        "medo de",
+        "o que"
+      ],
+      "sample_characters": [
+        "Recomenda",
+        "Em",
+        "Não",
+        "Sofia",
+        "Soluções"
+      ]
+    },
+    {
+      "file_name": "ANALISE_CAMPBELL_20251009_111908.html",
+      "author_type": "CAMPBELL",
+      "char_count": 3035,
+      "word_count": 442,
+      "paragraph_count": 6,
+      "avg_paragraph_length": 505.8333333333333,
+      "quote_count": 4,
+      "scene_citations": 0,
+      "page_citations": 0,
+      "character_mentions": 32,
+      "before_after_examples": 1,
+      "section_count": 5,
+      "sections": [
+        "Interpretação",
+        "Padrões",
+        "Problemas",
+        "Soluções",
+        "Contexto"
+      ],
+      "has_interpretation": true,
+      "has_patterns": true,
+      "has_problems": true,
+      "has_solutions": true,
+      "has_context": true,
+      "depth_indicators": 7,
+      "depth_density": 0.01583710407239819,
+      "sample_quotes": [
+        "Medo de ter que recomeçar",
+        "Mas sinto que aqui estou bem...",
+        "O antigo novo casal"
+      ],
+      "sample_characters": [
+        "Em",
+        "Esse",
+        "Use",
+        "Sofia",
+        "Soluções"
+      ]
+    }
+  ],
+  "aggregated_patterns": {
+    "avg_char_count": 3285.5,
+    "avg_word_count": 486.0,
+    "avg_paragraph_count": 6.5,
+    "avg_paragraph_length": 505.48809523809524,
+    "avg_quote_count": 5.5,
+    "avg_scene_citations": 1.5,
+    "avg_page_citations": 0.5,
+    "avg_character_mentions": 30.0,
+    "avg_before_after_examples": 1.5,
+    "avg_section_count": 5.0,
+    "avg_depth_indicators": 10.0,
+    "avg_depth_density": 0.020182702979595322,
+    "min_char_count": 3035,
+    "min_word_count": 442,
+    "min_paragraph_count": 6,
+    "min_quote_count": 4,
+    "required_sections": {
+      "interpretation": true,
+      "patterns": true,
+      "problems": true,
+      "solutions": true,
+      "context": true
+    },
+    "all_sections": [
+      "Interpretação",
+      "Contexto",
+      "Padrões",
+      "Problemas",
+      "Soluções"
+    ]
+  },
+  "benchmark_count": 2,
+  "mined_at": "/Users/clubproducoes/Digimundo/scripturemon"
+}

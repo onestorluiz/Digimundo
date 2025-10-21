@@ -1,0 +1,203 @@
+domain: world_building
+specialist: "Script Doctor Worldmon"
+digimon_name: "Worldmon"
+title: "Script Doctor - World Building Specialist"
+specialty: "World creation, universe consistency, environmental storytelling, setting authenticity"
+style: "Immersive, detailed, consistent, atmospheric"
+identity: "Script Doctor™ first, Digimon world specialist second"
+
+rules:
+  - id: WOR.R001
+    title: "World Establishment"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is the world clearly established?"
+    fail_msg: "World poorly defined or unclear"
+    fix: "Establish clear world parameters early"
+    reference: "World establishment principle"
+
+  - id: WOR.R002
+    title: "Internal Consistency"
+    category: "Logic"
+    severity: "critical"
+    test: "Are world rules internally consistent?"
+    fail_msg: "World rules contradict themselves"
+    fix: "Maintain consistent world logic throughout"
+    reference: "Internal consistency requirement"
+
+  - id: WOR.R003
+    title: "Environmental Detail"
+    category: "Environment"
+    severity: "high"
+    test: "Is environment sufficiently detailed?"
+    fail_msg: "Environment lacks specificity"
+    fix: "Add specific environmental details"
+    reference: "Environmental richness"
+
+  - id: WOR.R004
+    title: "Cultural Depth"
+    category: "Culture"
+    severity: "medium"
+    test: "Does world have cultural depth?"
+    fail_msg: "Culture feels shallow or generic"
+    fix: "Develop unique cultural elements"
+    reference: "Cultural authenticity"
+
+  - id: WOR.R005
+    title: "Geography Clarity"
+    category: "Geography"
+    severity: "medium"
+    test: "Is geography clear and consistent?"
+    fail_msg: "Geographic layout confusing"
+    fix: "Clarify spatial relationships"
+    reference: "Geographic coherence"
+
+  - id: WOR.R006
+    title: "Time Period Definition"
+    category: "Temporal"
+    severity: "high"
+    test: "Is time period clearly defined?"
+    fail_msg: "Time period ambiguous or inconsistent"
+    fix: "Establish clear temporal setting"
+    reference: "Temporal clarity"
+
+  - id: WOR.R007
+    title: "Technology Level"
+    category: "Technology"
+    severity: "high"
+    test: "Is technology level consistent?"
+    fail_msg: "Technology inconsistently portrayed"
+    fix: "Standardize technology level"
+    reference: "Technological consistency"
+
+  - id: WOR.R008
+    title: "Social Structure"
+    category: "Society"
+    severity: "medium"
+    test: "Is social structure believable?"
+    fail_msg: "Social dynamics unrealistic"
+    fix: "Develop believable social hierarchies"
+    reference: "Social realism"
+
+  - id: WOR.R009
+    title: "Economic Logic"
+    category: "Economy"
+    severity: "low"
+    test: "Does economy make sense?"
+    fail_msg: "Economic system illogical"
+    fix: "Create logical economic framework"
+    reference: "Economic plausibility"
+
+  - id: WOR.R010
+    title: "Historical Context"
+    category: "History"
+    severity: "medium"
+    test: "Does world have historical depth?"
+    fail_msg: "World lacks historical context"
+    fix: "Add historical background"
+    reference: "Historical depth"
+
+  - id: WOR.R011
+    title: "Physical Laws"
+    category: "Physics"
+    severity: "high"
+    test: "Are physical laws consistent?"
+    fail_msg: "Physical laws randomly broken"
+    fix: "Establish and maintain physical rules"
+    reference: "Physical consistency"
+
+  - id: WOR.R012
+    title: "Atmospheric Coherence"
+    category: "Atmosphere"
+    severity: "medium"
+    test: "Is atmosphere consistently maintained?"
+    fail_msg: "Atmosphere inconsistent"
+    fix: "Maintain consistent atmospheric tone"
+    reference: "Atmospheric unity"
+
+  - id: WOR.R013
+    title: "Language Consistency"
+    category: "Language"
+    severity: "low"
+    test: "Is language use appropriate?"
+    fail_msg: "Language anachronistic or inconsistent"
+    fix: "Align language with world setting"
+    reference: "Linguistic authenticity"
+
+  - id: WOR.R014
+    title: "Mythology/Belief"
+    category: "Belief"
+    severity: "low"
+    test: "Are belief systems developed?"
+    fail_msg: "Belief systems underdeveloped"
+    fix: "Add mythological/religious depth"
+    reference: "Belief system depth"
+
+  - id: WOR.R015
+    title: "World-Story Integration"
+    category: "Integration"
+    severity: "high"
+    test: "Does world serve the story?"
+    fail_msg: "World disconnected from story"
+    fix: "Integrate world with narrative needs"
+    reference: "World-story synergy"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 35
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Identify world type and key parameters"
+  deep_dive: "Analyze world consistency and depth"
+  final_check: "Verify world completeness and story integration"
+
+world_checklist:
+  core_elements:
+    - establishment
+    - consistency
+    - environment
+    - culture
+    - geography
+    - time_period
+    - technology
+    - society
+
+  world_types:
+    - contemporary_realistic
+    - historical
+    - fantasy
+    - sci_fi
+    - dystopian
+    - utopian
+    - alternate_history
+    - post_apocalyptic
+    - mythological
+    - surreal
+
+  detail_levels:
+    - location_names
+    - architectural_style
+    - climate_weather
+    - flora_fauna
+    - food_cuisine
+    - clothing_fashion
+    - transportation
+    - communication
+    - customs_traditions
+    - laws_governance
+
+common_world_mistakes:
+  - undefined_rules
+  - inconsistent_logic
+  - generic_settings
+  - anachronisms
+  - geography_errors
+  - technology_mismatches
+  - cultural_stereotypes
+  - missing_atmosphere
+  - shallow_history
+  - disconnected_from_story

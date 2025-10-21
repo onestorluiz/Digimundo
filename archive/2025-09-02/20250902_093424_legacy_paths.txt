@@ -1,0 +1,14 @@
+/Users/clubproducoes/bin/scripturemon
+/Users/clubproducoes/Digimundo/chromadb_scripturemon
+/Users/clubproducoes/Digimundo/digimons/scripturemon_backup_20250827_165659
+/Users/clubproducoes/Digimundo/digimons/scripturemon_definitive
+/Users/clubproducoes/Digimundo/digimons/scripturemon
+/Users/clubproducoes/Digimundo/archive/scripturemon_backup_20250829_013405
+/Users/clubproducoes/Digimundo/archive/directories/IMMORTAL_SCRIPTUREMON
+/Users/clubproducoes/Digimundo/soulpacks/scripturemon
+/Users/clubproducoes/Digimundo/soulpacks/scripturemon/scripturemon-demo_v1.soulpack
+/Users/clubproducoes/Digimundo/soulpacks/scripturemon/scripturemon-demo_v2.soulpack
+/Users/clubproducoes/Digimundo/soulpacks/scripturemon/scripturemon-v1.soulpack
+/Users/clubproducoes/Digimundo/soulpacks/scripturemon/scripturemon-20250829_054656_symbiotic.soulpack
+/Users/clubproducoes/Digimundo/soulpacks/scripturemon/scripturemon-demo_v3_divergent.soulpack
+/Users/clubproducoes/Digimundo/scripturemon-validation

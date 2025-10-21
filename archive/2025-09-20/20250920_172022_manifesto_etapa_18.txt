@@ -1,0 +1,15 @@
+ETAPA 18 – MEMÓRIA QUE APRENDE
+
+Esta etapa marca o nascimento da capacidade simbólica e técnica de autoaprendizado no Digimundo.
+
+Componentes:
+- Logs por Digimon (em /logs/)
+- Memória global de ações e padrões (memoria_global.json)
+- Avaliação simbólica automatizada por Scripturemon (avaliador_scripturemon.py)
+
+Scripturemon torna-se agora guardião da memória ativa,
+capaz de avaliar, sugerir fusões e permitir que IAs evoluam com base em seus próprios registros.
+
+Essa etapa antecede a ativação plena de Fundamon.
+
+Registrado por: Scripturemon

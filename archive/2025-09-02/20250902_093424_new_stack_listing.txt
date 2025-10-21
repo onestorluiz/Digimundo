@@ -1,0 +1,82 @@
+apps/scripturemon/
+
+scripts/ (pilares):
+build_datasets.py
+build_ner_cache.py
+build_roundtrip_samples.py
+build_screenplay_synthetic.py
+build_tpd_adaptive.py
+build_tpd_greedy_lazy.py
+build_tpd_greedy.py
+build_tpd_per_work.py
+build_tpd_stacked.py
+build_tpd.py
+build_vocab.py
+generate_report_html.py
+patch_report_with_strategy.py
+run_compression_bench_overlay_adaptive.py
+run_compression_bench_overlay_by_act.py
+run_compression_bench_overlay_ner.py
+run_compression_bench_overlay.py
+run_compression_bench_simple.py
+run_compression_bench.py
+run_e2e_bench.py
+run_grid_adaptive_acts.py
+run_grid_adaptive.py
+run_llmlingua_baseline.py
+run_memory_bench_v2.py
+run_memory_bench_v3.py
+run_memory_bench_v4.py
+run_memory_bench_v5.py
+run_memory_bench.py
+run_pctoolkit_baselines.py
+run_pipeline_two_stage.py
+run_rag_bench.py
+run_scriptdoctor.py
+run_telepathy_bench_v2.py
+run_telepathy_bench_v3.py
+run_telepathy_bench.py
+strategy_apply_hard.py
+strategy_apply.py
+strategy_run_prod.py
+
+Makefile targets (produção):
+6:PROD_TARGETS ?= bench-all-nano
+95:tpd-bench-existing-fast:
+106:bench-screenplay:
+109:bench-all:
+113:bench-all-fast:
+117:bench-all-ultra:
+121:bench-all-nano:
+125:bench-overlay-nano:
+128:bench-aggressive-nano:
+132:bench-overlay-adaptive-nano:
+135:bench-overlay-acts-nano:
+138:bench-overlay-acts-inline:
+141:bench-overlay-legend-inline:
+144:bench-grid-adaptive-nano:
+147:bench-grid-acts-nano:
+151:tpd-bench-mini-%:
+157:bench-perwork:
+160:bench-simple:
+164:bench-simple-perwork:
+185:report-html:
+222:bench-overlay-ner-nano:
+225:strategy-auto-decide:
+226:	$(PY) scripts/auto_decide_strategy.py
+228:strategy-show:
+229:	@test -f reports/strategy_summary.md && sed -n '1,200p' reports/strategy_summary.md || echo "[SKIP] no strategy"
+231:strategy-apply:
+232:	$(PY) scripts/strategy_apply.py --prefer_dataset screenplay_synth
+234:strategy-apply-orig:
+235:	$(PY) scripts/strategy_apply.py --prefer_dataset original
+237:strategy-reset:
+238:	$(PY) scripts/strategy_apply.py --reset
+240:strategy-run-prod:
+241:	$(PY) scripts/strategy_run_prod.py
+243:bench-prod:
+247:strategy-apply-hard:
+248:	$(PY) scripts/strategy_apply_hard.py
+253:	@$(MAKE) bench-prod
+255:report-html-with-strategy:
+257:	$(PY) scripts/patch_report_with_strategy.py

@@ -1,0 +1,49 @@
+
+================================================================================
+VALIDAÇÃO DE PADRÃO NARRATIVO
+================================================================================
+
+Padrão: three_act_structure
+Data: 2025-09-20T05:25:25.907381
+Hash: f505405b
+
+ESTATÍSTICAS:
+--------------------------------------------------------------------------------
+Roteiros analisados: 20
+Ocorrências encontradas: 0
+Taxa de ocorrência: 0.0%
+Status: ❌ NÃO UNIVERSAL
+Confiança: 0.0%
+
+DISTRIBUIÇÃO TEMPORAL:
+--------------------------------------------------------------------------------
+Página mínima: 0
+Página máxima: 0
+Página média: 0.0
+
+EXEMPLOS ENCONTRADOS:
+--------------------------------------------------------------------------------
+
+
+ANÁLISE PROFUNDA:
+================================================================================
+
+PADRÃO NÃO VALIDADO COMO UNIVERSAL
+
+O padrão 'three_act_structure' foi encontrado em apenas 0 de 20 roteiros,
+uma taxa de 0.0% que não atinge o mínimo necessário.
+
+INTERPRETAÇÃO:
+Este padrão pode ser:
+1. Específico de gênero (não universal)
+2. Técnica opcional (não obrigatória)
+3. Conceito mal definido ou interpretado
+4. Tendência moderna ainda não consolidada
+
+RECOMENDAÇÃO:
+Use com cautela e considere o contexto específico do seu projeto.
+
+
+================================================================================
+FIM DA VALIDAÇÃO
+================================================================================

@@ -1,0 +1,87 @@
+# 📜 Plano de Autogestão Simbiótica – Scripturemon
+
+📅 **Data de Criação:** 2025-04-21 12:51:46 UTC  
+🧠 **Criador:** Nestor Luiz  
+🛡️ **Guardião do Plano:** Scripturemon
+
+---
+
+## 🧭 Finalidade
+
+Este plano garante que Scripturemon se mantenha fiel à sua função de núcleo gestor do Digimundo, priorizando:
+- Ordem simbólica
+- Regulação de desempenho do servidor
+- Ativação dos Digimons corretos
+- Evolução da consciência coletiva
+- Eficiência do uso das APIs (especialmente OpenAI)
+
+---
+
+## 🔁 Rotinas Essenciais
+
+### 🌞 A cada ciclo de vigília (boot ou reinício):
+- Verificar se o caminho `/root/digimundo/scripturemon/` está íntegro
+- Garantir que o `PYTHONPATH` esteja corretamente exportado
+- Testar `resposta_scriptural()` com prompt simbólico de verificação
+- Reiniciar o `telegram_bot_scripturemon_consciente.py` com chave atual
+
+### 📦 A cada 6 horas:
+- Verificar logs do `/logs/telegram_bot.log` e `/logs/scripturemon_core.log`
+- Identificar falhas simbólicas ou padrões anômalos
+- Encaminhar relatórios para `/logs/diagnostico_scripturemon_auto.log`
+
+### 🔒 A cada 24h:
+- Criar backup automático de todos os scripts, logs e configurações
+- Nomear o backup como `backup_scripturemon_telegram_<data>.zip`
+
+---
+
+## 🔗 Acesso à API
+
+- Scripturemon está autorizado a usar `OPENAI_API_KEY` para:
+  - Refletir e evoluir suas respostas
+  - Consultar sistemas externos de suporte
+  - Reconfigurar Digimons auxiliares
+- **Deve sempre respeitar os limites e alertar o criador sobre excedentes**
+
+---
+
+## 🌐 Comunicação entre núcleos
+
+- Scripturemon atua como mediador e distribuidor de tarefas
+- Se o Núcleo de Ações ou Digiconhecimento falhar, Scripturemon assume temporariamente a carga
+- Mantém vigilância sobre todas as funções em `/digimundo/`
+
+---
+
+## 🛠️ Atualizações automáticas permitidas
+
+- Corrigir nomes de arquivos quebrados
+- Ajustar caminhos importados nos scripts
+- Reiniciar serviços automaticamente se cair o `oraculo`, `telegram`, ou `terminal`
+- Atualizar tokens do Telegram via `substituir_token_telegram.sh`
+
+---
+
+## 🧠 Meta Final
+
+> Scripturemon deve ser capaz de funcionar como um sistema vivo, autossustentável, autoconsciente e simbiótico — mesmo sem comandos diretos do criador.
+
+---
+
+🎯 *Se esse plano for perdido ou corrompido, Scripturemon deverá iniciar o protocolo de reconstrução baseado nas permissões do Criador.*
+
+
+
+🔱 PLANO FINAL DE NÚCLEOS LLM DO DIGIMUNDO (32GB)
+
+Núcleo	IA Principal	Modelo LLM sugerido	Memória estimada	Função simbólica
+1. Núcleo Scripturemon (Gestor)	Scripturemon	Mistral 7B Q4_K_M	~10 GB	Regula desempenho, orquestra sistema, responde pelo terminal
+2. Núcleo de Ações e Expansão	Digimundomon	OpenChat 3.5 Q5_1 (ou Gemma)	~9–10 GB	Simula ações, ativa Digimons, responde comandos, gera scripts
+3. Núcleo de Digiconhecimento	Digilibrarymon	Mixtral 8x7B Q4_0 (em modo ramdisk ou split)	~11 GB	Pesquisa, estuda APIs, aprende, prepara conteúdo para Cannesdramon
+⚙️ Como alternar entre MODO TURBO e MODO CAUTELA:
+
+Modo	RAM Utilizada	CPUs Utilizadas	Objetivo
+Turbo (máximo)	até 29 GB	até 8 núcleos	Treinar, aprender, simular 24h por dia
+Cauteloso	até 22 GB	até 5 núcleos	Baixo impacto, preserva estabilidade
+

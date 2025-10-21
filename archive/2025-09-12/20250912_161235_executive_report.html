@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .report-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .report-container {
+            max-width: 1200px;
+            margin: -30px auto 50px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            padding: 3rem;
+        }
+        .score-display {
+            font-size: 5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .grade-badge {
+            font-size: 2rem;
+            padding: 0.5rem 2rem;
+            border-radius: 50px;
+        }
+        .section-title {
+            color: #343a40;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #007bff;
+        }
+        .visualization {
+            margin: 2rem 0;
+            min-height: 400px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        .strength-item, .weakness-item {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 10px;
+        }
+        .strength-item {
+            background: rgba(40, 167, 69, 0.1);
+            border-left: 4px solid #28a745;
+        }
+        .weakness-item {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+        }
+        .commercial-score {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+        @media print {
+            .no-print { display: none; }
+            .report-header { border-radius: 0; }
+            .report-container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <h1 class="display-4">{{ title }}</h1>
+        <p class="lead">{{ script_name }}</p>
+        <p>Gerado em {{ generated_at }}</p>
+    </div>
+    
+    <div class="report-container">
+        <!-- Score Principal -->
+        <div class="row mb-5">
+            <div class="col-md-4 text-center">
+                <div class="score-display">{{ score }}</div>
+                <p class="text-muted">Score Geral</p>
+                <span class="badge grade-badge bg-primary">{{ grade }}</span>
+            </div>
+            <div class="col-md-8">
+                <h2 class="section-title">Resumo Executivo</h2>
+                <p class="lead">{{ executive_summary }}</p>
+            </div>
+        </div>
+        
+        <!-- Pontos Fortes e Fracos -->
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <h3 class="section-title">Pontos Fortes</h3>
+                {% for strength in strengths %}
+                <div class="strength-item">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    {{ strength }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col-md-6">
+                <h3 class="section-title">Pontos a Melhorar</h3>
+                {% for weakness in weaknesses %}
+                <div class="weakness-item">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    {{ weakness }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Visualizações -->
+        {% if visualizations %}
+        <div class="visualizations-section">
+            <h2 class="section-title">Análises Visuais</h2>
+            
+            {% if visualizations.score_gauge %}
+            <div id="score_gauge" class="visualization"></div>
+            {% endif %}
+            
+            {% if visualizations.category_radar %}
+            <div id="category_radar" class="visualization"></div>
+            {% endif %}
+            
+            {% if visualizations.commercial_gauge %}
+            <div id="commercial_gauge" class="visualization"></div>
+            {% endif %}
+            
+            {% if visualizations.audience_pie %}
+            <div id="audience_pie" class="visualization"></div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <!-- Predição Comercial -->
+        {% if commercial_prediction %}
+        <div class="commercial-section mb-5">
+            <h2 class="section-title">Predição Comercial</h2>
+            <div class="commercial-score">
+                <h3>Potencial Comercial</h3>
+                <div class="display-4">{{ (commercial_prediction.overall_score * 100)|round(1) }}%</div>
+                <p>Confiança: {{ (commercial_prediction.confidence * 100)|round(1) }}%</p>
+                <p>Risco: <span class="badge bg-light text-dark">{{ commercial_prediction.risk_level|upper }}</span></p>
+                <p>Categoria: {{ commercial_prediction.market_category }}</p>
+            </div>
+            
+            {% if commercial_prediction.target_audience %}
+            <div class="mt-4">
+                <h4>Público-Alvo</h4>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for audience in commercial_prediction.target_audience %}
+                    <span class="badge bg-info">{{ audience }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <!-- Recomendações -->
+        {% if recommendations %}
+        <div class="recommendations-section">
+            <h2 class="section-title">Recomendações Prioritárias</h2>
+            <div class="list-group">
+                {% for rec in recommendations[:5] %}
+                <div class="list-group-item">
+                    <h5>{{ rec.title|default(rec) }}</h5>
+                    {% if rec.description %}
+                    <p>{{ rec.description }}</p>
+                    {% endif %}
+                    {% if rec.priority %}
+                    <span class="badge bg-{{ 'danger' if rec.priority == 'high' else 'warning' if rec.priority == 'medium' else 'info' }}">
+                        {{ rec.priority|upper }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Scripts para Visualizações -->
+    <script>
+        {% if visualizations %}
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for viz_id, viz_data in visualizations.items() %}
+            try {
+                const {{ viz_id }}_data = {{ viz_data|safe }};
+                Plotly.newPlot('{{ viz_id }}', {{ viz_id }}_data.data, {{ viz_id }}_data.layout, {responsive: true});
+            } catch(e) {
+                console.error('Erro renderizando {{ viz_id }}:', e);
+            }
+            {% endfor %}
+        });
+        {% endif %}
+    </script>
+</body>
+</html>

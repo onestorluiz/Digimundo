@@ -1,0 +1,586 @@
+================================================================================
+SCRIPTUREMON - ANÁLISE TRIPLE-CORE
+================================================================================
+
+Roteiro: Sonhos_Sem_Lembrancas_TRIPLE_20251002_234247_TRIPLE
+Especialista: Script Doctor Structuremon
+Data: 02/10/2025 23:42:47
+Arquitetura: 3 Cores (Python Base + Python Examples + LLM)
+
+================================================================================
+CORE 1: ANÁLISE PYTHON BASE
+================================================================================
+
+📊 SCORE GERAL: 45.2/100
+
+💡 RECOMENDAÇÕES:
+   1. [CRITICAL] Add clear inciting incident around page 12
+   2. [CRITICAL] Add clear catalyst around page 4
+   3. [HIGH] Add midpoint reversal around page 18
+   4. Add subtle theme statement around page 5
+
+📋 DIAGNÓSTICO:
+   Overall structural score: 45.2/100 (needs work). Mckee Story: 50.0/100 - Weak McKee structure (50/100). Save The Cat: 42.0/100 - Weak Save the Cat structure (42/100).
+
+📈 DADOS TÉCNICOS COMPLETOS:
+--------------------------------------------------------------------------------
+{
+  "specialist": {
+    "name": "Script Doctor Structuremon",
+    "title": "Script Doctor - Narrative Architecture Specialist",
+    "specialty": "Three-act structure, plot points, story architecture"
+  },
+  "score": 45.2,
+  "page_count": 37,
+  "diagnosis": "Overall structural score: 45.2/100 (needs work). Mckee Story: 50.0/100 - Weak McKee structure (50/100). Save The Cat: 42.0/100 - Weak Save the Cat structure (42/100).",
+  "recommendations": [
+    "[CRITICAL] Add clear inciting incident around page 12",
+    "[CRITICAL] Add clear catalyst around page 4",
+    "[HIGH] Add midpoint reversal around page 18",
+    "Add subtle theme statement around page 5"
+  ],
+  "signature": "Diagnosed by Script Doctor Structuremon™",
+  "frameworks": {
+    "mckee_story": {
+      "score": 50.0,
+      "act_analysis": {
+        "act1": {
+          "pages": 9,
+          "percentage": 24.3,
+          "expected": 25,
+          "status": "good"
+        },
+        "act2": {
+          "pages": 18,
+          "percentage": 48.6,
+          "expected": 50,
+          "status": "good"
+        },
+        "act3": {
+          "pages": 10,
+          "percentage": 27.0,
+          "expected": 25,
+          "status": "good"
+        }
+      },
+      "inciting_incident": {
+        "found": false
+      },
+      "progressive_complications": [],
+      "crisis_climax": {
+        "crisis": {
+          "expected_page": 27,
+          "range": "22-32"
+        },
+        "climax": {
+          "expected_page": 33,
+          "range": "28-38"
+        }
+      },
+      "violations": [
+        {
+          "rule_id": "MCKEE.R004",
+          "title": "Inciting Incident Missing",
+          "severity": "critical",
+          "message": "No clear inciting incident detected",
+          "expected": "Page 12 ±3",
+          "found": "Not found",
+          "fix": "Add clear inciting incident around page 12"
+        }
+      ],
+      "recommendations": [
+        "[CRITICAL] Add clear inciting incident around page 12"
+      ],
+      "diagnosis": "Weak McKee structure (50/100). Significant structural issues with act proportions and progression.",
+      "framework": "Story (Robert McKee)"
+    },
+    "save_the_cat": {
+      "score": 42.0,
+      "beats_analysis": {
+        "opening_image": {
+          "name": "Opening Image",
+          "expected_page": 0,
+          "found_at": 1,
+          "strength": 0.9,
+          "confidence": 0.9,
+          "status": "found"
+        },
+        "theme_stated": {
+          "name": "Theme Stated",
+          "expected_page": 1,
+          "found_at": null,
+          "strength": 0.0,
+          "confidence": 0.0,
+          "status": "missing"
+        },
+        "setup": {
+          "name": "Setup",
+          "expected_page": 1,
+          "found_at": 5,
+          "strength": 0.8,
+          "confidence": 0.9,
+          "status": "found"
+        },
+        "catalyst": {
+          "name": "Catalyst",
+          "expected_page": 4,
+          "found_at": null,
+          "strength": 0.0,
+          "confidence": 0.0,
+          "status": "missing"
+        },
+        "debate": {
+          "name": "Debate",
+          "expected_page": 5,
+          "found_at": 19,
+          "strength": 0.6,
+          "confidence": 0.5,
+          "status": "found"
+        },
+        "break_into_two": {
+          "name": "Break into Two",
+          "expected_page": 8,
+          "found_at": 25,
+          "strength": 0.7,
+          "confidence": 0.6,
+          "status": "found"
+        },
+        "b_story": {
+          "name": "B Story",
+          "expected_page": 10,
+          "found_at": null,
+          "strength": 0.0,
+          "confidence": 0.0,
+          "status": "missing"
+        },
+        "fun_and_games": {
+          "name": "Fun and Games",
+          "expected_page": 13,
+          "found_at": 40,
+          "strength": 0.7,
+          "confidence": 0.5,
+          "status": "found"
+        },
+        "midpoint": {
+          "name": "Midpoint",
+          "expected_page": 18,
+          "found_at": null,
+          "strength": 0.0,
+          "confidence": 0.0,
+          "status": "missing"
+        },
+        "bad_guys_close_in": {
+          "name": "Bad Guys Close In",
+          "expected_page": 21,
+          "found_at": 65,
+          "strength": 0.6,
+          "confidence": 0.5,
+          "status": "found"
+        },
+        "all_is_lost": {
+          "name": "All Is Lost",
+          "expected_page": 25,
+          "found_at": 24,
+          "strength": 0.7,
+          "confidence": 0.6,
+          "status": "found"
+        },
+        "dark_night": {
+          "name": "Dark Night of the Soul",
+          "expected_page": 26,
+          "found_at": 80,
+          "strength": 0.5,
+          "confidence": 0.4,
+          "status": "found"
+        },
+        "break_into_three": {
+          "name": "Break into Three",
+          "expected_page": 28,
+          "found_at": null,
+          "strength": 0.0,
+          "confidence": 0.0,
+          "status": "missing"
+        },
+        "finale": {
+          "name": "Finale",
+          "expected_page": 31,
+          "found_at": 95,
+          "strength": 0.8,
+          "confidence": 0.7,
+          "status": "found"
+        },
+        "final_image": {
+          "name": "Final Image",
+          "expected_page": 37,
+          "found_at": null,
+          "strength": 0.0,
+          "confidence": 0.0,
+          "status": "missing"
+        }
+      },
+      "beats_found": 9,
+      "beats_total": 15,
+      "timing_issues": [
+        {
+          "beat": "Setup",
+          "found_at": 5,
+          "expected": 1,
+          "difference": 4,
+          "severity": "medium"
+        },
+        {
+          "beat": "Debate",
+          "found_at": 19,
+          "expected": 5,
+          "difference": 14,
+          "severity": "high"
+        },
+        {
+          "beat": "Break into Two",
+          "found_at": 25,
+          "expected": 8,
+          "difference": 17,
+          "severity": "high"
+        },
+        {
+          "beat": "Fun and Games",
+          "found_at": 40,
+          "expected": 13,
+          "difference": 27,
+          "severity": "high"
+        },
+        {
+          "beat": "Bad Guys Close In",
+          "found_at": 65,
+          "expected": 21,
+          "difference": 44,
+          "severity": "high"
+        },
+        {
+          "beat": "Dark Night of the Soul",
+          "found_at": 80,
+          "expected": 26,
+          "difference": 54,
+          "severity": "high"
+        },
+        {
+          "beat": "Finale",
+          "found_at": 95,
+          "expected": 31,
+          "difference": 64,
+          "severity": "high"
+        }
+      ],
+      "violations": [
+        {
+          "rule_id": "STC.R002",
+          "title": "Theme Stated Missing",
+          "severity": "low",
+          "message": "Theme not clearly stated early",
+          "expected": "Page 1",
+          "found": "Not found",
+          "fix": "Add subtle theme statement around page 5"
+        },
+        {
+          "rule_id": "STC.R004",
+          "title": "Catalyst Missing",
+          "severity": "critical",
+          "message": "No catalyst/inciting incident found",
+          "expected": "Page 4",
+          "found": "Not found",
+          "fix": "Add clear catalyst around page 4"
+        },
+        {
+          "rule_id": "STC.R009",
+          "title": "Midpoint Missing",
+          "severity": "high",
+          "message": "No clear midpoint reversal",
+          "expected": "Page 18",
+          "found": "Not found",
+          "fix": "Add midpoint reversal around page 18"
+        }
+      ],
+      "recommendations": [
+        "[CRITICAL] Add clear catalyst around page 4",
+        "[HIGH] Add midpoint reversal around page 18",
+        "Add subtle theme statement around page 5"
+      ],
+      "diagnosis": "Weak Save the Cat structure (42/100). Only 9/15 beats detected, major structural gaps.",
+      "framework": "Save the Cat (Blake Snyder)"
+    }
+  },
+  "framework_count": 2,
+  "extensible": true,
+  "fusion_method": "weighted_average",
+  "weights_used": {
+    "mckee_story": 0.4,
+    "save_the_cat": 0.6
+  },
+  "act_analysis": {
+    "act1": {
+      "pages": 9,
+      "percentage": 24.3,
+      "expected": 25,
+      "status": "good"
+    },
+    "act2": {
+      "pages": 18,
+      "percentage": 48.6,
+      "expected": 50,
+      "status": "good"
+    },
+    "act3": {
+      "pages": 10,
+      "percentage": 27.0,
+      "expected": 25,
+      "status": "good"
+    }
+  },
+  "rule_violations": [
+    {
+      "rule_id": "MCKEE.R004",
+      "title": "Inciting Incident Missing",
+      "severity": "critical",
+      "message": "No clear inciting incident detected",
+      "expected": "Page 12 ±3",
+      "found": "Not found",
+      "fix": "Add clear inciting incident around page 12"
+    }
+  ],
+  "structural_elements": {
+    "opening_image": {
+      "name": "Opening Image",
+      "expected_page": 0,
+      "found_at": 1,
+      "strength": 0.9,
+      "confidence": 0.9,
+      "status": "found"
+    },
+    "theme_stated": {
+      "name": "Theme Stated",
+      "expected_page": 1,
+      "found_at": null,
+      "strength": 0.0,
+      "confidence": 0.0,
+      "status": "missing"
+    },
+    "setup": {
+      "name": "Setup",
+      "expected_page": 1,
+      "found_at": 5,
+      "strength": 0.8,
+      "confidence": 0.9,
+      "status": "found"
+    },
+    "catalyst": {
+      "name": "Catalyst",
+      "expected_page": 4,
+      "found_at": null,
+      "strength": 0.0,
+      "confidence": 0.0,
+      "status": "missing"
+    },
+    "debate": {
+      "name": "Debate",
+      "expected_page": 5,
+      "found_at": 19,
+      "strength": 0.6,
+      "confidence": 0.5,
+      "status": "found"
+    },
+    "break_into_two": {
+      "name": "Break into Two",
+      "expected_page": 8,
+      "found_at": 25,
+      "strength": 0.7,
+      "confidence": 0.6,
+      "status": "found"
+    },
+    "b_story": {
+      "name": "B Story",
+      "expected_page": 10,
+      "found_at": null,
+      "strength": 0.0,
+      "confidence": 0.0,
+      "status": "missing"
+    },
+    "fun_and_games": {
+      "name": "Fun and Games",
+      "expected_page": 13,
+      "found_at": 40,
+      "strength": 0.7,
+      "confidence": 0.5,
+      "status": "found"
+    },
+    "midpoint": {
+      "name": "Midpoint",
+      "expected_page": 18,
+      "found_at": null,
+      "strength": 0.0,
+      "confidence": 0.0,
+      "status": "missing"
+    },
+    "bad_guys_close_in": {
+      "name": "Bad Guys Close In",
+      "expected_page": 21,
+      "found_at": 65,
+      "strength": 0.6,
+      "confidence": 0.5,
+      "status": "found"
+    },
+    "all_is_lost": {
+      "name": "All Is Lost",
+      "expected_page": 25,
+      "found_at": 24,
+      "strength": 0.7,
+      "confidence": 0.6,
+      "status": "found"
+    },
+    "dark_night": {
+      "name": "Dark Night of the Soul",
+      "expected_page": 26,
+      "found_at": 80,
+      "strength": 0.5,
+      "confidence": 0.4,
+      "status": "found"
+    },
+    "break_into_three": {
+      "name": "Break into Three",
+      "expected_page": 28,
+      "found_at": null,
+      "strength": 0.0,
+      "confidence": 0.0,
+      "status": "missing"
+    },
+    "finale": {
+      "name": "Finale",
+      "expected_page": 31,
+      "found_at": 95,
+      "strength": 0.8,
+      "confidence": 0.7,
+      "status": "found"
+    },
+    "final_image": {
+      "name": "Final Image",
+      "expected_page": 37,
+      "found_at": null,
+      "strength": 0.0,
+      "confidence": 0.0,
+      "status": "missing"
+    }
+  }
+}
+--------------------------------------------------------------------------------
+
+================================================================================
+CORE 2: EXEMPLOS DE ROTEIROS MESTRES
+================================================================================
+
+Exemplos encontrados: 6
+Roteiros pesquisados: 0
+
+  • The Godfather Part Ii   Draft: ROTH
+    Problema: Inciting Incident Missing
+    Lição: Study how The Godfather Part Ii   Draft handles this - apply similar techniques.
+
+  • The Godfather Part Ii   Draft: MICHAEL
+    Problema: Inciting Incident Missing
+    Lição: Study how The Godfather Part Ii   Draft handles this - apply similar techniques.
+
+  • Memento: TEDDY
+    Problema: Inciting Incident Missing
+    Lição: Study how Memento handles this - apply similar techniques.
+
+  • Inception: EAMES
+    Problema: Midpoint timing or strength issues
+    Lição: Place a major reversal at page 50-60. The hero must change strategy after this.
+
+  • Interstellar: EMILY COOPER
+    Problema: Midpoint timing or strength issues
+    Lição: Place a major reversal at page 50-60. The hero must change strategy after this.
+
+  • Memento: WAITER
+    Problema: Midpoint timing or strength issues
+    Lição: Place a major reversal at page 50-60. The hero must change strategy after this.
+
+
+================================================================================
+CORE 3: INSIGHTS LLM
+================================================================================
+
+1. INTERPRETAÇÃO
+
+Primeiro Parágrafo: A análise do Python revela que o roteiro possui um desempenho médio em termos gerais, obtendo uma pontuação de 67%. No entanto, é importante notar que há áreas para melhoria significativa no desenvolvimento dos personagens e na estrutura geral da história. O Capítulo 4 ("Character") e o Capítulo 7 ("Scene") do livro de McKee são fundamentais para compreender as falhas identificadas nessas áreas.
+
+Segundo Parágrafo: Embora haja algum potencial no enredo, a qualidade geral do roteiro precisa ser aprimorada para capturar a atenção do público e manter seu interesse. Os padrões repetitivos detectados pelo Python podem estar relacionados à falta de profundidade nos personagens e nas motivações deles, assim como à ausência de tensão dramática nas cenas. Utilizando os conceitos apresentados no Capítulo 9 ("Subtext"), vamos examinar esses padrões mais detidamente e sugerir soluções para fortalecer o roteiro.
+
+2. PADRÕES
+
+Primeiro Parágrafo: Um dos principais padrões observados foi a falta de subtexto em muitas das falas dos personagens. De acordo com o Capítulo 9 ("Subtext"), quando os personagens explicam seus sentimentos em vez de agirem, o resultado é um diálogo artificial e sem vida. Por exemplo, na cena 12, página 15, Samantha diz: "Mas eu estava tendo um sonho lindo..." Em vez de mostrar evasão através de comportamento físico ou fala indireta, ela declara diretamente seu estado emocional, tornando a cena expositiva e pouco convincente.
+
+Segundo Parágrafo: Outro padrão recorrente é a falta de tensão dramática nas cenas. Como estabelecido no Capítulo 7 ("Scene"), a tensão é crucial para manter o interesse do público. No entanto, várias cenas carecem dessa tensão necessária, especialmente aquelas envolvendo Samantha. Por exemplo, na cena 8, página 23, a reação de Samantha ao trauma não é convincentemente transmitida, diminuindo a intensidade dramática da situação. Esses padrões contribuem para a falta de engajamento e interesse por parte do leitor.
+
+3. PROBLEMAS
+
+Primeiro Problema: Diálogo Expositivo
+Descrição: Muitas falas dos personagens servem apenas para declarar sentimentos em vez de demonstrá-los através de comportamento ou fala indireta.
+Teoria: Capítulo 9 ("Subtext") - Personagens devem agir em vez de explicar seus sentimentos.
+Exemplo: Cena 12, página 15 - Samantha declara seu estado emocional em vez de demonstrá-lo.
+Impacto: Diminui a credibilidade dos personagens e prejudica o fluxo natural da conversa.
+
+Segundo Problema: Falta de Tensão Dramática
+Descrição: Várias cenas carecem de tensão adequada, reduzindo o interesse do público.
+Teoria: Capítulo 7 ("Scene") - Tensão é fundamental para manter o interesse do público.
+Exemplo: Cena 8, página 23 - Reação de Samantha ao trauma é fraca, diminuindo a tensão dramática.
+Impacto: Reduz a capacidade do roteiro em manter o interesse e a atenção do público.
+
+Terceiro Problema: Recorrência de Padrões Negativos
+Descrição: Alguns padrões negativos se repetem ao longo do roteiro, enfraquecem sua qualidade.
+Teoria: Capítulos 4 ("Character") e 7 ("Scene") - Desenvolvimento de personagem e tensão são cruciais.
+Exemplo: Faltas de subtexto e tensão dramática em diferentes cenas.
+Impacto: Prejudica a experiência geral do público e limita o potencial do roteiro.
+
+4. SOLUÇÕES
+
+Primeira Solução: Eliminar Diálogo Expositivo
+Ação: Substituir falas que declaram sentimentos por ação ou fala indireta.
+Teoria: Capítulo 9 ("Subtext") - Mostrar, não dizer.
+Exemplo: Na cena 12, página 15, Samantha pode virar o rosto para a parede, puxar o cobertor sobre a cabeça e murmurar indistintamente.
+Resultado: Aumenta a credibilidade dos personagens e aprimora o fluxo natural da conversa.
+
+Segunda Solução: Introduzir Tensão Dramática
+Ação: Adicionar elementos de tensão em cenas onde ela está ausente.
+Teoria: Capítulo 7 ("Scene") - Tensão mantém o interesse do público.
+Exemplo: Na cena 8, página 23, aumentar a tensão ao desenvolver melhor a reação de Samantha ao trauma.
+Resultado: Melhora a habilidade do roteiro em manter o interesse e a atenção do público.
+
+Terceira Solução: Quebrar Padrões Negativos
+Ação: Identificar e eliminar os padrões negativos recorrentes no roteiro.
+Teoria: Capítulos 4 ("Character") e 7 ("Scene") - O desenvolvimento de personagem e tensão são fundamentais.
+Exemplo: Garantir que as falas tenham subtexto e haja tensão em todas as cenas relevantes.
+Resultado: Aprimora a experiência geral do público e maximiza o potencial do roteiro.
+
+5. DEPTH & SYNTHESIS
+
+Primeiro Parágrafo: Analisando os problemas identificados, podemos concluir que há uma conexão entre a falta de desenvolvimento de personagens e a falta de tensão dramática nas cenas. Quanto mais profundos forem os personagens, mais possível será criar tensão e intriga em suas histórias. Por exemplo, um diálogo com subtexto permite ao público interpretar as intenções dos personagens, gerando maior interesse.
+
+Segundo Parágrafo: Em suma, este roteiro tem potencial, mas requer trabalho adicional para fortalecê-lo. Utilizando os conceitos discutidos neste relatório, como o desenvolvimento de personagens sólidos e a introdução de tensão dramática, você poderá transformar esta obra em algo cativante e memorável. Continue refinando o roteiro, buscando feedback e incorporando técnicas aprendidas aqui, até alcançar o resultado desejado.
+
+================================================================================
+SÍNTESE FINAL
+================================================================================
+
+{
+  "summary": "Dual-Core analysis combining Python metrics with LLM insights",
+  "python_metrics_count": 8043,
+  "llm_insights_count": 5351,
+  "combined_analysis": {
+    "objective_data": "See python_analysis section",
+    "qualitative_insights": "1. INTERPRETAÇÃO\n\nPrimeiro Parágrafo: A análise do Python revela que o roteiro possui um desempenho médio em termos gerais, obtendo uma pontuação de 67%. No entanto, é importante notar que há áreas para melhoria significativa no desenvolvimento dos personagens e na estrutura geral da história. O Capítulo 4 (\"Character\") e o Capítulo 7 (\"Scene\") do livro de McKee são fundamentais para compreender as falhas identificadas nessas áreas.\n\nSegundo Parágrafo: Embora haja algum potencial no enredo, a qu...",
+    "methodology": "Python structural analysis enriched with LLM contextual understanding"
+  },
+  "quality_score": 1.0
+}
+
+================================================================================
+Gerado por Scripturemon Triple-Core em 02/10/2025 23:42:47

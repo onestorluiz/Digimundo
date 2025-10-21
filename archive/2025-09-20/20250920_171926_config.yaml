@@ -1,0 +1,17 @@
+features:
+  digilang: true
+  sdl: true
+  soulos: true
+  soulpack: true
+knowledge_domains:
+- screenwriting
+- narrative structure
+- character development
+model: mistral:latest
+name: Scripturemon
+parameters:
+  mirostat: 2
+  num_ctx: 32768
+  repeat_penalty: 1.1
+  seed: 2367498234
+  temperature: 0.75

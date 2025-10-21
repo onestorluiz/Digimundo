@@ -1,0 +1,1 @@
+# TORA Sync – Sincroniza uma pasta local com o Digimundo via API

@@ -1,0 +1,1685 @@
+"""
+Script Doctor Openingmon - Opening Analysis Specialist
+A Script Doctor™ in Digimon form specializing in opening hooks, inciting incidents, ordinary world setup, first 10 pages impact.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class OpeningElement:
+    """Individual opening element."""
+    element_type: str  # "hook", "inciting_incident", "ordinary_world", "theme_stated", etc.
+    page_number: int
+    description: str
+    effectiveness: float  # 0-1
+    present: bool
+    notes: str
+
+
+@dataclass
+class OpeningProfile:
+    """Overall opening analysis."""
+    opening_hook_present: bool
+    hook_page: int
+    hook_effectiveness: float
+    inciting_incident_present: bool
+    inciting_page: int
+    inciting_effectiveness: float
+    ordinary_world_setup: bool
+    first_10_pages_score: float  # 0-100
+    character_intro_clarity: float
+    theme_stated_present: bool
+    tone_established: bool
+    stakes_clear_early: bool
+    protagonist_active: bool
+    slow_opening_detected: bool  # PENALTY
+    confusing_opening_detected: bool  # PENALTY
+    opening_originality: float
+    genre_expectations_met: bool
+    dramatic_question_posed: bool
+    overall_opening_quality: float
+
+
+class DrOpening:
+    """
+    Script Doctor Openingmon - The Opening Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing opening hooks,
+    inciting incidents, ordinary world setup, and first 10 pages impact.
+
+    Identity: Script Doctor first, Digimon opening specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Openingmon with rules and configuration."""
+        self.name = "Script Doctor Openingmon"
+        self.digimon_name = "Openingmon"
+        self.title = "Script Doctor - Opening Analysis Specialist"
+        self.specialty = "Opening hook, inciting incident, ordinary world setup, first 10 pages impact, theme stated"
+        self.identity = "I am Script Doctor Openingmon, a professional Script Doctor™ specializing in opening analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "opening_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - OPENING SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Opening mastery
+            "McKee Story opening hook grab audience attention first pages crucial",
+            "McKee Story inciting incident disrupts equilibrium protagonist world shattered",
+            "McKee Story setup ordinary world status quo before disruption established",
+            "McKee Story opening pages exposition character world situation context",
+            "McKee Story first act setup protagonist world stakes before journey",
+            "McKee Story opening dramatic question posed will protagonist succeed outcome",
+            "McKee Story opening tone mood genre expectations established immediately",
+
+            # McKee Story - INCITING INCIDENT & OPENING (ultra-specific manual reading)
+            "McKee Story inciting incident disrupts balance launches story quest gap opens",
+            "McKee Story opening ordinary world status quo balance before disruption shown",
+            "McKee Story story event opening meaningful change value shift conflict",
+
+            # Truby Anatomy - Opening architecture
+            "Truby Anatomy ghost wound revealed opening backstory trauma affecting present",
+            "Truby weakness need setup opening protagonist flaw transformation required",
+            "Truby inciting event opportunity catalyst protagonist must respond decision",
+            "Truby desire established opening protagonist wants goal clear stakes",
+            "Truby opening pages setup character world ordinary before extraordinary",
+            "Truby opponent introduced early opening antagonist threat established",
+
+            # Field Screenplay - First 10 pages setup
+            "Field Screenplay opening 10 pages setup exposition character world situation",
+            "Field catalyst inciting incident pages 10-15 disrupts ordinary world",
+            "Field dramatic need protagonist want desire established opening clearly",
+            "Field setup payoff opening establishes plants seeds later harvest",
+            "Field protagonist introduced active engaging sympathetic likable relatable",
+            "Field tone genre visual style established opening pages immediately",
+            "Field Act 1 setup first 30 pages context world character situation",
+
+            # Snyder Save the Cat - Beat sheet opening
+            "Snyder Save the Cat opening image first impression world tone snapshot",
+            "Snyder theme stated beat page 5 moral premise declared early",
+            "Snyder setup beats 1-10 ordinary world protagonist status quo life",
+            "Snyder catalyst beat page 12 inciting incident life disrupted event",
+            "Snyder save the cat moment protagonist likable relatable human flaw",
+            "Snyder opening image closing image bookends mirror transformation journey",
+            "Snyder stasis equals death opening protagonist stuck needs change",
+            "Snyder promise premise opening delivers genre expectations tone established",
+
+            # Vogler Writer's Journey - Departure phase
+            "Vogler Writer's Journey ordinary world hero's familiar world before adventure",
+            "Vogler call to adventure inciting incident opportunity threat appears",
+            "Vogler refusal call reluctance fear doubt hesitation protagonist resists",
+            "Vogler meeting mentor supernatural aid guide appears wisdom offered",
+            "Vogler threshold crossing commitment departure ordinary world left behind",
+            "Vogler setup hero sympathetic relatable human flawed vulnerable engaging",
+
+            # Campbell Hero 1000 Faces - Mythic beginning
+            "Campbell Hero 1000 Faces departure call adventure herald announces journey",
+            "Campbell ordinary world hero's familiar world status quo established",
+            "Campbell supernatural aid mentor appears guide helper threshold guardian",
+            "Campbell belly whale threshold passage point no return committed",
+            "Campbell opening mythic beginning hero world established ordinary before",
+
+            # Aristotle Poetics - Beginning principles
+            "Aristotle Poetics beginning middle end proper structure unity organic",
+            "Aristotle beginning itself follows nothing necessarily consequence nothing",
+            "Aristotle unity of action beginning establishes single action complete",
+            "Aristotle proper magnitude beginning appropriate length proportions balanced",
+            "Aristotle beginning setup exposition character situation context clear",
+
+            # Egri Art Dramatic Writing - Point of attack
+            "Egri Art Dramatic Writing point of attack opening where story begins",
+            "Egri premise setup opening character conflict direction established early",
+            "Egri exposition natural organic opening avoid heavy-handed info dump",
+            "Egri character introduction opening protagonist antagonist established clearly",
+            "Egri orchestration opening diverse characters contrast conflict inherent",
+
+            # Seger Making Good Script Great - Hook mastery
+            "Seger Making Good Script Great opening hook pages 1-3 grab audience",
+            "Seger inciting incident catalyst pages 10-15 disrupts equilibrium turning",
+            "Seger first turning point act break decision commitment journey begins",
+            "Seger setup context opening world character situation status quo clear",
+            "Seger protagonist active opening engaging decisions actions driving forward",
+            "Seger tone established opening mood style genre expectations met",
+
+            # Weiland Creating Character Arcs - Arc opening
+            "Weiland Creating Character Arcs lie believed opening protagonist world false",
+            "Weiland ghost wound backstory opening past trauma affecting present choices",
+            "Weiland characteristic moment opening reveals protagonist nature personality essence",
+            "Weiland normal world opening status quo life before inciting incident",
+            "Weiland want established opening protagonist external desire goal clear",
+            "Weiland opening hints theme arc lie truth foreshadowed subtly",
+
+            # Goldman Adventures Screen Trade - Page-turning opening
+            "Goldman Adventures Screen Trade opening pages hook reader attention grabbed",
+            "Goldman start late get in quickly avoid slow beginning enter action",
+            "Goldman protagonist established opening sympathetic engaging relatable immediately",
+            "Goldman opening momentum forward movement pace engaging hooks reader",
+
+            # Rhimes Year of Yes - Pilot mastery
+            "Rhimes Year of Yes pilot opening hook grab audience first minutes",
+            "Rhimes opening establishes tone voice style series identity signature",
+            "Rhimes character introduction opening protagonist compelling engaging relatable",
+            "Rhimes stakes personal opening emotional investment audience cares immediately",
+
+            # Mamet Three Uses of the Knife - Opening question
+            "Mamet Three Uses Knife opening dramatic question posed will protagonist",
+            "Mamet opening information withholding mystery intrigue audience engaged curious",
+            "Mamet opening conflict present immediately tension established early",
+
+            # Mackendrick On Film-Making - Visual opening
+            "Mackendrick On Film-Making opening visual hook cinematic image powerful",
+            "Mackendrick opening show don't tell visual storytelling establishes world",
+
+            # General opening concepts - comprehensive
+            "opening hook first pages grab attention compelling immediate engagement",
+            "inciting incident catalyst pages 10-15 disrupts ordinary world life",
+            "ordinary world setup status quo before disruption context established",
+            "first 10 pages crucial make break reader decision continues drops",
+            "theme stated early beat page 5 moral premise declared subtly",
+            "opening image closing image bookends mirror transformation arc visual",
+            "character introduction protagonist established sympathetic relatable engaging immediately",
+            "world setup context establishment tone mood genre expectations met",
+            "tone established opening mood style atmosphere genre delivered promises",
+            "dramatic question posed opening will protagonist succeed outcome uncertain",
+            "stakes established early opening what at risk consequences clear",
+            "protagonist active opening engaging decisions actions driving not passive",
+            "opening too slow pacing problem boring loses audience attention",
+            "opening confusing clarity problem unclear confuses audience loses interest",
+            "opening cliche originality problem derivative predictable unoriginal tired",
+            "in medias res opening middle action cold open immediate engagement",
+            "save the cat moment protagonist likable relatable human sympathetic"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story inciting incident radically upsets balance arouses desire",
+        "McKee Story inciting incident onscreen launches obligatory scene projection",
+        "McKee Story inciting incident within first twenty thirty minutes feature",
+        "McKee Story inciting incident tailored nature mind worm designed event",
+        "McKee Story big hook exact promise positioning audience appetite",
+        "McKee Story need to know desire to know create curiosity before reveal",
+        "McKee Story setup subplot open telling when main inciting late",
+        "McKee Story avoid long exposition before incident dramatize essentials",
+        "McKee Story opening image orient who when where kinetic vivid present",
+
+        # Campbell Hero 1000 Faces - GPT-5 (12 Oct 2025)
+        "Campbell Hero call adventure herald summons disruption ordinary world,",
+        "Campbell Hero refusal call fear inertia doubt security,",
+        "Campbell Hero supernatural aid mentor talisman boon promise,",
+        "Campbell Hero threshold crossing liminal shock guardian conflict,",
+        "Campbell Hero anomaly omen synchronicity chance encounter invitation,",
+        "Campbell Hero broken order wasteland summons restoration quest,",
+        "Campbell Hero inner call dream vision numinous beckoning,",
+        "Campbell Hero external call messenger crisis mandate duty,",
+        "Campbell Hero family pressure society expectation resisting call,",
+        "Campbell Hero prophetic sign oracle riddle naming destiny,",
+        "Campbell Hero theft loss inciting incident pursuit chase,",
+        "Campbell Hero ship leaves harbor portents threshold moment,",
+        "Campbell Hero mentor appears tests worthiness initiates journey,",
+        "Campbell Hero map letter thread clue pathfinding opening,",
+        "Campbell Hero mysterious guide animal helper first meeting,",
+
+        # Truby Anatomy 22 Steps - GPT-5 (12 Oct 2025)
+        "Truby Anatomy premise single sentence event character outcome core story essence",
+        "Truby Anatomy designing principle teased from premise story process original execution",
+        "Truby Anatomy wish list premise list self-exploration pattern voice genre theme discovery",
+        "Truby Anatomy look for what's possible promises what if brainstorming option space",
+        "Truby Anatomy story challenges inherent problems identification early confrontation",
+        "Truby Anatomy best character determination who do I love act think care driving",
+        "Truby Anatomy central conflict who fights whom over what single concise line",
+        "Truby Anatomy single cause-and-effect pathway basic action spine unify actions",
+        "Truby Anatomy possible character change opposites of basic action W A C equation",
+        "Truby Anatomy possible moral choice near end two positives Sophie's Choice caution",
+        "Truby Anatomy gauge audience appeal uniqueness beyond self ruthless decision",
+        "Truby Anatomy opening scene inverted triangle frame punch theme pattern seed",
+        "Truby Anatomy community start paradise vulnerable attack no ghost setup",
+        "Truby Anatomy running start ghost world weakness need problem fast clarity",
+        "Truby Anatomy slow start purposeless hero danger arc trigger later remedy",
+        "Truby Anatomy ghost and story world opening withholding exposition audience pull",
+        "Truby Anatomy first sentence framing tone ambition story promise stylistic cue",
+        "Truby Anatomy story world introduction arena visual oppositions early embedding",
+        "Truby Anatomy promises in premise high concept limitation overcoming full story craft",
+        "Truby Anatomy protagonist basic action clarified endpoint compass for scenes",
+
+        # Field Screenplay Paradigm - GPT-5 (12 Oct 2025)
+        "Field Screenplay opening ten pages setup character premise situation ten minute rule",
+        "Field Screenplay inciting incident sets story in motion hooks reader audience",
+        "Field Screenplay visual grabber page one word one cinematic hook",
+        "Field Screenplay credits placement filmic decision not writing focus on opening",
+        "Field Screenplay first image establishes context space time tone arena",
+        "Field Screenplay opening sequence action versus expository establish story movement",
+        "Field Screenplay subject action character stated early beginning unit",
+        "Field Screenplay story told with pictures show don’t tell at fade in",
+        "Field Screenplay dramatic situation circumstances surrounding action immediately clear",
+        "Field Screenplay page equals minute pacing calibrate first ten pages",
+        "Field Screenplay context set up twenty thirty pages structure blueprint",
+        "Field Screenplay opening voice over only if visual story still leads",
+        "Field Screenplay begin late enter scene at last possible moment",
+        "Field Screenplay form not formula choose opening that serves premise",
+        "Field Screenplay bookend prologue setup mirrored by epilogue closure",
+        "Field Screenplay incident versus key incident distinguish early placement",
+        "Field Screenplay master shot versus specific shots opening staging choices",
+        "Field Screenplay POV reverse angle moving shot insert opening imagery",
+        "Field Screenplay hook action spins direction to plot point one",
+        "Field Screenplay opening montage bridge time place action establish world",
+
+        # Vogler Writer's Journey - GPT-5 (12 Oct 2025)
+        "Vogler Journey ordinary world status quo baseline establish stakes empathy",
+        "Vogler Journey opening image visual metaphor foreshadow special world",
+        "Vogler Journey title thematic clue metaphor frame of reference",
+        "Vogler Journey prologue context backstory tone setup curtain raiser",
+        "Vogler Journey disorientation leads to suggestibility ritual signal trance",
+        "Vogler Journey foreshadowing miniature model of special world early echo",
+        "Vogler Journey raising dramatic question action plot emotional stakes",
+        "Vogler Journey backstory exposition doled out visual on the run",
+        "Vogler Journey making an entrance first action defines character attitude",
+        "Vogler Journey identification universal needs recognition compassion projection",
+        "Vogler Journey hero’s lack missing piece death kidnapping subtraction",
+        "Vogler Journey wounded hero early scar guilt trauma vulnerability",
+        "Vogler Journey tragic flaw hamartia hubris fatal arrogance nemesis",
+        "Vogler Journey establishing stakes life death high cost consequences",
+        "Vogler Journey theme stated offhand remark ordinary world seed",
+        "Vogler Journey inner problem outer problem dual engine conflict",
+        "Vogler Journey secrets layered revelation defenses peeled back",
+        "Vogler Journey law of genre cues mood tone promise of payoff",
+        "Vogler Journey herald foreshadow call messenger catalyst tease",
+        "Vogler Journey threshold teased doorway gate border hinted",
+
+            # McKee Character - GPT-5 (12 Oct 2025)
+            "McKee Character first impressions intrigue withhold protagonist give entrance",
+            "McKee Character character entrance frames identity invites curiosity",
+            "McKee Character inciting incident early shock imbalance ignites pursuit",
+            "McKee Character establish Center of Good early empathy anchor",
+            "McKee Character self-story prompt opening device reveals perspective",
+            "McKee Character setting charged by moral imagination from first image",
+            "McKee Character Magic If exploratory drafting invents opening moment",
+            "McKee Character opening value charge baseline before reversal",
+            "McKee Character withhold backstory tease revelation later pressure",
+            "McKee Character introduce foil to reflect protagonist facets",
+            "McKee Character narrative stance choose first-person third-person reliability",
+            "McKee Character mystery launch audience behind characters chase truth",
+            "McKee Character suspense opening present-time momentum unanswered MDQ",
+            "McKee Character dramatic irony prologue audience ahead reframing",
+            "McKee Character telling detail early signals singular characterization",
+            "McKee Character cast map seed relationships in opening beats",
+            "McKee Character object of desire glimpse provokes spine of action",
+            "McKee Character cultural restraints signal stakes boundaries immediately",
+            "McKee Character tonal promise comedy tragedy tragicomedy from entrance",
+            "McKee Character promise of contradictions foreshadow dimensionality",
+
+            # Egri Dramatic Writing - GPT-5 (12 Oct 2025)
+            "Egri Dramatic point of attack start at turning point",
+            "Egri Dramatic opening exposition through conflict not description",
+            "Egri Dramatic establish premise implicitly via early action",
+            "Egri Dramatic introduce pivotal character who forces conflict",
+            "Egri Dramatic foreshadowing conflict planted in first scenes",
+            "Egri Dramatic avoid static prologue begin with decision",
+            "Egri Dramatic entrances motivated integrate characters immediately",
+            "Egri Dramatic cause and effect chain begins at rise",
+            "Egri Dramatic early orchestration contrasting types collide quickly",
+            "Egri Dramatic unity of opposites established binds play",
+            "Egri Dramatic environment signaled by behavior not explanation",
+            "Egri Dramatic dialogue revealing dimensions from first exchanges",
+            "Egri Dramatic avoid bald exposition embed facts in quarrel",
+            "Egri Dramatic select optimal point not too soon late",
+            "Egri Dramatic opening movement rises not jumps arbitrarily",
+            "Egri Dramatic origin of action clear motivation visible",
+            "Egri Dramatic premise thumbnail suggested by first conflict",
+            "Egri Dramatic immediate decision counterdecision sets trajectory",
+            "Egri Dramatic turning point chosen with necessity in mind",
+            "Egri Dramatic audience oriented by stakes unity of opposites",
+
+            # Seger Script Great - GPT-5 (12 Oct 2025)
+            "Seger Script begin with an image orient place mood texture",
+            "Seger Script create the style from page one descriptions tone",
+            "Seger Script context where when genre quickly establish world",
+            "Seger Script catalyst strong action early defines story direction",
+            "Seger Script central question raised in setup anchors focus",
+            "Seger Script Act One setup tight ten to fifteen pages",
+            "Seger Script Act One development adds info before Act Two",
+            "Seger Script opening credit sequence purposeful images information",
+            "Seger Script pre-credit sequence teaser catalyst then titles",
+            "Seger Script keep early dialogue minimal let images lead",
+            "Seger Script accents dialect ease audience in reduce confusion",
+            "Seger Script avoid long situational catalyst unless expertly handled",
+            "Seger Script plant mission objective intention for Act Two",
+            "Seger Script foreshadowing early plants payoffs later cohesion",
+            "Seger Script protagonist introduction sympathy through action choices",
+            "Seger Script tone genre signals comedy drama thriller balance",
+            "Seger Script research precise details build credibility immediately",
+            "Seger Script trim overwritten openings cut detours tangents",
+            "Seger Script setup ends when central question fully engaged",
+            "Seger Script rewrite opening image to echo theme visually",
+
+            # Cowgill Short Films - GPT-5 (12 Oct 2025)
+            "Cowgill Short Fade In openings and the main exposition",
+            "Cowgill Short set-up complete first five or six pages",
+            "Cowgill Short ten minute film inciting incident first couple pages",
+            "Cowgill Short establish protagonist want need conflict right up front",
+            "Cowgill Short visual show don’t tell opening action oriented",
+            "Cowgill Short the problem stated early focuses audience",
+            "Cowgill Short main exposition grounds who where when why",
+            "Cowgill Short inciting incident forces action engages plot",
+            "Cowgill Short opening image power of images visual hook",
+            "Cowgill Short action vs dialogue opening avoid talky set-up",
+            "Cowgill Short opening orders information for clarity momentum",
+            "Cowgill Short compress back-story reveal only essential early",
+            "Cowgill Short first scene stakes mood arena established quickly",
+            "Cowgill Short withhold crucial information for later reveal payoff",
+            "Cowgill Short opening conflict already in motion off screen",
+            "Cowgill Short protagonist introduced through behavior not description",
+            "Cowgill Short early relationship framing protagonist antagonist defined",
+            "Cowgill Short opening tone genre and theme signaled",
+            "Cowgill Short set-up aims toward climax and theme connection",
+            "Cowgill Short beginning middle end roadmap implied from start",
+
+            # Aristotle Poetics - GPT-5 (12 Oct 2025)
+            "Aristotle Poetics: How do I craft a ‘beginning’ that has no necessary antecedent while planting all potentials (dynameis) required for middle and end?",
+            "Aristotle Poetics: What opening conflict best seeds a later reversal ‘contrary to expectation’—i.e., misclassifies a relationship the plot will reclassify?",
+            "Aristotle Poetics: How to minimize exposition in the prologos—only information without which the first necessary act cannot occur?",
+            "Aristotle Poetics: How to use early opsis (a prop/gesture) as a semeion that will later flip meaning at anagnorisis?",
+            "Aristotle Poetics: Which early gnome (maxim) should foreshadow the mistaken belief driving hamartia, without giving away the recognition?",
+            "Aristotle Poetics: How to ensure the inciting act is a true cause, not merely an event ‘after which’ things happen?",
+            "Aristotle Poetics: How to open with kinship stakes (en tais philiais) to align with the most tragic domains from the first scene?",
+            "Aristotle Poetics: How to prevent the opening from over-defining ethos—let action reveal the kind of person through the kind of choice?",
+            "Aristotle Poetics: How to encode necessary backstory as present-tense action (pledges, contracts, taboos) that will later constrain choices?",
+            "Aristotle Poetics: What opening question will be answered by recognition (anagnorisis) rather than by a reveal dump?",
+            "Aristotle Poetics: How to set the ‘magnitude’ expectation—pace, density, and scope—without promising multiple actions?",
+            "Aristotle Poetics: How to present the protagonist’s apparent telos so that the true telos (katharsis of the action) can overturn it?",
+            "Aristotle Poetics: How to plant a false pattern of probability that the plot will later reclassify as necessity to shock without cheating?",
+            "Aristotle Poetics: How do I signal the governing cause (arche) subtly—an oath, custom, or law—so the plot feels inevitable in hindsight?",
+            "Aristotle Poetics: How to avoid pre-title info-cards that define pros ta theatra instead of letting the action define itself?",
+            "Aristotle Poetics: How to open in medias res yet keep the ‘beginning’ free of offscreen necessary antecedents?",
+            "Aristotle Poetics: How to design the first visual analogy (animal/soul-like organizing sign) that hints the action is the film’s ‘soul’?",
+            "Aristotle Poetics: How to ensure the first reversal seed is innocuous enough to hide in plain sight but robust enough to bear necessity?",
+            "Aristotle Poetics: How to open with pity/fear simmering in ordinary acts (contracts, kin duties) instead of melodramatic events?",
+            "Aristotle Poetics: How to constrain locations/characters early to preclude later episodic wanderings?",
+
+            # Snyder Save the Cat - GPT-5 (12 Oct 2025)
+            "Snyder Cat: Does your Opening Image visually telegraph tone, scope, and the hero’s ‘before’ snapshot, and is the Final Image its clear opposite?",
+            "Snyder Cat: Within the first 2–3 pages, do you include a Save the Cat moment that earns audience empathy without faking it (no ‘late saves’ after page 10)?",
+            "Snyder Cat: Is Theme Stated delivered by page ~5 in an offhand line the hero doesn’t yet grasp, and can you cite the exact line of dialogue (or visual equivalent)?",
+            "Snyder Cat: Do the first 10 pages plant the Six Things That Need Fixing as concrete, screenable beats (not just lines), each with a planned Act Three payoff?",
+            "Snyder Cat: In the Set-Up (pages 1–10), have you introduced every A-Story character or left deliberate ‘ghost hints’ to be paid off upon first entry in Act Two?",
+            "Snyder Cat: Does your Opening Image ‘say what it is’ thematically (e.g., isolation vs. connection) in a way that your Final Image inverts or resolves?",
+            "Snyder Cat: Is the Save the Cat act aligned with the hero’s core flaw/need (e.g., compassion in a story about learning boundaries), not a random nicety?",
+            "Snyder Cat: Do you visually demonstrate the hero’s status quo via action (work/home rituals), avoiding ‘Hi how are you I’m fine’ dialogue fills?",
+            "Snyder Cat: Is the Catalyst foreshadowed in your Opening 10 via a prop, mini-upset, or ironic image so its arrival on page ~12 feels inevitable yet surprising?",
+            "Snyder Cat: Does your Title card placement coordinate with the Opening/Theme Stated rhythm to prime the audience for your genre’s expectations?",
+            "Snyder Cat: Have you calibrated the Set-Up’s info-density to bury exposition (‘Pope in the Pool’) inside a dynamic scene (e.g., medical test, pressurized workplace)?",
+            "Snyder Cat: Are there early micro-conflicts (>< on every scene) that reflect the macro-conflict to come, signaling the story engine before the Catalyst hits?",
+            "Snyder Cat: Does your Opening Image include a motif (color/object/gesture) you can deliberately call back in All Is Lost for symbolic collapse?",
+            "Snyder Cat: Can your first 10 pages pass a ‘silent read’—i.e., if dialogue were removed, would the story’s premise and hero’s need still be readable?",
+            "Snyder Cat: Is there an ironic contrast between the hero’s self-perception in the Opening and how others perceive them on screen within page 10?",
+            "Snyder Cat: Do you seed a visual ‘clock’ (deadline, season, day marker) in the Opening that will bear on the Midpoint/Finale timing?",
+            "Snyder Cat: Are the first 10 pages in your genre’s ‘home lane’ (e.g., a scare in horror, a laugh in comedy) without overpromising a different genre?",
+            "Snyder Cat: Does your Opening avoid worldbuilding bloat by ‘keeping the press out’—limiting info to what the hero would naturally encounter that day?",
+            "Snyder Cat: Is your Save the Cat beat unique to your hero’s voice (not a generic rescue), and can you identify the later beat where this trait becomes an asset/liability?",
+            "Snyder Cat: After your Opening, can you state the hero’s goal in one sentence by page 10, and is it primal enough (survival/connection/status/protection)?",
+
+            # Weiland Character Arcs - GPT-5 (12 Oct 2025)
+            "Weiland Arcs Characteristic Moment introduce protagonist hook show strengths weaknesses",
+            "Weiland Arcs Normal World dramatizes the Lie baseline status quo",
+            "Weiland Arcs Introduce The Thing Your Character Wants early clearly",
+            "Weiland Arcs Hint The Thing Your Character Needs foreshadow Truth",
+            "Weiland Arcs Seed Your Character’s Ghost subtle clues curiosity",
+            "Weiland Arcs Establish stakes if Lie continues consequences visible",
+            "Weiland Arcs First Act reinforce Lie indicate potential to change",
+            "Weiland Arcs Inciting Event tailor-made opportunity initially refused",
+            "Weiland Arcs Scene goal obstacle conflict immediate opening engagement",
+            "Weiland Arcs Sympathetic interest hook before major flaws revealed",
+            "Weiland Arcs Visual contrast set up adventure world later",
+            "Weiland Arcs Foreshadow First Plot Point point of no return",
+            "Weiland Arcs Character’s name role age occupation conveyed efficiently",
+            "Weiland Arcs Opening montage acceptable to show Want leadership",
+            "Weiland Arcs Double Characteristic Moments child then adult reestablish",
+            "Weiland Arcs Show Lie in action not just told narrative",
+            "Weiland Arcs Mentor cameo seed tools applicable later Truth",
+            "Weiland Arcs Establish antagonist presence stakes tone early",
+            "Weiland Arcs Thematic hint present but not overt moral",
+            "Weiland Arcs Hook aligned with Character Arc foundation beats",
+
+
+
+
+
+
+
+
+
+
+
+
+        ]
+
+        # Opening analysis patterns (bilingual: EN + PT)
+
+        # Opening hook markers (first 3 pages)
+        self.opening_hook_markers = [
+            # English
+            "opening image", "opening scene", "grabs attention", "hooks audience",
+            "compelling start", "strong opening", "immediate conflict",
+            "visual hook", "opening action", "first impression",
+            # Portuguese
+            "imagem de abertura", "cena inicial", "prende atenção", "gancha audiência",
+            "início forte", "abertura forte", "conflito imediato",
+            "gancho visual", "ação inicial", "primeira impressão"
+        ]
+
+        # Inciting incident markers (pages 10-15)
+        self.inciting_incident_markers = [
+            # English
+            "inciting incident", "catalyst", "call to adventure", "disrupts",
+            "changes everything", "opportunity", "turning point", "conflict begins",
+            "life disrupted", "point of attack", "inciting event",
+            # Portuguese
+            "incidente incitante", "catalisador", "chamado à aventura", "rompe",
+            "muda tudo", "oportunidade", "ponto de virada", "conflito começa",
+            "vida interrompida", "ponto de ataque", "evento incitante"
+        ]
+
+        # Ordinary world markers (before disruption)
+        self.ordinary_world_markers = [
+            # English
+            "ordinary world", "status quo", "normal life", "before", "daily routine",
+            "established world", "protagonist's world", "baseline", "normalcy",
+            # Portuguese
+            "mundo comum", "status quo", "vida normal", "antes", "rotina diária",
+            "mundo estabelecido", "mundo do protagonista", "linha de base", "normalidade"
+        ]
+
+        # Setup markers
+        self.setup_markers = [
+            # English
+            "setup", "establishes", "introduces", "presents", "shows", "reveals",
+            "world-building", "exposition", "context", "background",
+            # Portuguese
+            "prepara", "estabelece", "introduz", "apresenta", "mostra", "revela",
+            "construção de mundo", "exposição", "contexto", "antecedentes"
+        ]
+
+        # Theme stated markers (Snyder beat page 5)
+        self.theme_stated_markers = [
+            # English
+            "theme stated", "thematic declaration", "what story is about",
+            "moral lesson", "central idea", "thesis statement",
+            # Portuguese
+            "tema declarado", "declaração temática", "sobre o que é a história",
+            "lição moral", "ideia central", "declaração de tese"
+        ]
+
+        # First 10 pages markers (critical period)
+        self.first_10_pages_markers = [
+            # English
+            "first 10 pages", "opening sequence", "first act setup",
+            "initial pages", "beginning", "start", "opening stretch",
+            # Portuguese
+            "primeiras 10 páginas", "sequência de abertura", "preparação do primeiro ato",
+            "páginas iniciais", "início", "começo", "trecho inicial"
+        ]
+
+        # Character introduction markers
+        self.character_intro_markers = [
+            # English
+            "introduce protagonist", "meet hero", "character introduction",
+            "protagonist enters", "main character", "hero appears",
+            # Portuguese
+            "apresenta protagonista", "conhece herói", "introdução do personagem",
+            "protagonista entra", "personagem principal", "herói aparece"
+        ]
+
+        # Tone establishment markers
+        self.tone_markers = [
+            # English
+            "tone", "mood", "atmosphere", "style", "voice", "genre signal",
+            # Portuguese
+            "tom", "humor", "atmosfera", "estilo", "voz", "sinal de gênero"
+        ]
+
+        # Stakes markers
+        self.stakes_markers = [
+            # English
+            "stakes", "at risk", "stands to lose", "stands to gain",
+            "what's at stake", "consequences", "goal", "objective",
+            # Portuguese
+            "apostas", "em risco", "pode perder", "pode ganhar",
+            "o que está em jogo", "consequências", "objetivo", "meta"
+        ]
+
+        # Protagonist active markers
+        self.protagonist_active_markers = [
+            # English
+            "protagonist acts", "takes action", "makes choice", "decides",
+            "active protagonist", "drives story", "initiates",
+            # Portuguese
+            "protagonista age", "toma ação", "faz escolha", "decide",
+            "protagonista ativo", "conduz história", "inicia"
+        ]
+
+        # Slow opening markers (PENALTY)
+        self.slow_opening_markers = [
+            # English
+            "slow start", "drags", "takes too long", "boring opening",
+            "slow opening", "sluggish", "plodding", "tedious beginning",
+            # Portuguese
+            "início lento", "arrasta", "demora muito", "abertura chata",
+            "abertura lenta", "vagaroso", "arrastado", "início tedioso"
+        ]
+
+        # Confusing opening markers (PENALTY)
+        self.confusing_opening_markers = [
+            # English
+            "confusing", "unclear", "disorienting", "hard to follow",
+            "confusing opening", "lost", "bewildered", "unclear beginning",
+            # Portuguese
+            "confuso", "pouco claro", "desorientador", "difícil de seguir",
+            "abertura confusa", "perdido", "desnorteado", "início obscuro"
+        ]
+
+        # In medias res markers (technique)
+        self.in_medias_res_markers = [
+            # English
+            "in medias res", "starts in middle", "action first",
+            "cold open", "begins mid-action", "plunges into",
+            # Portuguese
+            "in medias res", "começa no meio", "ação primeiro",
+            "abertura fria", "começa no meio da ação", "mergulha em"
+        ]
+
+        # Originality markers
+        self.originality_markers = [
+            # English
+            "original", "fresh", "unique", "surprising", "unexpected",
+            "inventive", "novel", "distinctive", "innovative",
+            # Portuguese
+            "original", "fresco", "único", "surpreendente", "inesperado",
+            "inventivo", "novo", "distinto", "inovador"
+        ]
+
+        # Cliché opening markers (PENALTY)
+        self.cliche_opening_markers = [
+            # English
+            "alarm clock", "waking up", "dream sequence", "weather description",
+            "clichéd opening", "overused", "tired opening", "generic start",
+            # Portuguese
+            "despertador", "acordando", "sequência de sonho", "descrição do clima",
+            "abertura clichê", "usado demais", "abertura cansada", "início genérico"
+        ]
+
+        # Genre expectation markers
+        self.genre_markers = [
+            # English
+            "genre", "thriller", "comedy", "drama", "horror", "action",
+            "genre expectations", "genre conventions", "genre signals",
+            # Portuguese
+            "gênero", "thriller", "comédia", "drama", "terror", "ação",
+            "expectativas de gênero", "convenções de gênero", "sinais de gênero"
+        ]
+
+        # Dramatic question markers
+        self.dramatic_question_markers = [
+            # English
+            "dramatic question", "will protagonist succeed", "central question",
+            "story question", "main question", "driving question",
+            # Portuguese
+            "questão dramática", "protagonista terá sucesso", "questão central",
+            "pergunta da história", "questão principal", "questão motriz"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze opening in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete opening diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract first 10 pages
+        first_10_pages = self._extract_first_10_pages(screenplay_text)
+
+        # Detect opening hook (first 3 pages)
+        opening_hook = self._detect_opening_hook(screenplay_text, first_10_pages)
+
+        # Detect inciting incident (pages 10-15)
+        inciting_incident = self._detect_inciting_incident(screenplay_text, page_count)
+
+        # Analyze ordinary world setup
+        ordinary_world = self._analyze_ordinary_world(screenplay_text, first_10_pages)
+
+        # Analyze first 10 pages engagement
+        first_10_analysis = self._analyze_first_10_pages(first_10_pages)
+
+        # Analyze character introduction
+        character_intro = self._analyze_character_intro(first_10_pages)
+
+        # Detect theme stated (Snyder beat page 5)
+        theme_stated = self._detect_theme_stated(first_10_pages)
+
+        # Analyze tone establishment
+        tone_setup = self._analyze_tone_setup(first_10_pages)
+
+        # Analyze stakes clarity
+        stakes_analysis = self._analyze_stakes_early(first_10_pages)
+
+        # Assess protagonist activity
+        protagonist_activity = self._assess_protagonist_activity(first_10_pages)
+
+        # Detect slow opening (PENALTY)
+        slow_opening = self._detect_slow_opening(screenplay_text, first_10_pages)
+
+        # Detect confusing opening (PENALTY)
+        confusing_opening = self._detect_confusing_opening(screenplay_text, first_10_pages)
+
+        # Assess opening originality
+        originality = self._assess_opening_originality(first_10_pages)
+
+        # Assess genre expectations
+        genre_setup = self._assess_genre_setup(first_10_pages)
+
+        # Detect dramatic question
+        dramatic_question = self._detect_dramatic_question(first_10_pages)
+
+        # Assess opening consistency
+        opening_consistency = self._assess_opening_consistency(
+            opening_hook, inciting_incident, ordinary_world, first_10_analysis
+        )
+
+        # Build opening profile
+        opening_profile = OpeningProfile(
+            opening_hook_present=opening_hook["present"],
+            hook_page=opening_hook["page"],
+            hook_effectiveness=opening_hook["effectiveness"],
+            inciting_incident_present=inciting_incident["present"],
+            inciting_page=inciting_incident["page"],
+            inciting_effectiveness=inciting_incident["effectiveness"],
+            ordinary_world_setup=ordinary_world["setup"],
+            first_10_pages_score=first_10_analysis["score"],
+            character_intro_clarity=character_intro["clarity"],
+            theme_stated_present=theme_stated["present"],
+            tone_established=tone_setup["established"],
+            stakes_clear_early=stakes_analysis["clear"],
+            protagonist_active=protagonist_activity["active"],
+            slow_opening_detected=slow_opening["detected"],
+            confusing_opening_detected=confusing_opening["detected"],
+            opening_originality=originality["score"],
+            genre_expectations_met=genre_setup["met"],
+            dramatic_question_posed=dramatic_question["posed"],
+            overall_opening_quality=0.0  # calculated below
+        )
+
+        # Calculate overall opening quality
+        opening_profile.overall_opening_quality = self._calculate_overall_opening_quality(opening_profile)
+
+        # Check against rules
+        rule_violations = self._check_opening_rules(
+            opening_profile, opening_hook, inciting_incident, ordinary_world,
+            first_10_analysis, character_intro, theme_stated, tone_setup,
+            stakes_analysis, protagonist_activity, slow_opening, confusing_opening,
+            originality, genre_setup, dramatic_question, opening_consistency
+        )
+
+        # Calculate score
+        score = self._calculate_opening_score(
+            opening_profile, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, opening_profile, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "opening_hook": {
+                "present": opening_hook["present"],
+                "page": opening_hook["page"],
+                "effectiveness": opening_hook["effectiveness"],
+                "description": opening_hook.get("description", "")[:200]
+            },
+            "inciting_incident": {
+                "present": inciting_incident["present"],
+                "page": inciting_incident["page"],
+                "effectiveness": inciting_incident["effectiveness"],
+                "description": inciting_incident.get("description", "")[:200]
+            },
+            "ordinary_world": {
+                "setup": ordinary_world["setup"],
+                "clarity": ordinary_world.get("clarity", 0.5)
+            },
+            "first_10_pages": {
+                "score": first_10_analysis["score"],
+                "engaging": first_10_analysis.get("engaging", False)
+            },
+            "character_intro": {
+                "clarity": character_intro["clarity"],
+                "clear": character_intro.get("clear", False)
+            },
+            "theme_stated": {
+                "present": theme_stated["present"],
+                "page": theme_stated.get("page", 0)
+            },
+            "tone": {
+                "established": tone_setup["established"]
+            },
+            "stakes": {
+                "clear": stakes_analysis["clear"]
+            },
+            "protagonist_activity": {
+                "active": protagonist_activity["active"],
+                "score": protagonist_activity.get("score", 0.5)
+            },
+            "slow_opening": {
+                "detected": slow_opening["detected"],
+                "penalty": slow_opening.get("penalty", False)
+            },
+            "confusing_opening": {
+                "detected": confusing_opening["detected"],
+                "penalty": confusing_opening.get("penalty", False)
+            },
+            "originality": {
+                "score": originality["score"],
+                "original": originality.get("original", False)
+            },
+            "genre_expectations": {
+                "met": genre_setup["met"]
+            },
+            "dramatic_question": {
+                "posed": dramatic_question["posed"]
+            },
+            "opening_consistency": {
+                "score": opening_consistency["score"],
+                "consistent": opening_consistency.get("consistent", False)
+            },
+            "overall_opening_quality": opening_profile.overall_opening_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, opening_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_first_10_pages(self, screenplay: str) -> str:
+        """Extract first 10 pages (approximately 550 lines)."""
+        lines = screenplay.split('\n')
+        first_10_lines = lines[:550]  # 55 lines per page * 10 pages
+        return '\n'.join(first_10_lines)
+
+    def _detect_opening_hook(self, screenplay: str, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Detect opening hook (first 3 pages).
+
+        McKee/Field/Snyder: "First 3 pages must grab attention - opening hook is crucial."
+        """
+        # First 3 pages = ~165 lines
+        lines = screenplay.split('\n')
+        first_3_pages = '\n'.join(lines[:165])
+
+        present = False
+        page = 1
+        effectiveness = 0.0
+        description = ""
+
+        # Check for hook markers
+        hook_count = 0
+        for marker in self.opening_hook_markers:
+            if marker in first_3_pages.lower():
+                hook_count += 1
+                present = True
+                if not description:
+                    # Find context around marker
+                    for line in first_3_pages.split('\n'):
+                        if marker in line.lower():
+                            description = line.strip()[:200]
+                            break
+
+        # Check for action/conflict in first 3 pages
+        action_words = ["runs", "fights", "crashes", "explodes", "screams", "attacks", "chase"]
+        conflict_words = ["conflict", "tension", "problem", "crisis", "confrontation"]
+
+        for word in action_words + conflict_words:
+            if word in first_3_pages.lower():
+                hook_count += 1
+                present = True
+
+        # Calculate effectiveness (0-1)
+        effectiveness = min(1.0, hook_count / 3.0)
+
+        # If no explicit hook but first page has action, still consider present
+        if not present and len(first_3_pages) > 100:
+            # Check first scene for immediate engagement
+            if any(word in first_3_pages[:500].lower() for word in action_words):
+                present = True
+                effectiveness = 0.5
+                description = "Action-based opening"
+
+        return {
+            "present": present,
+            "page": page,
+            "effectiveness": effectiveness,
+            "description": description or "No clear opening hook detected",
+            "hook_count": hook_count
+        }
+
+    def _detect_inciting_incident(self, screenplay: str, page_count: int) -> Dict[str, Any]:
+        """
+        Detect inciting incident (pages 10-15).
+
+        Field/Snyder: "Catalyst/inciting incident pages 10-15 disrupts ordinary world."
+        """
+        lines = screenplay.split('\n')
+
+        # Pages 10-15 = lines 550-825
+        pages_10_15 = '\n'.join(lines[550:825])
+
+        present = False
+        page = 0
+        effectiveness = 0.0
+        description = ""
+
+        # Check for inciting incident markers
+        incident_count = 0
+        for marker in self.inciting_incident_markers:
+            if marker in pages_10_15.lower():
+                incident_count += 1
+                present = True
+                page = 12  # typical page
+                if not description:
+                    for line in pages_10_15.split('\n'):
+                        if marker in line.lower():
+                            description = line.strip()[:200]
+                            break
+
+        # Calculate effectiveness
+        effectiveness = min(1.0, incident_count / 2.0)
+
+        # Check entire first act for inciting incident if not found
+        if not present:
+            first_act = '\n'.join(lines[:1375])  # ~25 pages
+            for marker in self.inciting_incident_markers:
+                if marker in first_act.lower():
+                    present = True
+                    page = 15  # later than ideal
+                    effectiveness = 0.6
+                    description = "Inciting incident found but later than optimal"
+                    break
+
+        return {
+            "present": present,
+            "page": page,
+            "effectiveness": effectiveness,
+            "description": description or "No clear inciting incident detected",
+            "incident_count": incident_count
+        }
+
+    def _analyze_ordinary_world(self, screenplay: str, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Analyze ordinary world setup.
+
+        Campbell/Vogler: "Show protagonist's world before journey begins - establish baseline."
+        """
+        setup = False
+        clarity = 0.0
+
+        # Check for ordinary world markers
+        world_count = 0
+        for marker in self.ordinary_world_markers:
+            world_count += first_10_pages.lower().count(marker)
+
+        # Check for setup markers
+        for marker in self.setup_markers:
+            world_count += first_10_pages.lower().count(marker)
+
+        if world_count >= 2:
+            setup = True
+            clarity = min(1.0, world_count / 4.0)
+        elif world_count >= 1:
+            setup = True
+            clarity = 0.5
+
+        return {
+            "setup": setup,
+            "clarity": clarity,
+            "world_count": world_count
+        }
+
+    def _analyze_first_10_pages(self, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Analyze first 10 pages engagement.
+
+        Industry standard: "First 10 pages are make or break - must engage immediately."
+        """
+        score = 50.0  # baseline
+
+        # Check for engagement elements
+        engagement_count = 0
+
+        # Hook present
+        for marker in self.opening_hook_markers:
+            if marker in first_10_pages.lower():
+                engagement_count += 1
+                break
+
+        # Conflict/tension
+        conflict_words = ["conflict", "tension", "problem", "crisis", "confrontation", "argument"]
+        if any(word in first_10_pages.lower() for word in conflict_words):
+            engagement_count += 1
+
+        # Action
+        action_words = ["runs", "fights", "crashes", "explodes", "chase", "attack"]
+        if any(word in first_10_pages.lower() for word in action_words):
+            engagement_count += 1
+
+        # Dialogue
+        if '\"' in first_10_pages or "dialogue" in first_10_pages.lower():
+            engagement_count += 1
+
+        # Character introduction
+        if any(marker in first_10_pages.lower() for marker in self.character_intro_markers):
+            engagement_count += 1
+
+        # Calculate score (0-100)
+        score = min(100.0, 50.0 + (engagement_count * 10.0))
+
+        engaging = score >= 70.0
+
+        return {
+            "score": score,
+            "engaging": engaging,
+            "engagement_count": engagement_count
+        }
+
+    def _analyze_character_intro(self, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Analyze character introduction clarity.
+
+        McKee/Field: "Audience needs to know whose story this is - introduce protagonist early."
+        """
+        clarity = 0.0
+
+        # Check for character introduction markers
+        intro_count = 0
+        for marker in self.character_intro_markers:
+            intro_count += first_10_pages.lower().count(marker)
+
+        # Check for character names (uppercase = character intro)
+        uppercase_names = re.findall(r'\b[A-Z]{2,}\b', first_10_pages)
+        if len(uppercase_names) >= 3:
+            intro_count += 1
+
+        # Calculate clarity
+        clarity = min(1.0, intro_count / 2.0)
+
+        clear = clarity >= 0.5
+
+        return {
+            "clarity": clarity,
+            "clear": clear,
+            "intro_count": intro_count
+        }
+
+    def _detect_theme_stated(self, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Detect theme stated beat (Snyder page 5).
+
+        Snyder: "Theme Stated beat (page 5) - often by mentor - declares what story is about."
+        """
+        present = False
+        page = 0
+
+        # Check for theme stated markers
+        for marker in self.theme_stated_markers:
+            if marker in first_10_pages.lower():
+                present = True
+                page = 5  # typical page
+                break
+
+        return {
+            "present": present,
+            "page": page
+        }
+
+    def _analyze_tone_setup(self, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Analyze tone establishment.
+
+        Snyder: "Opening image sets tone - audience knows what kind of story within first pages."
+        """
+        established = False
+
+        # Check for tone markers
+        tone_count = 0
+        for marker in self.tone_markers:
+            tone_count += first_10_pages.lower().count(marker)
+
+        # Check for genre markers (genre signals tone)
+        for marker in self.genre_markers:
+            tone_count += first_10_pages.lower().count(marker)
+
+        if tone_count >= 2:
+            established = True
+        elif tone_count >= 1:
+            established = True  # even one signal helpful
+
+        return {
+            "established": established,
+            "tone_count": tone_count
+        }
+
+    def _analyze_stakes_early(self, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Analyze stakes clarity.
+
+        McKee/Field: "Audience needs to know what's at risk - establish stakes early."
+        """
+        clear = False
+
+        # Check for stakes markers
+        stakes_count = 0
+        for marker in self.stakes_markers:
+            stakes_count += first_10_pages.lower().count(marker)
+
+        if stakes_count >= 2:
+            clear = True
+        elif stakes_count >= 1:
+            clear = True  # even one mention helpful
+
+        return {
+            "clear": clear,
+            "stakes_count": stakes_count
+        }
+
+    def _assess_protagonist_activity(self, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Assess protagonist activity level.
+
+        Field: "Active protagonist > passive protagonist - must drive story from start."
+        """
+        active = False
+        score = 0.0
+
+        # Check for protagonist active markers
+        activity_count = 0
+        for marker in self.protagonist_active_markers:
+            activity_count += first_10_pages.lower().count(marker)
+
+        # Calculate score
+        score = min(1.0, activity_count / 3.0)
+
+        active = score >= 0.5 or activity_count >= 2
+
+        return {
+            "active": active,
+            "score": score,
+            "activity_count": activity_count
+        }
+
+    def _detect_slow_opening(self, screenplay: str, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Detect slow opening (PENALTY).
+
+        Goldman: "Start late - slow opening loses audience immediately."
+        """
+        detected = False
+        penalty = False
+
+        # Check for slow opening markers
+        slow_count = 0
+        for marker in self.slow_opening_markers:
+            slow_count += first_10_pages.lower().count(marker)
+
+        if slow_count >= 1:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "slow_count": slow_count
+        }
+
+    def _detect_confusing_opening(self, screenplay: str, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Detect confusing opening (PENALTY).
+
+        Balance mystery with clarity - audience should be intrigued but not lost.
+        """
+        detected = False
+        penalty = False
+
+        # Check for confusing opening markers
+        confusing_count = 0
+        for marker in self.confusing_opening_markers:
+            confusing_count += first_10_pages.lower().count(marker)
+
+        if confusing_count >= 1:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "confusing_count": confusing_count
+        }
+
+    def _assess_opening_originality(self, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Assess opening originality.
+
+        Avoid clichéd openings - find fresh approach.
+        """
+        score = 1.0  # start optimistic
+
+        # Check for cliché markers (PENALTY)
+        cliche_count = 0
+        for marker in self.cliche_opening_markers:
+            cliche_count += first_10_pages.lower().count(marker)
+
+        # Penalize for clichés
+        score = max(0.0, 1.0 - (cliche_count * 0.3))
+
+        # Bonus for originality markers
+        originality_count = 0
+        for marker in self.originality_markers:
+            originality_count += first_10_pages.lower().count(marker)
+
+        score = min(1.0, score + (originality_count * 0.1))
+
+        original = score >= 0.6
+
+        return {
+            "score": score,
+            "original": original,
+            "cliche_count": cliche_count,
+            "originality_count": originality_count
+        }
+
+    def _assess_genre_setup(self, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Assess genre expectations establishment.
+
+        Snyder: "Opening image tells audience what kind of movie - set genre expectations."
+        """
+        met = False
+
+        # Check for genre markers
+        genre_count = 0
+        for marker in self.genre_markers:
+            genre_count += first_10_pages.lower().count(marker)
+
+        if genre_count >= 1:
+            met = True
+
+        return {
+            "met": met,
+            "genre_count": genre_count
+        }
+
+    def _detect_dramatic_question(self, first_10_pages: str) -> Dict[str, Any]:
+        """
+        Detect dramatic question.
+
+        McKee: "Will protagonist achieve goal? Central question drives story."
+        """
+        posed = False
+
+        # Check for dramatic question markers
+        question_count = 0
+        for marker in self.dramatic_question_markers:
+            question_count += first_10_pages.lower().count(marker)
+
+        # Check for literal questions
+        if '?' in first_10_pages:
+            question_count += 1
+
+        if question_count >= 1:
+            posed = True
+
+        return {
+            "posed": posed,
+            "question_count": question_count
+        }
+
+    def _assess_opening_consistency(self, opening_hook: Dict, inciting_incident: Dict,
+                                   ordinary_world: Dict, first_10_analysis: Dict) -> Dict[str, Any]:
+        """
+        Assess opening consistency.
+
+        Hook + setup + inciting incident should work together as unified whole.
+        """
+        # Calculate consistency score
+        scores = [
+            1.0 if opening_hook["present"] else 0.0,
+            1.0 if inciting_incident["present"] else 0.5,
+            1.0 if ordinary_world["setup"] else 0.5,
+            first_10_analysis["score"] / 100.0
+        ]
+
+        consistency_score = sum(scores) / len(scores)
+
+        consistent = consistency_score >= 0.7
+
+        return {
+            "score": consistency_score,
+            "consistent": consistent
+        }
+
+    def _calculate_overall_opening_quality(self, profile: OpeningProfile) -> float:
+        """Calculate overall opening quality score."""
+        scores = [
+            1.0 if profile.opening_hook_present else 0.0,
+            profile.hook_effectiveness,
+            1.0 if profile.inciting_incident_present else 0.3,
+            profile.inciting_effectiveness,
+            1.0 if profile.ordinary_world_setup else 0.5,
+            profile.first_10_pages_score / 100.0,
+            profile.character_intro_clarity,
+            1.0 if profile.theme_stated_present else 0.7,  # optional
+            1.0 if profile.tone_established else 0.5,
+            1.0 if profile.stakes_clear_early else 0.6,
+            1.0 if profile.protagonist_active else 0.4,
+            0.0 if profile.slow_opening_detected else 1.0,  # PENALTY
+            0.0 if profile.confusing_opening_detected else 1.0,  # PENALTY
+            profile.opening_originality,
+            1.0 if profile.genre_expectations_met else 0.7,
+            1.0 if profile.dramatic_question_posed else 0.7
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_opening_rules(self, profile: OpeningProfile, opening_hook: Dict,
+                            inciting_incident: Dict, ordinary_world: Dict,
+                            first_10_analysis: Dict, character_intro: Dict,
+                            theme_stated: Dict, tone_setup: Dict,
+                            stakes_analysis: Dict, protagonist_activity: Dict,
+                            slow_opening: Dict, confusing_opening: Dict,
+                            originality: Dict, genre_setup: Dict,
+                            dramatic_question: Dict, opening_consistency: Dict) -> List[Dict]:
+        """Check opening against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "OPEN.R001":
+                # Opening Hook Present
+                if not profile.opening_hook_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No opening hook - first 3 pages don't grab attention",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R002":
+                # Inciting Incident Present
+                if not profile.inciting_incident_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No inciting incident - story doesn't get started",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R003":
+                # Ordinary World Setup
+                if not profile.ordinary_world_setup:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Ordinary world not established - no baseline for change",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R004":
+                # First 10 Pages Engaging
+                if profile.first_10_pages_score < 70.0:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"First 10 pages weak (score: {profile.first_10_pages_score:.1f}/100)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R005":
+                # Character Introduction Clear
+                if profile.character_intro_clarity < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Protagonist introduction unclear",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R006":
+                # Theme Stated
+                if not profile.theme_stated_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Theme not stated - thematic declaration missing",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R007":
+                # Tone Established
+                if not profile.tone_established:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Tone unclear - audience doesn't know what kind of story",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R008":
+                # Stakes Clear Early
+                if not profile.stakes_clear_early:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Stakes unclear - audience doesn't know what's at risk",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R009":
+                # Protagonist Active
+                if not profile.protagonist_active:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Protagonist passive - not driving story from beginning",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R010":
+                # Avoid Slow Opening
+                if profile.slow_opening_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Opening too slow - drags, takes too long",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R011":
+                # Avoid Confusing Opening
+                if profile.confusing_opening_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Opening confusing - audience disoriented",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R012":
+                # Opening Originality
+                if profile.opening_originality < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Opening clichéd - lacks freshness",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R013":
+                # Genre Expectations Set
+                if not profile.genre_expectations_met:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Genre unclear - audience expectations not set",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R014":
+                # Dramatic Question Posed
+                if not profile.dramatic_question_posed:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No dramatic question - audience doesn't know what story is about",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "OPEN.R015":
+                # Opening Consistency
+                if opening_consistency["score"] < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Inconsistent opening - quality varies, lacks coherence",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_opening_score(self, profile: OpeningProfile, violations: List) -> float:
+        """Calculate overall opening score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for slow/confusing opening
+        if profile.slow_opening_detected:
+            score -= 15  # major penalty
+        if profile.confusing_opening_detected:
+            score -= 20  # critical penalty
+
+        # Bonus for excellence
+        if profile.overall_opening_quality > 0.8:
+            score += 5
+        elif profile.overall_opening_quality > 0.7:
+            score += 3
+
+        if profile.opening_hook_present and profile.hook_effectiveness > 0.7:
+            score += 3
+
+        if profile.inciting_incident_present and profile.inciting_effectiveness > 0.7:
+            score += 3
+
+        if profile.first_10_pages_score >= 80.0:
+            score += 2
+
+        if profile.opening_originality > 0.7:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: OpeningProfile,
+                          violations: List) -> str:
+        """Generate opening diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Opening hooks audience immediately - first 10 pages are gripping"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Opening solid but could be stronger"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Opening problems - weak hook or slow start"
+        else:
+            level = "POOR"
+            summary = "Major opening problems - fails to engage"
+
+        diagnosis = f"OPENING {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.opening_hook_present:
+            issues.append("no hook")
+        if not profile.inciting_incident_present:
+            issues.append("no inciting incident")
+        if profile.slow_opening_detected:
+            issues.append("slow opening")
+        if profile.confusing_opening_detected:
+            issues.append("confusing opening")
+        if profile.first_10_pages_score < 60:
+            issues.append("weak first 10 pages")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: OpeningProfile) -> List[str]:
+        """Generate specific opening recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.opening_hook_present:
+            recommendations.append("Create strong opening hook - McKee/Field: 'First 3 pages must grab attention' - use conflict, mystery, or action")
+
+        if not profile.inciting_incident_present:
+            recommendations.append("Add inciting incident pages 10-15 - Field/Snyder: 'Catalyst disrupts ordinary world' - this is event that changes everything")
+
+        if profile.slow_opening_detected:
+            recommendations.append("Fix slow opening - Goldman: 'Start story as late as possible' - cut exposition, jump into action immediately")
+
+        if profile.confusing_opening_detected:
+            recommendations.append("Clarify opening - balance mystery with clarity - make clear WHO (protagonist), WHERE (location), WHAT (situation)")
+
+        if not profile.ordinary_world_setup:
+            recommendations.append("Establish ordinary world - Campbell/Vogler: 'Show protagonist's world before journey begins' - audience needs baseline")
+
+        if profile.first_10_pages_score < 70:
+            recommendations.append("Strengthen first 10 pages - Industry standard: 'First 10 pages are make or break' - hook, conflict, character, tone")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study Field's Screenplay - opening structure and inciting incident fundamental")
+            recommendations.append("Study Snyder's Save the Cat - opening image and beat sheet structure")
+
+        return recommendations[:5]
+
+    def export_opening_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export opening features for correlation/analysis.
+
+        Returns structured data with opening metrics.
+        """
+        first_10_pages = self._extract_first_10_pages(screenplay_text)
+        opening_hook = self._detect_opening_hook(screenplay_text, first_10_pages)
+        inciting_incident = self._detect_inciting_incident(screenplay_text, self._estimate_page_count(screenplay_text))
+
+        return {
+            "opening_hook": {
+                "present": opening_hook["present"],
+                "effectiveness": opening_hook["effectiveness"]
+            },
+            "inciting_incident": {
+                "present": inciting_incident["present"],
+                "page": inciting_incident["page"],
+                "effectiveness": inciting_incident["effectiveness"]
+            },
+            "meta": {
+                "source": "DrOpening",
+                "focus": "Opening quality and first 10 pages impact"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrOpeningAnalysis(DrOpening):
+    """Alias for compatibility with test framework."""
+    pass

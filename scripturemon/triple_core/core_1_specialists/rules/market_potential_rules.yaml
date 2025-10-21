@@ -1,0 +1,199 @@
+domain: market_potential
+specialist: "Script Doctor Marketmon"
+digimon_name: "Marketmon"
+title: "Script Doctor - Market Potential Specialist"
+specialty: "Commercial viability, audience appeal, market positioning, revenue potential"
+style: "Market-savvy, strategic, commercially-aware, audience-focused"
+identity: "Script Doctor™ first, Digimon market specialist second"
+
+rules:
+  - id: MAR.R001
+    title: "Audience Appeal"
+    category: "Audience"
+    severity: "critical"
+    test: "Does screenplay have broad audience appeal?"
+    fail_msg: "Limited audience appeal"
+    fix: "Broaden appeal without losing core identity"
+    reference: "Audience engagement requirement"
+
+  - id: MAR.R002
+    title: "Genre Marketability"
+    category: "Genre"
+    severity: "high"
+    test: "Is genre commercially viable?"
+    fail_msg: "Genre has limited market potential"
+    fix: "Enhance commercial genre elements"
+    reference: "Genre market analysis"
+
+  - id: MAR.R003
+    title: "Hook Strength"
+    category: "Hook"
+    severity: "critical"
+    test: "Is there a strong marketable hook?"
+    fail_msg: "Lacks compelling market hook"
+    fix: "Develop clear, marketable concept"
+    reference: "Marketing hook requirement"
+
+  - id: MAR.R004
+    title: "Competition Position"
+    category: "Competition"
+    severity: "high"
+    test: "Can it compete in current market?"
+    fail_msg: "Weak competitive position"
+    fix: "Differentiate from competition"
+    reference: "Market differentiation"
+
+  - id: MAR.R005
+    title: "Budget Feasibility"
+    category: "Budget"
+    severity: "high"
+    test: "Is budget-to-return ratio favorable?"
+    fail_msg: "Budget concerns affect viability"
+    fix: "Optimize scope for budget reality"
+    reference: "Production economics"
+
+  - id: MAR.R006
+    title: "Star Vehicle Potential"
+    category: "Casting"
+    severity: "medium"
+    test: "Does it offer strong casting opportunities?"
+    fail_msg: "Limited star attachment potential"
+    fix: "Strengthen lead roles for talent appeal"
+    reference: "Talent attachment value"
+
+  - id: MAR.R007
+    title: "International Appeal"
+    category: "Global"
+    severity: "medium"
+    test: "Does it have international potential?"
+    fail_msg: "Limited to domestic market"
+    fix: "Add universal themes and appeal"
+    reference: "Global market potential"
+
+  - id: MAR.R008
+    title: "Franchise Potential"
+    category: "Franchise"
+    severity: "low"
+    test: "Could this spawn sequels/franchise?"
+    fail_msg: "Limited franchise potential"
+    fix: "Build world for expansion possibilities"
+    reference: "Franchise development"
+
+  - id: MAR.R009
+    title: "Awards Potential"
+    category: "Prestige"
+    severity: "low"
+    test: "Does it have awards potential?"
+    fail_msg: "Lacks prestige elements"
+    fix: "Elevate artistic elements"
+    reference: "Prestige market value"
+
+  - id: MAR.R010
+    title: "Streaming Viability"
+    category: "Platform"
+    severity: "high"
+    test: "Is it suitable for streaming platforms?"
+    fail_msg: "Not optimized for streaming"
+    fix: "Adjust for platform requirements"
+    reference: "Platform suitability"
+
+  - id: MAR.R011
+    title: "Marketing Clarity"
+    category: "Marketing"
+    severity: "high"
+    test: "Can it be marketed clearly?"
+    fail_msg: "Difficult to market concept"
+    fix: "Clarify core selling points"
+    reference: "Marketing clarity"
+
+  - id: MAR.R012
+    title: "Demographic Target"
+    category: "Demographics"
+    severity: "high"
+    test: "Is target demographic clear and valuable?"
+    fail_msg: "Unclear or limited demographic"
+    fix: "Define and expand target audience"
+    reference: "Demographic targeting"
+
+  - id: MAR.R013
+    title: "Trend Alignment"
+    category: "Trends"
+    severity: "medium"
+    test: "Does it align with market trends?"
+    fail_msg: "Out of sync with current trends"
+    fix: "Update for market relevance"
+    reference: "Market trend alignment"
+
+  - id: MAR.R014
+    title: "Risk Assessment"
+    category: "Risk"
+    severity: "high"
+    test: "Is commercial risk acceptable?"
+    fail_msg: "High commercial risk"
+    fix: "Reduce risk factors"
+    reference: "Risk management"
+
+  - id: MAR.R015
+    title: "ROI Potential"
+    category: "Financial"
+    severity: "critical"
+    test: "Is ROI potential strong?"
+    fail_msg: "Weak return on investment potential"
+    fix: "Enhance commercial elements"
+    reference: "ROI projection"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 35
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Assess market potential and commercial viability"
+  deep_dive: "Analyze all commercial dimensions comprehensively"
+  final_check: "Verify market readiness and potential"
+
+market_checklist:
+  core_factors:
+    - audience_appeal
+    - genre_viability
+    - hook_strength
+    - budget_alignment
+    - marketing_clarity
+    - platform_fit
+    - demographic_appeal
+    - competitive_advantage
+
+  market_segments:
+    - theatrical_release
+    - streaming_original
+    - premium_cable
+    - network_television
+    - international_sales
+    - festival_circuit
+    - direct_to_consumer
+    - limited_release
+
+  audience_quadrants:
+    - male_under_25
+    - male_over_25
+    - female_under_25
+    - female_over_25
+    - family_audience
+    - mature_audience
+    - teen_audience
+    - niche_audience
+
+common_market_issues:
+  - unclear_audience
+  - oversaturated_genre
+  - weak_hook
+  - high_budget_low_appeal
+  - limited_demographics
+  - poor_timing
+  - no_star_vehicle
+  - difficult_marketing
+  - high_risk_low_reward
+  - trend_mismatch

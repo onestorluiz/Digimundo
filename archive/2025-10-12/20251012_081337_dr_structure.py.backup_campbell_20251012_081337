@@ -1,0 +1,1244 @@
+"""
+Script Doctor Structuremon - Narrative Structure and Architecture Specialist
+A Script Doctor™ in Digimon form specializing in three-act structure, plot points, and narrative architecture.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class StructureProfile:
+    """Deep profile analysis for narrative structure."""
+    total_pages: int
+    act_one_end: Optional[int]
+    act_two_end: Optional[int]
+    act_three_end: Optional[int]
+    inciting_incident: Optional[Dict]
+    plot_point_one: Optional[Dict]
+    midpoint: Optional[Dict]
+    plot_point_two: Optional[Dict]
+    climax: Optional[Dict]
+    resolution: Optional[Dict]
+    act_proportions: Dict[str, float]
+    turning_points_count: int
+    rising_action_present: bool
+    opening_hook_present: bool
+    setup_payoff_count: int
+    structural_coherence_score: float
+
+
+@dataclass
+class StructureMoment:
+    """A specific structural moment."""
+    moment_type: str  # inciting_incident, plot_point, midpoint, climax, resolution
+    page_number: int
+    description: str
+    act_position: str  # act1, act2, act3
+    intensity: float  # 0-1
+    turning_point: bool
+
+
+class DrStructure:
+    """
+    Script Doctor Structuremon - The Narrative Structure and Architecture Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing three-act structure,
+    plot points, midpoint, inciting incident, turning points, and narrative architecture.
+
+    Identity: Script Doctor first, Digimon structure specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Structuremon with rules and configuration."""
+        self.name = "Script Doctor Structuremon"
+        self.digimon_name = "Structuremon"
+        self.title = "Script Doctor - Narrative Structure and Architecture Specialist"
+        self.specialty = "Three-act structure, plot points, midpoint, inciting incident, turning points"
+        self.identity = "I am Script Doctor Structuremon, a professional Script Doctor™ specializing in narrative architecture"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "structure_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - STRUCTURE SPECIFIC
+        self.deep_context_queries = [
+            # Field Screenplay - Three-act paradigm foundation
+            "Field Screenplay three-act paradigm setup confrontation resolution structure",
+            "Field Screenplay Act 1 setup 30 pages establish world character problem",
+            "Field Screenplay Act 2 confrontation 60 pages obstacles complications escalation",
+            "Field Screenplay Act 3 resolution 30 pages climax resolution conclusion",
+            "Field Screenplay plot point 1 page 25-27 end Act 1 spins story",
+            "Field Screenplay plot point 2 page 85-90 end Act 2 spins Act 3",
+            "Field Screenplay pinch points mid-act structural beats maintain tension",
+            "Field Screenplay paradigm proportions 25-50-25 percent act balance",
+            "Field Screenplay dramatic structure foundation setup payoff mechanics",
+            "Field Screenplay turning points change direction story trajectory",
+            "Field Screenplay act breaks structural boundaries clear transitions",
+            "Field Screenplay inciting incident pages 10-15 disrupts ordinary world",
+
+            # Snyder Save the Cat - 15-beat structure
+            "Snyder Save Cat beat sheet 15 beats detailed structure blueprint",
+            "Snyder Save Cat opening image closing image thematic bookends mirror",
+            "Snyder Save Cat theme stated beat page 5 declares meaning",
+            "Snyder Save Cat setup beat pages 1-10 introduce world character tone",
+            "Snyder Save Cat catalyst beat page 12 life-changing event inciting",
+            "Snyder Save Cat debate beat pages 12-25 hesitation doubt resistance",
+            "Snyder Save Cat break into two page 25 commit journey Act 2",
+            "Snyder Save Cat B story beat introduces love interest theme carrier",
+            "Snyder Save Cat fun and games promise premise delivered entertainment",
+            "Snyder Save Cat midpoint page 55 false victory or false defeat",
+            "Snyder Save Cat bad guys close in complications escalate pressure mounts",
+            "Snyder Save Cat all is lost beat page 75 lowest point defeat",
+            "Snyder Save Cat dark night soul beat internal crisis reflection",
+            "Snyder Save Cat break into three page 85 solution found Act 3",
+            "Snyder Save Cat finale beat pages 85-110 climax resolution synthesis",
+            "Snyder Save Cat final image closing mirror opening transformation shown",
+
+            # McKee Story - Complex story design
+            "McKee Story inciting incident disrupts balance launches story quest",
+            "McKee Story progressive complications escalating conflict rising action",
+            "McKee Story crisis decision character forced impossible choice dilemma",
+            "McKee Story climax action result crisis choice peak moment",
+            "McKee Story resolution new equilibrium aftermath consequences",
+            "McKee Story classic design archplot linear active closed ending",
+            "McKee Story miniplot internal minimalist open ending anti-structure",
+            "McKee Story antiplot chaos absurd coincidence anti-structure",
+            "McKee Story controlling idea structure spine meaning dramatized",
+            "McKee Story act design major reversals irreversible change",
+            "McKee Story sequence structure 3-5 scenes building mini-climax",
+            "McKee Story scene structure beat pattern action-reaction",
+            "McKee Story story climax placement 75-85% through story",
+            "McKee Story rising action escalation stakes intensity complexity",
+            "McKee Story five-part structure inciting progressive crisis climax resolution",
+
+            # McKee Story - BEAT, EVENT, SEQUENCE (ultra-specific from manual reading)
+            "McKee Story beat smallest element action reaction exchange behavior turn",
+            "McKee Story story event value change meaningful conflict achieved turn",
+            "McKee Story sequence 3-5 scenes building moderate climax mini-turning point",
+            "McKee Story scene versus event camera setup versus value turn distinction",
+            "McKee Story gap theory expectation versus result desire versus reality divide",
+            "McKee Story value charge positive negative shift meaningful change life",
+            "McKee Story nonevent activity without value turn cut delete scene eliminate",
+            "McKee Story turning point beat action changes value life situation reversal",
+            "McKee Story beat by beat rhythm tempo pattern scene construction design",
+            "McKee Story story event meaningful not trivial change character life situation",
+
+            # Truby Anatomy - 22-step structure
+            "Truby Anatomy 22 step story structure comprehensive blueprint design",
+            "Truby Anatomy seven key story structure steps foundation essential",
+            "Truby Anatomy weakness need ghost desire opponent plan battle self-revelation",
+            "Truby Anatomy story world moral argument integrated structure unity",
+            "Truby Anatomy self-revelation anagnorisis structural climax character realizes",
+            "Truby Anatomy desire line clear structural spine character pursuit",
+            "Truby Anatomy opponent creates conflict obstacles structural resistance",
+            "Truby Anatomy plan strategy character attempt achieve goal structure",
+            "Truby Anatomy battle confrontation climax structural peak moment",
+            "Truby Anatomy new equilibrium resolution transformed world order",
+
+            # Vogler Writer's Journey - 12-stage hero journey
+            "Vogler Writer's Journey 12 stages hero journey structure blueprint",
+            "Vogler Journey ordinary world stage 1 establish normal status quo",
+            "Vogler Journey call adventure stage 2 problem challenge opportunity",
+            "Vogler Journey refusal call stage 3 fear doubt hesitation resistance",
+            "Vogler Journey meeting mentor stage 4 advice gift supernatural aid",
+            "Vogler Journey crossing threshold stage 5 commit special world Act 2",
+            "Vogler Journey tests allies enemies stage 6 learn rules new world",
+            "Vogler Journey approach inmost cave stage 7 prepare ordeal danger",
+            "Vogler Journey ordeal stage 8 crisis death rebirth midpoint",
+            "Vogler Journey reward stage 9 seizing sword achievement goal",
+            "Vogler Journey road back stage 10 return complications pursue",
+            "Vogler Journey resurrection stage 11 final test purification cleansing",
+            "Vogler Journey return elixir stage 12 bring wisdom benefit home",
+
+            # Campbell Hero 1000 Faces - Monomyth 17 stages
+            "Campbell Hero 1000 Faces monomyth 17 stages separation initiation return",
+            "Campbell Hero departure 5 stages call refusal aid threshold belly whale",
+            "Campbell Hero initiation 6 stages trials goddess temptation atonement apotheosis boon",
+            "Campbell Hero return 6 stages refusal magic rescue threshold worlds freedom live",
+            "Campbell Hero circular structure departure return transformed cycle complete",
+            "Campbell Hero death rebirth structure symbolic transformation resurrection",
+            "Campbell Hero threshold crossing boundary ordinary special world transition",
+
+            # Aristotle Poetics - Unity and structure
+            "Aristotle Poetics beginning middle end organic unity complete action",
+            "Aristotle Poetics unity action single complete whole coherent structure",
+            "Aristotle Poetics proper magnitude length appropriate size duration",
+            "Aristotle Poetics peripeteia reversal fortune change direction unexpected",
+            "Aristotle Poetics anagnorisis recognition ignorance knowledge character realizes",
+            "Aristotle Poetics complication unraveling tying untying structure pattern",
+            "Aristotle Poetics rising action complications build to crisis climax",
+            "Aristotle Poetics necessity probability causal structure inevitable logic",
+            "Aristotle Poetics simple vs complex plots reversal recognition presence",
+
+            # Egri Art Dramatic Writing - Premise structure
+            "Egri Art Dramatic Writing premise driven structure spine foundation unity",
+            "Egri Art rising conflict escalation crisis to crisis building tension",
+            "Egri Art point of attack where story begins structural choice",
+            "Egri Art orchestration contrast conflict variety characters structural balance",
+            "Egri Art transition connection scenes structural flow continuity",
+            "Egri Art dialectical structure thesis antithesis synthesis progression",
+
+            # Seger Making Good Script Great - Structural craft
+            "Seger Making Good Script Great catalyst turning points structural beats",
+            "Seger catalyst inciting incident gets story moving structure launches",
+            "Seger turning points change direction new information reversals",
+            "Seger act structure problems weak breaks unclear transitions fixes",
+            "Seger restructuring script techniques repair structural problems",
+            "Seger subplot integration structure weave parallel stories thematic unity",
+            "Seger pacing structure rhythm tempo beats timing control",
+
+            # Weiland Creating Character Arcs - Structure mirrors character
+            "Weiland Creating Character Arcs structure mirrors character arc alignment",
+            "Weiland Character Arc beats aligned structure stages synchronized",
+            "Weiland lie truth journey structure character arc integrated",
+            "Weiland first plot point threshold cross commit arc deepens",
+            "Weiland midpoint truth moment character glimpse reality shift",
+            "Weiland third plot point death moment all lost arc bottom",
+
+            # Hauge six-stage structure
+            "Hauge six stage structure setup new situation progress complications final push aftermath",
+            "Hauge setup stage 1 introduce character world problem 10 percent",
+            "Hauge new situation stage 2 new world pursue goal 25 percent",
+            "Hauge progress stage 3 plan working success visible 50 percent",
+            "Hauge complications stage 4 problems escalate plan fails 75 percent",
+            "Hauge final push stage 5 last attempt all or nothing 90 percent",
+            "Hauge aftermath resolution stage 6 new equilibrium transformed 100 percent",
+
+            # Goldman Adventures Screen Trade - Structure principles
+            "Goldman Adventures Screen Trade structure serves story not formula principles",
+            "Goldman setup payoff mastery plant pay structural integrity",
+
+            # Rhimes/Mamet/Mackendrick - Additional structural concepts
+            "Rhimes TV structure act breaks commercial beats episodic structure",
+            "Mamet scene structure beats action reaction negotiation want obstacle",
+            "Mackendrick visual structure cinematic storytelling image sequence design"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story story event meaningful change value charge expressed achieved through conflict",
+        "McKee Story story value universal qualities positive negative reversal moment",
+        "McKee Story scene action through conflict turns value condition perceptible significance",
+        "McKee Story sequence series scenes culminates greater impact than previous scene",
+        "McKee Story act series sequences peaks climactic scene major reversal value",
+        "McKee Story story climax last act absolute irreversible change closes design",
+        "McKee Story progressive complications arouse antagonism gap widens expectation result",
+        "McKee Story points of no return conservative action fails greater risk required",
+        "McKee Story law of conflict nothing moves forward except through conflict pressure",
+        "McKee Story archplot causality active protagonist linear time closed ending",
+        "McKee Story miniplot internal conflict open ending passive protagonist simplicity",
+        "McKee Story antiplot coincidence nonlinear time inconsistent realities extravagance",
+        "McKee Story inciting incident upsets balance launches desire quest obligatory scene",
+        "McKee Story crisis dangerous opportunity true dilemma irreconcilable goods lesser evils",
+        "McKee Story climax value swing maximum charge absolute irreversible meaning produces emotion",
+        "McKee Story resolution after climax slow curtain recuperation social effects spread",
+        "McKee Story pacing rhythm tempo accelerate toward act climaxes then pause",
+        "McKee Story scene length average two three minutes master scene readability",
+        "McKee Story suspense sentence periodic construction meaning last word cueing",
+        "McKee Story earn the pause telescoping rhythm spiraling tempo before climax",
+
+        # McKee DIALOGUE - GPT-5 extracted (12 Oct 2025)
+        "McKee Dialogue inciting incident throws life balance upset starts story",
+        "McKee Dialogue turning point action revelation change value charge pivot",
+        "McKee Dialogue beat action reaction gerund labeling progression escalation",
+
+
+        ]
+
+        # Structure analysis patterns (bilingual: EN + PT)
+
+        # Three-act structure markers
+        self.structure_markers = [
+            # English
+            "three-act", "setup", "confrontation", "resolution", "paradigm",
+            "act one", "act two", "act three", "first act", "second act", "third act",
+            # Portuguese
+            "três atos", "primeiro ato", "segundo ato", "terceiro ato",
+            "configuração", "confronto", "resolução"
+        ]
+
+        # Plot point markers
+        self.plot_point_markers = [
+            # English
+            "turning point", "plot point", "reversal", "twist", "major turn",
+            "everything changes", "no turning back", "point of no return",
+            "game changer", "shift", "pivot",
+            # Portuguese
+            "ponto de virada", "reviravolta", "mudança radical", "tudo muda",
+            "sem volta", "ponto sem retorno", "virada", "guinada"
+        ]
+
+        # Inciting incident markers
+        self.inciting_incident_markers = [
+            # English
+            "catalyst", "call to action", "triggering event", "life-changing",
+            "everything changed when", "the day that", "it all started",
+            "inciting incident", "call to adventure", "ordinary world disrupted",
+            # Portuguese
+            "catalisador", "chamado", "evento gatilho", "tudo mudou quando",
+            "o dia em que", "tudo começou", "mundo comum interrompido"
+        ]
+
+        # Midpoint markers
+        self.midpoint_markers = [
+            # English
+            "midpoint", "false victory", "false defeat", "central crisis",
+            "halfway point", "point of no return", "commitment",
+            "raised stakes", "all is lost", "mirror moment",
+            # Portuguese
+            "ponto médio", "falsa vitória", "falsa derrota", "crise central",
+            "meio da jornada", "aposta levantada", "tudo está perdido"
+        ]
+
+        # Climax markers
+        self.climax_markers = [
+            # English
+            "climax", "final confrontation", "peak", "highest stakes",
+            "ultimate battle", "final showdown", "decisive moment",
+            "all or nothing", "make or break", "final stand",
+            # Portuguese
+            "clímax", "confronto final", "pico", "aposta máxima",
+            "batalha final", "confronto decisivo", "momento decisivo",
+            "tudo ou nada", "última resistência"
+        ]
+
+        # Resolution markers
+        self.resolution_markers = [
+            # English
+            "resolution", "denouement", "epilogue", "aftermath",
+            "new normal", "new equilibrium", "closing image",
+            "final image", "ending", "conclusion",
+            # Portuguese
+            "resolução", "desfecho", "epílogo", "consequências",
+            "novo normal", "novo equilíbrio", "imagem final",
+            "conclusão", "fim"
+        ]
+
+        # Act markers
+        self.act_markers = {
+            "act1": ["act one", "first act", "setup", "ordinary world", "primeiro ato", "ato um"],
+            "act2": ["act two", "second act", "confrontation", "segundo ato", "ato dois"],
+            "act3": ["act three", "third act", "resolution", "terceiro ato", "ato três"]
+        }
+
+        # Rising action markers
+        self.rising_action_markers = [
+            # English
+            "escalates", "intensifies", "raises stakes", "grows worse",
+            "complications", "obstacles increase", "pressure mounts",
+            "tension rises", "conflict deepens", "stakes higher",
+            # Portuguese
+            "escala", "intensifica", "aumenta aposta", "piora",
+            "complicações", "obstáculos aumentam", "pressão cresce",
+            "tensão aumenta", "conflito aprofunda"
+        ]
+
+        # Opening hook markers
+        self.opening_hook_markers = [
+            # English
+            "opens with", "grabs attention", "hook", "cold open",
+            "teaser", "bang", "explosive start", "immediately",
+            # Portuguese
+            "abre com", "chama atenção", "gancho", "começo explosivo",
+            "imediatamente", "de cara"
+        ]
+
+        # Setup and payoff patterns
+        self.setup_patterns = [
+            "establish", "introduce", "plant", "foreshadow",
+            "hint at", "mention", "show", "setup",
+            "estabelecer", "introduzir", "plantar", "prenunciar"
+        ]
+
+        self.payoff_patterns = [
+            "return", "callback", "pays off", "comes back",
+            "remember when", "circles back", "resolves",
+            "retorna", "retoma", "resolve", "lembra quando"
+        ]
+
+        # Beat sheet patterns (Save the Cat)
+        self.beat_sheet_markers = {
+            "opening_image": ["opening image", "first image", "imagem inicial"],
+            "theme_stated": ["theme stated", "moral premise", "tema declarado"],
+            "setup": ["setup", "ordinary world", "configuração"],
+            "catalyst": ["catalyst", "inciting incident", "catalisador"],
+            "debate": ["debate", "refusal of call", "debate"],
+            "break_into_two": ["break into two", "crossing threshold", "ruptura"],
+            "b_story": ["b story", "love story", "subplot", "história b"],
+            "fun_and_games": ["fun and games", "promise of premise", "diversão"],
+            "midpoint": ["midpoint", "false victory", "ponto médio"],
+            "bad_guys_close_in": ["bad guys close in", "inimigos se aproximam"],
+            "all_is_lost": ["all is lost", "dark night of soul", "tudo está perdido"],
+            "break_into_three": ["break into three", "ruptura final"],
+            "finale": ["finale", "climax", "final"],
+            "final_image": ["final image", "closing image", "imagem final"]
+        }
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze narrative structure and architecture in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete structure diagnostic report
+        """
+        # Extract page count
+        page_count = self._estimate_page_count(screenplay_text)
+
+        # Detect three-act structure
+        act_structure = self._detect_three_act_structure(screenplay_text, page_count)
+
+        # Find inciting incident
+        inciting_incident = self._find_inciting_incident(screenplay_text, page_count)
+
+        # Find Plot Point 1
+        plot_point_one = self._find_plot_point_one(screenplay_text, page_count)
+
+        # Find midpoint
+        midpoint = self._find_midpoint(screenplay_text, page_count)
+
+        # Find Plot Point 2
+        plot_point_two = self._find_plot_point_two(screenplay_text, page_count)
+
+        # Find climax
+        climax = self._find_climax(screenplay_text, page_count)
+
+        # Find resolution
+        resolution = self._find_resolution(screenplay_text, page_count)
+
+        # Analyze act proportions
+        act_proportions = self._analyze_act_proportions(act_structure, page_count)
+
+        # Count turning points
+        turning_points = self._count_turning_points(screenplay_text)
+
+        # Detect rising action
+        rising_action = self._detect_rising_action(screenplay_text)
+
+        # Check opening hook
+        opening_hook = self._check_opening_hook(screenplay_text)
+
+        # Analyze setup and payoff
+        setup_payoff = self._analyze_setup_payoff(screenplay_text)
+
+        # Calculate structural coherence
+        coherence = self._calculate_structural_coherence(
+            act_structure, inciting_incident, plot_point_one,
+            midpoint, plot_point_two, climax
+        )
+
+        # Detect beat sheet (Save the Cat)
+        beat_sheet = self._detect_beat_sheet(screenplay_text, page_count)
+
+        # Check pacing
+        pacing_analysis = self._analyze_pacing(screenplay_text, page_count, act_structure)
+
+        # Build structure profile
+        structure_profile = StructureProfile(
+            total_pages=page_count,
+            act_one_end=act_structure.get("act1_end"),
+            act_two_end=act_structure.get("act2_end"),
+            act_three_end=page_count,
+            inciting_incident=inciting_incident,
+            plot_point_one=plot_point_one,
+            midpoint=midpoint,
+            plot_point_two=plot_point_two,
+            climax=climax,
+            resolution=resolution,
+            act_proportions=act_proportions,
+            turning_points_count=len(turning_points),
+            rising_action_present=rising_action["present"],
+            opening_hook_present=opening_hook["present"],
+            setup_payoff_count=len(setup_payoff["pairs"]),
+            structural_coherence_score=coherence
+        )
+
+        # Check against rules
+        rule_violations = self._check_structure_rules(
+            structure_profile, act_proportions, rising_action,
+            opening_hook, coherence
+        )
+
+        # Calculate score
+        score = self._calculate_structure_score(
+            structure_profile, act_proportions, coherence, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, structure_profile, act_proportions, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "total_pages": page_count,
+            "three_act_structure": {
+                "detected": act_structure.get("detected", False),
+                "act_one_end": act_structure.get("act1_end"),
+                "act_two_end": act_structure.get("act2_end"),
+                "act_three_end": page_count
+            },
+            "act_proportions": act_proportions,
+            "proportions_correct": self._proportions_match_paradigm(act_proportions),
+            "inciting_incident": {
+                "present": inciting_incident is not None,
+                "page": inciting_incident.get("page") if inciting_incident else None,
+                "description": inciting_incident.get("description") if inciting_incident else None
+            },
+            "plot_point_one": {
+                "present": plot_point_one is not None,
+                "page": plot_point_one.get("page") if plot_point_one else None,
+                "description": plot_point_one.get("description") if plot_point_one else None
+            },
+            "midpoint": {
+                "present": midpoint is not None,
+                "page": midpoint.get("page") if midpoint else None,
+                "type": midpoint.get("type") if midpoint else None,
+                "description": midpoint.get("description") if midpoint else None
+            },
+            "plot_point_two": {
+                "present": plot_point_two is not None,
+                "page": plot_point_two.get("page") if plot_point_two else None,
+                "description": plot_point_two.get("description") if plot_point_two else None
+            },
+            "climax": {
+                "present": climax is not None,
+                "page": climax.get("page") if climax else None,
+                "intensity": climax.get("intensity") if climax else None,
+                "description": climax.get("description") if climax else None
+            },
+            "resolution": {
+                "present": resolution is not None,
+                "page": resolution.get("page") if resolution else None,
+                "description": resolution.get("description") if resolution else None
+            },
+            "turning_points_count": len(turning_points),
+            "turning_points_examples": turning_points[:5],
+            "rising_action": rising_action,
+            "opening_hook": opening_hook,
+            "setup_payoff_pairs": len(setup_payoff["pairs"]),
+            "setup_payoff_examples": setup_payoff["pairs"][:3],
+            "structural_coherence": coherence,
+            "beat_sheet_coverage": beat_sheet["coverage"],
+            "beats_detected": beat_sheet["beats_found"],
+            "pacing_analysis": pacing_analysis,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, structure_profile, act_proportions
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        # Rough estimate: 55 lines per page
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _detect_three_act_structure(self, screenplay: str, page_count: int) -> Dict[str, Any]:
+        """Detect three-act structure breaks."""
+        # Expected act breaks (Field's paradigm: 25/50/25)
+        expected_act1_end = int(page_count * 0.25)
+        expected_act2_end = int(page_count * 0.75)
+
+        # Search for explicit act markers or structural beats
+        lines = screenplay.split('\n')
+        current_page = 0
+
+        act1_end = None
+        act2_end = None
+
+        for i, line in enumerate(lines):
+            current_page = i // 55  # Rough page estimation
+
+            # Check for plot point 1 (around page 25)
+            if expected_act1_end - 5 <= current_page <= expected_act1_end + 5:
+                if any(marker in line.lower() for marker in self.plot_point_markers):
+                    act1_end = current_page
+
+            # Check for plot point 2 (around page 75)
+            if expected_act2_end - 5 <= current_page <= expected_act2_end + 5:
+                if any(marker in line.lower() for marker in self.plot_point_markers):
+                    act2_end = current_page
+
+        # If not found explicitly, use expected positions
+        if act1_end is None:
+            act1_end = expected_act1_end
+        if act2_end is None:
+            act2_end = expected_act2_end
+
+        return {
+            "detected": True,
+            "act1_end": act1_end,
+            "act2_end": act2_end,
+            "act3_end": page_count
+        }
+
+    def _find_inciting_incident(self, screenplay: str, page_count: int) -> Optional[Dict]:
+        """Find the inciting incident (typically pages 10-15)."""
+        lines = screenplay.split('\n')
+
+        # Search in first 20% of script
+        search_end = int(len(lines) * 0.20)
+
+        for i in range(min(search_end, len(lines))):
+            line = lines[i].strip()
+            for marker in self.inciting_incident_markers:
+                if marker in line.lower():
+                    return {
+                        "page": i // 55,
+                        "description": line[:100] + "..." if len(line) > 100 else line,
+                        "marker_used": marker
+                    }
+
+        return None
+
+    def _find_plot_point_one(self, screenplay: str, page_count: int) -> Optional[Dict]:
+        """Find Plot Point 1 (typically page 25, end of Act 1)."""
+        lines = screenplay.split('\n')
+        expected_page = int(page_count * 0.25)
+
+        # Search around expected page (±5 pages)
+        search_start = max(0, (expected_page - 5) * 55)
+        search_end = min(len(lines), (expected_page + 5) * 55)
+
+        for i in range(search_start, search_end):
+            line = lines[i].strip()
+            for marker in self.plot_point_markers:
+                if marker in line.lower():
+                    return {
+                        "page": i // 55,
+                        "description": line[:100] + "..." if len(line) > 100 else line,
+                        "expected_page": expected_page
+                    }
+
+        return None
+
+    def _find_midpoint(self, screenplay: str, page_count: int) -> Optional[Dict]:
+        """Find midpoint (typically page 50-60, middle of Act 2)."""
+        lines = screenplay.split('\n')
+        expected_page = int(page_count * 0.50)
+
+        # Search around expected page (±10 pages)
+        search_start = max(0, (expected_page - 10) * 55)
+        search_end = min(len(lines), (expected_page + 10) * 55)
+
+        for i in range(search_start, search_end):
+            line = lines[i].strip()
+            for marker in self.midpoint_markers:
+                if marker in line.lower():
+                    # Determine type (false victory vs false defeat)
+                    midpoint_type = "false_victory" if any(v in line.lower() for v in ["victory", "win", "success"]) else "false_defeat"
+
+                    return {
+                        "page": i // 55,
+                        "type": midpoint_type,
+                        "description": line[:100] + "..." if len(line) > 100 else line,
+                        "expected_page": expected_page
+                    }
+
+        return None
+
+    def _find_plot_point_two(self, screenplay: str, page_count: int) -> Optional[Dict]:
+        """Find Plot Point 2 (typically page 75-85, end of Act 2)."""
+        lines = screenplay.split('\n')
+        expected_page = int(page_count * 0.75)
+
+        # Search around expected page (±5 pages)
+        search_start = max(0, (expected_page - 5) * 55)
+        search_end = min(len(lines), (expected_page + 5) * 55)
+
+        for i in range(search_start, search_end):
+            line = lines[i].strip()
+            for marker in self.plot_point_markers:
+                if marker in line.lower():
+                    return {
+                        "page": i // 55,
+                        "description": line[:100] + "..." if len(line) > 100 else line,
+                        "expected_page": expected_page
+                    }
+
+        return None
+
+    def _find_climax(self, screenplay: str, page_count: int) -> Optional[Dict]:
+        """Find climax (typically pages 85-100, near end of Act 3)."""
+        lines = screenplay.split('\n')
+
+        # Search in last 20% of script
+        search_start = int(len(lines) * 0.80)
+
+        max_intensity = 0
+        climax_line = None
+        climax_page = None
+
+        for i in range(search_start, len(lines)):
+            line = lines[i].strip()
+
+            # Calculate intensity based on climax markers
+            intensity = sum(1 for marker in self.climax_markers if marker in line.lower())
+
+            if intensity > max_intensity:
+                max_intensity = intensity
+                climax_line = line
+                climax_page = i // 55
+
+        if climax_line:
+            return {
+                "page": climax_page,
+                "intensity": min(1.0, max_intensity / 5.0),
+                "description": climax_line[:100] + "..." if len(climax_line) > 100 else climax_line
+            }
+
+        return None
+
+    def _find_resolution(self, screenplay: str, page_count: int) -> Optional[Dict]:
+        """Find resolution (last 5-10 pages)."""
+        lines = screenplay.split('\n')
+
+        # Search in last 10% of script
+        search_start = int(len(lines) * 0.90)
+
+        for i in range(search_start, len(lines)):
+            line = lines[i].strip()
+            for marker in self.resolution_markers:
+                if marker in line.lower():
+                    return {
+                        "page": i // 55,
+                        "description": line[:100] + "..." if len(line) > 100 else line
+                    }
+
+        return None
+
+    def _analyze_act_proportions(self, act_structure: Dict, page_count: int) -> Dict[str, float]:
+        """Analyze act proportions (ideal: 25/50/25)."""
+        act1_end = act_structure.get("act1_end", 0)
+        act2_end = act_structure.get("act2_end", 0)
+
+        act1_pages = act1_end
+        act2_pages = act2_end - act1_end
+        act3_pages = page_count - act2_end
+
+        return {
+            "act1_percentage": (act1_pages / max(page_count, 1)) * 100,
+            "act2_percentage": (act2_pages / max(page_count, 1)) * 100,
+            "act3_percentage": (act3_pages / max(page_count, 1)) * 100,
+            "act1_pages": act1_pages,
+            "act2_pages": act2_pages,
+            "act3_pages": act3_pages
+        }
+
+    def _proportions_match_paradigm(self, proportions: Dict) -> bool:
+        """Check if proportions match Field's 25/50/25 paradigm."""
+        act1_pct = proportions["act1_percentage"]
+        act2_pct = proportions["act2_percentage"]
+        act3_pct = proportions["act3_percentage"]
+
+        # Allow 10% variance
+        return (15 <= act1_pct <= 35 and
+                40 <= act2_pct <= 60 and
+                15 <= act3_pct <= 35)
+
+    def _count_turning_points(self, screenplay: str) -> List[Dict]:
+        """Count all turning points throughout screenplay."""
+        turning_points = []
+        lines = screenplay.split('\n')
+
+        for i, line in enumerate(lines):
+            line = line.strip()
+            for marker in self.plot_point_markers:
+                if marker in line.lower():
+                    turning_points.append({
+                        "page": i // 55,
+                        "description": line[:80] + "..." if len(line) > 80 else line,
+                        "marker": marker
+                    })
+                    break
+
+        return turning_points
+
+    def _detect_rising_action(self, screenplay: str) -> Dict[str, Any]:
+        """Detect rising action and escalation."""
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.rising_action_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 3:
+                        examples.append(line[:80] + "..." if len(line) > 80 else line)
+                    break
+
+        return {
+            "present": count > 0,
+            "escalation_count": count,
+            "examples": examples
+        }
+
+    def _check_opening_hook(self, screenplay: str) -> Dict[str, Any]:
+        """Check for opening hook (first 3 pages)."""
+        lines = screenplay.split('\n')
+        first_pages = lines[:165]  # Roughly 3 pages
+
+        for line in first_pages:
+            for marker in self.opening_hook_markers:
+                if marker in line.lower():
+                    return {
+                        "present": True,
+                        "description": line[:100] + "..." if len(line) > 100 else line
+                    }
+
+        # Check for action-oriented opening
+        action_words = ["explosion", "chase", "fight", "crash", "run", "battle"]
+        for line in first_pages:
+            if any(word in line.lower() for word in action_words):
+                return {
+                    "present": True,
+                    "description": f"Action opening: {line[:80]}..."
+                }
+
+        return {"present": False}
+
+    def _analyze_setup_payoff(self, screenplay: str) -> Dict[str, Any]:
+        """Analyze setup and payoff patterns."""
+        lines = screenplay.split('\n')
+        setups = []
+        payoffs = []
+        pairs = []
+
+        # Find setups (first half)
+        midpoint = len(lines) // 2
+
+        for i in range(midpoint):
+            line = lines[i].strip().lower()
+            for pattern in self.setup_patterns:
+                if pattern in line:
+                    setups.append({"page": i // 55, "text": lines[i][:60]})
+                    break
+
+        # Find payoffs (second half)
+        for i in range(midpoint, len(lines)):
+            line = lines[i].strip().lower()
+            for pattern in self.payoff_patterns:
+                if pattern in line:
+                    payoffs.append({"page": i // 55, "text": lines[i][:60]})
+                    break
+
+        # Match potential pairs (simplified)
+        for setup in setups:
+            for payoff in payoffs:
+                if payoff["page"] > setup["page"]:
+                    pairs.append({
+                        "setup_page": setup["page"],
+                        "payoff_page": payoff["page"],
+                        "description": f"{setup['text'][:40]} → {payoff['text'][:40]}"
+                    })
+                    break
+
+        return {
+            "setups_count": len(setups),
+            "payoffs_count": len(payoffs),
+            "pairs": pairs[:10]  # Top 10 pairs
+        }
+
+    def _calculate_structural_coherence(self, act_structure: Dict,
+                                       inciting_incident: Optional[Dict],
+                                       plot_point_one: Optional[Dict],
+                                       midpoint: Optional[Dict],
+                                       plot_point_two: Optional[Dict],
+                                       climax: Optional[Dict]) -> float:
+        """Calculate overall structural coherence score."""
+        score = 0.0
+
+        # Each major structural element present adds to score
+        if act_structure.get("detected"):
+            score += 0.15
+        if inciting_incident:
+            score += 0.20
+        if plot_point_one:
+            score += 0.15
+        if midpoint:
+            score += 0.15
+        if plot_point_two:
+            score += 0.15
+        if climax:
+            score += 0.20
+
+        return min(1.0, score)
+
+    def _detect_beat_sheet(self, screenplay: str, page_count: int) -> Dict[str, Any]:
+        """Detect Save the Cat beat sheet coverage."""
+        lines = screenplay.split('\n')
+        beats_found = {}
+
+        for beat_name, markers in self.beat_sheet_markers.items():
+            for i, line in enumerate(lines):
+                for marker in markers:
+                    if marker in line.lower():
+                        beats_found[beat_name] = {
+                            "page": i // 55,
+                            "description": line[:60]
+                        }
+                        break
+                if beat_name in beats_found:
+                    break
+
+        total_beats = len(self.beat_sheet_markers)
+        coverage = (len(beats_found) / total_beats) * 100
+
+        return {
+            "coverage": coverage,
+            "beats_found": beats_found,
+            "total_possible": total_beats
+        }
+
+    def _analyze_pacing(self, screenplay: str, page_count: int, act_structure: Dict) -> Dict[str, Any]:
+        """Analyze pacing consistency."""
+        lines = screenplay.split('\n')
+
+        # Measure scene density per act
+        scenes = screenplay.count('INT.') + screenplay.count('EXT.')
+
+        act1_end = act_structure.get("act1_end", 0) * 55
+        act2_end = act_structure.get("act2_end", 0) * 55
+
+        act1_text = '\n'.join(lines[:act1_end])
+        act2_text = '\n'.join(lines[act1_end:act2_end])
+        act3_text = '\n'.join(lines[act2_end:])
+
+        act1_scenes = act1_text.count('INT.') + act1_text.count('EXT.')
+        act2_scenes = act2_text.count('INT.') + act2_text.count('EXT.')
+        act3_scenes = act3_text.count('INT.') + act3_text.count('EXT.')
+
+        # Calculate variance (low variance = consistent pacing)
+        scene_counts = [act1_scenes, act2_scenes, act3_scenes]
+        mean_scenes = sum(scene_counts) / 3
+        variance = sum((x - mean_scenes) ** 2 for x in scene_counts) / 3
+
+        consistent = variance < 10  # Threshold for consistency
+
+        return {
+            "total_scenes": scenes,
+            "act1_scenes": act1_scenes,
+            "act2_scenes": act2_scenes,
+            "act3_scenes": act3_scenes,
+            "pacing_consistent": consistent,
+            "variance": variance,
+            "sagging_middle": act2_scenes < (act1_scenes * 0.5)  # Act 2 has too few scenes
+        }
+
+    def _check_structure_rules(self, profile: StructureProfile,
+                               proportions: Dict, rising_action: Dict,
+                               opening_hook: Dict, coherence: float) -> List[Dict]:
+        """Check narrative structure against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "STRUCT.R001":
+                # Three-Act Structure Present
+                if not (profile.act_one_end and profile.act_two_end):
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Three-act structure not clearly defined",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STRUCT.R002":
+                # Inciting Incident Present
+                if not profile.inciting_incident:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Inciting incident not detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STRUCT.R003":
+                # Plot Point 1 Present
+                if not profile.plot_point_one:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Plot Point 1 not detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STRUCT.R004":
+                # Midpoint Present
+                if not profile.midpoint:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Midpoint not detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STRUCT.R005":
+                # Plot Point 2 Present
+                if not profile.plot_point_two:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Plot Point 2 not detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STRUCT.R006":
+                # Climax Present
+                if not profile.climax:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Climax not detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STRUCT.R007":
+                # Act Proportions Correct
+                if not self._proportions_match_paradigm(proportions):
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Act proportions off: {proportions['act1_percentage']:.0f}/{proportions['act2_percentage']:.0f}/{proportions['act3_percentage']:.0f} (should be ~25/50/25)",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STRUCT.R008":
+                # Rising Action/Escalation
+                if not rising_action["present"]:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No rising action or escalation detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STRUCT.R011":
+                # Opening Hook
+                if not opening_hook["present"]:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Opening hook not detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STRUCT.R015":
+                # Structural Coherence
+                if coherence < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Low structural coherence: {coherence:.0%}",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_structure_score(self, profile: StructureProfile,
+                                   proportions: Dict, coherence: float,
+                                   violations: List) -> float:
+        """Calculate overall structure architecture score."""
+        # Start at 90 (not 100 - no structure is perfect)
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Bonus for excellence (max +15, capped at 95)
+        if coherence > 0.9:
+            score += 5
+        elif coherence > 0.7:
+            score += 3
+
+        if self._proportions_match_paradigm(proportions):
+            score += 5
+
+        if profile.turning_points_count > 5:
+            score += 3
+        elif profile.turning_points_count > 3:
+            score += 2
+
+        # Cap at 95 (not 100 - always room for improvement)
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: StructureProfile,
+                          proportions: Dict, violations: List) -> str:
+        """Generate structure diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Narrative structure is well-architected with clear acts and beats"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Structure works but could be more precisely defined"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Structural architecture issues affecting narrative flow"
+        else:
+            level = "POOR"
+            summary = "Major structural construction problems throughout"
+
+        diagnosis = f"STRUCTURE {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.inciting_incident:
+            issues.append("no inciting incident")
+        if not profile.midpoint:
+            issues.append("missing midpoint")
+        if not self._proportions_match_paradigm(proportions):
+            issues.append("act proportions off")
+        if profile.structural_coherence_score < 0.6:
+            issues.append("low coherence")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: StructureProfile,
+                                 proportions: Dict) -> List[str]:
+        """Generate specific structure recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:  # Top 3 violations
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.inciting_incident:
+            recommendations.append("Establish clear inciting incident in first 10-15 pages")
+
+        if not profile.midpoint:
+            recommendations.append("Add midpoint (false victory/defeat) at page 50-60")
+
+        if not self._proportions_match_paradigm(proportions):
+            recommendations.append(f"Rebalance acts to 25/50/25 (currently {proportions['act1_percentage']:.0f}/{proportions['act2_percentage']:.0f}/{proportions['act3_percentage']:.0f})")
+
+        if profile.turning_points_count < 3:
+            recommendations.append("Add more turning points to create narrative momentum")
+
+        if not profile.opening_hook_present:
+            recommendations.append("Strengthen opening with immediate hook or action")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study three-act structure in acclaimed screenplays")
+            recommendations.append("Apply Field's paradigm worksheet to restructure")
+
+        return recommendations[:5]  # Return top 5
+
+    def export_structure_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export structure features for correlation/analysis.
+
+        Returns structured data with narrative structure metrics.
+        Useful for external indexing, correlation engines, or ML pipelines.
+
+        Args:
+            screenplay_text: Full screenplay text
+
+        Returns:
+            Dict with keys:
+                - page_metrics: Total pages and act breaks
+                - plot_points: All major structural beats
+                - proportions: Act proportions analysis
+                - coherence: Structural coherence metrics
+                - meta: Additional metadata
+        """
+        page_count = self._estimate_page_count(screenplay_text)
+        act_structure = self._detect_three_act_structure(screenplay_text, page_count)
+
+        inciting_incident = self._find_inciting_incident(screenplay_text, page_count)
+        plot_point_one = self._find_plot_point_one(screenplay_text, page_count)
+        midpoint = self._find_midpoint(screenplay_text, page_count)
+        plot_point_two = self._find_plot_point_two(screenplay_text, page_count)
+        climax = self._find_climax(screenplay_text, page_count)
+        resolution = self._find_resolution(screenplay_text, page_count)
+
+        act_proportions = self._analyze_act_proportions(act_structure, page_count)
+        coherence = self._calculate_structural_coherence(
+            act_structure, inciting_incident, plot_point_one,
+            midpoint, plot_point_two, climax
+        )
+
+        return {
+            "page_metrics": {
+                "total_pages": page_count,
+                "act_one_end": act_structure.get("act1_end"),
+                "act_two_end": act_structure.get("act2_end"),
+                "act_three_end": page_count
+            },
+            "plot_points": {
+                "inciting_incident": inciting_incident,
+                "plot_point_one": plot_point_one,
+                "midpoint": midpoint,
+                "plot_point_two": plot_point_two,
+                "climax": climax,
+                "resolution": resolution
+            },
+            "proportions": {
+                "act1_percentage": act_proportions["act1_percentage"],
+                "act2_percentage": act_proportions["act2_percentage"],
+                "act3_percentage": act_proportions["act3_percentage"],
+                "matches_paradigm": self._proportions_match_paradigm(act_proportions)
+            },
+            "coherence": {
+                "score": coherence,
+                "all_elements_present": coherence >= 1.0,
+                "major_gaps": coherence < 0.6
+            },
+            "meta": {
+                "source": "DrStructure",
+                "paradigm": "Syd Field 25/50/25"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrStructureArchitecture(DrStructure):
+    """Alias for compatibility with test framework."""
+    pass

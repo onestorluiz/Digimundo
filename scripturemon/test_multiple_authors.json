@@ -1,0 +1,38 @@
+{
+  "mckee": {
+    "success": true,
+    "time": 137.96182107925415,
+    "examples": 42,
+    "llm_length": 3363,
+    "quality": 1.0,
+    "author_mentioned": true,
+    "llm_preview": "📝 **Análise do Roteiro: Interpretação, Padrões, Problemas, Soluções e Contexto**\n\n**1. Interpretação:** Os dados quantitativos apresentados oferecem uma visão geral do diálogo no roteiro. Metrics como"
+  },
+  "mckee_dialogue": {
+    "success": true,
+    "time": 13.596740245819092,
+    "examples": 42,
+    "llm_length": 958,
+    "quality": 1.0,
+    "author_mentioned": true,
+    "llm_preview": "📝 **Análise do Roteiro: Interpretação, Padrões, Problemas, Soluções e Contexto**\n\n**1. Interpretação:** Os dados quantitativos apresentados oferecem uma visão geral do diálogo no roteiro. Metrics como"
+  },
+  "field": {
+    "success": true,
+    "time": 13.609210014343262,
+    "examples": 42,
+    "llm_length": 958,
+    "quality": 1.0,
+    "author_mentioned": true,
+    "llm_preview": "📝 **Análise do Roteiro: Interpretação, Padrões, Problemas, Soluções e Contexto**\n\n**1. Interpretação:** Os dados quantitativos apresentados oferecem uma visão geral do diálogo no roteiro. Metrics como"
+  },
+  "truby": {
+    "success": true,
+    "time": 13.596935987472534,
+    "examples": 42,
+    "llm_length": 958,
+    "quality": 1.0,
+    "author_mentioned": true,
+    "llm_preview": "📝 **Análise do Roteiro: Interpretação, Padrões, Problemas, Soluções e Contexto**\n\n**1. Interpretação:** Os dados quantitativos apresentados oferecem uma visão geral do diálogo no roteiro. Metrics como"
+  }
+}

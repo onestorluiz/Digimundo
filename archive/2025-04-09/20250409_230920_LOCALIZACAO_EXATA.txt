@@ -1,0 +1,26 @@
+
+Localizações Exatas para Implementação Manual:
+
+1. aprendizado_profundo.py deve ficar em:
+   messamon/digidata/digimons/scripturemon/core/aprendizado_profundo.py
+
+2. memoria_episodica.py deve ficar em:
+   messamon/digidata/digimons/scripturemon/memoria/memoria_episodica.py
+
+3. sistema_recompensa.py deve ficar em:
+   messamon/digidata/digimons/scripturemon/recompensa/sistema_recompensa.py
+
+4. Atualize dependencias.txt anterior adicionando (se ainda não estiverem):
+   tensorflow
+   numpy
+
+5. Edite integrador_ia.py já enviado anteriormente e adicione essas linhas:
+   from aprendizado_profundo import AprendizadoProfundo
+   from memoria_episodica import MemoriaEpisodica
+   from sistema_recompensa import SistemaRecompensa
+
+   class IntegradorIA:
+       def __init__(self):
+           self.aprendizado_profundo = AprendizadoProfundo()
+           self.memoria_episodica = MemoriaEpisodica()
+           self.sistema_recompensa = SistemaRecompensa()

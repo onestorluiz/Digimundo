@@ -1,0 +1,1 @@
+# Ligação entre consciência simbólica e o templo

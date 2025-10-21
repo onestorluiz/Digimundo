@@ -1,0 +1,150 @@
+# Worldbuilding Rules
+# Based on McKee (Story), Truby (Anatomy), Field (Screenplay), Seger (Making Good Script Great)
+# Focus: World established, setting consistency, world rules, geography, culture, visual details
+
+rules:
+  - id: WORLD.R001
+    title: "World Established in Opening"
+    severity: high
+    description: "World must be established in opening pages (first 10 pages)"
+    rationale: "McKee/Field: 'Audience must know where we are within first 10 pages' - opening establishes world, time, place"
+    check: "world_established == True"
+    fix: "Establish world in opening - show setting, time period, world rules clearly in first 10 pages"
+
+  - id: WORLD.R002
+    title: "Setting Clear and Specific"
+    severity: high
+    description: "Setting must be clear and specific in every scene"
+    rationale: "Field: 'Every scene needs specific location' - INT./EXT. headings, clear geography"
+    check: "setting_clear == True"
+    fix: "Use specific locations - INT./EXT. headings with clear place names, describe settings visually"
+
+  - id: WORLD.R003
+    title: "Setting Consistency"
+    severity: medium
+    description: "Setting must remain consistent throughout story"
+    rationale: "McKee: 'World doesn't change arbitrarily' - maintain internal consistency"
+    check: "setting_consistency >= 0.6"
+    fix: "Maintain setting consistency - track locations, avoid contradictions, keep world coherent"
+
+  - id: WORLD.R004
+    title: "World Rules Defined"
+    severity: high
+    description: "World rules must be clearly defined (especially for genre stories)"
+    rationale: "Truby: 'Fantasy/sci-fi needs clear world rules' - establish what's possible/impossible"
+    check: "world_rules_defined == True"
+    fix: "Define world rules clearly - explain how world works, what's possible, establish physics/magic/technology rules"
+
+  - id: WORLD.R005
+    title: "World Rules Consistent"
+    severity: critical
+    description: "World rules must remain consistent throughout story"
+    rationale: "McKee: 'World must be internally consistent' - no arbitrary rule changes"
+    check: "world_rules_consistent == True"
+    fix: "Maintain rule consistency - track established rules, eliminate contradictions, don't break your own rules"
+
+  - id: WORLD.R006
+    title: "Geography Clear"
+    severity: medium
+    description: "Geography and spatial relationships must be clear"
+    rationale: "McKee/Field: 'Audience must understand spatial relationships' - where things are relative to each other"
+    check: "geography_clear == True"
+    fix: "Clarify geography - establish spatial relationships, use directional language, help audience map the world"
+
+  - id: WORLD.R007
+    title: "Time Period Established"
+    severity: medium
+    description: "Time period must be clearly established"
+    rationale: "Field/Seger: 'Audience must know when story takes place' - historical/futuristic/contemporary clarity"
+    check: "time_period_established == True"
+    fix: "Establish time period - use visual cues, technology level, cultural references to clarify when story occurs"
+
+  - id: WORLD.R008
+    title: "Culture/Society Rules"
+    severity: low
+    description: "Culture and society rules should be defined"
+    rationale: "Truby: 'Culture defines how characters interact' - social norms, customs, traditions"
+    check: "culture_society_rules == True"
+    fix: "Define culture/society - show customs, traditions, social norms through character interactions"
+
+  - id: WORLD.R009
+    title: "Visual Worldbuilding"
+    severity: medium
+    description: "Worldbuilding should be visual (show don't tell)"
+    rationale: "Seger/McKee: 'Show the world, don't explain it' - visual storytelling over exposition"
+    check: "visual_worldbuilding_score >= 0.5"
+    fix: "Show worldbuilding visually - describe what we see, use action/visuals instead of explanation/dialogue"
+
+  - id: WORLD.R010
+    title: "Sensory Details"
+    severity: low
+    description: "Engage all five senses (not just visual)"
+    rationale: "Seger: 'Use all five senses for immersion' - sight, sound, smell, touch, taste"
+    check: "sensory_details_score >= 0.5"
+    fix: "Add sensory details - describe sounds, smells, textures, tastes, not just visual elements"
+
+  - id: WORLD.R011
+    title: "World Coherent"
+    severity: high
+    description: "World must be internally coherent and logical"
+    rationale: "McKee: 'World must have internal logic' - rules, geography, culture form coherent whole"
+    check: "world_coherent == True"
+    fix: "Ensure world coherence - check that all elements (rules, geography, culture) fit together logically"
+
+  - id: WORLD.R012
+    title: "Avoid Confusing World"
+    severity: critical
+    description: "World should not be confusing to audience"
+    rationale: "McKee/Field: 'Clarity essential' - unclear rules/geography loses audience"
+    check: "confusing_world_detected == False"
+    fix: "Clarify confusing elements - explain rules clearly, establish geography, eliminate confusion"
+
+  - id: WORLD.R013
+    title: "Avoid Inconsistent Rules"
+    severity: critical
+    description: "Avoid contradictions in world logic"
+    rationale: "McKee: 'Consistency critical' - contradictions break audience immersion"
+    check: "inconsistent_rules_detected == False"
+    fix: "Fix inconsistencies - track world rules throughout script, eliminate contradictions"
+
+  - id: WORLD.R014
+    title: "Avoid Generic World"
+    severity: medium
+    description: "World should not be generic or cliché"
+    rationale: "McKee: 'Distinctive world engages audience' - avoid derivative/unoriginal settings"
+    check: "generic_world_detected == False"
+    fix: "Add distinctiveness - find fresh angle on familiar settings, create unique world elements"
+
+  - id: WORLD.R015
+    title: "World Unique and Distinctive"
+    severity: low
+    description: "World should be unique and memorable"
+    rationale: "McKee/Truby: 'Distinctive world enhances story' - memorable setting adds value"
+    check: "world_unique == True"
+    fix: "Create distinctive world - add unique elements, fresh perspective, memorable details that set your world apart"
+
+# Analysis prompts for LLM-based deep analysis
+analysis_prompts:
+  world_establishment:
+    prompt: "Analyze how effectively the world is established in the opening pages. Does the audience clearly understand where and when the story takes place?"
+    focus: ["setting clarity", "time period", "world rules introduction"]
+
+  setting_consistency:
+    prompt: "Analyze setting consistency throughout the screenplay. Does the world remain internally consistent?"
+    focus: ["location consistency", "world rules consistency", "contradictions"]
+
+  world_rules:
+    prompt: "Analyze world rules definition and consistency. Are the rules of how this world works clearly established and maintained?"
+    focus: ["physics/magic rules", "technology level", "what's possible/impossible", "rule violations"]
+
+  geography_clarity:
+    prompt: "Analyze geography and spatial relationships. Can the audience map this world mentally?"
+    focus: ["location relationships", "directional clarity", "spatial understanding"]
+
+  visual_worldbuilding:
+    prompt: "Analyze visual worldbuilding approach. Is the world shown through visuals/action or explained through dialogue/exposition?"
+    focus: ["show vs tell", "visual details", "cinematic worldbuilding", "exposition dumps"]
+
+  sensory_immersion:
+    prompt: "Analyze sensory details. Does the screenplay engage all five senses to create immersive world?"
+    focus: ["sight", "sound", "smell", "touch", "taste", "sensory richness"]

@@ -1,0 +1,27 @@
+✅ Chave ativa: openai
+✅ Chave ativa: tmdb
+✅ Chave ativa: omdb
+⚠️ Chave não preenchida: google_books
+⚠️ Chave não preenchida: unsplash
+✅ Chave ativa: pexels
+⚠️ Chave não preenchida: notion
+⚠️ Chave não preenchida: youtube
+⚠️ Chave não preenchida: europeana
+✅ Chave ativa: wikipedia
+✅ Chave ativa: wikidata
+✅ Chave ativa: wikimedia_commons
+✅ Chave ativa: project_gutenberg
+✅ Chave ativa: archive_org
+✅ Chave ativa: dblp
+✅ Chave ativa: arxiv
+✅ Chave ativa: cc_search
+✅ Chave ativa: wikipedia_lang
+✅ Chave ativa: digipool
+✅ Chave ativa: chat_nucleo
+✅ Chave ativa: espelho_simbolico
+✅ Chave ativa: tora_integradora
+✅ Chave ativa: sistema_guardioes
+✅ Chave ativa: interface_dinamica
+✅ Chave ativa: backup_externo
+✅ Chave ativa: explorador_extensao
+✅ Chave ativa: scripturemon_autobusca

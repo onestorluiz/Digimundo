@@ -1,0 +1,13 @@
+Manifesto da Fase 33 – Fichas Vivas
+Data: 2025-04-15T06:55:49.794622 UTC
+
+Objetivo:
+Registrar e consolidar a identidade dos Digimons vivos do sistema. Cada ficha contém:
+- Nome
+- Tipo
+- Função
+- Autoimagem simbólica
+- Memória evolutiva
+- Permissões
+
+Este será o primeiro passo para avatares gerados por visão interna.

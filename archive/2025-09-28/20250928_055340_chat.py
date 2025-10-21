@@ -1,0 +1,110 @@
+from __future__ import annotations
+import json
+from dataclasses import dataclass
+from typing import List, Optional
+from pathlib import Path
+try:
+    import requests
+except Exception:
+    requests = None
+
+from ..analysis.theory import TheoryComparator
+from ..analysis.script_doctor import ScriptDoctor
+from ..learning.learning_lite import LearningLite
+from ..core.coach import DoctorCoach
+
+@dataclass
+class ChatConfig:
+    model: str = "llama3.1:8b"
+    endpoint: str = "http://127.0.0.1:11434/api/generate"
+    timeout: int = 60
+    theory_dir: str = "data/theory"
+
+class ScripturemonChat:
+    def __init__(self, cfg: ChatConfig = ChatConfig(), genre: str = "generic"):
+        self.cfg = cfg
+        self.doctor = ScriptDoctor(use_learning=True, genre=genre)
+        self.learn = LearningLite()
+        self.theory = TheoryComparator(Path(self.cfg.theory_dir))
+        try: self.theory.build()
+        except Exception: pass
+        self.coach = DoctorCoach(genre=genre, theory_dir=self.cfg.theory_dir, ollama_model=self.cfg.model, endpoint=self.cfg.endpoint)
+
+    def _ollama(self, prompt: str) -> str:
+        if requests is None: return "(Ollama indisponível) " + prompt[::-1]
+        try:
+            r = requests.post(self.cfg.endpoint, json={"model": self.cfg.model, "prompt": prompt, "stream": False}, timeout=self.cfg.timeout)
+            j = r.json()
+            return j.get("response") or j.get("completion") or "(sem resposta)"
+        except Exception as e:
+            return f"(erro Ollama: {e})"
+
+    def _format_context(self, user_text: str) -> str:
+        rich = self.learn.enrich_prompt_pro("[USER PROMPT]", q=user_text, k_beats=3, k_arch=2, k_chars=2)
+        hits = self.theory.compare(user_text, k=3) if self.theory else []
+        if hits:
+            frag = "\n".join([f"- {h.doc_id}: {h.excerpt[:200]}..." for h in hits])
+            rich += "\n\n[THEORY]\n" + frag
+        return rich
+
+    def chat_loop(self):
+        print("✨ Scripturemon Chat — /help para comandos, Ctrl+C para sair.")
+        while True:
+            try:
+                inp = input("> ").strip()
+            except (EOFError, KeyboardInterrupt):
+                print("\nAté logo!"); break
+            if not inp: continue
+            if inp.startswith('/'):
+                if inp in ("/quit","/exit"): break
+                if inp == "/help":
+                    print("Comandos: /analyze <arquivo>, /compare <arquivo>, /coach <arquivo>, /learn <arquivo>, /stats, /quit"); continue
+                if inp.startswith("/analyze "):
+                    path = inp.split(" ",1)[1].strip()
+                    try:
+                        txt = Path(path).read_text(encoding="utf-8", errors="replace")
+                        sa = self.doctor.analyze_script(txt, screenplay_name=Path(path).stem)
+                        print(json.dumps(sa.to_dict(), ensure_ascii=False, indent=2))
+                    except Exception as e: print("Erro:", e)
+                    continue
+                if inp.startswith("/compare "):
+                    path = inp.split(" ",1)[1].strip()
+                    try:
+                        txt = Path(path).read_text(encoding="utf-8", errors="replace")
+                        stc = self.doctor.analyze_save_the_cat(txt)
+                        tips = self.learn.recommend_for({"beats":[b.__dict__ for b in stc.beats], "pacing_score":0.0, "dialogue_ratio":0.0})
+                        print("Sugestões:", json.dumps(tips, ensure_ascii=False, indent=2))
+                    except Exception as e: print("Erro:", e)
+                    continue
+                if inp.startswith("/coach "):
+                    path = inp.split(" ",1)[1].strip()
+                    try:
+                        txt = Path(path).read_text(encoding="utf-8", errors="replace")
+                        plan, _ = self.coach.coach(txt, screenplay_name=Path(path).stem)
+                        print(json.dumps({"plan": plan.__dict__}, ensure_ascii=False, indent=2))
+                    except Exception as e: print("Erro:", e)
+                    continue
+                if inp.startswith("/learn "):
+                    path = inp.split(" ",1)[1].strip()
+                    try:
+                        txt = Path(path).read_text(encoding="utf-8", errors="replace")
+                        sa = self.doctor.analyze_script(txt, screenplay_name=Path(path).stem)
+                        self.learn.learn_from_analysis(sa, Path(path).stem)
+                        print("Aprendido com", path)
+                    except Exception as e: print("Erro:", e)
+                    continue
+                if inp == "/stats":
+                    print(json.dumps(self.learn.get_statistics(), ensure_ascii=False, indent=2)); continue
+
+            ctx = self._format_context(inp)
+            prompt = ('''You are Scripturemon, a unified Script Doctor and Learning system.
+[CONTEXT]
+''' + ctx + '''
+[USER]
+''' + inp + '''
+[INSTRUCTIONS]
+- Use Portuguese when the user speaks Portuguese.
+- Analyze the user's idea or script; compare with theory; give concrete notes and alternatives.
+- Ask one focused question to advance the draft.
+''')
+            print(self._ollama(prompt))

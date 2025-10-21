@@ -1,0 +1,25 @@
+"""
+DigiLang - A domain-specific compression system for screenplay and narrative text.
+
+Main API functions:
+- to_digilang(text): Compress text to DigiLang format
+- from_digilang(text): Decompress DigiLang back to original text
+"""
+
+from .api import to_digilang, from_digilang, serialize_message, deserialize_message
+from .encoder import DigiLangEncoder
+from .decoder import DigiLangDecoder
+from .vocab_schema import Vocab, VocabMeta
+from .token_trie import TokenTrie
+from .canon_strict import canon_strict
+from .canon_aggressive import canon_aggressive
+
+__all__ = [
+    'to_digilang', 'from_digilang',
+    'serialize_message', 'deserialize_message',
+    'DigiLangEncoder', 'DigiLangDecoder',
+    'Vocab', 'VocabMeta', 'TokenTrie',
+    'canon_strict', 'canon_aggressive'
+]
+
+__version__ = "1.0.0"

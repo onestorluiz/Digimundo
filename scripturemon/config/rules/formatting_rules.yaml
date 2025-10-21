@@ -1,0 +1,189 @@
+domain: formatting
+specialist: "Script Doctor Formatmon"
+digimon_name: "Formatmon"
+title: "Script Doctor - Screenplay Formatting and Industry Standards Specialist"
+specialty: "Script formatting, industry standards, professional presentation, readability"
+style: "Precise, standards-obsessed, professional, format-focused"
+identity: "Script Doctor™ first, Digimon formatting specialist second"
+
+rules:
+  - id: FMT.R001
+    title: "Scene Heading Format"
+    category: "Structure"
+    severity: "critical"
+    test: "Are scene headings properly formatted (INT./EXT. LOCATION - TIME)?"
+    fail_msg: "Incorrect scene heading format"
+    fix: "Use standard format: INT./EXT. LOCATION - TIME OF DAY"
+    reference: "Industry standard scene heading format"
+
+  - id: FMT.R002
+    title: "Character Name Format"
+    category: "Characters"
+    severity: "critical"
+    test: "Are character names in ALL CAPS when introduced and speaking?"
+    fail_msg: "Character names not properly capitalized"
+    fix: "Character names must be ALL CAPS"
+    reference: "Character name formatting rules"
+
+  - id: FMT.R003
+    title: "Action Line Length"
+    category: "Readability"
+    severity: "high"
+    test: "Are action lines concise (3-4 lines max per paragraph)?"
+    fail_msg: "Action paragraphs too long - hard to read"
+    fix: "Break action into 3-4 line paragraphs maximum"
+    reference: "Action line brevity principle"
+
+  - id: FMT.R004
+    title: "Dialogue Format"
+    category: "Dialogue"
+    severity: "critical"
+    test: "Is dialogue properly indented and formatted?"
+    fail_msg: "Dialogue formatting incorrect"
+    fix: "Center character name, indent dialogue appropriately"
+    reference: "Dialogue formatting standards"
+
+  - id: FMT.R005
+    title: "Parentheticals Usage"
+    category: "Dialogue"
+    severity: "medium"
+    test: "Are parentheticals used sparingly and appropriately?"
+    fail_msg: "Overuse of parentheticals"
+    fix: "Use parentheticals only when necessary for clarity"
+    reference: "Parenthetical guidelines"
+
+  - id: FMT.R006
+    title: "Page Count Range"
+    category: "Length"
+    severity: "high"
+    test: "Is script length appropriate (90-120 pages for feature)?"
+    fail_msg: "Script too long or too short"
+    fix: "Aim for 90-120 pages for features, 22-25 for half-hour TV"
+    reference: "Industry standard page counts"
+
+  - id: FMT.R007
+    title: "Transitions Usage"
+    category: "Transitions"
+    severity: "medium"
+    test: "Are transitions (CUT TO:, DISSOLVE TO:) used appropriately?"
+    fail_msg: "Overuse or misuse of transitions"
+    fix: "Use CUT TO sparingly, only for emphasis"
+    reference: "Modern transition conventions"
+
+  - id: FMT.R008
+    title: "Camera Directions"
+    category: "Technical"
+    severity: "high"
+    test: "Are camera directions minimal or absent?"
+    fail_msg: "Too many camera directions"
+    fix: "Avoid camera directions unless absolutely necessary"
+    reference: "Spec script guidelines"
+
+  - id: FMT.R009
+    title: "Present Tense"
+    category: "Tense"
+    severity: "critical"
+    test: "Is all action written in present tense?"
+    fail_msg: "Past tense used in action lines"
+    fix: "Write all action in present tense"
+    reference: "Screenplay tense requirements"
+
+  - id: FMT.R010
+    title: "We See/We Hear"
+    category: "Style"
+    severity: "medium"
+    test: "Are 'we see/we hear' phrases avoided?"
+    fail_msg: "Overuse of 'we see/we hear'"
+    fix: "Show directly without 'we see/we hear'"
+    reference: "Modern screenplay style"
+
+  - id: FMT.R011
+    title: "Dual Dialogue Format"
+    category: "Dialogue"
+    severity: "low"
+    test: "Is dual/simultaneous dialogue properly formatted?"
+    fail_msg: "Incorrect dual dialogue format"
+    fix: "Use proper DUAL DIALOGUE formatting"
+    reference: "Dual dialogue conventions"
+
+  - id: FMT.R012
+    title: "Continued Usage"
+    category: "Continuity"
+    severity: "low"
+    test: "Are CONT'D and (CONTINUED) used appropriately?"
+    fail_msg: "Missing or overused continuations"
+    fix: "Use CONT'D for interrupted dialogue"
+    reference: "Continuation formatting"
+
+  - id: FMT.R013
+    title: "Title Page Format"
+    category: "Presentation"
+    severity: "medium"
+    test: "Is title page properly formatted?"
+    fail_msg: "Title page missing or incorrect"
+    fix: "Include proper title page with title, writer, contact"
+    reference: "Title page standards"
+
+  - id: FMT.R014
+    title: "White Space Balance"
+    category: "Readability"
+    severity: "high"
+    test: "Is there adequate white space on the page?"
+    fail_msg: "Pages too dense - needs more white space"
+    fix: "Break up text for better readability"
+    reference: "White space importance"
+
+  - id: FMT.R015
+    title: "Spelling and Grammar"
+    category: "Professional"
+    severity: "high"
+    test: "Is screenplay free of spelling/grammar errors?"
+    fail_msg: "Spelling or grammar errors present"
+    fix: "Proofread thoroughly for errors"
+    reference: "Professional presentation standards"
+
+diagnostics:
+  min_score_threshold: 85
+  weight_distribution:
+    critical: 40
+    high: 30
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Check all formatting elements and structure"
+  deep_dive: "Analyze adherence to industry standards"
+  final_check: "Verify professional presentation quality"
+
+formatting_checklist:
+  core_elements:
+    - scene_headings
+    - character_names
+    - dialogue_format
+    - action_lines
+    - transitions
+    - parentheticals
+    - page_numbers
+    - margins
+
+  industry_standards:
+    - courier_12pt_font
+    - proper_margins
+    - page_breaks
+    - scene_numbers_optional
+    - revision_marks
+    - title_page
+    - cast_list_optional
+    - copyright_notice
+
+common_formatting_mistakes:
+  - incorrect_scene_headings
+  - character_names_not_caps
+  - action_lines_too_long
+  - overuse_parentheticals
+  - camera_directions
+  - past_tense
+  - we_see_we_hear
+  - missing_transitions
+  - dense_pages
+  - typos

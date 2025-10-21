@@ -1,0 +1,1535 @@
+"""
+Script Doctor Climaxmon - Climax Analysis Specialist
+A Script Doctor™ in Digimon form specializing in ultimate confrontation, peak tension, crisis vs climax, theme expression at climax.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class ClimaxElement:
+    """Individual climax element."""
+    element_type: str  # "ultimate_confrontation", "peak_tension", "theme_expression", "crisis_moment", etc.
+    page_number: int
+    description: str
+    intensity: float  # 0-1
+    present: bool
+    notes: str
+
+
+@dataclass
+class ClimaxProfile:
+    """Overall climax analysis."""
+    climax_present: bool
+    climax_page: int
+    climax_placement_score: float  # Should be in Act 3 (85-95% range)
+    ultimate_confrontation: bool
+    protagonist_antagonist_face_off: bool
+    peak_tension_achieved: bool
+    theme_expressed_at_climax: bool
+    stakes_maximized: bool
+    character_transformation_moment: bool
+    crisis_vs_climax_distinct: bool
+    resolution_setup: bool
+    all_forces_converge: bool
+    emotional_peak_achieved: bool
+    intellectual_peak_achieved: bool
+    moral_choice_at_climax: bool
+    anticlimax_detected: bool  # PENALTY
+    weak_climax_detected: bool  # PENALTY
+    climax_too_early: bool  # PENALTY
+    climax_too_late: bool  # PENALTY
+    climax_intensity: float  # 0-1
+    climax_satisfaction: float  # 0-1
+    overall_climax_quality: float
+
+
+class DrClimax:
+    """
+    Script Doctor Climaxmon - The Climax Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing ultimate confrontation,
+    peak tension, crisis vs climax distinction, theme expression at climax, and stakes maximization.
+
+    Identity: Script Doctor first, Digimon climax specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Climaxmon with rules and configuration."""
+        self.name = "Script Doctor Climaxmon"
+        self.digimon_name = "Climaxmon"
+        self.title = "Script Doctor - Climax Analysis Specialist"
+        self.specialty = "Ultimate confrontation, peak tension, crisis vs climax, theme expression at climax, stakes maximization"
+        self.identity = "I am Script Doctor Climaxmon, a professional Script Doctor™ specializing in climax analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "climax_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - CLIMAX SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Climax as ultimate confrontation and controlling idea expression
+            "McKee Story climax ultimate confrontation protagonist antagonist final battle peak",
+            "McKee Story climax controlling idea theme expressed proved through action",
+            "McKee Story climax crisis decision moral choice character under pressure",
+            "McKee Story climax resolution all forces converge story lines unite",
+            "McKee Story climax stakes maximized highest risk everything on line",
+            "McKee Story climax protagonist changed transformed arc complete moment",
+            "McKee Story climax emotional intellectual physical peak convergence apex",
+            "McKee Story climax satisfying earned inevitable surprising organic resonance",
+
+            # McKee Story - CRISIS, CLIMAX & GAP RESOLUTION (ultra-specific manual reading)
+            "McKee Story crisis decision impossible choice character forced moral dilemma",
+            "McKee Story climax action crisis choice result peak moment consequence",
+            "McKee Story story climax placement 75-85 percent through optimal timing",
+            "McKee Story controlling idea climax proven theme expressed action demonstrates",
+            "McKee Story gap closes climax resolution protagonist achieves desire outcome",
+
+            # Truby Anatomy - Final battle and self-revelation climax
+            "Truby Anatomy climax final battle confrontation opponent face to face",
+            "Truby Anatomy climax self-revelation moment character sees truth transformation",
+            "Truby Anatomy climax moral decision choice defines character under pressure",
+            "Truby Anatomy climax theme expressed through action not dialogue proof",
+            "Truby Anatomy climax character web all relationships resolved converge",
+            "Truby Anatomy climax desire line satisfied want achieved or transformed",
+            "Truby Anatomy climax premise proved argument won thematic statement clear",
+
+            # Field Screenplay - Act 3 climax structure and timing
+            "Field Screenplay climax Act 3 final confrontation pages 85-100 placement",
+            "Field climax resolution protagonist antagonist face off showdown final",
+            "Field climax emotional peak dramatic apex highest intensity moment",
+            "Field climax all plot points setup payoff resolved satisfaction",
+            "Field climax character arc complete transformation shown not told",
+            "Field climax stakes maximized everything protagonist worked for risk",
+            "Field climax crisis vs climax distinction dark night soul then climax",
+
+            # Snyder Save the Cat - Finale beat and transformation proof
+            "Snyder Save the Cat finale beat climax pages 85-110 resolution",
+            "Snyder final image vs opening image climax transformation proof visual",
+            "Snyder gathering team storming castle finale beat final push",
+            "Snyder all is lost dark night soul crisis NOT climax distinction",
+            "Snyder synthesis thesis antithesis unite climax new person emerges",
+            "Snyder dig deep down bury weakness embrace strength climax choice",
+            "Snyder high tower surprise climax unexpected satisfying inevitable payoff",
+
+            # Vogler Writer's Journey - Ordeal, resurrection, and supreme climax
+            "Vogler Writer's Journey ordeal supreme climax death rebirth transformation",
+            "Vogler resurrection final test climax hero reborn changed death ego",
+            "Vogler reward seizing sword climax goal achieved but at cost",
+            "Vogler road back climax pursuit chase consequence choice made",
+            "Vogler return elixir climax proof change wisdom gained share",
+            "Vogler atonement father climax confronting power source ultimate test",
+
+            # Campbell Hero 1000 Faces - Apotheosis and ultimate boon climax
+            "Campbell Hero 1000 Faces apotheosis climax hero becomes god-like peak",
+            "Campbell ultimate boon climax goal achieved wisdom treasure gained",
+            "Campbell final battle dragon slaying climax defeating ultimate enemy",
+            "Campbell return threshold crossing climax bringing boon home world",
+            "Campbell atonement father climax confronting creator source power truth",
+            "Campbell master two worlds climax balance inner outer freedom live",
+
+            # Aristotle Poetics - Peripeteia, anagnorisis, and catharsis
+            "Aristotle Poetics peripeteia reversal fortune climax unexpected turn destiny",
+            "Aristotle anagnorisis recognition climax character sees truth revelation moment",
+            "Aristotle catharsis emotional release climax pity fear purge audience",
+            "Aristotle necessity probability climax inevitable logic cause effect organic",
+            "Aristotle unity action climax all parts converge single complete whole",
+
+            # Egri Art Dramatic Writing - Premise proved at climax
+            "Egri Art Dramatic Writing climax premise proved thematic statement clear",
+            "Egri climax character reaches conclusion inevitable growth pole leap",
+            "Egri climax unity of opposites resolved conflict synthesized transcended",
+            "Egri climax orchestration all contrasting characters clash converge finale",
+            "Egri climax static vs jumping character transformation complete proof",
+
+            # Seger Making Good Script Great - All storylines converge
+            "Seger Making Good Script Great climax pages 90-100 all lines converge",
+            "Seger climax emotional intellectual physical convergence total engagement peak",
+            "Seger climax all subplots resolved tied together unified satisfying",
+            "Seger climax character arc complete transformation visible proof behavior",
+            "Seger climax stakes maximized highest risk everything on line now",
+            "Seger climax payoff all setups resolved planted paid off satisfaction",
+            "Seger climax anticlimax avoid disappointing weak premature insufficient peak",
+
+            # Weiland Creating Character Arcs - Moment of truth at climax
+            "Weiland Creating Character Arcs climax moment truth character acts on truth",
+            "Weiland climax lie believed defeated truth embraced new person",
+            "Weiland positive change arc climax embracing truth overcoming lie weakness",
+            "Weiland flat arc climax proving truth to world changing others",
+            "Weiland negative arc climax embracing lie tragic fall corruption complete",
+            "Weiland third plot point crisis then climax distinction dark night first",
+
+            # Goldman Adventures Screen Trade - Button and payoff climax
+            "Goldman Adventures Screen Trade climax button perfect ending payoff resonance",
+            "Goldman climax all setups planted earlier paid off satisfaction earned",
+            "Goldman climax protagonist choice behavior reveals character transformation proof",
+            "Goldman nobody knows anything climax surprise inevitable satisfying unexpected",
+            "Goldman climax structure pattern meaning through juxtaposition not statement",
+
+            # Rhimes Year of Yes - Peak drama and emotional climax
+            "Rhimes Year of Yes climax peak drama highest emotional stakes intensity",
+            "Rhimes climax authentic moment truth vulnerability character revealed real",
+            "Rhimes climax season finale all threads converge payoff satisfaction",
+            "Rhimes climax relationship dynamics resolved transformed chemistry peak",
+
+            # Mamet Three Uses of the Knife - Dramatic question answered
+            "Mamet Three Uses of the Knife climax dramatic question answered satisfied",
+            "Mamet climax action reveals character choice behavior not words proof",
+            "Mamet climax essential task completed or failed protagonist pursuit end",
+            "Mamet climax structure pattern meaning through juxtaposition organic earned",
+
+            # Mackendrick On Film-Making - Visual climax peak
+            "Mackendrick On Film-Making climax visual peak image sequence apex",
+            "Mackendrick climax show don't tell visual storytelling behavior reveals",
+            "Mackendrick climax editing juxtaposition creates meaning emotional impact",
+            "Mackendrick climax image speaks action behavior reveals character transformation",
+
+            # General climax concepts - Comprehensive coverage
+            "climax ultimate confrontation final battle protagonist antagonist face off",
+            "climax peak tension highest stakes everything on line maximum pressure",
+            "climax theme expressed controlling idea premise proved action not words",
+            "climax character transformation self-revelation arc complete proof behavior",
+            "climax crisis decision moral choice character defining moment pressure",
+            "climax all forces converge story lines unite resolution setup",
+            "climax emotional peak catharsis pity fear release engagement total",
+            "climax intellectual peak understanding realization truth revelation dawns",
+            "climax physical peak action apex highest intensity visual spectacular",
+            "crisis vs climax distinction dark night soul first then climax",
+            "anticlimax weak disappointing insufficient premature peak penalty failure",
+            "climax placement timing Act 3 pages 85-100 structural positioning",
+            "climax satisfaction earned inevitable surprising organic resonance perfect",
+            "climax stakes maximized highest risk reward everything protagonist values",
+            "climax payoff all setups resolved planted paid off satisfaction complete"
+        ]
+
+        # Climax analysis patterns (bilingual: EN + PT)
+
+        # Climax presence markers
+        self.climax_markers = [
+            # English
+            "climax", "final confrontation", "ultimate battle", "final showdown",
+            "peak moment", "highest stakes", "final face-off", "ultimate test",
+            "final challenge", "supreme moment", "apex", "culmination",
+            # Portuguese
+            "clímax", "confronto final", "batalha final", "confronto supremo",
+            "momento pico", "apostas máximas", "cara a cara final", "teste final",
+            "desafio final", "momento supremo", "ápice", "culminação"
+        ]
+
+        # Ultimate confrontation markers (protagonist vs antagonist)
+        self.ultimate_confrontation_markers = [
+            # English
+            "final battle", "ultimate fight", "final showdown", "face to face",
+            "confronts antagonist", "faces enemy", "final encounter",
+            "ultimate confrontation", "final clash", "decisive battle",
+            # Portuguese
+            "batalha final", "luta final", "confronto final", "cara a cara",
+            "confronta antagonista", "enfrenta inimigo", "encontro final",
+            "confrontação final", "embate final", "batalha decisiva"
+        ]
+
+        # Peak tension markers (highest dramatic intensity)
+        self.peak_tension_markers = [
+            # English
+            "peak tension", "highest stakes", "maximum pressure", "ultimate risk",
+            "everything at stake", "do or die", "now or never", "last chance",
+            "final moment", "critical juncture", "breaking point", "tipping point",
+            # Portuguese
+            "tensão máxima", "apostas máximas", "pressão máxima", "risco supremo",
+            "tudo em jogo", "fazer ou morrer", "agora ou nunca", "última chance",
+            "momento final", "junção crítica", "ponto de ruptura", "ponto de virada"
+        ]
+
+        # Theme expression markers (theme proved at climax)
+        self.theme_expression_markers = [
+            # English
+            "theme expressed", "controlling idea", "premise proved", "moral lesson",
+            "central truth", "story's meaning", "thematic statement", "theme demonstrated",
+            "what story is about", "ultimate meaning", "philosophical point",
+            # Portuguese
+            "tema expresso", "ideia controladora", "premissa provada", "lição moral",
+            "verdade central", "significado da história", "declaração temática", "tema demonstrado",
+            "sobre o que é a história", "significado final", "ponto filosófico"
+        ]
+
+        # Character transformation markers (hero changed)
+        self.character_transformation_markers = [
+            # English
+            "transformation", "character arc complete", "hero changed", "self-revelation",
+            "realizes truth", "becomes", "evolved", "transformed", "growth complete",
+            "learns lesson", "understanding achieved", "metamorphosis", "rebirth",
+            # Portuguese
+            "transformação", "arco do personagem completo", "herói mudado", "auto-revelação",
+            "percebe verdade", "torna-se", "evoluiu", "transformado", "crescimento completo",
+            "aprende lição", "compreensão alcançada", "metamorfose", "renascimento"
+        ]
+
+        # Stakes maximized markers (highest risk/reward)
+        self.stakes_maximized_markers = [
+            # English
+            "stakes maximized", "everything on line", "all or nothing", "highest risk",
+            "lose everything", "win everything", "life or death", "fate of world",
+            "ultimate cost", "maximum stakes", "everything depends", "final gamble",
+            # Portuguese
+            "apostas maximizadas", "tudo na linha", "tudo ou nada", "risco máximo",
+            "perder tudo", "ganhar tudo", "vida ou morte", "destino do mundo",
+            "custo final", "apostas máximas", "tudo depende", "aposta final"
+        ]
+
+        # Crisis vs climax markers (crisis comes before climax)
+        self.crisis_markers = [
+            # English
+            "crisis", "dark night of soul", "all is lost", "lowest point",
+            "darkest hour", "breaking point", "despair", "seems impossible",
+            "defeat imminent", "hope lost", "rock bottom", "dire straits",
+            # Portuguese
+            "crise", "noite escura da alma", "tudo perdido", "ponto mais baixo",
+            "hora mais escura", "ponto de ruptura", "desespero", "parece impossível",
+            "derrota iminente", "esperança perdida", "fundo do poço", "situação terrível"
+        ]
+
+        # Resolution setup markers (climax leads to resolution)
+        self.resolution_setup_markers = [
+            # English
+            "leads to resolution", "sets up ending", "final pieces", "resolution begins",
+            "aftermath", "consequences", "results in", "resolves conflict",
+            "closes story", "wraps up", "ties together", "brings closure",
+            # Portuguese
+            "leva à resolução", "prepara final", "peças finais", "resolução começa",
+            "consequências", "resultados", "resolve conflito",
+            "fecha história", "conclui", "une tudo", "traz fechamento"
+        ]
+
+        # All forces converge markers (everything comes together)
+        self.converge_markers = [
+            # English
+            "all forces converge", "everything comes together", "all threads unite",
+            "all storylines meet", "everyone arrives", "final gathering",
+            "all elements align", "forces collide", "convergence", "confluence",
+            # Portuguese
+            "todas forças convergem", "tudo se une", "todos fios se juntam",
+            "todas tramas se encontram", "todos chegam", "reunião final",
+            "todos elementos se alinham", "forças colidem", "convergência", "confluência"
+        ]
+
+        # Moral choice markers (ethical decision at climax)
+        self.moral_choice_markers = [
+            # English
+            "moral choice", "ethical decision", "right vs wrong", "chooses path",
+            "decisive choice", "moral dilemma", "values tested", "must decide",
+            "character choice", "defining moment", "moral test", "ethical crossroads",
+            # Portuguese
+            "escolha moral", "decisão ética", "certo vs errado", "escolhe caminho",
+            "escolha decisiva", "dilema moral", "valores testados", "deve decidir",
+            "escolha do personagem", "momento definitivo", "teste moral", "encruzilhada ética"
+        ]
+
+        # Emotional peak markers
+        self.emotional_peak_markers = [
+            # English
+            "emotional peak", "catharsis", "emotional release", "tears", "joy",
+            "heartbreak", "triumph", "emotional apex", "feeling culmination",
+            "emotional payoff", "moved to tears", "emotional climax",
+            # Portuguese
+            "pico emocional", "catarse", "liberação emocional", "lágrimas", "alegria",
+            "desgosto", "triunfo", "ápice emocional", "culminação emocional",
+            "recompensa emocional", "movido às lágrimas", "clímax emocional"
+        ]
+
+        # Intellectual peak markers (understanding achieved)
+        self.intellectual_peak_markers = [
+            # English
+            "realizes", "understands", "discovers truth", "revelation", "epiphany",
+            "sees clearly", "finally knows", "truth revealed", "mystery solved",
+            "comprehends", "insight", "enlightenment", "awareness achieved",
+            # Portuguese
+            "percebe", "compreende", "descobre verdade", "revelação", "epifania",
+            "vê claramente", "finalmente sabe", "verdade revelada", "mistério resolvido",
+            "compreende", "insight", "iluminação", "consciência alcançada"
+        ]
+
+        # Anticlimax markers (PENALTY - disappointing climax)
+        self.anticlimax_markers = [
+            # English
+            "anticlimax", "disappointing", "underwhelming", "weak ending",
+            "fizzles out", "peters out", "falls flat", "unsatisfying",
+            "letdown", "anticlimactic", "deflating", "underwhelms",
+            # Portuguese
+            "anticlímax", "decepcionante", "fraco", "final fraco",
+            "se dissipa", "se desfaz", "cai sem graça", "insatisfatório",
+            "decepção", "anticlimático", "deflacionante", "decepciona"
+        ]
+
+        # Weak climax markers (PENALTY - insufficient intensity)
+        self.weak_climax_markers = [
+            # English
+            "weak climax", "lacks intensity", "not enough stakes", "easy victory",
+            "too simple", "no challenge", "unrealistic", "deus ex machina",
+            "unearned victory", "convenient solution", "weak payoff",
+            # Portuguese
+            "clímax fraco", "falta intensidade", "apostas insuficientes", "vitória fácil",
+            "simples demais", "sem desafio", "irrealista", "deus ex machina",
+            "vitória não merecida", "solução conveniente", "recompensa fraca"
+        ]
+
+        # Climax too early markers (PENALTY - premature peak)
+        self.climax_too_early_markers = [
+            # English
+            "climax too early", "premature peak", "peaks too soon",
+            "Act 2 climax", "middle climax", "early resolution",
+            # Portuguese
+            "clímax cedo demais", "pico prematuro", "atinge pico cedo",
+            "clímax Ato 2", "clímax no meio", "resolução precoce"
+        ]
+
+        # Climax too late markers (PENALTY - delayed too much)
+        self.climax_too_late_markers = [
+            # English
+            "climax too late", "delayed climax", "drags", "takes too long",
+            "exhausted audience", "overstays welcome", "too prolonged",
+            # Portuguese
+            "clímax tarde demais", "clímax atrasado", "arrasta", "demora muito",
+            "audiência exausta", "prolonga demais", "muito prolongado"
+        ]
+
+        # Protagonist active markers (must drive climax)
+        self.protagonist_active_markers = [
+            # English
+            "protagonist acts", "hero takes action", "makes choice", "decides fate",
+            "drives resolution", "active hero", "protagonist confronts", "hero defeats",
+            # Portuguese
+            "protagonista age", "herói toma ação", "faz escolha", "decide destino",
+            "conduz resolução", "herói ativo", "protagonista confronta", "herói derrota"
+        ]
+
+        # Deus ex machina markers (PENALTY - unearned resolution)
+        self.deus_ex_machina_markers = [
+            # English
+            "deus ex machina", "convenient", "lucky coincidence", "sudden save",
+            "miraculous rescue", "unearned", "too easy", "contrived solution",
+            # Portuguese
+            "deus ex machina", "conveniente", "coincidência sortuda", "salvamento repentino",
+            "resgate milagroso", "não merecido", "fácil demais", "solução forçada"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze climax in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete climax diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract Act 3 (pages 85-110 typically)
+        act3_start_page = int(page_count * 0.75)
+        act3_end_page = page_count
+        act3_text = self._extract_pages(screenplay_text, act3_start_page, act3_end_page)
+
+        # Detect climax presence and location
+        climax_detection = self._detect_climax(screenplay_text, page_count)
+
+        # Analyze climax placement (should be 85-95% through script)
+        climax_placement = self._analyze_climax_placement(climax_detection, page_count)
+
+        # Detect ultimate confrontation (protagonist vs antagonist)
+        ultimate_confrontation = self._detect_ultimate_confrontation(act3_text)
+
+        # Analyze peak tension achievement
+        peak_tension = self._analyze_peak_tension(act3_text)
+
+        # Analyze theme expression at climax
+        theme_expression = self._analyze_theme_at_climax(act3_text)
+
+        # Analyze stakes maximization
+        stakes_maximized = self._analyze_stakes_maximized(act3_text)
+
+        # Analyze character transformation at climax
+        character_transformation = self._analyze_character_transformation(act3_text)
+
+        # Analyze crisis vs climax distinction
+        crisis_vs_climax = self._analyze_crisis_vs_climax(screenplay_text, page_count)
+
+        # Analyze resolution setup
+        resolution_setup = self._analyze_resolution_setup(act3_text)
+
+        # Analyze all forces converge
+        forces_converge = self._analyze_forces_converge(act3_text)
+
+        # Analyze emotional peak
+        emotional_peak = self._analyze_emotional_peak(act3_text)
+
+        # Analyze intellectual peak
+        intellectual_peak = self._analyze_intellectual_peak(act3_text)
+
+        # Analyze moral choice at climax
+        moral_choice = self._analyze_moral_choice(act3_text)
+
+        # Detect anticlimax (PENALTY)
+        anticlimax = self._detect_anticlimax(act3_text)
+
+        # Detect weak climax (PENALTY)
+        weak_climax = self._detect_weak_climax(act3_text)
+
+        # Detect climax timing problems (PENALTY)
+        timing_problems = self._detect_climax_timing_problems(climax_detection, page_count)
+
+        # Assess climax intensity
+        climax_intensity = self._assess_climax_intensity(
+            ultimate_confrontation, peak_tension, stakes_maximized
+        )
+
+        # Assess climax satisfaction
+        climax_satisfaction = self._assess_climax_satisfaction(
+            theme_expression, character_transformation, emotional_peak,
+            anticlimax, weak_climax
+        )
+
+        # Build climax profile
+        climax_profile = ClimaxProfile(
+            climax_present=climax_detection["present"],
+            climax_page=climax_detection["page"],
+            climax_placement_score=climax_placement["score"],
+            ultimate_confrontation=ultimate_confrontation["present"],
+            protagonist_antagonist_face_off=ultimate_confrontation["face_off"],
+            peak_tension_achieved=peak_tension["achieved"],
+            theme_expressed_at_climax=theme_expression["expressed"],
+            stakes_maximized=stakes_maximized["maximized"],
+            character_transformation_moment=character_transformation["present"],
+            crisis_vs_climax_distinct=crisis_vs_climax["distinct"],
+            resolution_setup=resolution_setup["setup"],
+            all_forces_converge=forces_converge["converge"],
+            emotional_peak_achieved=emotional_peak["achieved"],
+            intellectual_peak_achieved=intellectual_peak["achieved"],
+            moral_choice_at_climax=moral_choice["present"],
+            anticlimax_detected=anticlimax["detected"],
+            weak_climax_detected=weak_climax["detected"],
+            climax_too_early=timing_problems["too_early"],
+            climax_too_late=timing_problems["too_late"],
+            climax_intensity=climax_intensity,
+            climax_satisfaction=climax_satisfaction,
+            overall_climax_quality=0.0  # calculated below
+        )
+
+        # Calculate overall climax quality
+        climax_profile.overall_climax_quality = self._calculate_overall_climax_quality(climax_profile)
+
+        # Check against rules
+        rule_violations = self._check_climax_rules(
+            climax_profile, climax_detection, climax_placement, ultimate_confrontation,
+            peak_tension, theme_expression, stakes_maximized, character_transformation,
+            crisis_vs_climax, resolution_setup, forces_converge, emotional_peak,
+            intellectual_peak, moral_choice, anticlimax, weak_climax, timing_problems
+        )
+
+        # Calculate score
+        score = self._calculate_climax_score(
+            climax_profile, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, climax_profile, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "climax": {
+                "present": climax_detection["present"],
+                "page": climax_detection["page"],
+                "placement_score": climax_placement["score"],
+                "optimal_placement": climax_placement.get("optimal", False)
+            },
+            "ultimate_confrontation": {
+                "present": ultimate_confrontation["present"],
+                "face_off": ultimate_confrontation["face_off"],
+                "intensity": ultimate_confrontation.get("intensity", 0.0)
+            },
+            "peak_tension": {
+                "achieved": peak_tension["achieved"],
+                "score": peak_tension.get("score", 0.0)
+            },
+            "theme_expression": {
+                "expressed": theme_expression["expressed"],
+                "clarity": theme_expression.get("clarity", 0.0)
+            },
+            "stakes": {
+                "maximized": stakes_maximized["maximized"],
+                "level": stakes_maximized.get("level", "medium")
+            },
+            "character_transformation": {
+                "present": character_transformation["present"],
+                "complete": character_transformation.get("complete", False)
+            },
+            "crisis_vs_climax": {
+                "distinct": crisis_vs_climax["distinct"],
+                "crisis_present": crisis_vs_climax.get("crisis_present", False)
+            },
+            "resolution_setup": {
+                "setup": resolution_setup["setup"]
+            },
+            "forces_converge": {
+                "converge": forces_converge["converge"]
+            },
+            "emotional_peak": {
+                "achieved": emotional_peak["achieved"]
+            },
+            "intellectual_peak": {
+                "achieved": intellectual_peak["achieved"]
+            },
+            "moral_choice": {
+                "present": moral_choice["present"]
+            },
+            "anticlimax": {
+                "detected": anticlimax["detected"],
+                "penalty": anticlimax.get("penalty", False)
+            },
+            "weak_climax": {
+                "detected": weak_climax["detected"],
+                "penalty": weak_climax.get("penalty", False)
+            },
+            "timing_problems": {
+                "too_early": timing_problems["too_early"],
+                "too_late": timing_problems["too_late"]
+            },
+            "climax_intensity": climax_intensity,
+            "climax_satisfaction": climax_satisfaction,
+            "overall_climax_quality": climax_profile.overall_climax_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, climax_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_pages(self, screenplay: str, start_page: int, end_page: int) -> str:
+        """Extract specific page range from screenplay."""
+        lines = screenplay.split('\n')
+        start_line = start_page * 55
+        end_line = end_page * 55
+        return '\n'.join(lines[start_line:end_line])
+
+    def _detect_climax(self, screenplay: str, page_count: int) -> Dict[str, Any]:
+        """
+        Detect climax presence and location.
+
+        McKee/Field: "Climax occurs in Act 3, typically 85-95% through script."
+        """
+        present = False
+        page = 0
+        description = ""
+
+        # Expected climax range: pages 85-95% of script
+        expected_start = int(page_count * 0.85)
+        expected_end = int(page_count * 0.95)
+
+        # Extract Act 3
+        act3_text = self._extract_pages(screenplay, expected_start, page_count)
+
+        # Check for climax markers
+        climax_count = 0
+        for marker in self.climax_markers:
+            if marker in act3_text.lower():
+                climax_count += 1
+                present = True
+                if not description:
+                    for line in act3_text.split('\n'):
+                        if marker in line.lower():
+                            description = line.strip()[:200]
+                            break
+
+        # If climax markers found, estimate page
+        if present:
+            page = expected_start + (expected_end - expected_start) // 2
+        else:
+            # Check entire screenplay
+            for marker in self.climax_markers:
+                if marker in screenplay.lower():
+                    present = True
+                    page = page_count - 10  # Assume near end
+                    description = "Climax detected but not in optimal location"
+                    break
+
+        return {
+            "present": present,
+            "page": page,
+            "description": description or "No clear climax detected",
+            "climax_count": climax_count
+        }
+
+    def _analyze_climax_placement(self, climax_detection: Dict, page_count: int) -> Dict[str, Any]:
+        """
+        Analyze climax placement quality.
+
+        Optimal: 85-95% through script (Field/McKee)
+        """
+        if not climax_detection["present"]:
+            return {"score": 0.0, "optimal": False, "notes": "No climax detected"}
+
+        climax_page = climax_detection["page"]
+        climax_percentage = (climax_page / page_count) * 100
+
+        # Optimal range: 85-95%
+        if 85 <= climax_percentage <= 95:
+            score = 1.0
+            optimal = True
+            notes = f"Optimal placement at {climax_percentage:.1f}% through script"
+        elif 80 <= climax_percentage < 85 or 95 < climax_percentage <= 100:
+            score = 0.7
+            optimal = False
+            notes = f"Acceptable but not optimal placement at {climax_percentage:.1f}%"
+        elif 70 <= climax_percentage < 80:
+            score = 0.4
+            optimal = False
+            notes = f"Too early - climax at {climax_percentage:.1f}% (should be 85-95%)"
+        else:
+            score = 0.2
+            optimal = False
+            notes = f"Poor placement at {climax_percentage:.1f}%"
+
+        return {
+            "score": score,
+            "optimal": optimal,
+            "percentage": climax_percentage,
+            "notes": notes
+        }
+
+    def _detect_ultimate_confrontation(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Detect ultimate confrontation (protagonist vs antagonist).
+
+        McKee/Field: "Climax is ultimate confrontation between protagonist and antagonistic force."
+        """
+        present = False
+        face_off = False
+        intensity = 0.0
+
+        # Check for ultimate confrontation markers
+        confrontation_count = 0
+        for marker in self.ultimate_confrontation_markers:
+            confrontation_count += act3_text.lower().count(marker)
+
+        if confrontation_count >= 2:
+            present = True
+            face_off = True
+            intensity = min(1.0, confrontation_count / 4.0)
+        elif confrontation_count >= 1:
+            present = True
+            face_off = False
+            intensity = 0.5
+
+        return {
+            "present": present,
+            "face_off": face_off,
+            "intensity": intensity,
+            "confrontation_count": confrontation_count
+        }
+
+    def _analyze_peak_tension(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze peak tension achievement.
+
+        McKee: "Climax is moment of highest tension - all accumulated pressure released."
+        """
+        achieved = False
+        score = 0.0
+
+        # Check for peak tension markers
+        tension_count = 0
+        for marker in self.peak_tension_markers:
+            tension_count += act3_text.lower().count(marker)
+
+        # Check for stakes maximized markers
+        for marker in self.stakes_maximized_markers:
+            tension_count += act3_text.lower().count(marker)
+
+        if tension_count >= 3:
+            achieved = True
+            score = min(1.0, tension_count / 5.0)
+        elif tension_count >= 2:
+            achieved = True
+            score = 0.6
+        elif tension_count >= 1:
+            achieved = True
+            score = 0.4
+
+        return {
+            "achieved": achieved,
+            "score": score,
+            "tension_count": tension_count
+        }
+
+    def _analyze_theme_at_climax(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze theme expression at climax.
+
+        McKee: "Climax is where controlling idea is ultimately expressed - theme proved through action."
+        """
+        expressed = False
+        clarity = 0.0
+
+        # Check for theme expression markers
+        theme_count = 0
+        for marker in self.theme_expression_markers:
+            theme_count += act3_text.lower().count(marker)
+
+        if theme_count >= 2:
+            expressed = True
+            clarity = min(1.0, theme_count / 3.0)
+        elif theme_count >= 1:
+            expressed = True
+            clarity = 0.5
+
+        return {
+            "expressed": expressed,
+            "clarity": clarity,
+            "theme_count": theme_count
+        }
+
+    def _analyze_stakes_maximized(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze stakes maximization.
+
+        McKee/Field: "At climax, stakes are at maximum - protagonist stands to lose/gain everything."
+        """
+        maximized = False
+        level = "low"
+
+        # Check for stakes maximized markers
+        stakes_count = 0
+        for marker in self.stakes_maximized_markers:
+            stakes_count += act3_text.lower().count(marker)
+
+        if stakes_count >= 3:
+            maximized = True
+            level = "maximum"
+        elif stakes_count >= 2:
+            maximized = True
+            level = "high"
+        elif stakes_count >= 1:
+            maximized = True
+            level = "medium"
+        else:
+            level = "low"
+
+        return {
+            "maximized": maximized,
+            "level": level,
+            "stakes_count": stakes_count
+        }
+
+    def _analyze_character_transformation(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze character transformation at climax.
+
+        Truby/McKee: "Climax is moment of self-revelation - character completes transformation."
+        """
+        present = False
+        complete = False
+
+        # Check for character transformation markers
+        transformation_count = 0
+        for marker in self.character_transformation_markers:
+            transformation_count += act3_text.lower().count(marker)
+
+        if transformation_count >= 3:
+            present = True
+            complete = True
+        elif transformation_count >= 2:
+            present = True
+            complete = True
+        elif transformation_count >= 1:
+            present = True
+            complete = False
+
+        return {
+            "present": present,
+            "complete": complete,
+            "transformation_count": transformation_count
+        }
+
+    def _analyze_crisis_vs_climax(self, screenplay: str, page_count: int) -> Dict[str, Any]:
+        """
+        Analyze crisis vs climax distinction.
+
+        Snyder: "Crisis (All Is Lost) comes before climax - darkest hour before dawn."
+        """
+        distinct = False
+        crisis_present = False
+
+        # Crisis typically pages 75-85% (before climax at 85-95%)
+        crisis_start = int(page_count * 0.75)
+        crisis_end = int(page_count * 0.85)
+        crisis_text = self._extract_pages(screenplay, crisis_start, crisis_end)
+
+        # Check for crisis markers
+        crisis_count = 0
+        for marker in self.crisis_markers:
+            crisis_count += crisis_text.lower().count(marker)
+
+        if crisis_count >= 2:
+            crisis_present = True
+            distinct = True
+        elif crisis_count >= 1:
+            crisis_present = True
+            distinct = False  # Present but may overlap with climax
+
+        return {
+            "distinct": distinct,
+            "crisis_present": crisis_present,
+            "crisis_count": crisis_count
+        }
+
+    def _analyze_resolution_setup(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze resolution setup.
+
+        McKee: "Climax leads directly to resolution - consequences play out."
+        """
+        setup = False
+
+        # Check for resolution setup markers
+        setup_count = 0
+        for marker in self.resolution_setup_markers:
+            setup_count += act3_text.lower().count(marker)
+
+        if setup_count >= 1:
+            setup = True
+
+        return {
+            "setup": setup,
+            "setup_count": setup_count
+        }
+
+    def _analyze_forces_converge(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze all forces converge at climax.
+
+        McKee/Seger: "All story threads, characters, and forces converge at climax."
+        """
+        converge = False
+
+        # Check for converge markers
+        converge_count = 0
+        for marker in self.converge_markers:
+            converge_count += act3_text.lower().count(marker)
+
+        if converge_count >= 2:
+            converge = True
+        elif converge_count >= 1:
+            converge = True
+
+        return {
+            "converge": converge,
+            "converge_count": converge_count
+        }
+
+    def _analyze_emotional_peak(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze emotional peak achievement.
+
+        Aristotle/McKee: "Climax produces catharsis - emotional release for audience."
+        """
+        achieved = False
+
+        # Check for emotional peak markers
+        emotional_count = 0
+        for marker in self.emotional_peak_markers:
+            emotional_count += act3_text.lower().count(marker)
+
+        if emotional_count >= 2:
+            achieved = True
+        elif emotional_count >= 1:
+            achieved = True
+
+        return {
+            "achieved": achieved,
+            "emotional_count": emotional_count
+        }
+
+    def _analyze_intellectual_peak(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze intellectual peak (understanding achieved).
+
+        McKee: "Climax can provide intellectual insight - protagonist (and audience) finally understands."
+        """
+        achieved = False
+
+        # Check for intellectual peak markers
+        intellectual_count = 0
+        for marker in self.intellectual_peak_markers:
+            intellectual_count += act3_text.lower().count(marker)
+
+        if intellectual_count >= 2:
+            achieved = True
+        elif intellectual_count >= 1:
+            achieved = True
+
+        return {
+            "achieved": achieved,
+            "intellectual_count": intellectual_count
+        }
+
+    def _analyze_moral_choice(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Analyze moral choice at climax.
+
+        Truby/McKee: "Climax often involves moral choice - character reveals true values under pressure."
+        """
+        present = False
+
+        # Check for moral choice markers
+        moral_count = 0
+        for marker in self.moral_choice_markers:
+            moral_count += act3_text.lower().count(marker)
+
+        if moral_count >= 1:
+            present = True
+
+        return {
+            "present": present,
+            "moral_count": moral_count
+        }
+
+    def _detect_anticlimax(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Detect anticlimax (PENALTY).
+
+        Anticlimax = disappointing, underwhelming climax that doesn't deliver.
+        """
+        detected = False
+        penalty = False
+
+        # Check for anticlimax markers
+        anticlimax_count = 0
+        for marker in self.anticlimax_markers:
+            anticlimax_count += act3_text.lower().count(marker)
+
+        if anticlimax_count >= 1:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "anticlimax_count": anticlimax_count
+        }
+
+    def _detect_weak_climax(self, act3_text: str) -> Dict[str, Any]:
+        """
+        Detect weak climax (PENALTY).
+
+        Weak climax = lacks intensity, insufficient stakes, easy victory, deus ex machina.
+        """
+        detected = False
+        penalty = False
+
+        # Check for weak climax markers
+        weak_count = 0
+        for marker in self.weak_climax_markers:
+            weak_count += act3_text.lower().count(marker)
+
+        # Check for deus ex machina
+        for marker in self.deus_ex_machina_markers:
+            weak_count += act3_text.lower().count(marker)
+
+        if weak_count >= 1:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "weak_count": weak_count
+        }
+
+    def _detect_climax_timing_problems(self, climax_detection: Dict, page_count: int) -> Dict[str, Any]:
+        """
+        Detect climax timing problems (PENALTY).
+
+        Too early = before 75%, too late = after 98%
+        """
+        too_early = False
+        too_late = False
+
+        if not climax_detection["present"]:
+            return {"too_early": False, "too_late": False}
+
+        climax_page = climax_detection["page"]
+        climax_percentage = (climax_page / page_count) * 100
+
+        if climax_percentage < 75:
+            too_early = True
+        elif climax_percentage > 98:
+            too_late = True
+
+        return {
+            "too_early": too_early,
+            "too_late": too_late,
+            "percentage": climax_percentage
+        }
+
+    def _assess_climax_intensity(self, ultimate_confrontation: Dict,
+                                 peak_tension: Dict, stakes_maximized: Dict) -> float:
+        """Assess climax intensity (0-1)."""
+        scores = [
+            1.0 if ultimate_confrontation["present"] else 0.0,
+            ultimate_confrontation.get("intensity", 0.0),
+            1.0 if peak_tension["achieved"] else 0.0,
+            peak_tension.get("score", 0.0),
+            1.0 if stakes_maximized["maximized"] else 0.0
+        ]
+
+        return sum(scores) / len(scores)
+
+    def _assess_climax_satisfaction(self, theme_expression: Dict,
+                                   character_transformation: Dict,
+                                   emotional_peak: Dict,
+                                   anticlimax: Dict, weak_climax: Dict) -> float:
+        """Assess climax satisfaction (0-1)."""
+        scores = [
+            1.0 if theme_expression["expressed"] else 0.5,
+            theme_expression.get("clarity", 0.0),
+            1.0 if character_transformation["present"] else 0.5,
+            1.0 if emotional_peak["achieved"] else 0.5,
+            0.0 if anticlimax["detected"] else 1.0,  # PENALTY
+            0.0 if weak_climax["detected"] else 1.0   # PENALTY
+        ]
+
+        return sum(scores) / len(scores)
+
+    def _calculate_overall_climax_quality(self, profile: ClimaxProfile) -> float:
+        """Calculate overall climax quality score."""
+        scores = [
+            1.0 if profile.climax_present else 0.0,
+            profile.climax_placement_score,
+            1.0 if profile.ultimate_confrontation else 0.3,
+            1.0 if profile.peak_tension_achieved else 0.3,
+            1.0 if profile.theme_expressed_at_climax else 0.6,
+            1.0 if profile.stakes_maximized else 0.4,
+            1.0 if profile.character_transformation_moment else 0.5,
+            1.0 if profile.crisis_vs_climax_distinct else 0.7,
+            1.0 if profile.resolution_setup else 0.7,
+            1.0 if profile.all_forces_converge else 0.6,
+            1.0 if profile.emotional_peak_achieved else 0.6,
+            1.0 if profile.intellectual_peak_achieved else 0.7,
+            1.0 if profile.moral_choice_at_climax else 0.7,
+            0.0 if profile.anticlimax_detected else 1.0,  # PENALTY
+            0.0 if profile.weak_climax_detected else 1.0,  # PENALTY
+            0.0 if profile.climax_too_early else 1.0,  # PENALTY
+            0.0 if profile.climax_too_late else 1.0,  # PENALTY
+            profile.climax_intensity,
+            profile.climax_satisfaction
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_climax_rules(self, profile: ClimaxProfile, climax_detection: Dict,
+                           climax_placement: Dict, ultimate_confrontation: Dict,
+                           peak_tension: Dict, theme_expression: Dict,
+                           stakes_maximized: Dict, character_transformation: Dict,
+                           crisis_vs_climax: Dict, resolution_setup: Dict,
+                           forces_converge: Dict, emotional_peak: Dict,
+                           intellectual_peak: Dict, moral_choice: Dict,
+                           anticlimax: Dict, weak_climax: Dict,
+                           timing_problems: Dict) -> List[Dict]:
+        """Check climax against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "CLIMAX.R001":
+                # Climax Present
+                if not profile.climax_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No clear climax detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R002":
+                # Ultimate Confrontation
+                if not profile.ultimate_confrontation:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No ultimate confrontation - protagonist doesn't face antagonist",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R003":
+                # Peak Tension
+                if not profile.peak_tension_achieved:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Peak tension not achieved - climax lacks intensity",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R004":
+                # Theme Expressed
+                if not profile.theme_expressed_at_climax:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Theme not expressed at climax - controlling idea not proved",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R005":
+                # Stakes Maximized
+                if not profile.stakes_maximized:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Stakes not maximized - not enough at risk",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R006":
+                # Character Transformation
+                if not profile.character_transformation_moment:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No character transformation - arc incomplete",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R007":
+                # Crisis vs Climax Distinct
+                if not profile.crisis_vs_climax_distinct:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Crisis and climax not distinct - unclear structure",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R008":
+                # Resolution Setup
+                if not profile.resolution_setup:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Climax doesn't set up resolution - ending unclear",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R009":
+                # All Forces Converge
+                if not profile.all_forces_converge:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Not all forces converge - story threads scattered",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R010":
+                # Emotional Peak
+                if not profile.emotional_peak_achieved:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Emotional peak not achieved - lacks catharsis",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R011":
+                # Avoid Anticlimax
+                if profile.anticlimax_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Anticlimax detected - disappointing resolution",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R012":
+                # Avoid Weak Climax
+                if profile.weak_climax_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Weak climax - lacks intensity or relies on deus ex machina",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R013":
+                # Optimal Placement
+                if profile.climax_placement_score < 0.7:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Poor climax placement (score: {profile.climax_placement_score:.1f})",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R014":
+                # Moral Choice
+                if not profile.moral_choice_at_climax:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No moral choice at climax - values not tested",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "CLIMAX.R015":
+                # Climax Intensity
+                if profile.climax_intensity < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Insufficient climax intensity ({profile.climax_intensity:.1f}/1.0)",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_climax_score(self, profile: ClimaxProfile, violations: List) -> float:
+        """Calculate overall climax score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for anticlimax/weak climax
+        if profile.anticlimax_detected:
+            score -= 25  # critical penalty
+        if profile.weak_climax_detected:
+            score -= 20  # major penalty
+        if profile.climax_too_early:
+            score -= 15
+        if profile.climax_too_late:
+            score -= 10
+
+        # Bonus for excellence
+        if profile.overall_climax_quality > 0.85:
+            score += 5
+        elif profile.overall_climax_quality > 0.75:
+            score += 3
+
+        if profile.ultimate_confrontation and profile.peak_tension_achieved:
+            score += 3
+
+        if profile.theme_expressed_at_climax:
+            score += 3
+
+        if profile.character_transformation_moment:
+            score += 2
+
+        if profile.climax_intensity > 0.8:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: ClimaxProfile,
+                          violations: List) -> str:
+        """Generate climax diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Climax delivers powerful ultimate confrontation at peak tension"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Climax solid but could be more intense"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Climax problems - weak or poorly placed"
+        else:
+            level = "POOR"
+            summary = "Major climax problems - fails to deliver"
+
+        diagnosis = f"CLIMAX {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.climax_present:
+            issues.append("no climax")
+        if not profile.ultimate_confrontation:
+            issues.append("no confrontation")
+        if profile.anticlimax_detected:
+            issues.append("anticlimax")
+        if profile.weak_climax_detected:
+            issues.append("weak climax")
+        if not profile.peak_tension_achieved:
+            issues.append("low tension")
+        if not profile.theme_expressed_at_climax:
+            issues.append("theme not expressed")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: ClimaxProfile) -> List[str]:
+        """Generate specific climax recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.climax_present:
+            recommendations.append("Create clear climax - McKee/Field: 'Ultimate confrontation where protagonist faces antagonistic force' - this is story's peak moment")
+
+        if not profile.ultimate_confrontation:
+            recommendations.append("Add ultimate confrontation - McKee: 'Protagonist must face antagonist directly' - no substitutes, no evasion, direct face-off")
+
+        if profile.anticlimax_detected:
+            recommendations.append("Fix anticlimax - McKee: 'Climax must deliver on all setups' - avoid disappointment, deliver satisfying payoff, meet audience expectations")
+
+        if profile.weak_climax_detected:
+            recommendations.append("Strengthen climax - Avoid deus ex machina - McKee: 'Victory must be earned through character's choices and actions' - increase difficulty, raise stakes")
+
+        if not profile.peak_tension_achieved:
+            recommendations.append("Maximize tension at climax - McKee: 'All accumulated pressure released at climax' - this is highest tension point in entire story")
+
+        if not profile.theme_expressed_at_climax:
+            recommendations.append("Express theme at climax - McKee: 'Controlling idea proved through climactic action' - theme must be demonstrated, not stated")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - climax structure and ultimate confrontation fundamental")
+            recommendations.append("Study Field's Screenplay - Act 3 structure and climax placement")
+
+        return recommendations[:5]
+
+    def export_climax_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export climax features for correlation/analysis.
+
+        Returns structured data with climax metrics.
+        """
+        page_count = self._estimate_page_count(screenplay_text)
+        climax_detection = self._detect_climax(screenplay_text, page_count)
+        act3_text = self._extract_pages(screenplay_text, int(page_count * 0.75), page_count)
+        ultimate_confrontation = self._detect_ultimate_confrontation(act3_text)
+        peak_tension = self._analyze_peak_tension(act3_text)
+
+        return {
+            "climax": {
+                "present": climax_detection["present"],
+                "page": climax_detection["page"],
+                "placement_percentage": (climax_detection["page"] / page_count * 100) if climax_detection["present"] else 0
+            },
+            "ultimate_confrontation": {
+                "present": ultimate_confrontation["present"],
+                "intensity": ultimate_confrontation.get("intensity", 0.0)
+            },
+            "peak_tension": {
+                "achieved": peak_tension["achieved"],
+                "score": peak_tension.get("score", 0.0)
+            },
+            "meta": {
+                "source": "DrClimax",
+                "focus": "Ultimate confrontation and peak tension at climax"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrClimaxAnalysis(DrClimax):
+    """Alias for compatibility with test framework."""
+    pass

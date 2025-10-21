@@ -1,0 +1,180 @@
+# MOTIVATION RULES - Character Motivation Analysis
+# Specialist: Script Doctor Motivationmon
+# Focus: Want/desire clarity, need identification, goal specificity, motivation drives action
+
+rules:
+  - id: MOTIVATION.R001
+    title: "Want/Desire Clear"
+    severity: critical
+    description: "Protagonist's want/desire must be clear - audience knows what protagonist wants"
+    rationale: "Truby: 'Protagonist must want something - desire line drives story.' McKee: 'Protagonist's conscious desire is what story tracks.'"
+    fix: "Clarify protagonist's want/desire early (first 10-15 pages) - what do they consciously want? Make it explicit through dialogue or action."
+    examples:
+      - "GOOD: 'I want to win the championship' - clear, specific desire"
+      - "BAD: Protagonist has no clear stated want - audience unclear on goal"
+
+  - id: MOTIVATION.R002
+    title: "Need Identified"
+    severity: high
+    description: "Protagonist's need (unconscious/deeper) should be identified - what they truly need vs want"
+    rationale: "Truby: 'Need is what protagonist must learn/gain - often unconscious.' McKee: 'True character emerges under pressure - reveals deeper need.'"
+    fix: "Identify protagonist's deeper need (often unconscious) - what must they learn/gain? Usually revealed through character arc and climax."
+    examples:
+      - "GOOD: Wants revenge, but needs forgiveness - want ≠ need"
+      - "BAD: Only surface want, no deeper need - shallow character"
+
+  - id: MOTIVATION.R003
+    title: "Want vs Need Distinction"
+    severity: medium
+    description: "Want should be distinguished from need - protagonist wants X but needs Y (Truby's insight)"
+    rationale: "Truby: 'Want ≠ Need - protagonist wants X but needs Y. Best stories show this distinction.' Creates deeper, more sophisticated storytelling."
+    fix: "Distinguish want (conscious goal) from need (unconscious lesson) - what protagonist thinks they want vs what they really need."
+    examples:
+      - "SOPHISTICATED: Wants treasure, needs friendship (Indiana Jones style)"
+      - "SIMPLE: Want = need - lacks depth"
+
+  - id: MOTIVATION.R004
+    title: "Goal Specific"
+    severity: critical
+    description: "Goal must be specific, concrete, measurable - not vague"
+    rationale: "Field/Truby: 'Goal must be specific, concrete, measurable - vague goals = weak story.' Audience needs to track progress toward specific objective."
+    fix: "Make goal specific and measurable - what exactly does protagonist want to achieve? Avoid vague abstractions like 'find happiness'."
+    examples:
+      - "GOOD: 'Win the race', 'Save my daughter', 'Stop the bomb' - specific, measurable"
+      - "BAD: 'Be happy', 'Find myself', 'Get better' - too vague"
+
+  - id: MOTIVATION.R005
+    title: "Goal Clarity"
+    severity: high
+    description: "Goal clarity must be high - audience clearly knows what protagonist is after"
+    rationale: "McKee/Field: 'Audience must know protagonist's goal clearly - what are they after?' Clear goal = audience can track story progress."
+    fix: "Increase goal clarity - state protagonist's goal explicitly, repeat/reinforce it, show protagonist actively pursuing it."
+    examples:
+      - "CLEAR: Goal stated early, reinforced throughout, visually tracked"
+      - "UNCLEAR: Audience confused about what protagonist wants"
+
+  - id: MOTIVATION.R006
+    title: "Motivation Established Early"
+    severity: critical
+    description: "Motivation must be established early - first 10-15 pages (Snyder: page 5-10)"
+    rationale: "Field/Snyder: 'Protagonist's goal must be clear in first 10-15 pages.' Truby: 'Desire should be established as early as possible.' Audience needs to know what protagonist wants to stay engaged."
+    fix: "Establish protagonist's want/desire in first 10-15 pages - don't wait. Use dialogue, action, or inciting incident to reveal desire."
+    examples:
+      - "GOOD: Desire clear by page 10-15 (end of setup)"
+      - "BAD: Desire not clear until page 30+ - audience lost"
+
+  - id: MOTIVATION.R007
+    title: "Motivation Consistent"
+    severity: medium
+    description: "Motivation should remain consistent - not change arbitrarily without reason"
+    rationale: "Truby: 'Protagonist's desire should remain consistent - not change arbitrarily.' McKee: 'Character consistency - motivation shouldn't flip without reason.' Changes must be earned."
+    fix: "Keep protagonist's core desire consistent - if it changes, show clear reason/revelation that earns the change."
+    examples:
+      - "CONSISTENT: Same core desire throughout, or earned evolution"
+      - "INCONSISTENT: Protagonist wants X, then Y, then Z with no reason"
+
+  - id: MOTIVATION.R008
+    title: "Obstacles to Goal"
+    severity: high
+    description: "Protagonist must face obstacles to goal - active opposition tests desire"
+    rationale: "McKee: 'Protagonist must face obstacles - opposition tests desire.' Field: 'Conflict = obstacles to protagonist's goal.' No obstacles = no conflict = no story."
+    fix: "Add obstacles that actively oppose protagonist's goal - antagonist, circumstances, internal conflict. Test protagonist's desire."
+    examples:
+      - "GOOD: Multiple obstacles that test protagonist's commitment to goal"
+      - "BAD: No meaningful obstacles - protagonist easily achieves goal"
+
+  - id: MOTIVATION.R009
+    title: "Motivation Drives Action"
+    severity: critical
+    description: "Motivation must drive protagonist's actions - protagonist actively pursues goal (not passive)"
+    rationale: "Truby: 'Desire drives plot - protagonist actively pursues goal.' McKee: 'Protagonist must be active, not passive - drives story.' Passive protagonist = weak story."
+    fix: "Make protagonist active - show them pursuing goal through concrete actions. Don't let things just happen to them."
+    examples:
+      - "ACTIVE: Protagonist initiates actions to achieve goal"
+      - "PASSIVE: Things happen to protagonist, they react but don't drive story"
+
+  - id: MOTIVATION.R010
+    title: "Emotional Motivation"
+    severity: medium
+    description: "Emotional motivation should be present - why protagonist cares emotionally"
+    rationale: "McKee: 'Audience cares when protagonist cares - emotional investment.' Truby: 'Emotional motivation = why protagonist wants/needs this.' Must be personal and emotional."
+    fix: "Show why protagonist cares emotionally - personal stake, emotional connection to goal. Make it matter personally."
+    examples:
+      - "EMOTIONAL: 'My daughter's life depends on this' - personal, emotional"
+      - "INTELLECTUAL: 'It would be interesting to solve this puzzle' - lacks emotion"
+
+  - id: MOTIVATION.R011
+    title: "Motivation Relatable"
+    severity: low
+    description: "Motivation should be relatable - audience understands and connects with desire"
+    rationale: "McKee: 'Universal human desires - audience relates to protagonist's want.' Campbell: 'Mythic resonance - desire speaks to universal human needs.'"
+    fix: "Ground motivation in universal human desires - love, safety, belonging, achievement, justice. Make audience understand and relate."
+    examples:
+      - "RELATABLE: Save family, find love, seek justice - universal"
+      - "OBSCURE: Achieve abstract goal only expert understands - not relatable"
+
+  - id: MOTIVATION.R012
+    title: "Antagonist Motivation Clear"
+    severity: medium
+    description: "Antagonist should have clear motivation - opposing goal to protagonist"
+    rationale: "Seger: 'Antagonist must have clear motivation - opposing goal to protagonist.' McKee: 'Best antagonists have their own goals, not just opposition.'"
+    fix: "Give antagonist their own clear goal that opposes protagonist's goal - show why antagonist wants what they want."
+    examples:
+      - "CLEAR: Antagonist wants X, protagonist wants Y - direct opposition"
+      - "UNCLEAR: Antagonist opposes protagonist but unclear why or what they want"
+
+  - id: MOTIVATION.R013
+    title: "Avoid Unclear Motivation"
+    severity: critical
+    description: "PENALTY: Avoid unclear motivation - audience must know what protagonist wants"
+    rationale: "Truby: 'If audience doesn't know what protagonist wants, they're lost.' Unclear motivation = audience disengagement."
+    fix: "Clarify motivation - state protagonist's want explicitly, show them pursuing it, reinforce it throughout."
+    examples:
+      - "AVOID: 'I don't know what I want' (if sustained throughout story)"
+      - "ACCEPTABLE: Initial uncertainty quickly resolved by establishing clear goal"
+
+  - id: MOTIVATION.R014
+    title: "Avoid Passive Protagonist"
+    severity: critical
+    description: "PENALTY: Avoid passive protagonist - protagonist must have clear drive and actively pursue goal"
+    rationale: "McKee: 'Passive protagonist = weak story. Protagonist must drive action.' Field: 'Active protagonist essential - things don't just happen to them.'"
+    fix: "Activate protagonist - give them clear want/desire and show them actively pursuing it through concrete actions."
+    examples:
+      - "AVOID: Protagonist reacts to events but never initiates action toward goal"
+      - "GOOD: Protagonist drives story through active pursuit of clearly defined goal"
+
+  - id: MOTIVATION.R015
+    title: "Avoid Inconsistent Motivation"
+    severity: high
+    description: "PENALTY: Avoid inconsistent motivation - protagonist's desire shouldn't change arbitrarily"
+    rationale: "Truby: 'Protagonist's desire shouldn't change arbitrarily - motivation must be consistent.' Changes must be earned through character development."
+    fix: "Keep motivation consistent - if it changes, earn it through character revelation or development. Don't flip arbitrarily."
+    examples:
+      - "AVOID: Protagonist wants X for 50 pages, then suddenly wants Y with no reason"
+      - "GOOD: Motivation evolves organically through earned character development"
+
+# Analysis prompts for LLM-based analysis
+analysis_prompts:
+  want_clear:
+    prompt: "Analyze the screenplay for protagonist's want/desire clarity. Is it clear what the protagonist wants? Quote specific lines showing their conscious goal."
+
+  need_identified:
+    prompt: "Analyze the screenplay for protagonist's deeper need (Truby). What does the protagonist need (unconscious/deeper) vs what they want (conscious)? How is this revealed?"
+
+  want_vs_need:
+    prompt: "Analyze the want vs need distinction (Truby). Does the protagonist want one thing but need something else? How does this create dramatic depth?"
+
+  goal_specific:
+    prompt: "Analyze goal specificity. Is the protagonist's goal specific, concrete, and measurable? Or is it vague and abstract?"
+
+  motivation_early:
+    prompt: "Analyze motivation establishment timing. Is the protagonist's want/desire clear in the first 10-15 pages? When is it first established?"
+
+  motivation_drives_action:
+    prompt: "Analyze whether motivation drives action. Does the protagonist actively pursue their goal? Or are they passive, with things happening to them?"
+
+  obstacles:
+    prompt: "Analyze obstacles to goal. What stands in the protagonist's way? How do these obstacles test their desire and commitment?"
+
+  emotional_motivation:
+    prompt: "Analyze emotional motivation. Why does the protagonist care emotionally? What personal stake do they have in achieving their goal?"

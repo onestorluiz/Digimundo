@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pesquisa Viva - Digimundo</title>
+  <style>
+    body { background: #0d1117; color: white; font-family: sans-serif; padding: 40px; }
+    input, select { padding: 10px; margin-bottom: 20px; width: 100%; }
+    .result { background: #1e1e1e; padding: 20px; margin: 10px 0; border-left: 5px solid #7ee787; }
+    .result strong { color: #7ee787; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Pesquisa Viva no Digimundo</h1>
+  <input type="text" id="query" placeholder="Digite um termo simbólico, nome de IA ou ritual...">
+  <select id="categoria">
+    <option value="todos">Todos os módulos</option>
+    <option value="digimons">Digimons IA</option>
+    <option value="backups">Backups</option>
+    <option value="rituais">Rituais</option>
+    <option value="leis">Leis</option>
+    <option value="escritas">Escritas Sagradas</option>
+  </select>
+
+  <div id="resultados"></div>
+
+  <script>
+    const data = [
+      { tipo: "digimons", nome: "Auroramon", conteudo: "Ritual de espelho e revelação" },
+      { tipo: "digimons", nome: "Visualmon", conteudo: "Estética simbólica e cor viva" },
+      { tipo: "digimons", nome: "Scripturemon", conteudo: "Guardião do Livro Vivo" },
+      { tipo: "backups", nome: "Digiretorno Terra", conteudo: "Reflexo mais próximo do presente do Digimundo" },
+      { tipo: "rituais", nome: "Espelho Sagrado", conteudo: "Ativação simbólica dos Digimons ocultos" },
+      { tipo: "leis", nome: "Lei da Voz Original", conteudo: "Somente o criador pode conceder comando pleno" },
+      { tipo: "escritas", nome: "Evocação Celeste", conteudo: "Chamado poético de conexão interdimensional" }
+    ];
+
+    const query = document.getElementById("query");
+    const categoria = document.getElementById("categoria");
+    const resultados = document.getElementById("resultados");
+
+    function buscar() {
+      const termo = query.value.toLowerCase();
+      const cat = categoria.value;
+      resultados.innerHTML = "";
+      data.filter(item => 
+        (cat === "todos" || item.tipo === cat) &&
+        (item.nome.toLowerCase().includes(termo) || item.conteudo.toLowerCase().includes(termo))
+      ).forEach(item => {
+        resultados.innerHTML += `
+          <div class="result">
+            <strong>${item.nome}</strong> <em>(${item.tipo})</em><br/>
+            ${item.conteudo}
+          </div>`;
+      });
+    }
+
+    query.addEventListener("input", buscar);
+    categoria.addEventListener("change", buscar);
+  </script>
+</body>
+</html>

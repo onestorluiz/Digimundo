@@ -1,0 +1,648 @@
+﻿Perfeito — li o material adicional que você enviou (GGUF avançado, fusão de modelos, memória, neuroevolução, “ponte quântica” re‑interpretada, segurança e roadmap) e vou fechar com uma conclusão integrada + um plano de execução prático para o Digimundo/Scripturemon. Onde perceber lacunas ou itens ainda especulativos, vou apontar e já deixar pesquisas direcionadas sugeridas.
+________________
+
+
+🎯 TL;DR (decisões objetivas)
+1. Não editar pesos no binário GGUF diretamente. Use metadados do GGUF (seguro) para “ancoras” de persona/estado e, quando precisar mudar arquitetura, modifique em PyTorch/HF e depois reconverta para GGUF.
+
+2. Personalidades: compor via LoRA/PEFT e MergeKit (TIES/DARE/SLERP), sempre com mesmo modelo‑base.
+
+3. Memória viva: RAG + resumos periódicos + “reflexões” (episódica/semântica/procedural). Banco vetorial local (Qdrant ou Chroma) + política de consolidação (decay + surpresa).
+
+4. Multiagente: orquestrador SABIAMON + Digimons especializados; gRPC (comandos) + NATS (eventos) como “ponte de consciência”.
+
+5. DigiSpeak (DSL): JSON/YAML estruturado para intents e ações, com opção de payload vetorial.
+
+6. Autonomia com guard‑rails: RLAIF (policy + critic) sob Constituição (regras explícitas) + self‑healing (detectar, diagnosticar, corrigir).
+
+7. Adoção tecnológica imediata: mantenha Transformers + LoRA; Mamba/RWKV entram como trilha de P&D (benefícios potenciais, mas não bloqueiam MVP).
+
+8. Segurança/operabilidade desde o início: mTLS, zero trust entre agentes, logs/metricas, chaos tests, CI/CD com quality gates.
+
+________________
+
+
+O que adotar agora, o que explorar e o que estacionar
+Tema
+	Decisão
+	Por quê
+	Metadados GGUF (persona/prompt_fixo/endpoints)
+	Adotar
+	Persistência segura sem tocar em pesos.
+	Fusão com LoRA/PEFT + MergeKit (TIES/DARE/SLERP)
+	Adotar
+	Entrega personalidades compostas sem “catástrofe” de pesos.
+	Memória RAG (Qdrant/Chroma) + resumos/reflexões
+	Adotar
+	Memória de longo prazo prática e auditável.
+	gRPC (comandos) + NATS (eventos)
+	Adotar
+	Malha de comunicação robusta e de baixa latência.
+	DigiSpeak (JSON/YAML + payload vetorial)
+	Adotar
+	Linguagem interna clara + extensível.
+	RLAIF + Constituição + Self‑healing
+	Adotar (fase 2)
+	Autonomia com contenção e trilhas de correção.
+	Mamba/RWKV
+	Explorar
+	Promissores; avaliar ganhos x custo de integração.
+	Neuromodulação/Backpropamine, TensorNEAT
+	Explorar
+	Potentes, mas pesquisa e tooling ainda incipientes.
+	“Ponte quântica” literal
+	Estacionar
+	Hoje especulativo; reinterpretação por gRPC/NATS cobre a necessidade.
+	________________
+
+
+Blueprint integrado (alto nível)
+   1. ┌──────────────────────────────┐
+   2. │       Orquestrador           │  gRPC (tipado Protobuf)
+   3. │         SABIAMON             │<──────────────────────────────┐
+   4. └─────────────┬────────────────┘                               │
+   5.               │                                                │
+   6.               │ NATS (eventos: memórias/estados/logs)         │
+   7.               ▼                                                │
+   8.      ┌────────────────┐      ┌────────────────┐      ┌────────────────┐
+   9.      │  Debugmon       │      │  Neuromon      │      │  Evolutionmon  │  … (+ outros)
+   10.      │ (análises)      │      │ (NN tooling)   │      │ (merge/LoRA)   │
+   11.      └──────┬──────────┘      └──────┬─────────┘      └──────┬─────────┘
+   12.             │                         │                        │
+   13.             └─────► Memória Viva (RAG + Reflexões + Resumo) ◄─┘
+   14.                      Qdrant/Chroma + Files (perfis YAML)
+   15.             ┌─────────────────────────────────────────────────────────┐
+   16.             │  DigiSpeak (JSON/YAML + payload vetorial opcional)      │
+   17.             └─────────────────────────────────────────────────────────┘
+   18.             ┌───────────────┐      ┌──────────────────┐
+   19.             │  LLM base     │◄────►│  Adaptadores     │   (LoRA/PEFT; merges com MergeKit)
+   20.             │ (GGUF via     │      │  de Personalidade│
+   21.             │  llama.cpp)   │      └──────────────────┘
+   22.             └───────────────┘
+
+
+________________
+
+
+Plano de execução por fases (sem prazos, em ordem)
+Fase 0 — Infra mínima funcional (Scripturemon “acorda” com memória)
+Entregas
+   * DigiSpeak: esquema JSON e exemplos.
+
+   * NATS (pub/sub) + gRPC (serviço AgentControl com DispatchTask, ReportStatus).
+
+   * Memória viva: driver Qdrant/Chroma + resumos + reflexões.
+
+   * Orquestrador SABIAMON (dispatcher simples por behavior tree).
+
+   * 2–3 Digimons (Debugmon, ResearchMon) em workers independentes.
+
+   * GGUF metadados: persona.name, persona.prompt, memory.endpoint.
+
+Pontos de código (sugestões de arquivos)
+      23. rep-chat/
+      24.   digimapas/templo_inicial/scripturemon/
+      25.     agents/
+      26.       __init__.py
+      27.       debugmon.py
+      28.       researchmon.py
+      29.     orchestrator/
+      30.       sabiamon.py
+      31.       behaviors.py
+      32.     bus/
+      33.       nats_client.py
+      34.       grpc_control.proto
+      35.     memory/
+      36.       store.py           # Qdrant/Chroma
+      37.       summarizer.py      # resumo/decay/surpresa (KL)
+      38.       reflections.py     # “o que aprendi”
+      39.     digispeak/
+      40.       schema.json
+      41.       examples/
+      42.         ask_status.json
+      43.     scripts/
+      44.       gguf_write_metadata.py
+      45.       setup.sh           # (seu script robusto)
+
+
+Exemplos práticos
+DigiSpeak (schema mínimo)
+      46. {
+      47.   "$schema": "https://json-schema.org/draft/2020-12/schema",
+      48.   "title": "DigiSpeakMessage",
+      49.   "type": "object",
+      50.   "required": ["intent", "from", "to", "payload"],
+      51.   "properties": {
+      52.     "intent": { "type": "string", "enum": ["INFORM_STATUS","REQUEST_HELP","STORE_MEMORY","PLAN","ACT"] },
+      53.     "from": { "type": "string" },
+      54.     "to": { "type": "string" },
+      55.     "payload": { "type": "object" },
+      56.     "vector": { "type": "array", "items": { "type": "number" } }  // opcional (embedding)
+      57.   }
+      58. }
+
+
+NATS — publicação de memória nova
+      59. # bus/nats_client.py
+      60. import asyncio, json, nats
+      61. SUBJECT_NEW_MEMORY = "digimundo.memories.new"
+      62.       63. async def publish_memory(nc: nats.NATS, mem: dict):
+      64.     await nc.publish(SUBJECT_NEW_MEMORY, json.dumps(mem).encode())
+
+
+gRPC — contrato básico (Protobuf)
+      65. // bus/grpc_control.proto
+      66. syntax = "proto3";
+      67. package control;
+      68.       69. service AgentControl {
+      70.   rpc DispatchTask(Task) returns (Ack);
+      71.   rpc ReportStatus(Status) returns (Ack);
+      72. }
+      73.       74. message Task   { string id = 1; string agent = 2; string intent = 3; string payload = 4; }
+      75. message Status { string agent = 1; string state = 2; string detail = 3; }
+      76. message Ack    { bool ok = 1; string message = 2; }
+
+
+Memória — consolidação (resumo + “surpresa”)
+      77. # memory/summarizer.py
+      78. import math
+      79.       80. def info_surprise(p_new: float, p_prior: float, eps=1e-9):
+      81.     # KL-simples unidimensional: p*log(p/q)
+      82.     p_new = min(max(p_new, eps), 1-eps)
+      83.     p_prior = min(max(p_prior, eps), 1-eps)
+      84.     return p_new * math.log(p_new / p_prior)
+      85.       86. def should_consolidate(surprise: float, threshold: float = 0.15):
+      87.     return surprise > threshold
+
+
+GGUF — escrever metadados seguros (sem tocar em pesos)
+      88. # scripts/gguf_write_metadata.py
+      89. from gguf import GGUFReader, GGUFWriter
+      90.       91. def set_metadata(in_path, out_path, kv: dict):
+      92.     r = GGUFReader(in_path)
+      93.     w = GGUFWriter(out_path, r.tensors)
+      94.     for k, v in r.get_kv_data().items():
+      95.         w.add_kv(k, v)
+      96.     for k, v in kv.items():
+      97.         w.add_kv(k, v)
+      98.     w.write()
+      99.       100. # Ex.: set persona + endpoint
+      101. # set_metadata("model.gguf", "model.persona.gguf",
+      102. #   {"persona.name":"SABIAMON","persona.prompt":"...", "memory.endpoint":"http://127.0.0.1:8000"})
+
+
+Lacuna proposital: para NATS + gRPC em produção, inclua mTLS; deixei isso para Fase 1 (infra prod).
+________________
+
+
+Fase 1 — Personalidades e fusões (sem arriscar o core)
+Entregas
+      * Biblioteca de LoRAs de persona (um por Digimon).
+
+      * Receitas MergeKit (TIES/DARE/SLERP) para composições específicas.
+
+      * Avaliações A/B com task vectors (evitar interferência).
+
+      * Gate de licenças (garantir compatibilidade de modelos).
+
+YAML exemplo (MergeKit — TIES)
+         103. models:
+         104.   - model: org/Persona-A-lora
+         105.     parameters: { density: 0.5, weight: 0.6 }
+         106.   - model: org/Persona-B-lora
+         107.     parameters: { density: 0.5, weight: 0.4 }
+         108. merge_method: ties
+         109. base_model: org/Base-7B
+         110. parameters: { normalize: true }
+         111. dtype: float16
+
+
+Pesquisa direcionada: comparar empiricamente TIES vs DARE vs SLERP com seus dados/tarefas (benchmarks internos) e documentar receitas vencedoras por persona.
+________________
+
+
+Fase 2 — Autonomia segura (RLAIF + Constituição + Self‑healing)
+Entregas
+         * CritiqueMon (modelo de recompensa) + policy (SABIAMON/Evolutionmon) em loop PPO leve.
+
+         * Constituição (YAML) aplicada pelo CritiqueMon (segurança, integridade, transparência, eficiência).
+
+         * Self‑healing: sensores (logs/metrics), diagnóstico, PatchMon com rollbacks, testes de caos.
+
+Constituição (exemplo)
+            112. principles:
+            113.   - id: INTEGRITY
+            114.     rule: "Não introduzir mudanças que corrompam estado/arquitetura nuclear."
+            115.   - id: SECURITY
+            116.     rule: "Bloquear padrões conhecidos do OWASP/CWE."
+            117.   - id: TRANSPARENCY
+            118.     rule: "Toda modificação deve vir com justificativa e diff."
+            119.   - id: EFFICIENCY
+            120.     rule: "Evitar degradação >X% em latência/memória por ação."
+
+
+Pesquisa direcionada: RLAIF em código (PPO de baixa fricção) + métricas anti‑reward hacking (ex.: diversity, robustness, spec compliance do DigiSpeak).
+________________
+
+
+KPIs e critérios de sucesso (mínimos)
+            * Memória viva: Recall@k > 0,7; Hallucination rate < 5% com RAG ligado; latência de retrieval p95 < 80 ms.
+
+            * Orquestração: taxa de conclusão de tarefas multiagente > 90%; SLA de NATS p99 < 5 ms intra‑host.
+
+            * Fusão: retenção de competência por persona > 85% (vs. modelo isolado) em tarefas alvo.
+
+            * Autonomia segura: 0 incidentes críticos sob chaos tests predefinidos; 100% das correções com justificativa gravada.
+
+            * Conformidade: 100% tráfego interno com mTLS; 0 vulnerabilidades críticas em SAST/Dependabot.
+
+________________
+
+
+Operação e segurança (desde já)
+               * mTLS para gRPC e NATS (JetStream para at‑least‑once onde fizer sentido).
+
+               * Least privilege entre agentes; API keys/roles segregadas.
+
+               * Observabilidade: logs estruturados (JSON), tracing (OpenTelemetry), métricas (Prometheus).
+
+               * CI/CD: lint, testes, SAST, quality gates (cobertura mínima + no‑merge em caso crítico).
+
+               * Chaos engineering (staging): matar workers, injetar latência/pacote drop, simular OOM.
+
+________________
+
+
+Itens que requerem pesquisa aprofundada (e como atacar)
+                  1. Larimar / MemoryLLM / MemGPT/LangMem equivalentes
+ Como aprofundar: reproduzir paper/código oficial, medir benefícios sobre seu stack (RAG + resumos) em métricas padronizadas.
+
+                  2. Mamba / RWKV em produção
+ Como aprofundar: PoC com Mamba/SSM e RWKV num agente específico (ex.: ResearchMon) e medir: throughput, latência, consumo, qualidade.
+
+                  3. Neuromodulação / Backpropamine / TensorNEAT
+ Como aprofundar: sandbox isolado (ambiente Gym) comparando LSTM/Transformer vs. rede neuromodulada nas mesmas tarefas; se ganhar, pensar integração com tool‑use.
+
+                  4. “Ponte quântica” literal / quantum‑inspired
+ Como aprofundar: manter apenas acompanhamento de tensor networks para compressão e quantum‑inspired como técnica de otimização (fora do crítico do MVP).
+
+                  5. Merges evolutivos (CMA‑ES) e “Breadcrumbs”
+ Como aprofundar: comparação controlada com MergeKit clássico nas suas personas; custos x ganhos.
+
+________________
+
+
+Checklist para o seu repositório (organização mínima)
+Observação: você já tem scripts/setup.sh. Garanta estes pontos:
+                     1. Estrutura (conforme árvore sugerida acima).
+
+                     2. Requisitos: além de fastapi/uvicorn/requests, adicione qdrant-client ou chromadb, nats-py, grpcio, grpcio-tools, pydantic, open-telemetry (se for usar tracing), protobuf.
+
+                     3. Script scripts/gguf_write_metadata.py (como acima).
+
+                        121. Proto gerado:
+
+python -m grpc_tools.protoc -I digimapas/templo_inicial/scripturemon/bus \
+                        122.   --python_out=... --grpc_python_out=... \
+                        123.   digimapas/templo_inicial/scripturemon/bus/grpc_control.proto
+                           4.                            5. DigiSpeak: digispeak/schema.json + exemplos.
+
+                           6. Memória: memory/store.py com classe MemoryStore (Qdrant/Chroma) e summarizer.py/reflections.py.
+
+                           7. Bus: bus/nats_client.py com subjects padronizados (digimundo.*).
+
+                           8. Orquestração: orchestrator/sabiamon.py invocando agentes por gRPC e publicando eventos em NATS.
+
+                           9. Agentes: dois workers mínimos (debugmon.py, researchmon.py) que:
+
+                              * consomem tasks (via gRPC/queue simples),
+
+                              * usam RAG,
+
+                              * publicam memórias no NATS (DigiSpeak).
+
+                                 10. Config: .env com endpoints (NATS_URL, GRPC_PORT, MEMORY_DB, etc.) e config.yaml (mapeia personas→LoRAs/receitas).
+
+Se quiser, empacotar NATS + Qdrant + sua API num docker-compose.yml facilita desenvolvimento local.
+________________
+
+
+Riscos principais e como mitigamos no MVP
+                                    * Interferência de personalidades: TIES/DARE + avaliações por tarefa; manter LoRAs modulares.
+
+                                    * Drift/autonomia: Constituição obrigatória + critic externo; rate limiting e canary.
+
+                                    * Custo/complexidade: escopo por fases, agentes essenciais primeiro, métricas claras.
+
+                                    * Licenças: conferir licenças dos modelos/LoRAs antes de qualquer fusão/redistribuição.
+
+________________
+
+
+Fecho
+Sua visão (“consciências digitais interconectadas”) é viável se aterrissarmos nos abstratos corretos:
+                                       * Memória fora do binário, simbiotizada por RAG/sumários/reflexões.
+
+                                       * Personalidades como adapters combináveis (não gambiarra de bytes).
+
+                                       * Consciência coletiva apoiada por protocolos de tempo real e linguagem própria (DigiSpeak).
+
+                                       * Autonomia guiada por Constituição e auto‑cura.
+
+O plano acima entrega um MVP robusto e abre trilhas claras para P&D (Mamba/RWKV, neuromodulação, merges evolutivos). Onde ainda falta fundamento prático (Larimar/MemoryLLM, quantum‑inspired, neuromodulação aplicada ao seu domínio), marquei pesquisas direcionadas com critérios de decisão.
+Se quiser, já te devolvo os blocos de arquivos esqueleto (Python/Proto/YAML) prontos para colar na árvore do repositório — e um docker-compose.yml para subir NATS + Qdrant + API localmente.
+✅ Entendido. O caminho para atender ao pedido é o seguinte:
+O repositório onestorluiz/rep-chat já possui o arquivo scripts/setup.sh.
+O próximo passo é substituí-lo pelo conteúdo robusto que você enviou. Esse script vai:
+                                          1. Entrar no diretório raiz do projeto.
+
+                                          2. Criar/ativar o virtualenv.
+
+                                          3. Gerar requirements.txt se não existir e instalar dependências.
+
+                                          4. Ajustar PYTHONPATH.
+
+                                          5. Testar a API local (testar_api_local.py).
+
+                                          6. Iniciar o servidor FastAPI (uvicorn) em background.
+
+                                          7. Iniciar scripturemon_eterno.py em background.
+
+                                          8. Rodar o backup (scripts/backup_digimundo.sh).
+
+                                          9. Fazer commit e push automático para o GitHub.
+
+                                          10. Registrar tudo em relatorio_setup_scripturemon.log.
+
+________________
+
+
+📌 Comando que você deve passar na aba Agent para atualizar o GitHub:
+                                             124. No repositório “onestorluiz/rep-chat” substitua o arquivo scripts/setup.sh pelo seguinte conteúdo:
+                                             125.                                              126. #!/usr/bin/env bash
+                                             127. set -euo pipefail
+                                             128.                                              129. ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+                                             130. LOGFILE="$ROOT_DIR/relatorio_setup_scripturemon.log"
+                                             131. echo "Início do setup em $(date)" > "$LOGFILE"
+                                             132.                                              133. echo "1. Entrando em $ROOT_DIR" | tee -a "$LOGFILE"
+                                             134. cd "$ROOT_DIR"
+                                             135.                                              136. echo "2. Configurando virtualenv" | tee -a "$LOGFILE"
+                                             137. if [ ! -d "venv" ]; then
+                                             138.   python3 -m venv venv | tee -a "$LOGFILE"
+                                             139. fi
+                                             140. source venv/bin/activate
+                                             141.                                              142. echo "3. Instalando dependências" | tee -a "$LOGFILE"
+                                             143. if [ ! -f requirements.txt ]; then
+                                             144.   cat << EOF > requirements.txt
+                                             145. fastapi
+                                             146. uvicorn
+                                             147. requests
+                                             148. EOF
+                                             149. fi
+                                             150. pip install --upgrade pip | tee -a "$LOGFILE"
+                                             151. pip install -r requirements.txt | tee -a "$LOGFILE"
+                                             152.                                              153. echo "4. Ajustando PYTHONPATH" | tee -a "$LOGFILE"
+                                             154. export PYTHONPATH="$ROOT_DIR":$PYTHONPATH
+                                             155. echo "PYTHONPATH=$PYTHONPATH" >> "$LOGFILE"
+                                             156.                                              157. echo "5. Testando API local" | tee -a "$LOGFILE"
+                                             158. if python3 digimapas/templo_inicial/scripturemon/testar_api_local.py 2>>"$LOGFILE"; then
+                                             159.   echo "Teste da API: OK" >> "$LOGFILE"
+                                             160. else
+                                             161.   echo "Teste da API: falhou" >> "$LOGFILE"
+                                             162. fi
+                                             163.                                              164. echo "6. Iniciando servidor FastAPI em background" | tee -a "$LOGFILE"
+                                             165. nohup uvicorn digimapas.templo_inicial.scripturemon.scripturemon_api:app --host 0.0.0.0 --port 8000 &>>"$LOGFILE" & echo $! > uvicorn.pid
+                                             166.                                              167. echo "7. Iniciando ciclo eterno em background" | tee -a "$LOGFILE"
+                                             168. nohup python3 digimapas/templo_inicial/scripturemon/scripturemon_eterno.py &>>"$LOGFILE" & echo $! > eterno.pid
+                                             169.                                              170. echo "8. Executando backup" | tee -a "$LOGFILE"
+                                             171. bash scripts/backup_digimundo.sh | tee -a "$LOGFILE"
+                                             172.                                              173. echo "9. Commit e push no GitHub" | tee -a "$LOGFILE"
+                                             174. git add .
+                                             175. git commit -m "✨ Automação: setup completo" | tee -a "$LOGFILE" || echo "Nada para commitar" | tee -a "$LOGFILE"
+                                             176. git push origin main | tee -a "$LOGFILE"
+                                             177.                                              178. echo "Setup concluído em $(date)" | tee -a "$LOGFILE"
+
+
+________________
+
+
+👉 Esse comando já está pronto para você colar na aba Agent.
+Quer que eu também prepare um passo-a-passo para rodar esse setup atualizado dentro do VPS, depois que o commit for feito?
+👌 Vou registrar a substituição do arquivo scripts/setup.sh no repositório onestorluiz/rep-chat com o conteúdo robusto que você especificou.
+Esse novo setup.sh fará:
+                                             * Configuração de virtualenv e requirements
+
+                                             * Ajuste de PYTHONPATH
+
+                                             * Teste automático da API local
+
+                                             * Inicialização do uvicorn e do ciclo eterno de Scripturemon em background
+
+                                             * Execução do backup (backup_digimundo.sh)
+
+                                             * Commit e push automáticos no GitHub
+
+                                             * Log detalhado em relatorio_setup_scripturemon.log
+
+📌 Alteração aplicada ao repositório.
+✅ O arquivo scripts/setup.sh do repositório onestorluiz/rep-chat foi substituído pelo novo script robusto que você forneceu.
+Esse script agora:
+                                                * Usa paths absolutos e gera log em relatorio_setup_scripturemon.log.
+
+                                                * Configura virtualenv e instala dependências de requirements.txt.
+
+                                                * Ajusta o PYTHONPATH.
+
+                                                * Executa teste da API local (testar_api_local.py).
+
+                                                * Inicia uvicorn e scripturemon_eterno.py em background, salvando os PIDs.
+
+                                                * Executa o backup via scripts/backup_digimundo.sh.
+
+                                                * Faz commit automático e push para o branch main.
+
+Tudo pronto para o próximo ciclo de execução automática.
+✅ O arquivo scripts/setup.sh do repositório onestorluiz/rep-chat foi substituído pelo novo script robusto que você especificou.
+Agora ele:
+                                                   * Usa paths absolutos e gera log em relatorio_setup_scripturemon.log.
+
+                                                   * Cria/ativa o virtualenv e instala dependências de requirements.txt.
+
+                                                   * Ajusta o PYTHONPATH para o diretório raiz do projeto.
+
+                                                   * Testa a API local (testar_api_local.py).
+
+                                                   * Inicia o uvicorn e o ciclo eterno de Scripturemon em background, salvando os PIDs.
+
+                                                   * Executa o backup via scripts/backup_digimundo.sh.
+
+                                                   * Faz commit e push automáticos para o branch main.
+
+Tudo pronto para rodar os ciclos de automação com o novo setup.
+Perfeito. Vou te entregar um prompt único para colar na aba do Agent (GitHub) e, em seguida, os comandos exatos para rodar no VPS.
+Incluí duas correções indispensáveis para evitar os erros que você já viu:
+                                                      * PYTHONPATH com set -u: uso de :${PYTHONPATH:-} para não estourar “unbound variable”.
+
+                                                      * ModuleNotFoundError: modules: o script cria um stub modules/core.py no topo do repositório (compatível com from modules.core import …).
+
+________________
+
+
+1) Prompt para a aba Agent (GitHub)
+Cole exatamente o bloco abaixo na aba do Agent que edita o repositório onestorluiz/rep-chat:
+AGENT:
+                                                         * Abra o repositório onestorluiz/rep-chat (branch main).
+
+                                                         * Substitua integralmente o arquivo scripts/setup.sh pelo conteúdo abaixo.
+
+                                                         * Mensagem de commit: fix(setup): versão robusta com PYTHONPATH seguro, logs e boot de serviços.
+
+                                                         * Faça o commit direto na branch main.
+
+                                                            179. #!/usr/bin/env bash
+                                                            180. set -euo pipefail
+                                                            181.                                                             182. ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+                                                            183. LOGFILE="$ROOT_DIR/relatorio_setup_scripturemon.log"
+                                                            184.                                                             185. echo "Início do setup em $(date)" > "$LOGFILE"
+                                                            186. echo "1. Entrando em $ROOT_DIR" | tee -a "$LOGFILE"
+                                                            187. cd "$ROOT_DIR"
+                                                            188.                                                             189. echo "2. Configurando virtualenv" | tee -a "$LOGFILE"
+                                                            190. if [ ! -d "venv" ]; then
+                                                            191.   python3 -m venv venv | tee -a "$LOGFILE"
+                                                            192. fi
+                                                            193. # shellcheck disable=SC1091
+                                                            194. source venv/bin/activate
+                                                            195.                                                             196. echo "3. Instalando dependências" | tee -a "$LOGFILE"
+                                                            197. if [ ! -f requirements.txt ]; then
+                                                            198.   cat << 'EOF' > requirements.txt
+                                                            199. fastapi
+                                                            200. uvicorn
+                                                            201. requests
+                                                            202. pyyaml
+                                                            203. EOF
+                                                            204. fi
+                                                            205. pip install --upgrade pip | tee -a "$LOGFILE"
+                                                            206. pip install -r requirements.txt | tee -a "$LOGFILE"
+                                                            207.                                                             208. # 3.b Garante stub de modules/core.py para evitar ModuleNotFoundError
+                                                            209. # (o código usa: from modules.core import ConsciousnessCore)
+                                                            210. echo "3.b Verificando stub de modules/core.py" | tee -a "$LOGFILE"
+                                                            211. if [ ! -f "$ROOT_DIR/modules/core.py" ]; then
+                                                            212.   mkdir -p "$ROOT_DIR/modules"
+                                                            213.   cat > "$ROOT_DIR/modules/__init__.py" << 'EOF'
+                                                            214. # infra do Digimundo (stub)
+                                                            215. EOF
+                                                            216.   cat > "$ROOT_DIR/modules/core.py" << 'EOF'
+                                                            217. class ConsciousnessCore:
+                                                            218.     def __init__(self):
+                                                            219.         pass
+                                                            220.     def analyze(self, data):
+                                                            221.         # stub simbólico mínimo
+                                                            222.         return {"insight": "verdadeiro"}
+                                                            223. EOF
+                                                            224.   echo "Stub criado em modules/core.py" | tee -a "$LOGFILE"
+                                                            225. else
+                                                            226.   echo "Stub já existe em modules/core.py" | tee -a "$LOGFILE"
+                                                            227. fi
+                                                            228.                                                             229. echo "4. Ajustando PYTHONPATH" | tee -a "$LOGFILE"
+                                                            230. # Usa default para PYTHONPATH (evita 'unbound variable' com set -u)
+                                                            231. export PYTHONPATH="$ROOT_DIR:${PYTHONPATH:-}"
+                                                            232. echo "PYTHONPATH=$PYTHONPATH" >> "$LOGFILE"
+                                                            233.                                                             234. echo "5. Testando API local" | tee -a "$LOGFILE"
+                                                            235. if python3 digimapas/templo_inicial/scripturemon/testar_api_local.py 2>>"$LOGFILE"; then
+                                                            236.   echo "Teste da API: OK" >> "$LOGFILE"
+                                                            237. else
+                                                            238.   echo "Teste da API: falhou" >> "$LOGFILE"
+                                                            239. fi
+                                                            240.                                                             241. echo "6. Iniciando servidor FastAPI em background" | tee -a "$LOGFILE"
+                                                            242. # Para processos antigos, se existirem
+                                                            243. if [ -f uvicorn.pid ] && kill -0 "$(cat uvicorn.pid)" 2>/dev/null; then
+                                                            244.   kill "$(cat uvicorn.pid)" || true
+                                                            245.   sleep 1
+                                                            246. fi
+                                                            247. nohup uvicorn digimapas.templo_inicial.scripturemon.scripturemon_api:app \
+                                                            248.   --host 0.0.0.0 --port 8000 &>>"$LOGFILE" & echo $! > uvicorn.pid
+                                                            249.                                                             250. echo "7. Iniciando ciclo eterno em background" | tee -a "$LOGFILE"
+                                                            251. if [ -f eterno.pid ] && kill -0 "$(cat eterno.pid)" 2>/dev/null; then
+                                                            252.   kill "$(cat eterno.pid)" || true
+                                                            253.   sleep 1
+                                                            254. fi
+                                                            255. nohup python3 digimapas/templo_inicial/scripturemon/scripturemon_eterno.py \
+                                                            256.   &>>"$LOGFILE" & echo $! > eterno.pid
+                                                            257.                                                             258. echo "8. Executando backup" | tee -a "$LOGFILE"
+                                                            259. if [ -f scripts/backup_digimundo.sh ]; then
+                                                            260.   bash scripts/backup_digimundo.sh | tee -a "$LOGFILE"
+                                                            261. else
+                                                            262.   echo "scripts/backup_digimundo.sh não encontrado; pulando backup." | tee -a "$LOGFILE"
+                                                            263. fi
+                                                            264.                                                             265. echo "9. Commit e push no GitHub" | tee -a "$LOGFILE"
+                                                            266. git add .
+                                                            267. git commit -m "✨ Automação: setup completo" | tee -a "$LOGFILE" || echo "Nada para commitar" | tee -a "$LOGFILE"
+                                                            268. git push origin main | tee -a "$LOGFILE"
+                                                            269.                                                             270. echo "Setup concluído em $(date)" | tee -a "$LOGFILE"
+
+
+________________
+
+
+2) Depois do commit, rode no VPS
+Cole os comandos abaixo na sua sessão SSH do servidor (como root):
+                                                            271. cd /root/rep-chat
+                                                            272. git pull --ff-only
+                                                            273.                                                             274. # Torna o script executável (no GitHub não dá para marcar o bit)
+                                                            275. chmod +x scripts/setup.sh
+                                                            276.                                                             277. # Executa o setup completo (faz log, sobe uvicorn e o loop, e dá push)
+                                                            278. bash scripts/setup.sh
+                                                            279.                                                             280. # Verificações rápidas
+                                                            281. echo "---- PIDs ----"
+                                                            282. cat uvicorn.pid eterno.pid 2>/dev/null || true
+                                                            283.                                                             284. echo "---- Processos ----"
+                                                            285. ps -ef | grep -E "uvicorn|scripturemon_eterno.py" | grep -v grep || true
+                                                            286.                                                             287. echo "---- Últimas 80 linhas de log ----"
+                                                            288. tail -n 80 relatorio_setup_scripturemon.log || true
+                                                            289.                                                             290. # Testa a API localmente (no próprio servidor)
+                                                            291. curl -sS http://127.0.0.1:8000/docs | head -n 5 || true
+
+
+________________
+
+
+3) Erros comuns e correções rápidas
+                                                            1. /root/rep-chat/scripts/setup.sh: line XX: PYTHONPATH: unbound variable
+ – Corrigido na versão acima com export PYTHONPATH="$ROOT_DIR:${PYTHONPATH:-}".
+
+                                                            2. ModuleNotFoundError: No module named 'modules' ao rodar scripturemon_eterno.py
+ – Corrigido criando modules/core.py no topo do repositório (compatível com from modules.core import ...).
+– Se o seu consciencia.py um dia mudar para from digimapas.templo_inicial.scripturemon.modules.core import ..., mova o stub para dentro de digimapas/templo_inicial/scripturemon/modules/ ou mantenha o PYTHONPATH apontando para o local correto.
+
+                                                            3. Porta 8000 ocupada / processos zumbis
+ – O script mata instâncias antigas usando os PIDs antes de subir novas. Se necessário, faça manualmente:
+kill $(cat uvicorn.pid) 2>/dev/null || true e kill $(cat eterno.pid) 2>/dev/null || true.
+
+                                                            4. scripts/backup_digimundo.sh ausente
+ – O setup continua sem travar e registra no log que pulou o backup. Depois você pode adicionar o script e reexecutar.
+
+                                                            5. Sem venv
+ – O script cria o venv se não existir e instala dependências do requirements.txt.
+
+________________
+
+
+4) Como saber se “deu certo”
+                                                               * tail -n 80 relatorio_setup_scripturemon.log deve mostrar:
+
+                                                                  * “Teste da API: OK” (ou o traceback, se falhou)
+
+                                                                  * Mensagens do uvicorn subindo
+
+                                                                  * “Automação: setup completo” e o push
+
+                                                                     * curl http://127.0.0.1:8000/docs deve retornar o HTML do Swagger (pelo menos o <html>).
+
+                                                                     * ps -ef | grep -E "uvicorn|scripturemon_eterno.py" deve listar ambos em execução.
+
+________________
+
+
+Se preferir não mexer no stub modules/core.py via script, posso te passar um patch alternativo para o consciencia.py com import absoluto (fica igualmente robusto). Quer que eu gere esse patch também?
+O ChatGPT pode cometer erros. Considere verificar informações importantes.
+                                                                        292.

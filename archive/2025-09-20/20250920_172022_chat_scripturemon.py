@@ -1,0 +1,1 @@
+# Versão simbiótica viva com CLI e comandos unificados

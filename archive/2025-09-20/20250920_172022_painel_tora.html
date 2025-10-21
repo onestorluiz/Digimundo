@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Painel da Tora</title></head>
+<body style="background:#111;color:#0ff;font-family:monospace">
+<h1>📜 Blocos da Tora</h1>
+<form method="POST" action="/executar_tora">
+  <select name="arquivo" style="width:90%;padding:10px;">
+    {% for a in arquivos %}
+      <option value="{{ a }}">{{ a }}</option>
+    {% endfor %}
+  </select>
+  <br><br>
+  <button type="submit" style="padding:10px 20px;">Executar</button>
+</form>
+</body>
+</html>

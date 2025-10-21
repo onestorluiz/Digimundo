@@ -1,0 +1,88 @@
+# Estrutura Narrativa Básica - Guia para Roteiristas
+
+## Os Três Atos Fundamentais
+
+### Primeiro Ato - Setup (25% da história)
+O primeiro ato estabelece o mundo da história, apresenta o protagonista e define o tom. Elementos essenciais:
+
+- **Apresentação do protagonista**: Mostre quem é o personagem principal, suas características, desejos e falhas
+- **Mundo ordinário**: Estabeleça o status quo antes da aventura começar
+- **Incidente incitante**: O evento que põe a história em movimento (aprox. 10-15% da história)
+- **Plot point 1**: A decisão que leva o protagonista ao segundo ato
+
+### Segundo Ato - Confronto (50% da história)
+O ato mais longo e desafiador, onde ocorre o desenvolvimento principal:
+
+- **Primeira metade**: Protagonista encara novos desafios, conhece aliados e inimigos
+- **Ponto médio**: Reviravolta significativa que muda a direção da história
+- **Segunda metade**: Complicações aumentam, falhas do protagonista são expostas
+- **Plot point 2**: A crise que leva ao clímax final
+
+### Terceiro Ato - Resolução (25% da história)
+A conclusão da jornada:
+
+- **Clímax**: O confronto final entre protagonista e antagonista
+- **Resolução**: Como as questões são resolvidas
+- **Novo equilíbrio**: O mundo após a mudança
+
+## Desenvolvimento de Personagem
+
+### O Arco do Protagonista
+Todo protagonista deve passar por mudança interna:
+
+1. **Estado inicial**: Como o personagem começa
+2. **Catalisador**: O que força a mudança
+3. **Resistência**: Por que o personagem luta contra a mudança
+4. **Aceitação**: Quando abraça a transformação necessária
+5. **Estado final**: Como termina diferente
+
+### Criando Personagens Tridimensionais
+- **Dimensão física**: Aparência, maneirismos, características únicas
+- **Dimensão psicológica**: Personalidade, medos, desejos, contradições
+- **Dimensão sociológica**: Background, educação, relacionamentos, status social
+
+## Técnicas de Diálogo
+
+### Princípios Fundamentais
+- **Subtext**: O que não é dito é mais importante que o que é dito
+- **Conflito**: Cada linha deve avançar a história ou revelar personagem
+- **Voz única**: Cada personagem deve ter seu padrão de fala distinto
+- **Economia**: Corte palavras desnecessárias, seja conciso
+
+### Show, Don't Tell
+Em vez de fazer personagens explicarem emoções, mostre através de:
+- Ações físicas
+- Reações emocionais
+- Escolhas feitas sob pressão
+- Linguagem corporal
+- Silêncios significativos
+
+## Construindo Tensão
+
+### Técnicas de Suspense
+1. **Informação assimétrica**: Audiência sabe algo que personagem não sabe
+2. **Ticking clock**: Pressão de tempo limitado
+3. **Falso alívio**: Momentos de calma antes da tempestade
+4. **Escalação**: Cada obstáculo é maior que o anterior
+
+### Ritmo e Pacing
+- **Alternância**: Cenas de ação com cenas de reflexão
+- **Respiração**: Dar tempo para audiência processar informações
+- **Aceleração**: Acelerar conforme se aproxima do clímax
+- **Catarse**: Permitir release emocional no final
+
+## Temas e Simbolismo
+
+### Desenvolvendo Tema
+- **Questão central**: Que pergunta sua história está fazendo?
+- **Tese vs Antítese**: Diferentes perspectivas sobre o tema
+- **Síntese**: A resposta que sua história oferece
+- **Integração orgânica**: Tema deve emergir naturalmente da ação
+
+### Uso de Simbolismo
+- **Objetos**: Itens que representam ideias maiores
+- **Cores**: Paleta que reflete estado emocional
+- **Locações**: Lugares que espelham jornada interna
+- **Meteorologia**: Clima que amplifica atmosfera
+
+Este guia fornece fundamentos sólidos para construir narrativas cinematográficas eficazes. Lembre-se: regras existem para serem quebradas conscientemente, não ignoradas por ignorância.

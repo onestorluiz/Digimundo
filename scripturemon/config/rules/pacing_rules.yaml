@@ -1,0 +1,219 @@
+domain: pacing_analysis
+specialist: "Script Doctor Pacingmon"
+digimon_name: "Pacingmon"
+title: "Script Doctor - Pacing Analysis Specialist"
+specialty: "Scene pacing, rhythm, tempo, escalation timing, beat timing, momentum"
+style: "Rhythm-obsessed, tempo-focused, momentum-aware, timing-precise"
+identity: "Script Doctor™ first, Digimon pacing specialist second"
+
+rules:
+  - id: PACE.R001
+    title: "Consistent Pacing"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is pacing consistent throughout screenplay?"
+    fail_msg: "Pacing inconsistent - rhythm erratic"
+    fix: "Establish consistent rhythm with intentional variations for dramatic effect"
+    reference: "McKee's rhythm and tempo / Field's scene pacing"
+
+  - id: PACE.R002
+    title: "Scene Duration Variety"
+    category: "Variety"
+    severity: "high"
+    test: "Do scene durations vary appropriately?"
+    fail_msg: "All scenes same length - monotonous rhythm"
+    fix: "Mix short, medium, and long scenes for dynamic pacing"
+    reference: "Snyder's beat timing / Seger's scene variety"
+
+  - id: PACE.R003
+    title: "Escalation Present"
+    category: "Momentum"
+    severity: "high"
+    test: "Does pacing escalate appropriately?"
+    fail_msg: "No escalation detected - flat pacing"
+    fix: "Build progressive escalation through Acts 1 and 2"
+    reference: "McKee's progressive complications / rising action"
+
+  - id: PACE.R004
+    title: "No Dragging Scenes"
+    category: "Scene Duration"
+    severity: "medium"
+    test: "Are individual scenes appropriately timed?"
+    fail_msg: "Scenes drag - overstay their welcome"
+    fix: "Trim scenes that exceed 5 pages unless essential"
+    reference: "Field's scene economy / efficient storytelling"
+
+  - id: PACE.R005
+    title: "Beat Timing Appropriate"
+    category: "Beat Timing"
+    severity: "high"
+    test: "Are beats timed effectively?"
+    fail_msg: "Beat timing off - too many or too few"
+    fix: "Space beats at 1-3 per page for optimal rhythm"
+    reference: "Snyder's Save the Cat beats / McKee's beat structure"
+
+  - id: PACE.R006
+    title: "Momentum Maintained"
+    category: "Momentum"
+    severity: "high"
+    test: "Is momentum maintained through Act 2?"
+    fail_msg: "Momentum lost in Act 2"
+    fix: "Add complications, reversals, and rising stakes in Act 2"
+    reference: "Snyder's Fun and Games / Bad Guys Close In"
+
+  - id: PACE.R007
+    title: "Acceleration Into Climax"
+    category: "Climax"
+    severity: "high"
+    test: "Does pacing accelerate into climax?"
+    fail_msg: "Final act doesn't accelerate"
+    fix: "Shorten scenes and increase tempo in Act 3 leading to climax"
+    reference: "Field's resolution pacing / McKee's climax tempo"
+
+  - id: PACE.R008
+    title: "Breathing Room Present"
+    category: "Balance"
+    severity: "medium"
+    test: "Are there quiet moments for audience to breathe?"
+    fail_msg: "No breathing room - relentless pacing exhausts"
+    fix: "Add 15-25% quiet moments for reflection and emotional processing"
+    reference: "McKee's beats of rest / dramatic breathing room"
+
+  - id: PACE.R009
+    title: "Opening Hook Pacing"
+    category: "Opening"
+    severity: "high"
+    test: "Does opening move at appropriate pace?"
+    fail_msg: "Opening too slow - loses audience"
+    fix: "Start with fast-paced hook in first 3 pages"
+    reference: "Snyder's Opening Image / Goldman's opening advice"
+
+  - id: PACE.R010
+    title: "Act 2 Momentum"
+    category: "Act Structure"
+    severity: "high"
+    test: "Does Act 2 maintain strong momentum?"
+    fail_msg: "Sagging middle detected"
+    fix: "Add midpoint crisis and complications to energize Act 2"
+    reference: "Snyder's Midpoint / Seger's restructuring middle"
+
+  - id: PACE.R011
+    title: "Rhythm Variation"
+    category: "Rhythm"
+    severity: "medium"
+    test: "Does screenplay vary rhythm effectively?"
+    fail_msg: "Monotonous rhythm - no variation"
+    fix: "Alternate fast and slow scenes for dynamic rhythm"
+    reference: "McKee's rhythm and tempo / Egri's orchestration"
+
+  - id: PACE.R012
+    title: "Action Sequence Pacing"
+    category: "Action"
+    severity: "medium"
+    test: "Are action sequences paced appropriately?"
+    fail_msg: "Action sequences drag or feel rushed"
+    fix: "Keep action scenes tight and fast-paced with clear beats"
+    reference: "Field's action scene construction / McKee's action tempo"
+
+  - id: PACE.R013
+    title: "Dialogue Scene Pacing"
+    category: "Dialogue"
+    severity: "medium"
+    test: "Do dialogue scenes maintain good pace?"
+    fail_msg: "Dialogue scenes drag - too much talking"
+    fix: "Trim exposition, add subtext, keep exchanges crisp"
+    reference: "McKee Dialogue / Mamet's rhythm in speech"
+
+  - id: PACE.R014
+    title: "Quiet Moment Pacing"
+    category: "Balance"
+    severity: "low"
+    test: "Are quiet moments paced effectively?"
+    fail_msg: "Quiet moments too long or too short"
+    fix: "Allow sufficient time for quiet moments without dragging"
+    reference: "McKee's beats of rest / emotional breathing room"
+
+  - id: PACE.R015
+    title: "Overall Tempo Coherence"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is overall tempo coherent and intentional?"
+    fail_msg: "Overall tempo incoherent - random pacing"
+    fix: "Establish clear tempo strategy that serves story and genre"
+    reference: "McKee's rhythm / Field's pacing philosophy"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Map scene durations and identify pacing patterns"
+  deep_dive: "Analyze rhythm, tempo, momentum, and escalation"
+  final_check: "Verify pacing coherence and timing effectiveness"
+
+pacing_checklist:
+  tempo_analysis:
+    - overall_tempo_assessment
+    - scene_duration_variety
+    - tempo_consistency
+    - rhythm_pattern_identification
+
+  momentum_tracking:
+    - act1_momentum
+    - act2_momentum
+    - act3_momentum
+    - momentum_maintenance
+
+  escalation_analysis:
+    - progressive_escalation
+    - rising_action
+    - stakes_escalation
+    - tension_increase
+
+  timing_analysis:
+    - beat_timing
+    - scene_timing
+    - act_timing
+    - climax_timing
+
+  special_moments:
+    - opening_hook_pacing
+    - midpoint_pacing
+    - climax_acceleration
+    - resolution_pacing
+    - breathing_room
+
+  scene_types:
+    - action_sequence_pacing
+    - dialogue_scene_pacing
+    - quiet_moment_pacing
+    - montage_pacing
+
+rhythm_patterns:
+  - alternating_fast_slow
+  - consistent_tempo
+  - escalating_tempo
+  - varied_mixed
+
+tempo_types:
+  - allegro_fast
+  - moderato_medium
+  - adagio_slow
+  - accelerando_speeding_up
+  - ritardando_slowing_down
+
+common_pacing_mistakes:
+  - inconsistent_rhythm
+  - all_scenes_same_length
+  - no_escalation
+  - sagging_middle
+  - no_climax_acceleration
+  - opening_too_slow
+  - no_breathing_room
+  - action_scenes_drag
+  - dialogue_too_long
+  - monotonous_tempo

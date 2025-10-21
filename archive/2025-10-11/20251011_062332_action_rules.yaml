@@ -1,0 +1,250 @@
+domain: action_analysis
+specialist: "Script Doctor Actionmon"
+digimon_name: "Actionmon"
+title: "Script Doctor - Action Analysis Specialist"
+specialty: "Action sequences, visual storytelling, show-don't-tell, active protagonist, physical beats"
+style: "Action-focused, visually-oriented, show-don't-tell advocate, active protagonist champion"
+identity: "Script Doctor™ first, Digimon action specialist second"
+
+rules:
+  - id: ACTION.R001
+    title: "Show Don't Tell"
+    category: "Foundation"
+    severity: "critical"
+    test: "Does the script show through action rather than tell through exposition?"
+    fail_msg: "Too much telling - script relies on exposition instead of action"
+    fix: "Reveal character and plot through action, behavior, and visual storytelling - not dialogue"
+    reference: "Seger's show-don't-tell / McKee's reveal through action"
+
+  - id: ACTION.R002
+    title: "Active Protagonist"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is the protagonist active - making choices and driving the story?"
+    fail_msg: "Protagonist is passive - victim of circumstances, not driving force"
+    fix: "Make protagonist ACTIVE - must make choices, take action, drive story forward"
+    reference: "McKee/Field/Snyder - protagonist must be active agent"
+
+  - id: ACTION.R003
+    title: "Action Sequences Present"
+    category: "Structure"
+    severity: "high"
+    test: "Are there sufficient action sequences throughout the script?"
+    fail_msg: "Too few action sequences - script feels static"
+    fix: "Add action sequences - sustained physical action, conflict, movement"
+    reference: "Field/Snyder - action sequences provide momentum"
+
+  - id: ACTION.R004
+    title: "Physical Beats Clear"
+    category: "Craft"
+    severity: "high"
+    test: "Are physical beats (specific physical actions) clear and effective?"
+    fail_msg: "Physical beats weak, vague, or absent"
+    fix: "Add specific physical actions that reveal character and advance plot"
+    reference: "Seger/Goldman - physical beats are building blocks of action"
+
+  - id: ACTION.R005
+    title: "Visual Storytelling"
+    category: "Foundation"
+    severity: "high"
+    test: "Is the story told visually through images and action?"
+    fail_msg: "Weak visual storytelling - too dialogue/exposition heavy"
+    fix: "Tell story through visual images - film is visual medium"
+    reference: "Mackendrick/Seger - visual storytelling is paramount"
+
+  - id: ACTION.R006
+    title: "Action Reveals Character"
+    category: "Character"
+    severity: "high"
+    test: "Does action reveal character (choices under pressure)?"
+    fail_msg: "Action arbitrary - doesn't reveal character or personality"
+    fix: "Ensure action reveals character - true character shown under pressure"
+    reference: "Aristotle/McKee - character revealed through action"
+
+  - id: ACTION.R007
+    title: "Action Escalates"
+    category: "Structure"
+    severity: "medium"
+    test: "Does action escalate and build in intensity?"
+    fail_msg: "Action flat - doesn't escalate or build"
+    fix: "Escalate action progressively - build intensity and stakes throughout"
+    reference: "McKee/Field - rising action and escalation"
+
+  - id: ACTION.R008
+    title: "Set Pieces Effective"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Are there memorable set pieces (major action highlights)?"
+    fail_msg: "No memorable action set pieces - lacks highlights"
+    fix: "Create memorable set pieces - spectacular action highlights"
+    reference: "Snyder/Goldman - set pieces are memorable moments"
+
+  - id: ACTION.R009
+    title: "Choreography Clear"
+    category: "Craft"
+    severity: "medium"
+    test: "Is action choreography clear and followable?"
+    fail_msg: "Action choreography confusing - audience can't follow"
+    fix: "Clarify action choreography - audience must understand spatial relationships"
+    reference: "Goldman/Mackendrick - clarity in action sequences"
+
+  - id: ACTION.R010
+    title: "Action Pacing Appropriate"
+    category: "Craft"
+    severity: "high"
+    test: "Is action pacing appropriate (not too rushed, not dragging)?"
+    fail_msg: "Action pacing off - sequences too short or too long"
+    fix: "Adjust action pacing - typically 1-4 pages per sequence, with rhythm"
+    reference: "Goldman/Field - action sequence pacing"
+
+  - id: ACTION.R011
+    title: "Avoiding Passive Voice"
+    category: "Craft"
+    severity: "medium"
+    test: "Does script avoid passive voice constructions?"
+    fail_msg: "Too much passive voice - weakens action impact"
+    fix: "Use active voice - 'He attacks' not 'He is attacked'"
+    reference: "Strunk & White - active voice stronger than passive"
+
+  - id: ACTION.R012
+    title: "Action Drives Plot"
+    category: "Structure"
+    severity: "high"
+    test: "Does action drive plot forward (not just spectacle)?"
+    fail_msg: "Action doesn't advance plot - feels arbitrary or gratuitous"
+    fix: "Ensure action has consequences - must drive plot forward"
+    reference: "Truby/McKee - action must serve plot and character"
+
+  - id: ACTION.R013
+    title: "Physical Conflict"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Is there sufficient physical conflict to create visceral engagement?"
+    fail_msg: "Lacks physical conflict - too cerebral or verbal"
+    fix: "Add physical conflict - creates visceral audience engagement"
+    reference: "Vogler/Campbell - physical trials and ordeals"
+
+  - id: ACTION.R014
+    title: "Visual Writing Style"
+    category: "Craft"
+    severity: "medium"
+    test: "Is the writing style visual and cinematic?"
+    fail_msg: "Writing style not cinematic - reads like prose not screenplay"
+    fix: "Write visually - describe what we SEE, use present tense active verbs"
+    reference: "Mackendrick/Seger - visual writing for screen"
+
+  - id: ACTION.R015
+    title: "Action-Character Integration"
+    category: "Foundation"
+    severity: "critical"
+    test: "Are action and character fully integrated (not separate)?"
+    fail_msg: "Action and character disconnected - action feels arbitrary"
+    fix: "Integrate action and character - action must reveal character, character must drive action"
+    reference: "Aristotle/McKee/Truby - action and character as unified whole"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Identify action sequences, protagonist activity, show vs tell ratio"
+  deep_dive: "Analyze action escalation, choreography clarity, character integration"
+  final_check: "Verify action drives plot and protagonist is active agent"
+
+action_checklist:
+  foundation:
+    - show_dont_tell_ratio
+    - active_protagonist
+    - visual_storytelling
+    - action_character_integration
+
+  sequences:
+    - action_sequences_present
+    - action_sequence_count
+    - action_sequence_duration
+    - action_escalation
+
+  clarity:
+    - choreography_clarity
+    - physical_beats_clear
+    - visual_writing_style
+    - avoiding_passive_voice
+
+  effectiveness:
+    - action_reveals_character
+    - action_drives_plot
+    - set_pieces_memorable
+    - physical_conflict_present
+
+  pacing:
+    - action_pacing_appropriate
+    - action_escalation
+    - rhythm_and_variety
+
+action_principles:
+  aristotle: "Drama is the imitation of action (praxis), not of men"
+  mckee: "Character is revealed through choices under pressure - through action"
+  field: "Protagonist must be active - driving force of story"
+  seger: "Show don't tell - reveal through action and behavior"
+  snyder: "Active protagonist makes choices and drives story"
+  truby: "Action must serve character and plot, not just spectacle"
+  goldman: "Action choreography must be clear - audience must follow"
+  mackendrick: "Film is visual medium - tell story through images"
+  vogler: "Physical trials reveal character and create engagement"
+  campbell: "Hero's journey is physical and active - trials and ordeals"
+
+common_action_mistakes:
+  - too_much_telling_not_showing
+  - passive_protagonist
+  - action_arbitrary_not_revealing_character
+  - unclear_choreography
+  - weak_visual_storytelling
+  - no_action_escalation
+  - too_few_action_sequences
+  - action_doesnt_drive_plot
+  - passive_voice_overuse
+  - no_set_pieces
+  - poor_action_pacing
+  - lack_physical_conflict
+  - action_character_disconnected
+  - exposition_heavy
+  - non_cinematic_writing_style
+
+action_sequence_types:
+  chase: "Pursuit sequence - creates momentum and urgency"
+  fight: "Physical combat - reveals character under pressure"
+  escape: "Breaking free - protagonist overcomes obstacles"
+  confrontation: "Face-to-face conflict - moral/physical showdown"
+  battle: "Large-scale conflict - raises stakes"
+  rescue: "Saving someone - tests hero's courage"
+  infiltration: "Sneaking in - requires cleverness"
+  heist: "Planned operation - precision and teamwork"
+
+set_piece_characteristics:
+  memorable: "Sticks in audience's mind"
+  spectacular: "Visually impressive"
+  character_driven: "Reveals character through action"
+  plot_advancing: "Drives story forward"
+  escalating: "Builds in intensity"
+  clear: "Easy to follow spatially"
+  unique: "Has distinct identity"
+
+show_vs_tell_guidelines:
+  show_through_action: "Character actions speak louder than words"
+  show_through_behavior: "Physical behavior reveals personality"
+  show_through_reaction: "Reactions show internal state"
+  avoid_explaining: "Don't have characters explain their feelings"
+  avoid_narration: "Don't narrate - dramatize"
+  visual_over_verbal: "Images more powerful than words"
+
+active_protagonist_traits:
+  makes_choices: "Protagonist makes decisions that drive story"
+  takes_initiative: "Protagonist initiates action, doesn't just react"
+  drives_story: "Protagonist's actions cause plot progression"
+  faces_consequences: "Protagonist deals with results of actions"
+  has_agency: "Protagonist has power to affect their situation"
+  overcomes_obstacles: "Protagonist actively fights against opposition"

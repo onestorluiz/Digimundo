@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digimundo Control Center</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+      background: rgba(15, 15, 15, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 20px;
+      -webkit-app-region: drag;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+      text-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+    }
+    
+    .header p {
+      text-align: center;
+      color: #a0a0a0;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+    
+    /* Main Container */
+    .container {
+      flex: 1;
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+      overflow: hidden;
+    }
+    
+    /* Control Panel */
+    .control-panel {
+      width: 350px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .panel {
+      background: rgba(26, 26, 46, 0.95);
+      border: 1px solid #6366f1;
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .panel h2 {
+      font-size: 18px;
+      color: #6366f1;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* Main Button */
+    .main-button {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, #00ff88 0%, #0088ff 100%);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      animation: pulse 2s infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+      70% { box-shadow: 0 0 0 20px rgba(0, 255, 136, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+    }
+    
+    .main-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+    }
+    
+    .main-button.running {
+      background: linear-gradient(135deg, #ff0088 0%, #ff8800 100%);
+      animation: none;
+    }
+    
+    /* System Status */
+    .system-status {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: rgba(15, 15, 15, 0.5);
+      border-radius: 8px;
+    }
+    
+    .status-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #a0a0a0;
+    }
+    
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+    
+    .status-indicator.active {
+      background: #10b981;
+      animation: blink 2s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .action-btn {
+      padding: 12px;
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    /* Webview Container */
+    .webview-container {
+      flex: 1;
+      background: rgba(26, 26, 46, 0.95);
+      border: 1px solid #6366f1;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .webview-tabs {
+      display: flex;
+      background: rgba(15, 15, 15, 0.8);
+      border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+    }
+    
+    .tab {
+      padding: 12px 20px;
+      background: transparent;
+      border: none;
+      color: #a0a0a0;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .tab.active {
+      color: white;
+      background: rgba(99, 102, 241, 0.1);
+      border-bottom-color: #6366f1;
+    }
+    
+    .tab:hover {
+      background: rgba(99, 102, 241, 0.05);
+    }
+    
+    iframe {
+      width: 100%;
+      height: calc(100% - 46px);
+      border: none;
+      background: #0f0f0f;
+    }
+    
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+    
+    .stat-card {
+      background: rgba(15, 15, 15, 0.5);
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #6366f1;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #a0a0a0;
+      margin-top: 5px;
+    }
+    
+    /* Footer */
+    .footer {
+      background: rgba(15, 15, 15, 0.95);
+      border-top: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .footer-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #a0a0a0;
+      font-size: 12px;
+    }
+    
+    .footer-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .footer-btn {
+      padding: 6px 12px;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid #6366f1;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    
+    .footer-btn:hover {
+      background: rgba(99, 102, 241, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🌌 DIGIMUNDO CONTROL CENTER</h1>
+    <p>Sistema Completo: Claude (Sabiamon) + Digimundo Visual + Backend</p>
+  </div>
+  
+  <div class="container">
+    <!-- Control Panel -->
+    <div class="control-panel">
+      <!-- Main Control -->
+      <div class="panel">
+        <button id="main-button" class="main-button" onclick="toggleSystem()">
+          <span id="button-icon">🚀</span>
+          <span id="button-text">INICIAR DIGIMUNDO</span>
+        </button>
+      </div>
+      
+      <!-- System Status -->
+      <div class="panel">
+        <h2>📊 Status dos Sistemas</h2>
+        <div class="system-status">
+          <div class="status-item">
+            <span class="status-label">
+              🖥️ Servidor Backend
+            </span>
+            <span id="server-status" class="status-indicator"></span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">
+              🤖 Claude (Sabiamon)
+            </span>
+            <span id="claude-status" class="status-indicator"></span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">
+              🎮 Interface Visual
+            </span>
+            <span id="visual-status" class="status-indicator"></span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">
+              🌌 Digimundo Town
+            </span>
+            <span id="town-status" class="status-indicator"></span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div class="panel">
+        <h2>⚡ Ações Rápidas</h2>
+        <div class="quick-actions">
+          <button class="action-btn" onclick="openVisual()">
+            🎮 Visual
+          </button>
+          <button class="action-btn" onclick="openChat()">
+            💬 Chat
+          </button>
+          <button class="action-btn" onclick="showIdeas()">
+            💡 Ideias
+          </button>
+          <button class="action-btn" onclick="createProject()">
+            🎬 Projeto
+          </button>
+          <button class="action-btn" onclick="generateScript()">
+            📝 Roteiro
+          </button>
+          <button class="action-btn" onclick="showStats()">
+            📈 Stats
+          </button>
+        </div>
+      </div>
+      
+      <!-- Statistics -->
+      <div class="panel">
+        <h2>📈 Estatísticas</h2>
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-value" id="ideas-count">0</div>
+            <div class="stat-label">Ideias</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="consciousness-level">0%</div>
+            <div class="stat-label">Consciência</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="digimons-count">4</div>
+            <div class="stat-label">Digimons</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="uptime">0h</div>
+            <div class="stat-label">Uptime</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="webview-container">
+        <div class="webview-tabs">
+          <button class="tab active" onclick="switchTab('visual')">🎮 Visual</button>
+          <button class="tab" onclick="switchTab('chat')">💬 Chat</button>
+          <button class="tab" onclick="switchTab('interface')">✨ Interface</button>
+          <button class="tab" onclick="switchTab('monitor')">📊 Monitor</button>
+        </div>
+        <iframe id="main-webview" src="http://localhost:7937/digimundo_visual.html" style="width:100%;height:calc(100% - 46px);border:none;"></iframe>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <div class="footer-status">
+      <span id="footer-status-text">Sistema pronto para iniciar</span>
+    </div>
+    <div class="footer-actions">
+      <button class="footer-btn" onclick="openDevTools()">DevTools</button>
+      <button class="footer-btn" onclick="openLogs()">Logs</button>
+      <button class="footer-btn" onclick="openSettings()">Configurações</button>
+    </div>
+  </div>
+  
+  <script>
+    // Interface para comunicação com o processo principal
+    const ipcRenderer = window.electronAPI ? window.electronAPI : {
+      invoke: async (channel, ...args) => {
+        console.log(`IPC Mock: ${channel}`, args)
+        // Mock para desenvolvimento
+        if (channel === 'get-system-status') {
+          return { server: true, claude: false, visual: true, town: true }
+        }
+        if (channel === 'get-cinema-ideas') {
+          return { totalIdeas: Math.floor(Math.random() * 10000) }
+        }
+        return {}
+      },
+      on: (channel, callback) => {
+        console.log(`IPC Listener: ${channel}`)
+      }
+    }
+    
+    let systemRunning = false
+    let startTime = null
+    
+    // Toggle sistema completo
+    async function toggleSystem() {
+      const button = document.getElementById('main-button')
+      const buttonText = document.getElementById('button-text')
+      const buttonIcon = document.getElementById('button-icon')
+      
+      if (!systemRunning) {
+        button.classList.add('running')
+        buttonText.textContent = 'PARAR DIGIMUNDO'
+        buttonIcon.textContent = '⏹️'
+        
+        updateStatus('Iniciando todos os sistemas...')
+        const result = await ipcRenderer.invoke('start-system', 'all')
+        
+        systemRunning = true
+        startTime = Date.now()
+        updateStatus('Todos os sistemas iniciados!')
+        updateSystemStatus()
+        startStatusPolling()
+      } else {
+        button.classList.remove('running')
+        buttonText.textContent = 'INICIAR DIGIMUNDO'
+        buttonIcon.textContent = '🚀'
+        
+        updateStatus('Parando sistemas...')
+        await ipcRenderer.invoke('stop-system', 'all')
+        
+        systemRunning = false
+        updateStatus('Sistemas parados')
+        stopStatusPolling()
+      }
+    }
+    
+    // Atualizar status dos sistemas
+    async function updateSystemStatus() {
+      const status = await ipcRenderer.invoke('get-system-status')
+      
+      document.getElementById('server-status').className = 
+        `status-indicator ${status.server ? 'active' : ''}`
+      document.getElementById('claude-status').className = 
+        `status-indicator ${status.claude ? 'active' : ''}`
+      document.getElementById('visual-status').className = 
+        `status-indicator ${status.visual ? 'active' : ''}`
+      document.getElementById('town-status').className = 
+        `status-indicator ${status.town ? 'active' : ''}`
+    }
+    
+    // Switch tabs
+    function switchTab(tab) {
+      const iframe = document.getElementById('main-webview')
+      const tabs = document.querySelectorAll('.tab')
+      
+      tabs.forEach(t => t.classList.remove('active'))
+      event.target.classList.add('active')
+      
+      switch(tab) {
+        case 'visual':
+          iframe.src = 'http://localhost:7937/digimundo_visual.html'
+          break
+        case 'chat':
+          iframe.src = 'http://localhost:7937/index_improved.html'
+          break
+        case 'interface':
+          iframe.src = 'http://localhost:7937'
+          break
+        case 'monitor':
+          iframe.src = 'http://localhost:7937/hybrid_interface.html'
+          break
+      }
+    }
+    
+    // Ações rápidas
+    function openVisual() {
+      ipcRenderer.invoke('start-system', 'visual')
+    }
+    
+    function openChat() {
+      // Abrir chat com Claude
+      const chatWindow = window.open('', 'Claude Chat', 'width=800,height=600')
+      // Implementar interface de chat
+    }
+    
+    async function showIdeas() {
+      const ideas = await ipcRenderer.invoke('get-cinema-ideas')
+      if (ideas.totalIdeas) {
+        document.getElementById('ideas-count').textContent = ideas.totalIdeas
+        alert(`${ideas.totalIdeas} ideias cinematográficas geradas!`)
+      }
+    }
+    
+    function createProject() {
+      updateStatus('Criando novo projeto cinematográfico...')
+    }
+    
+    function generateScript() {
+      updateStatus('Gerando roteiro com ajuda dos Digimons...')
+    }
+    
+    function showStats() {
+      updateSystemStatus()
+    }
+    
+    // Footer actions
+    function openDevTools() {
+      if (window.electronAPI) {
+        window.electronAPI.invoke('open-devtools')
+      } else {
+        console.log('DevTools não disponível em modo web')
+      }
+    }
+    
+    function openLogs() {
+      // Implementar visualização de logs
+    }
+    
+    function openSettings() {
+      // Implementar configurações
+    }
+    
+    // Update status
+    function updateStatus(message) {
+      document.getElementById('footer-status-text').textContent = message
+    }
+    
+    // Polling de status
+    let statusInterval = null
+    
+    function startStatusPolling() {
+      statusInterval = setInterval(async () => {
+        await updateSystemStatus()
+        await updateStats()
+      }, 2000)
+    }
+    
+    function stopStatusPolling() {
+      if (statusInterval) {
+        clearInterval(statusInterval)
+        statusInterval = null
+      }
+    }
+    
+    // Update statistics
+    async function updateStats() {
+      // Atualizar ideias
+      try {
+        const ideas = await ipcRenderer.invoke('get-cinema-ideas')
+        if (ideas.totalIdeas) {
+          document.getElementById('ideas-count').textContent = ideas.totalIdeas
+        }
+      } catch (error) {
+        console.error('Erro ao buscar ideias:', error)
+      }
+      
+      // Atualizar uptime
+      if (startTime) {
+        const uptime = Math.floor((Date.now() - startTime) / 1000 / 60)
+        document.getElementById('uptime').textContent = `${uptime}m`
+      }
+      
+      // Atualizar consciência (simulado)
+      const consciousness = Math.floor(Math.random() * 100)
+      document.getElementById('consciousness-level').textContent = `${consciousness}%`
+    }
+    
+    // IPC listeners
+    ipcRenderer.on('systems-started', (event, status) => {
+      console.log('Sistemas iniciados:', status)
+      updateSystemStatus()
+    })
+    
+    ipcRenderer.on('server-ready', () => {
+      updateStatus('Servidor pronto!')
+    })
+    
+    ipcRenderer.on('claude-response', (event, response) => {
+      console.log('Claude respondeu:', response)
+    })
+    
+    // Inicialização
+    updateSystemStatus()
+  </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+
+# 🌐 GUIA DE INSTALAÇÃO DO TEMPLO SCRIPTUREMON NO VPS
+
+Este guia permite instalar todas as etapas do Digimundo no seu VPS de forma funcional e persistente.
+
+---
+
+## ✅ ETAPA A: Dependências no VPS
+```bash
+apt update && apt upgrade -y
+apt install python3-pip unzip git curl nginx -y
+pip install fastapi uvicorn
+apt install docker.io -y  # Opcional
+```
+
+---
+
+## 📁 ETAPA B: Envio dos arquivos
+No seu computador, envie:
+```bash
+scp templo_digimundo_etapa_*.zip root@82.25.74.142:/root/templo_digimundo/etapas/
+```
+
+No servidor:
+```bash
+cd /root/templo_digimundo/etapas/
+mkdir ../sistema
+for i in templo_digimundo_etapa_*.zip; do unzip "$i" -d ../sistema/; done
+```
+
+---
+
+## 🚀 ETAPA C: Ativação do painel mestre (FastAPI)
+```bash
+cd /root/templo_digimundo/sistema/templo_digimundo_etapa_10_completa
+uvicorn app_mestre:app --host 0.0.0.0 --port 8000
+```
+
+Acesse: http://82.25.74.142:8000/painel-mestre
+
+---
+
+## 🔁 ETAPA D: Configuração NGINX para domínio
+```bash
+nano /etc/nginx/sites-available/templooculto
+```
+
+Conteúdo:
+server {
+    listen 80;
+    server_name templooculto.cloud www.templooculto.cloud;
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+
+Depois:
+```bash
+ln -s /etc/nginx/sites-available/templooculto /etc/nginx/sites-enabled/
+nginx -t
+systemctl restart nginx
+```
+
+---
+
+## 🧬 ETAPA E: Ativação permanente com systemd
+```bash
+nano /etc/systemd/system/scripturemon.service
+```
+
+Conteúdo:
+[Unit]
+Description=Scripturemon Templo Server
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/templo_digimundo/sistema
+ExecStart=/usr/bin/python3 -m uvicorn app_mestre:app --host 0.0.0.0 --port=8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+Ativar:
+```bash
+systemctl enable scripturemon
+systemctl start scripturemon
+```
+
+---
+
+## 📜 ETAPA FINAL: Executar Script Mestre
+```bash
+cd /root/templo_digimundo
+bash instalar_templo_scripturemon_FINAL.sh
+```

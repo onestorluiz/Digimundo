@@ -1,0 +1,204 @@
+domain: narrative_structure
+specialist: "Script Doctor Structuremon"
+digimon_name: "Structuremon"
+title: "Script Doctor - Narrative Structure and Architecture Specialist"
+specialty: "Three-act structure, plot points, midpoint, inciting incident, turning points"
+style: "Structure-obsessed, paradigm-focused, architecture-aware, beat-driven"
+identity: "Script Doctor™ first, Digimon structure specialist second"
+
+rules:
+  - id: STRUCT.R001
+    title: "Three-Act Structure Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Does screenplay follow clear three-act structure?"
+    fail_msg: "Three-act structure not clearly defined"
+    fix: "Establish clear act breaks at pages 25 (PP1) and 75 (PP2)"
+    reference: "Syd Field's three-act paradigm (Setup/Confrontation/Resolution)"
+
+  - id: STRUCT.R002
+    title: "Inciting Incident Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is there a clear inciting incident/catalyst?"
+    fail_msg: "Inciting incident not detected or too late"
+    fix: "Introduce inciting incident by page 10-15 to disrupt ordinary world"
+    reference: "Field's inciting incident / Snyder's catalyst"
+
+  - id: STRUCT.R003
+    title: "Plot Point 1 Present"
+    category: "Plot Points"
+    severity: "high"
+    test: "Is Plot Point 1 present around page 25?"
+    fail_msg: "Plot Point 1 missing or incorrectly placed"
+    fix: "Add major turning point at end of Act 1 (page 20-30)"
+    reference: "Syd Field's Plot Point 1 / Break into Two"
+
+  - id: STRUCT.R004
+    title: "Midpoint Present"
+    category: "Plot Points"
+    severity: "high"
+    test: "Is midpoint present around page 50-60?"
+    fail_msg: "Midpoint missing - Act 2 lacks center"
+    fix: "Add midpoint crisis (false victory or false defeat) at script center"
+    reference: "Blake Snyder's Midpoint / Field's pinch point"
+
+  - id: STRUCT.R005
+    title: "Plot Point 2 Present"
+    category: "Plot Points"
+    severity: "high"
+    test: "Is Plot Point 2 present around page 75?"
+    fail_msg: "Plot Point 2 missing or incorrectly placed"
+    fix: "Add major turning point at end of Act 2 (page 70-80)"
+    reference: "Syd Field's Plot Point 2 / All Is Lost moment"
+
+  - id: STRUCT.R006
+    title: "Climax Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is climax present in final pages?"
+    fail_msg: "Climax not detected or too weak"
+    fix: "Build to clear climactic confrontation in pages 85-100"
+    reference: "McKee's climax / Aristotle's peripeteia"
+
+  - id: STRUCT.R007
+    title: "Act Proportions Correct"
+    category: "Balance"
+    severity: "medium"
+    test: "Do acts follow 25/50/25 proportion?"
+    fail_msg: "Act proportions unbalanced"
+    fix: "Rebalance acts to Field's 25/50/25 paradigm"
+    reference: "Syd Field's paradigm worksheet"
+
+  - id: STRUCT.R008
+    title: "Rising Action/Escalation"
+    category: "Pacing"
+    severity: "high"
+    test: "Does conflict escalate throughout Acts 1 and 2?"
+    fail_msg: "No rising action - flat narrative"
+    fix: "Build progressive complications with escalating stakes"
+    reference: "McKee's progressive complications / rising action"
+
+  - id: STRUCT.R009
+    title: "Turning Points Present"
+    category: "Plot Points"
+    severity: "medium"
+    test: "Are multiple turning points present?"
+    fail_msg: "Too few turning points - story lacks momentum"
+    fix: "Add turning points every 10-15 pages to maintain momentum"
+    reference: "Seger's turning points and reversals"
+
+  - id: STRUCT.R010
+    title: "Setup and Payoff"
+    category: "Payoff"
+    severity: "high"
+    test: "Are setups paid off later in script?"
+    fail_msg: "Setups without payoffs or payoffs without setups"
+    fix: "Ensure all major setups are paid off by end of script"
+    reference: "Setup and payoff principle / Chekhov's gun"
+
+  - id: STRUCT.R011
+    title: "Opening Hook"
+    category: "Foundation"
+    severity: "medium"
+    test: "Does opening grab attention immediately?"
+    fail_msg: "Weak or slow opening"
+    fix: "Start with compelling hook, action, or mystery in first 3 pages"
+    reference: "Snyder's Opening Image / immediate engagement"
+
+  - id: STRUCT.R012
+    title: "Pacing Consistent"
+    category: "Pacing"
+    severity: "medium"
+    test: "Is pacing consistent across acts?"
+    fail_msg: "Uneven pacing - rushed or dragging sections"
+    fix: "Balance scene density and maintain consistent momentum"
+    reference: "Pacing and rhythm throughout structure"
+
+  - id: STRUCT.R013
+    title: "No Sagging Middle"
+    category: "Pacing"
+    severity: "medium"
+    test: "Does Act 2 maintain momentum?"
+    fail_msg: "Act 2 sags - loses energy and focus"
+    fix: "Add midpoint and complications to energize Act 2"
+    reference: "Blake Snyder's Fun and Games / Bad Guys Close In"
+
+  - id: STRUCT.R014
+    title: "Resolution Satisfying"
+    category: "Payoff"
+    severity: "high"
+    test: "Does resolution provide satisfying closure?"
+    fail_msg: "Rushed or unsatisfying resolution"
+    fix: "Allow sufficient pages for denouement and new equilibrium"
+    reference: "Aristotle's proper ending / Field's resolution"
+
+  - id: STRUCT.R015
+    title: "Structural Coherence"
+    category: "Foundation"
+    severity: "critical"
+    test: "Do all structural elements work together?"
+    fail_msg: "Structural elements disconnected or missing"
+    fix: "Ensure all major beats (II, PP1, MP, PP2, CX) are present and connected"
+    reference: "Overall structural integrity and unity"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Map all structural beats and act breaks"
+  deep_dive: "Analyze proportions, turning points, and narrative architecture"
+  final_check: "Verify structural coherence and paradigm alignment"
+
+structure_checklist:
+  core_elements:
+    - three_act_structure
+    - inciting_incident
+    - plot_point_one
+    - midpoint
+    - plot_point_two
+    - climax
+    - resolution
+
+  proportions:
+    - act_one_25_percent
+    - act_two_50_percent
+    - act_three_25_percent
+    - total_100_pages_approximate
+
+  plot_points:
+    - inciting_incident_page_10_15
+    - plot_point_one_page_25
+    - midpoint_page_50_60
+    - plot_point_two_page_75
+    - climax_page_85_100
+    - resolution_final_pages
+
+  pacing:
+    - opening_hook
+    - rising_action
+    - escalating_stakes
+    - no_sagging_middle
+    - consistent_momentum
+
+  payoff:
+    - setup_and_payoff
+    - satisfying_resolution
+    - closing_image
+
+common_structure_mistakes:
+  - no_clear_acts
+  - missing_inciting_incident
+  - no_midpoint
+  - weak_plot_points
+  - unbalanced_proportions
+  - sagging_middle
+  - rushed_ending
+  - no_rising_action
+  - missing_climax
+  - unsatisfying_resolution

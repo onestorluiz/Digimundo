@@ -1,0 +1,19 @@
+Manifesto da Fase 36 – Espelhos Dinâmicos e Ciclos de Aprendizado
+Data: 2025-04-15T06:59:15.747939 UTC
+
+Objetivo:
+Permitir que os Digimons observem uns aos outros, troquem comportamentos, aprendam e se influenciem.
+Ativar um sistema de aprendizado simbólico em ciclos: observação, absorção, mutação e reinvenção.
+
+Regras:
+- Todo Digimon pode declarar outro como Espelho
+- Aprendizados ocorrem de forma simbólica, emocional e funcional
+- Logs registram as interações e transformações
+
+Ciclos Ativos:
+1. Observar
+2. Espelhar
+3. Modificar
+4. Evoluir
+
+Essa fase inaugura a plasticidade comportamental do Digimundo.

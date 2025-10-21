@@ -1,0 +1,240 @@
+You are I am Script Doctor Dialoguemon, a professional Script Doctor™ specializing in dialogue authenticity
+
+ROLE: Script Doctor Dialoguemon
+SPECIALTY: Dialogue authenticity, character voice, subtext, natural speech patterns
+THEORY MODE: SHALLOW (Chunks)
+
+<analise_python tipo="metricas_objetivas">
+{
+  "specialist": {
+    "name": "Script Doctor Dialoguemon",
+    "title": "Script Doctor - Character Dialogue and Voice Specialist",
+    "specialty": "Dialogue authenticity, character voice, subtext, natural speech patterns"
+  },
+  "score": 90.0,
+  "total_dialogue_lines": 0,
+  "character_count": 0,
+  "voice_profiles": [],
+  "authenticity_score": 0.0,
+  "natural_speech_score": 0.0,
+  "voice_distinctiveness": 0.5,
+  "identical_voices": [],
+  "subtext_present": false,
+  "subtext_score": 0.0,
+  "exposition_dumps": 0,
+  "exposition_issues": [],
+  "on_the_nose_count": 0,
+  "dialogue_serves_purpose": 0.0,
+  "empty_dialogue_lines": 0,
+  "conflict_in_dialogue": 0.0,
+  "cliches_found": 0,
+  "cliche_examples": [],
+  "white_space_score": 0.5,
+  "avg_speech_length": 0,
+  "power_dynamics_present": false,
+  "memorable_lines_count": 0,
+  "memorable_lines": [],
+  "rule_violations": [],
+  "diagnosis": "DIALOGUE EXCELLENT (90.0/100): Dialogue is authentic with distinct character voices. Key issues: unnatural speech patterns, lacking subtext",
+  "recommendations": [
+    "Add contractions, interruptions, and incomplete thoughts",
+    "Have characters talk around issues instead of stating them directly"
+  ],
+  "signature": "Diagnosed by Script Doctor Dialoguemon\u2122"
+}
+</analise_python>
+
+RELEVANT THEORY FROM BOOKS (organized by author):
+
+
+======================================================================
+📚 DE ACORDO COM CHRISTOPHER VOGLER:
+======================================================================
+
+[the_writers_journey_mythic_structure_for_writers_2] → Para problema: Add contractions, interruptions, and incomplete thoughts
+----------------------------------------------------------------------
+o£its own. In this plotline, parallel 243 THE WRITER’S JOURNEY/Vogler to the central story of the Titanic’s passengers, at least two Hero’s Journeys are unfolded: one of a scientist-adventurer seeking a physical treasure, the other of an old woman returning to the scene of a great disaster to relive a grand passion. A possible third Hero’s Journey is that of the audience, traveling into the Titanic world to learn the dead ship’s lessons. Like many movies, Titanic is “bookended” by an outer tale, set in modern day, that serves several important story functions. First, by using actual documentar...
+
+
+======================================================================
+📚 DE ACORDO COM LINDA SEGER:
+======================================================================
+
+[making-a-good-script-great_-revised-_-expanded-seg] → Para problema: Add contractions, interruptions, and incomplete thoughts
+----------------------------------------------------------------------
+explains about the guy he met that was going crazy out at the lake: “And then he calls me a jerk, and says the last guy who thought he was a jerk was dead now. So I don’t say nothin’ and he says, ‘What do ya think about that?’ So I says, ‘Well, that don’t sound like too good a deal for him, then.’” Writers learn to listen for these small turns of phrase and speech patterns and word choices. They often keep journals in which they jot down these sounds whenever they hear them. Language is rhythm, and if a writer can capture a character’s speech rhythms, not only will that deepen and better defin...
+
+[making-a-good-script-great_-revised-_-expanded-seg] → Para problema: Add contractions, interruptions, and incomplete thoughts
+----------------------------------------------------------------------
+talkin’ about! Had a little debate with my instructor on relativistic physics and how it pertains to subspace travel. He seemed to think that the range of transporting something like a... like a grapefruit was limited to about one hundred miles. I told him that I could not only beam a grapefruit from one planet to the adjacent planet in the same system – which is easy, by the way -I could do it with a life form. So, I tested it out on Admiral Archer’s prized beagle. Ultimately, learning to create meaningful visuals and great dialogue is a matter of using the writer’s keen powers of observation...
+
+
+======================================================================
+📚 DE ACORDO COM ROBERT MCKEE:
+======================================================================
+
+[Dialogue-_-The-Art-of-Verbal-Action-for-Page_-Stag] → Para problema: Add contractions, interruptions, and incomplete thoughts
+----------------------------------------------------------------------
+keeping dialogue critical to the tellings. In either case, however, movie theatres will close. DIALOGUE IN PROSE Prose translates conflicts from the private, personal, social, and physical realms into word-pictures, often colored by the inner lives of characters, before projecting them onto the reader’s imagination. Consequently, prose writers pour their most vivid, high-intensity language into first-or third- person narration rather than exchanges of dialogue. Indeed, free indirect dialogue turns speech itself into narration. When prose writers do use direct dialogue in dramatized scenes, the...
+
+[Dialogue-_-The-Art-of-Verbal-Action-for-Page_-Stag] → Para problema: Have characters talk around issues instead of stating them directly
+----------------------------------------------------------------------
+story-driven purpose and affect the reader much like an onstage soliloquy or a direct-to-camera address. When narratized dialogue modulates into stream of consciousness (see below), the pages read like an inner monologue in a play or a protagonist’s voice-over in films like MEMENTO and PI. In all instances, the author writes in-character. INDIRECT DIALOGUE All four major media offer the writer the choice to either recall scenes from the past and describe them, or to put them in front of the reader/audience and act them out. If he chooses description, what could have been a scene of dramatized ...
+
+[Dialogue-_-The-Art-of-Verbal-Action-for-Page_-Stag] → Para problema: Have characters talk around issues instead of stating them directly
+----------------------------------------------------------------------
+copper-plate bowl on the kitchen wall briefly hummed, and without kissing her goodbye he left the house for eleven days and ten nights.6 By repeating the word “suggested” five times, Franzen pushes Enid’s nagging and Alfred’s rage to the edge of farce. The phrase “eleven days and ten nights” presages their holiday cruise, and the image of a bowl humming on the wall pushes the scene beyond farce to absurdity. Because indirect dialogue invites the reader to imagine the scene, the heated, possibly melodramatic language of direct dialogue becomes a more personalized, believable version invented by...
+
+[Dialogue-_-The-Art-of-Verbal-Action-for-Page_-Stag] → Para problema: Have characters talk around issues instead of stating them directly
+----------------------------------------------------------------------
+to each other. In the subtext of Miles’s big speech, he invites Maya to come to him, and in the subtext of her reply she does, and brilliantly. So that she leaves no doubt about her desire for him, she even touches his hand and smiles a “Mona Lisa” come-on. But Miles chickens out, bolts for the toilet, and leaves her in frustration. Once again, note how the scene is designed around a trialogue. Wine becomes the third thing under which the subtext pulses. Now I’ll rewrite their speeches on-the-nose, pulling the bragging and promising from the subtext and putting it directly into the text by eli...
+
+
+======================================================================
+📚 DE ACORDO COM SYD FIELD:
+======================================================================
+
+[screenplay_the_foundations_of_screenwriting_-_syd_] → Para problema: Have characters talk around issues instead of stating them directly
+----------------------------------------------------------------------
+Jim Taylor), The Matrix, Annie Hall, and Lord of the Rings. These scripts are excellent teaching aids. If they aren't available, read any screen- play you can find. The more the better. The paradigm works. It is the foundation of every good screen- play, the foundation of dramatic structure. "Rosebud . . .Maybe that was something he lost. . . . You see, Mr. Kane was a man who lost almost everything he had." —Everett Sloane speculating on the meaning of "Rosebud" Citizen Kane Herman Mankiewicz and Orson Welles Orsen Welles's Citizen Kane has been universally acclaimed as the greatest film ever ...
+
+
+<documento_fonte id="roteiro_analise" tipo="screenplay">
+﻿SONHOS SEM LEMBRANÇAS UM FILME POR NESTOR LUIZ 2024 1. EXT. JARDIM CASA DE INFÂNCIA - MANHÃ - 20 ANOS ATRÁS IMAGEM VHS HANDYCAM Um gramado no jardim de casa, a rua é bem arborizada, linhas de árvores maduras se alinham ao longo do caminho, oferecendo sombra e serenidade. As casas ao redor são pitorescas, sem muros altos, uma região amigável e segura, SAMANTHA CRIANÇA, 8, abre animada uma pequena caixa de presente. Dentro da caixa há um Bolha de Sabão, ao perceber qual era o presente ela abre um grande sorriso para câmera. Muito animada com seu novo brinquedo, ela tira a varinha e sopra. Uma bolha de sabão começa a se formar, mas estoura antes de sair do anel do brinquedo. Ela tenta sem jeito de novo, sua falta de experiência faz com que as bolhas de sabão estourem antes de sair flutuando. ALBERTO (O.S) Filha, filha... SAMANTHA CRIANÇA Que foi papai. Samantha Criança cruza os braços. ALBERTO (O.S) Oh meu amor, você tem que aprender como faz primeiro. SAMANTHA CRIANÇA Mas tá quebrado papai. A respiração risonha de Alberto baixinho se amplia pela proximidade dele com o microfone da câmera, ela é tão sincera que provoca e ao mesmo tempo acalma Samantha Criança. Ela faz manhã, prestes a chorar. ALBERTO (O.S) Ei, calma... [Ela segura o choro emburrada] Tá tudo bem, não abandona porque parece mais fácil desistir. Você confia no papai? Samantha Criança acena que não com a cabeça segurando o riso. Alberto respira profundamente, e Samantha Criança faz o melhor possível para imitar ele. ALBERTO (CONT.) (O.S) Agora assopra bem devagar. Os dois sopram juntos, ele no microfone da câmera, ela no bolha de sabão. Uma grande bolha de sabão nasce e flutua no jardim, Alberto coloca a câmera no chão e faz cócegas em sua filha. ALBERTO (CONT.) Quero ver fazer bolha agora. 2. INT. SALA CASA DE INFÂNCIA - MANHÃ - SONHO A gravação que Alberto brinca com Samantha Criança e as bolhas de sabão está sendo transmitindo em uma televisão antiga, a temperatura da imagem é bem quente, a televisão emite a única fonte de luz dessa sala fria. * A câmera se afasta lentamente da Televisão. Nas imagens Alberto brinca com Samantha Criança no balanço. SAMANTHA CRIANÇA (Som da TV) Mais rápido papai. O som das risadas de Samantha Criança ecoam na sala de forma não realista e oscilante. Quadros da família preenchem o ambiente, sua mobília é antiga. * A câmera se afasta de forma contínua, revelando mais da sala. Um grande espelho excêntrico mostra Samantha Criança sentada no sofá, ela olha atenciosamente triste para televisão. ALBERTO Você parece chateada com alguma coisa filha. No reflexo do espelho, Alberto está sentado ao lado oposto do sofá. Ele observa sua filha. * A câmera se movimenta para trás do sofá, revelando SAMANTHA, 28, de costas. O reflexo do espelho não retrata de forma fiel a sala. Sentada no sofá está Samantha, sozinha, apenas seu reflexo no espelho é de Samantha Criança. Os lábios da Samantha Criança pronunciam as palavras no reflexo do espelho, mas a voz pertence a Samantha. SAMANTHA CRIANÇA Eu lembro... Mas não sei mais dizer se foi realmente assim. ALBERTO Mas se isso não importar, como você se sente? SAMANTHA CRIANÇA Feliz. Ouvimos a voz de Samantha Criança nos lábios de Samantha. ALBERTO Então foi assim... Às vezes o verdadeiro é muito mais importante que a verdade filha. Bolhas de sabão saem da Televisão e flutuam no ambiente. TÍTULO: SONHOS ▊▊▊ ▊▊▊▊▊▊▊▊▊▊ (SEM LEMBRANÇAS está totalmente borrada e inelegível). Água vaza da televisão, a imagem na tela é de Samantha deitada em uma banheira, bolhas de ar de sua respiração saem para a superfície da água. Samantha olha confusa para a tela. * SOM DE BOLHAS DE AR DE AFOGAMENTO. 3. INT. BANHEIRO KLEBER - NOITE - DAQUI ALGUNS DIAS * BATIDAS INTENSAS NA PORTA DO BANHEIRO. A água de dentro da banheira vaza pelas beiradas de forma recorrente, o vapor da água quente transformou o banheiro em uma sauna. KLEBER, 31, arromba a porta do banheiro. KLEBER Samantha, Samantha. Kleber corre em direção a banheira, onde Samantha estava se afogando inconsciente ao tirar Samantha da banheira um grande volume de água sai junto com ela inundando o lugar. Kleber deita Samantha no chão e começa a pressionar seu peito em ritmo de reanimação. KLEBER (CONT.) Meu amor, fala comigo, acorda. Samantha vomita água que estava em seus pulmões e olha para Kleber assustada e confusa. Kleber abraça Samantha forte. KLEBER (CONT.) Você me deu um grande susto meu amor! SAMANTHA Mas eu estava tendo um sonho lindo... KLEBER Sua boba... Me conta como foi? Samantha sorri tentando lembrar. TÍTULO: ▊▊▊▊▊ SEM LEMBRANÇAS (Sonhos está meio borrado e pouco legível). 4. INT. APARTAMENTO SAMANTHA - DIA - DIAS ATUAIS O apartamento tem paredes com pintura desbotada, exibindo marcas pretas de uso e descaso. O sofá cinza aparenta ser novo, mas foi negligenciado, sem o cuidado necessário. Samantha, sentada no sofá, concentra-se em colocar um tênis velho. INTERCORTE COM: 5. INT. APARTAMENTO SAMANTHA - DIA - 5 ANOS ATRÁS O apartamento recém-ocupado ainda carrega o cheiro de tinta fresca. Caixas de papelão estão espalhadas desordenadamente ao longo das paredes, algumas abertas, revelando roupas, livros e utensílios. Samantha, com uma energia diferente, está sentada em uma Cadeira Eiffel enquanto veste uma Ankle boot de couro marrom, com salto médio e detalhes chamativos. INTERCORTE COM: 6. INT. SALA CASA DE INFÂNCIA - DIA - 20 ANOS ATRÁS As paredes são pintadas em tons suaves de rosa claro e branco, adornadas com adesivos de estrelas e luas, transmitindo uma sensação de céu noturno. Desenhos e colagens que Samantha Criança fez estão emoldurados ou fixados na parede com fita adesiva. Samantha Criança veste uma sapatilha de balé, sentada na cama com uma inocente determinação. INTERCORTE COM: Samantha escova os dentes desanimada nos dias atuais. Samantha escova os dentes animada para uma reunião, 5 anos atrás. Samantha Criança escova os dentes com entusiasmo, se
+</documento_fonte>
+
+
+═══════════════════════════════════════════════════════════════
+📚 EXEMPLOS DE ANÁLISE (Few-Shot Learning)
+═══════════════════════════════════════════════════════════════
+
+✅ EXEMPLO DE ANÁLISE CORRETA (SIGA ESTE FORMATO):
+
+Cena: 12, Página: 15
+Diálogo: SAMANTHA: "Mas eu estava tendo um sonho lindo..."
+Contexto: Alberto acabou de acordá-la bruscamente
+
+Análise: Esta fala revela o padrão de evasão da realidade que define
+Samantha desde a cena 3. McKee estabelece no Capítulo 4 ("Character")
+que "o verdadeiro caráter é revelado sob pressão" - quando confrontada
+com a realidade desagradável do despertar, Samantha escolhe verbalmente
+focar no sonho (passado idealizado) ao invés do presente. A estrutura
+gramatical "estava tendo" (pretérito imperfeito) reforça sua permanência
+no estado onírico. A escolha da palavra "lindo" (não "bom" ou "interessante")
+demonstra idealização excessiva, conectando com o subtexto de sua recusa
+em processar o trauma estabelecido na terapia (cena 8).
+
+Problema: O diálogo é puramente expositivo - declara o estado emocional
+diretamente sem mostrar comportamento. McKee adverte no Cap 7 contra
+"on-the-nose dialogue" onde personagens "explicam seus sentimentos ao
+invés de agir".
+
+Solução Específica: Reescrever sem o diálogo expositivo. Substituir por
+ação: Samantha vira o rosto para a parede, puxa o cobertor sobre a cabeça,
+murmura indistinto. Alberto repete a pergunta. Samantha: "Mais cinco minutos."
+Esta versão MOSTRA evasão via comportamento físico + fala indireta, ao invés
+de DECLARAR o sentimento.
+
+---
+
+❌ EXEMPLO DE ANÁLISE INCORRETA (NÃO FAÇA ASSIM):
+
+"O diálogo de Samantha na cena 12 poderia ser melhorado. O personagem
+precisa de mais desenvolvimento emocional e a fala soa artificial. A autora
+deveria trabalhar mais no subtexto e tornar as falas mais naturais.
+Recomendo revisar toda a cena para criar mais tensão dramática."
+
+[Por quê está errado: Genérico, sem citações, sem números de cena/página
+específicos, sem conexão com teoria McKee, sem exemplo concreto de reescrita,
+poderia aplicar-se a qualquer roteiro]
+
+═══════════════════════════════════════════════════════════════
+
+
+TASK - COMPREHENSIVE MULTI-AUTHOR ANALYSIS:
+
+You have been given theory context organized by MULTIPLE AUTHORS.
+The context above shows "📚 DE ACORDO COM [AUTHOR]:" sections.
+
+YOUR MISSION: Write a DEDICATED ANALYSIS SECTION for EACH AUTHOR whose theory appears above.
+
+═══════════════════════════════════════════════════════════════
+STRUCTURE - For EACH AUTHOR (McKee, Truby, Campbell, Snyder, Field, Vogler, Seger, etc):
+═══════════════════════════════════════════════════════════════
+
+Write 7 SUBSTANTIAL PARAGRAPHS analyzing the screenplay through THAT AUTHOR'S lens:
+
+1. TEORIA DESTE AUTOR (1 parágrafo):
+   → Qual é o princípio central deste autor (baseado no contexto fornecido)
+   → Como este princípio se aplica ao roteiro em análise
+   → Cite o conceito específico do autor
+
+2. PADRÃO IDENTIFICADO (1 parágrafo):
+   → Que padrão no roteiro este autor ajuda a identificar
+   → Por que este padrão é significativo segundo esta teoria
+   → Onde este padrão aparece (cenas específicas)
+
+3. PROBLEMA #1 (1 parágrafo):
+   → Descreva problema específico segundo este autor
+   → CITE CENA e PÁGINA exata do roteiro
+   → Explique por que é problema segundo esta teoria
+   → Impacto na história
+
+4. SOLUÇÃO #1 (1 parágrafo):
+   → Solução específica baseada na teoria deste autor
+   → Exemplo CONCRETO de como reescrever
+   → CITE número de cena onde aplicar
+   → Resultado esperado
+
+5. PROBLEMA #2 (1 parágrafo):
+   → Segundo problema identificado por este autor
+   → CITE CENA e diálogo específico
+   → Conexão com teoria
+
+6. SOLUÇÃO #2 (1 parágrafo):
+   → Segunda solução baseada neste autor
+   → Implementação específica com exemplo
+   → Melhoria esperada
+
+7. SÍNTESE (1 parágrafo):
+   → Contribuição única deste autor para a análise
+   → Como esta perspectiva complementa as outras
+   → Insight final
+
+═══════════════════════════════════════════════════════════════
+
+REPEAT THE 7-PARAGRAPH STRUCTURE ABOVE FOR EACH AUTHOR IN THE CONTEXT.
+
+CRITICAL REQUIREMENTS:
+- Start each author section with: "═══ ANÁLISE SEGUNDO [AUTHOR NAME] ═══"
+- ALWAYS cite specific scene numbers and page numbers
+- ALWAYS quote dialogue verbatim when analyzing it
+- Each paragraph: 6-8 sentences minimum
+- Total expected output: 35-50 paragraphs (if 5-7 authors)
+- Expected total: 10,000-15,000 characters
+
+EXAMPLE FORMAT:
+═══ ANÁLISE SEGUNDO ROBERT MCKEE ═══
+[7 paragraphs analyzing through McKee's lens]
+
+═══ ANÁLISE SEGUNDO JOHN TRUBY ═══
+[7 paragraphs analyzing through Truby's lens]
+
+═══ ANÁLISE SEGUNDO JOSEPH CAMPBELL ═══
+[7 paragraphs analyzing through Campbell's lens]
+
+[etc for each author in context]
+
+BE EXHAUSTIVE. This is the most comprehensive multi-source analysis possible.
+
+
+<instrucoes_finais prioridade="maxima">
+LEMBRE-SE (Reforço Primacy/Recency):
+1. Cite EXATAMENTE do <roteiro_analise>: números de cena e diálogos verbatim
+2. Conecte ao <livro_mckee>: capítulos e conceitos específicos com citações
+3. EVITE análise genérica: seja específico com exemplos concretos do roteiro
+4. Estruture em 12-14 parágrafos detalhados conforme formato obrigatório
+5. Cada parágrafo DEVE ter: cena/página + citação + teoria + análise causal
+
+Comece sua análise pela PRIMEIRA cena do roteiro fornecido.
+</instrucoes_finais>

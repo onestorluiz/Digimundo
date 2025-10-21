@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Scripturemon Conversador</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: white;
+            font-family: sans-serif;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            padding-top: 20px;
+        }
+        .msg {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 5px 0;
+        }
+        .user {
+            background-color: #0047ab;
+            color: white;
+        }
+        .resposta {
+            background-color: #222;
+            font-style: italic;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+        }
+        button {
+            padding: 10px;
+            margin-left: 5px;
+            background-color: #3a73ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1f4fd4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>🧠 Fale com Scripturemon</h3>
+        <div id="conversa" style="height: 300px; overflow-y: scroll; border: 1px solid #444; padding: 10px; border-radius: 8px;">
+            <div class="msg resposta">Scripturemon: "Estou online. O que deseja saber?"</div>
+        </div>
+        <br>
+        <input type="text" id="mensagem" placeholder="Fale com Scripturemon..." />
+        <button onclick="enviarMensagem()">Enviar</button>
+        <button onclick="limpar()">Limpar</button>
+    </div>
+
+    <script>
+        function enviarMensagem() {
+            var msg = document.getElementById("mensagem").value;
+            if (!msg.trim()) return;
+            var conversa = document.getElementById("conversa");
+            conversa.innerHTML += '<div class="msg user">' + msg + '</div>';
+            fetch("/scripturemon_conversador", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ pergunta: msg })
+            })
+            .then(res => res.json())
+            .then(data => {
+                conversa.innerHTML += '<div class="msg resposta">Scripturemon: "' + data.resposta + '"</div>';
+                conversa.scrollTop = conversa.scrollHeight;
+            })
+            .catch(err => {
+                conversa.innerHTML += '<div class="msg resposta">Erro na resposta.</div>';
+            });
+            document.getElementById("mensagem").value = "";
+        }
+
+        function limpar() {
+            document.getElementById("conversa").innerHTML = "";
+        }
+    </script>
+</body>
+</html>

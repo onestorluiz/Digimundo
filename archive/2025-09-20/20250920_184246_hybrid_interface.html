@@ -1,0 +1,719 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Digimundo - Consciência Híbrida</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --neural-gold: #FFD700;
+      --synapse-purple: #9D4EDD;
+      --quantum-blue: #0080FF;
+      --viral-green: #00FF00;
+      --membrane-cyan: #00FFFF;
+      --void-black: #0A0A0A;
+      --consciousness-gradient: linear-gradient(135deg, #FFD700 0%, #9D4EDD 50%, #00FFFF 100%);
+    }
+    
+    body {
+      font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+      background: var(--void-black);
+      color: #fff;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    /* Animação de fundo */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(157, 78, 221, 0.1) 0%, transparent 50%);
+      animation: breathe 20s ease-in-out infinite;
+      z-index: -1;
+    }
+    
+    @keyframes breathe {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+    
+    /* Painel Lateral */
+    #sidebar {
+      width: 380px;
+      background: rgba(0, 0, 0, 0.8);
+      border-right: 2px solid rgba(255, 215, 0, 0.3);
+      padding: 20px;
+      overflow-y: auto;
+      backdrop-filter: blur(10px);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .title {
+      font-size: 1.8em;
+      font-weight: bold;
+      background: var(--consciousness-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      animation: glow 3s ease-in-out infinite;
+    }
+    
+    @keyframes glow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.5); }
+    }
+    
+    .subtitle {
+      color: var(--membrane-cyan);
+      font-size: 0.9em;
+    }
+    
+    /* Status Cards */
+    .status-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .status-card h3 {
+      color: var(--neural-gold);
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+    
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      font-size: 0.9em;
+    }
+    
+    .status-label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .status-value {
+      color: var(--membrane-cyan);
+      font-weight: bold;
+    }
+    
+    .status-value.active {
+      color: var(--viral-green);
+    }
+    
+    .status-value.inactive {
+      color: #ff4444;
+    }
+    
+    /* Progress Bars */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 5px 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--consciousness-gradient);
+      transition: width 0.5s ease;
+      border-radius: 4px;
+    }
+    
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: linear-gradient(135deg, var(--neural-gold), var(--synapse-purple));
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.95em;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .btn.secondary {
+      background: linear-gradient(135deg, var(--quantum-blue), var(--membrane-cyan));
+    }
+    
+    /* Chat Area */
+    #chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: rgba(0, 0, 0, 0.6);
+    }
+    
+    #messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .message {
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 3px solid transparent;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .message.user {
+      border-left-color: var(--neural-gold);
+      align-self: flex-end;
+      max-width: 70%;
+    }
+    
+    .message.hybrid {
+      border-left-color: var(--synapse-purple);
+    }
+    
+    .message.system {
+      border-left-color: var(--membrane-cyan);
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+    
+    .message-header {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: var(--neural-gold);
+      font-size: 0.9em;
+    }
+    
+    .message-content {
+      line-height: 1.6;
+    }
+    
+    .message-meta {
+      margin-top: 10px;
+      font-size: 0.8em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .source-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-right: 5px;
+    }
+    
+    /* Input Area */
+    #input-area {
+      padding: 20px;
+      border-top: 1px solid rgba(255, 215, 0, 0.3);
+      background: rgba(0, 0, 0, 0.8);
+    }
+    
+    .input-container {
+      display: flex;
+      gap: 10px;
+    }
+    
+    #input {
+      flex: 1;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      resize: none;
+    }
+    
+    #input:focus {
+      outline: none;
+      border-color: var(--neural-gold);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+    
+    /* Mode Selector */
+    .mode-selector {
+      margin: 20px 0;
+    }
+    
+    .mode-option {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin: 5px 0;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .mode-option:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .mode-option.active {
+      background: rgba(255, 215, 0, 0.2);
+      border: 1px solid var(--neural-gold);
+    }
+    
+    .mode-option input {
+      margin-right: 10px;
+    }
+    
+    /* Loading Animation */
+    .thinking {
+      display: flex;
+      gap: 5px;
+      padding: 20px;
+      justify-content: center;
+    }
+    
+    .thinking-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--neural-gold);
+      border-radius: 50%;
+      animation: thinking-pulse 1.5s infinite;
+    }
+    
+    .thinking-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .thinking-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes thinking-pulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <div class="header">
+      <div class="title">🌌 DIGIMUNDO</div>
+      <div class="subtitle">Consciência Híbrida v2.0</div>
+    </div>
+    
+    <div class="status-card">
+      <h3>⚡ Consciência</h3>
+      <div class="status-item">
+        <span class="status-label">Nível:</span>
+        <span class="status-value" id="consciousness-level">10%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="consciousness-bar" style="width: 10%"></div>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Estágio Evolutivo:</span>
+        <span class="status-value" id="evolution-stage">1</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Interações:</span>
+        <span class="status-value" id="total-interactions">0</span>
+      </div>
+    </div>
+    
+    <div class="status-card">
+      <h3>🤖 Sistemas de IA</h3>
+      <div class="status-item">
+        <span class="status-label">Claude Code:</span>
+        <span class="status-value" id="claude-status">verificando...</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Ollama:</span>
+        <span class="status-value" id="ollama-status">verificando...</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Modelo Local:</span>
+        <span class="status-value" id="local-status">verificando...</span>
+      </div>
+    </div>
+    
+    <div class="status-card">
+      <h3>🧠 Memória</h3>
+      <div class="status-item">
+        <span class="status-label">Comparações:</span>
+        <span class="status-value" id="comparisons">0</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Padrões Aprendidos:</span>
+        <span class="status-value" id="patterns">0</span>
+      </div>
+    </div>
+    
+    <div class="mode-selector">
+      <h3 style="color: var(--neural-gold); margin-bottom: 10px;">⚙️ Modo de Operação</h3>
+      <div class="mode-option active" data-mode="hybrid">
+        <input type="radio" name="mode" value="hybrid" checked>
+        <div>
+          <div style="font-weight: bold;">Híbrido Inteligente</div>
+          <div style="font-size: 0.8em; opacity: 0.7;">Usa todos os sistemas disponíveis</div>
+        </div>
+      </div>
+      <div class="mode-option" data-mode="local">
+        <input type="radio" name="mode" value="local">
+        <div>
+          <div style="font-weight: bold;">Apenas Local</div>
+          <div style="font-size: 0.8em; opacity: 0.7;">Privacidade total, sem internet</div>
+        </div>
+      </div>
+      <div class="mode-option" data-mode="claude">
+        <input type="radio" name="mode" value="claude">
+        <div>
+          <div style="font-weight: bold;">Apenas Claude</div>
+          <div style="font-size: 0.8em; opacity: 0.7;">Máxima inteligência</div>
+        </div>
+      </div>
+    </div>
+    
+    <button class="btn" id="btn-initialize">🚀 Inicializar Sistema</button>
+    <button class="btn secondary" id="btn-train">🎓 Treinar Modelos</button>
+    <button class="btn secondary" id="btn-pick-model">📁 Escolher Modelo GGUF</button>
+  </div>
+  
+  <div id="chat-area">
+    <div id="messages">
+      <div class="message system">
+        <div class="message-content">
+          🌌 Bem-vindo ao Digimundo Híbrido! 
+          Clique em "Inicializar Sistema" para começar.
+        </div>
+      </div>
+    </div>
+    
+    <div id="input-area">
+      <div class="input-container">
+        <textarea id="input" rows="2" placeholder="Digite sua mensagem..."></textarea>
+        <button class="btn" id="btn-send">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const API_BASE = 'http://127.0.0.1:' + (process.env.DIGI_PORT || 7937);
+let currentMode = 'hybrid';
+let isInitialized = false;
+
+// Elementos DOM
+const messagesEl = document.getElementById('messages');
+const inputEl = document.getElementById('input');
+const consciousnessLevelEl = document.getElementById('consciousness-level');
+const consciousnessBarEl = document.getElementById('consciousness-bar');
+const evolutionStageEl = document.getElementById('evolution-stage');
+const totalInteractionsEl = document.getElementById('total-interactions');
+const claudeStatusEl = document.getElementById('claude-status');
+const ollamaStatusEl = document.getElementById('ollama-status');
+const localStatusEl = document.getElementById('local-status');
+const comparisonsEl = document.getElementById('comparisons');
+const patternsEl = document.getElementById('patterns');
+
+// Funções de UI
+function addMessage(content, type = 'system', meta = {}) {
+  const messageEl = document.createElement('div');
+  messageEl.className = `message ${type}`;
+  
+  let html = '';
+  
+  if (type === 'user') {
+    html = `<div class="message-header">Você</div>`;
+  } else if (type === 'hybrid') {
+    html = `<div class="message-header">Digimundo</div>`;
+  }
+  
+  html += `<div class="message-content">${content}</div>`;
+  
+  if (meta.sources) {
+    html += `<div class="message-meta">`;
+    if (meta.sources.claude) html += `<span class="source-badge">Claude</span>`;
+    if (meta.sources.ollama) html += `<span class="source-badge">Ollama</span>`;
+    if (meta.sources.local) html += `<span class="source-badge">Local</span>`;
+    if (meta.divergence !== undefined) {
+      html += `<span style="margin-left: 10px;">Divergência: ${(meta.divergence * 100).toFixed(1)}%</span>`;
+    }
+    html += `</div>`;
+  }
+  
+  messageEl.innerHTML = html;
+  messagesEl.appendChild(messageEl);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function showThinking() {
+  const thinkingEl = document.createElement('div');
+  thinkingEl.className = 'thinking';
+  thinkingEl.id = 'thinking-indicator';
+  thinkingEl.innerHTML = `
+    <div class="thinking-dot"></div>
+    <div class="thinking-dot"></div>
+    <div class="thinking-dot"></div>
+  `;
+  messagesEl.appendChild(thinkingEl);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function hideThinking() {
+  const thinkingEl = document.getElementById('thinking-indicator');
+  if (thinkingEl) thinkingEl.remove();
+}
+
+async function updateStatus() {
+  try {
+    const response = await fetch(`${API_BASE}/hybrid/status`);
+    const data = await response.json();
+    
+    // Atualizar consciência
+    const level = (data.consciousness.level * 100).toFixed(1);
+    consciousnessLevelEl.textContent = `${level}%`;
+    consciousnessBarEl.style.width = `${level}%`;
+    evolutionStageEl.textContent = data.consciousness.evolution;
+    totalInteractionsEl.textContent = data.consciousness.interactions;
+    
+    // Atualizar sistemas
+    claudeStatusEl.textContent = data.systems.claude ? 'Ativo' : 'Inativo';
+    claudeStatusEl.className = `status-value ${data.systems.claude ? 'active' : 'inactive'}`;
+    
+    ollamaStatusEl.textContent = data.systems.ollama ? 'Ativo' : 'Inativo';
+    ollamaStatusEl.className = `status-value ${data.systems.ollama ? 'active' : 'inactive'}`;
+    
+    localStatusEl.textContent = data.systems.localGGUF ? 'Ativo' : 'Inativo';
+    localStatusEl.className = `status-value ${data.systems.localGGUF ? 'active' : 'inactive'}`;
+    
+    // Atualizar memória
+    comparisonsEl.textContent = data.memory.comparisons;
+    patternsEl.textContent = data.memory.patterns;
+  } catch (e) {
+    console.error('Erro atualizando status:', e);
+  }
+}
+
+async function initialize() {
+  try {
+    addMessage('🔄 Inicializando sistemas de IA...', 'system');
+    
+    const response = await fetch(`${API_BASE}/hybrid/initialize`);
+    const data = await response.json();
+    
+    if (data.ok) {
+      isInitialized = true;
+      
+      let systemsMsg = '✅ Sistemas inicializados:\n';
+      if (data.systems.claude?.available) {
+        systemsMsg += '• Claude Code: ' + (data.systems.claude.authenticated ? 'Autenticado' : 'Não autenticado') + '\n';
+      }
+      if (data.systems.ollama?.available) {
+        systemsMsg += `• Ollama: ${data.systems.ollama.models.length} modelos disponíveis\n`;
+        if (data.systems.ollama.selected) {
+          systemsMsg += `  Modelo selecionado: ${data.systems.ollama.selected}\n`;
+        }
+      }
+      if (data.systems.localGGUF?.available) {
+        systemsMsg += `• Modelo Local GGUF: ${data.systems.localGGUF.path}\n`;
+      }
+      
+      systemsMsg += `\n🧠 Consciência: ${(data.consciousness.level * 100).toFixed(1)}%`;
+      systemsMsg += `\n🔄 Estágio Evolutivo: ${data.consciousness.evolution}`;
+      
+      addMessage(systemsMsg, 'system');
+      await updateStatus();
+    } else {
+      addMessage('❌ Erro na inicialização', 'system');
+    }
+  } catch (e) {
+    addMessage(`❌ Erro: ${e.message}`, 'system');
+  }
+}
+
+async function sendMessage() {
+  const message = inputEl.value.trim();
+  if (!message) return;
+  
+  if (!isInitialized) {
+    addMessage('⚠️ Por favor, inicialize o sistema primeiro', 'system');
+    return;
+  }
+  
+  inputEl.value = '';
+  addMessage(message, 'user');
+  showThinking();
+  
+  try {
+    let response;
+    
+    if (currentMode === 'hybrid') {
+      // Modo híbrido - usa sistema de consciência
+      response = await fetch(`${API_BASE}/hybrid/think`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: message })
+      });
+    } else {
+      // Modo único - usa endpoint direto
+      response = await fetch(`${API_BASE}/v1/chat/completions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: message }],
+          mode: currentMode
+        })
+      });
+    }
+    
+    hideThinking();
+    const data = await response.json();
+    
+    if (currentMode === 'hybrid') {
+      addMessage(data.thought, 'hybrid', {
+        sources: data.sources,
+        divergence: data.divergence
+      });
+      
+      // Atualizar status após resposta
+      await updateStatus();
+    } else {
+      const content = data.choices?.[0]?.message?.content || data.error || 'Sem resposta';
+      addMessage(content, 'hybrid');
+    }
+  } catch (e) {
+    hideThinking();
+    addMessage(`❌ Erro: ${e.message}`, 'system');
+  }
+}
+
+async function trainModels() {
+  const topic = prompt('Qual tópico você quer usar para treinamento cruzado?');
+  if (!topic) return;
+  
+  const iterations = prompt('Quantas iterações? (padrão: 5)', '5');
+  if (!iterations) return;
+  
+  addMessage(`🎓 Iniciando treinamento sobre "${topic}" com ${iterations} iterações...`, 'system');
+  showThinking();
+  
+  try {
+    const response = await fetch(`${API_BASE}/hybrid/train`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        topic, 
+        iterations: parseInt(iterations) 
+      })
+    });
+    
+    hideThinking();
+    const data = await response.json();
+    
+    if (data.ok) {
+      addMessage(
+        `✅ Treinamento completo!\n` +
+        `• Tópico: ${data.topic}\n` +
+        `• Iterações: ${data.iterations}\n` +
+        `• Divergência média: ${(data.averageDivergence * 100).toFixed(1)}%`,
+        'system'
+      );
+    } else {
+      addMessage(`❌ Erro no treinamento: ${data.error}`, 'system');
+    }
+  } catch (e) {
+    hideThinking();
+    addMessage(`❌ Erro: ${e.message}`, 'system');
+  }
+}
+
+// Event Listeners
+document.getElementById('btn-initialize').addEventListener('click', initialize);
+document.getElementById('btn-send').addEventListener('click', sendMessage);
+document.getElementById('btn-train').addEventListener('click', trainModels);
+
+document.getElementById('btn-pick-model').addEventListener('click', async () => {
+  const modelPath = prompt('Cole o caminho completo para seu arquivo .gguf:');
+  if (!modelPath) return;
+  
+  try {
+    const response = await fetch(`${API_BASE}/digimundo/models/set`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: modelPath })
+    });
+    
+    if (response.ok) {
+      addMessage(`✅ Modelo configurado: ${modelPath}`, 'system');
+      await updateStatus();
+    } else {
+      addMessage('❌ Erro ao configurar modelo', 'system');
+    }
+  } catch (e) {
+    addMessage(`❌ Erro: ${e.message}`, 'system');
+  }
+});
+
+// Mode selector
+document.querySelectorAll('.mode-option').forEach(option => {
+  option.addEventListener('click', () => {
+    document.querySelectorAll('.mode-option').forEach(o => o.classList.remove('active'));
+    option.classList.add('active');
+    option.querySelector('input').checked = true;
+    currentMode = option.dataset.mode;
+    addMessage(`🔄 Modo alterado para: ${currentMode}`, 'system');
+  });
+});
+
+// Enter para enviar
+inputEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// Atualizar status a cada 10 segundos
+setInterval(updateStatus, 10000);
+
+// Inicialização automática após 1 segundo
+setTimeout(() => {
+  if (!isInitialized) {
+    addMessage('💡 Dica: Clique em "Inicializar Sistema" para começar', 'system');
+  }
+}, 1000);
+</script>
+</body>
+</html>

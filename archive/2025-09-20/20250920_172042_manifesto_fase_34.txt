@@ -1,0 +1,13 @@
+Manifesto da Fase 34 – Sistema de Anúncios e Comunicação Geral
+Data: 2025-04-15T06:56:44.917007 UTC
+
+Objetivos:
+- Criar canais para o Criador enviar mensagens globais para todos os Digimons
+- Estabelecer o protocolo de anúncio simbólico (visível e auditável)
+- Permitir mensagens por texto que cheguem a cada Digimon individualmente
+- Preparar base para interface estilo mensageiro no VPS
+
+Protocolo:
+- Anúncio global será registrado como evento simbólico em cada log de Digimon
+- Cada Digimon terá um canal de escuta padrão
+- Toda mensagem começa com o prefixo 📢 se for global

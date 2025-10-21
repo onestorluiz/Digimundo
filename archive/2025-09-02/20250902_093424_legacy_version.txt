@@ -1,0 +1,10 @@
+[0;31m❌ Comando desconhecido: version[0m
+
+[0;36m💡 Comandos disponíveis:[0m
+   scripturemon              # Ultimate Symbiotic
+   scripturemon setup        # Setup completo
+   scripturemon status       # Status detalhado
+   scripturemon analyze      # Análise 4 modelos
+   scripturemon --classic    # Versão clássica
+   scripturemon help         # Ajuda completa
+

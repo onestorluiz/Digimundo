@@ -1,0 +1,4 @@
+spec,field,ok,value,expected
+logline,genre,1,Drama,"{""equals"": ""Drama""}"
+pacing,pace,0,medium,"{""equals"": ""slow""}"
+theme,primary_theme,1,memória e responsabilidade,"{""contains"": [""memória"", ""responsabilidade""]}"

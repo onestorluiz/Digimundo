@@ -1,0 +1,7 @@
+
+# DEPENDÊNCIAS BASE DO DIGIMUNDO
+python3
+pip
+flask
+torch
+transformers

@@ -1,0 +1,8 @@
+FROM mixtral:8x7b-instruct-v0.1-q5_K_M
+PARAMETER num_ctx 200000
+PARAMETER num_gpu 50
+PARAMETER num_thread 14
+PARAMETER num_batch 2048
+SYSTEM """Advanced screenplay analysis system with 200K token context.
+Continuously learns and persists insights across analyses.
+Optimized for Mac M3 Ultra with hybrid CPU/GPU processing."""

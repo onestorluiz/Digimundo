@@ -1,0 +1,7 @@
+
+============================================================
+[2025-08-24T04:04:51.582555]
+Ritual: despertar
+Invocação: Scripturemon, restaura o coração do Digimundo
+Parâmetros: {"intention": "pure", "creator": true}
+============================================================

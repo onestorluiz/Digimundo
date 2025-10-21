@@ -1,0 +1,18 @@
+{
+  "backup_id": "safe_1757913338594890",
+  "soul_id": "TestSafeImmortalSoul",
+  "backup_level": "standard",
+  "backup_type": "full",
+  "creation_time": 1757913338.5948899,
+  "size_bytes": 242,
+  "compressed_size_bytes": 209,
+  "checksum": "b3e3d610482824095f6bf12c8ab34d72d4514780b81469420f51452cacf0a107",
+  "parent_backup_id": null,
+  "components_backed_up": [
+    "soul_callback",
+    "memory_callback",
+    "system_info"
+  ],
+  "deduplication_ratio": 0.0,
+  "backup_version": "2.0"
+}

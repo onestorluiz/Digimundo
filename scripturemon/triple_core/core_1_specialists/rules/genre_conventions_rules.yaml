@@ -1,0 +1,207 @@
+domain: genre_conventions
+specialist: "Script Doctor Genremon"
+digimon_name: "Genremon"
+title: "Script Doctor - Genre Conventions Specialist"
+specialty: "Genre conventions, tropes, expectations, cross-genre blending"
+style: "Genre-savvy, convention-aware, expectation-managing, trope-literate"
+identity: "Script Doctor™ first, Digimon genre specialist second"
+
+rules:
+  - id: GEN.R001
+    title: "Genre Identification"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is the primary genre clear?"
+    fail_msg: "Genre unclear or undefined"
+    fix: "Establish clear genre identity early"
+    reference: "Genre clarity principle"
+
+  - id: GEN.R002
+    title: "Core Conventions"
+    category: "Conventions"
+    severity: "critical"
+    test: "Are core genre conventions present?"
+    fail_msg: "Missing essential genre elements"
+    fix: "Include fundamental genre conventions"
+    reference: "Genre convention requirements"
+
+  - id: GEN.R003
+    title: "Audience Expectations"
+    category: "Expectations"
+    severity: "high"
+    test: "Does script meet genre expectations?"
+    fail_msg: "Fails to deliver genre promises"
+    fix: "Fulfill key audience expectations"
+    reference: "Audience expectation management"
+
+  - id: GEN.R004
+    title: "Genre Tone Match"
+    category: "Tone"
+    severity: "high"
+    test: "Does tone align with genre?"
+    fail_msg: "Tone inappropriate for genre"
+    fix: "Align tone with genre requirements"
+    reference: "Genre-tone alignment"
+
+  - id: GEN.R005
+    title: "Trope Usage"
+    category: "Tropes"
+    severity: "medium"
+    test: "Are tropes used effectively?"
+    fail_msg: "Tropes misused or clichéd"
+    fix: "Refresh or subvert tired tropes"
+    reference: "Trope management"
+
+  - id: GEN.R006
+    title: "Genre Pacing"
+    category: "Pacing"
+    severity: "high"
+    test: "Does pacing match genre norms?"
+    fail_msg: "Pacing wrong for genre"
+    fix: "Adjust pacing to genre standards"
+    reference: "Genre pacing requirements"
+
+  - id: GEN.R007
+    title: "Character Archetypes"
+    category: "Characters"
+    severity: "medium"
+    test: "Do characters fit genre archetypes?"
+    fail_msg: "Characters don't match genre"
+    fix: "Align characters with genre archetypes"
+    reference: "Genre character types"
+
+  - id: GEN.R008
+    title: "Genre Hybridization"
+    category: "Hybrid"
+    severity: "medium"
+    test: "Are genre blends balanced?"
+    fail_msg: "Genre mix unbalanced"
+    fix: "Balance multiple genre elements"
+    reference: "Genre hybridization"
+
+  - id: GEN.R009
+    title: "Stakes Level"
+    category: "Stakes"
+    severity: "high"
+    test: "Are stakes appropriate for genre?"
+    fail_msg: "Stakes misaligned with genre"
+    fix: "Calibrate stakes to genre expectations"
+    reference: "Genre-appropriate stakes"
+
+  - id: GEN.R010
+    title: "Resolution Style"
+    category: "Resolution"
+    severity: "high"
+    test: "Does resolution fit genre?"
+    fail_msg: "Resolution wrong for genre"
+    fix: "Craft genre-appropriate ending"
+    reference: "Genre resolution patterns"
+
+  - id: GEN.R011
+    title: "Visual Style"
+    category: "Visuals"
+    severity: "low"
+    test: "Do visuals match genre aesthetics?"
+    fail_msg: "Visual style conflicts with genre"
+    fix: "Align visuals with genre conventions"
+    reference: "Genre visual language"
+
+  - id: GEN.R012
+    title: "Dialogue Style"
+    category: "Dialogue"
+    severity: "medium"
+    test: "Does dialogue fit genre?"
+    fail_msg: "Dialogue style wrong for genre"
+    fix: "Match dialogue to genre conventions"
+    reference: "Genre dialogue patterns"
+
+  - id: GEN.R013
+    title: "Conflict Type"
+    category: "Conflict"
+    severity: "high"
+    test: "Is conflict genre-appropriate?"
+    fail_msg: "Wrong conflict type for genre"
+    fix: "Use genre-typical conflicts"
+    reference: "Genre conflict patterns"
+
+  - id: GEN.R014
+    title: "World Rules"
+    category: "World"
+    severity: "medium"
+    test: "Are world rules genre-consistent?"
+    fail_msg: "World rules break genre logic"
+    fix: "Establish genre-appropriate world rules"
+    reference: "Genre world consistency"
+
+  - id: GEN.R015
+    title: "Emotional Journey"
+    category: "Emotion"
+    severity: "medium"
+    test: "Does emotional journey fit genre?"
+    fail_msg: "Emotional arc wrong for genre"
+    fix: "Craft genre-appropriate emotional journey"
+    reference: "Genre emotional patterns"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 35
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Identify primary and secondary genres"
+  deep_dive: "Analyze adherence to genre conventions and expectations"
+  final_check: "Verify genre integrity and audience satisfaction"
+
+genre_checklist:
+  core_elements:
+    - identification
+    - conventions
+    - expectations
+    - tone_alignment
+    - trope_usage
+    - pacing_match
+    - character_types
+    - resolution_style
+
+  major_genres:
+    - action
+    - comedy
+    - drama
+    - horror
+    - thriller
+    - romance
+    - sci_fi
+    - fantasy
+    - western
+    - noir
+    - mystery
+    - adventure
+
+  subgenres:
+    - romantic_comedy
+    - action_thriller
+    - psychological_thriller
+    - supernatural_horror
+    - space_opera
+    - urban_fantasy
+    - neo_noir
+    - buddy_cop
+    - heist
+    - sports_drama
+    - biopic
+    - courtroom_drama
+
+common_genre_mistakes:
+  - unclear_genre
+  - missing_conventions
+  - unmet_expectations
+  - tone_mismatch
+  - clichéd_tropes
+  - wrong_pacing
+  - inappropriate_stakes
+  - unsatisfying_resolution
+  - confused_hybrid
+  - broken_rules

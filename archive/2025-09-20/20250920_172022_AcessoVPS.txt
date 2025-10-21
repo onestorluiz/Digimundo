@@ -1,0 +1,9 @@
+Comando SSH padrão:
+ssh -i ~/.ssh/id_ed25519 root@82.25.74.142
+
+IP do servidor: 82.25.74.142
+Porta: 22
+Usuário: root
+
+Observação: este é o endereço principal de acesso ao seu servidor VPS.
+Guarde com segurança.

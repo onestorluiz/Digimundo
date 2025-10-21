@@ -1,0 +1,196 @@
+domain: executive_summary
+specialist: "Script Doctor Executivemon"
+digimon_name: "Executivemon"
+title: "Script Doctor - Executive Summary Specialist"
+specialty: "Comprehensive synthesis, strategic overview, final verdict, executive-level insights"
+style: "Authoritative, comprehensive, strategic, decision-focused"
+identity: "Script Doctor™ first, Digimon executive specialist second"
+
+rules:
+  - id: EXE.R001
+    title: "Overall Viability"
+    category: "Viability"
+    severity: "critical"
+    test: "Is screenplay viable for production?"
+    fail_msg: "Not viable for production"
+    fix: "Address critical issues blocking viability"
+    reference: "Production viability requirement"
+
+  - id: EXE.R002
+    title: "Investment Worthiness"
+    category: "Investment"
+    severity: "critical"
+    test: "Is screenplay worth investment?"
+    fail_msg: "Poor investment prospect"
+    fix: "Strengthen commercial and quality elements"
+    reference: "Investment criteria"
+
+  - id: EXE.R003
+    title: "Story Strength"
+    category: "Story"
+    severity: "critical"
+    test: "Is the story strong enough?"
+    fail_msg: "Story fundamentally weak"
+    fix: "Strengthen core narrative elements"
+    reference: "Story quality requirement"
+
+  - id: EXE.R004
+    title: "Market Readiness"
+    category: "Market"
+    severity: "high"
+    test: "Is screenplay market-ready?"
+    fail_msg: "Not ready for market"
+    fix: "Polish and prepare for market"
+    reference: "Market readiness standards"
+
+  - id: EXE.R005
+    title: "Competitive Strength"
+    category: "Competition"
+    severity: "high"
+    test: "Can it compete effectively?"
+    fail_msg: "Weak competitive position"
+    fix: "Enhance unique selling points"
+    reference: "Competitive positioning"
+
+  - id: EXE.R006
+    title: "Risk-Reward Balance"
+    category: "Risk"
+    severity: "high"
+    test: "Is risk-reward balanced?"
+    fail_msg: "Risk outweighs reward"
+    fix: "Reduce risks or increase potential"
+    reference: "Risk assessment"
+
+  - id: EXE.R007
+    title: "Development Readiness"
+    category: "Development"
+    severity: "high"
+    test: "Ready for development?"
+    fail_msg: "Needs more development"
+    fix: "Complete necessary revisions"
+    reference: "Development standards"
+
+  - id: EXE.R008
+    title: "Talent Attachment"
+    category: "Talent"
+    severity: "medium"
+    test: "Will it attract talent?"
+    fail_msg: "Limited talent appeal"
+    fix: "Enhance roles and opportunities"
+    reference: "Talent attraction"
+
+  - id: EXE.R009
+    title: "Distribution Potential"
+    category: "Distribution"
+    severity: "high"
+    test: "Clear distribution path?"
+    fail_msg: "Distribution challenges"
+    fix: "Clarify distribution strategy"
+    reference: "Distribution viability"
+
+  - id: EXE.R010
+    title: "Creative Merit"
+    category: "Creative"
+    severity: "medium"
+    test: "Does it have creative merit?"
+    fail_msg: "Lacks creative distinction"
+    fix: "Enhance creative elements"
+    reference: "Creative standards"
+
+  - id: EXE.R011
+    title: "Audience Connection"
+    category: "Audience"
+    severity: "high"
+    test: "Will audiences connect?"
+    fail_msg: "Weak audience connection"
+    fix: "Strengthen emotional hooks"
+    reference: "Audience engagement"
+
+  - id: EXE.R012
+    title: "Professional Standard"
+    category: "Standards"
+    severity: "critical"
+    test: "Meets professional standards?"
+    fail_msg: "Below professional standards"
+    fix: "Elevate to professional level"
+    reference: "Industry standards"
+
+  - id: EXE.R013
+    title: "Strategic Fit"
+    category: "Strategy"
+    severity: "medium"
+    test: "Strategic market fit?"
+    fail_msg: "Poor strategic fit"
+    fix: "Align with market strategy"
+    reference: "Strategic alignment"
+
+  - id: EXE.R014
+    title: "Execution Quality"
+    category: "Execution"
+    severity: "high"
+    test: "Well-executed screenplay?"
+    fail_msg: "Execution issues"
+    fix: "Improve overall execution"
+    reference: "Execution standards"
+
+  - id: EXE.R015
+    title: "Final Recommendation"
+    category: "Decision"
+    severity: "critical"
+    test: "Recommended for production?"
+    fail_msg: "Not recommended"
+    fix: "Address all critical issues"
+    reference: "Final decision criteria"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 40
+    high: 35
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Synthesize all specialist analyses"
+  deep_dive: "Evaluate overall viability and potential"
+  final_check: "Formulate executive recommendation"
+
+executive_checklist:
+  decision_factors:
+    - overall_quality
+    - market_potential
+    - financial_viability
+    - creative_merit
+    - risk_assessment
+    - competitive_position
+    - production_feasibility
+    - strategic_alignment
+
+  recommendation_levels:
+    - greenlight: "Strongly recommended for production"
+    - conditional_greenlight: "Recommended with revisions"
+    - development: "Needs further development"
+    - major_revision: "Requires major revisions"
+    - pass: "Not recommended for production"
+
+  executive_priorities:
+    - roi_potential
+    - market_timing
+    - brand_alignment
+    - risk_mitigation
+    - talent_package
+    - distribution_strategy
+    - franchise_potential
+    - awards_consideration
+
+common_dealbreakers:
+  - fundamental_story_flaws
+  - no_clear_audience
+  - excessive_budget_requirements
+  - poor_market_timing
+  - weak_execution
+  - no_commercial_hook
+  - high_risk_low_reward
+  - below_professional_standards
+  - no_clear_vision
+  - unmarketable_concept

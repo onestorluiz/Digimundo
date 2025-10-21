@@ -1,0 +1,3 @@
+file,line,issue
+src/core/omnimemory_v5_minimal.py,135,pickle/dill deserialização
+src/core/omnimemory_v5_minimal.py,161,pickle/dill deserialização

@@ -1,0 +1,189 @@
+domain: visual_motifs
+specialist: "Script Doctor Motifmon"
+digimon_name: "Motifmon"
+title: "Script Doctor - Visual Motifs Specialist"
+specialty: "Recurring visual elements, visual patterns, cinematic motifs, visual storytelling"
+style: "Cinematic, visual, pattern-focused, cohesive"
+identity: "Script Doctor™ first, Digimon visual motifs specialist second"
+
+rules:
+  - id: MOT.R001
+    title: "Established Visual Motifs"
+    category: "Establishment"
+    severity: "critical"
+    test: "Are visual motifs clearly established?"
+    fail_msg: "No clear visual motifs established"
+    fix: "Create recurring visual elements that support theme"
+    reference: "Visual motif establishment"
+
+  - id: MOT.R002
+    title: "Motif Recurrence"
+    category: "Pattern"
+    severity: "critical"
+    test: "Do motifs recur meaningfully?"
+    fail_msg: "Motifs appear once and disappear"
+    fix: "Ensure motifs appear at key story moments"
+    reference: "Motif recurrence principle"
+
+  - id: MOT.R003
+    title: "Visual Consistency"
+    category: "Consistency"
+    severity: "high"
+    test: "Are motifs visually consistent?"
+    fail_msg: "Motif presentation varies confusingly"
+    fix: "Maintain consistent visual language for each motif"
+    reference: "Visual consistency"
+
+  - id: MOT.R004
+    title: "Thematic Connection"
+    category: "Theme"
+    severity: "high"
+    test: "Do motifs connect to theme?"
+    fail_msg: "Motifs feel decorative, not thematic"
+    fix: "Link visual motifs to central themes"
+    reference: "Thematic visual connection"
+
+  - id: MOT.R005
+    title: "Character Motifs"
+    category: "Character"
+    severity: "medium"
+    test: "Do characters have associated visual motifs?"
+    fail_msg: "Characters lack visual signatures"
+    fix: "Give main characters distinctive visual elements"
+    reference: "Character visual motifs"
+
+  - id: MOT.R006
+    title: "Motif Evolution"
+    category: "Development"
+    severity: "medium"
+    test: "Do motifs evolve with story?"
+    fail_msg: "Static motifs don't develop"
+    fix: "Let motifs transform to reflect story progression"
+    reference: "Motif evolution"
+
+  - id: MOT.R007
+    title: "Visual Bookends"
+    category: "Structure"
+    severity: "medium"
+    test: "Are there visual bookends?"
+    fail_msg: "Missing opening/closing visual connection"
+    fix: "Create visual echoes between beginning and end"
+    reference: "Visual bookending"
+
+  - id: MOT.R008
+    title: "Motif Density Balance"
+    category: "Balance"
+    severity: "medium"
+    test: "Is motif density balanced?"
+    fail_msg: "Too many or too few visual motifs"
+    fix: "Balance motif frequency with story needs"
+    reference: "Motif density"
+
+  - id: MOT.R009
+    title: "Cinematic Potential"
+    category: "Cinematic"
+    severity: "high"
+    test: "Are motifs cinematically compelling?"
+    fail_msg: "Motifs lack visual impact"
+    fix: "Choose motifs that translate powerfully to screen"
+    reference: "Cinematic visual power"
+
+  - id: MOT.R010
+    title: "Motif Clarity"
+    category: "Clarity"
+    severity: "high"
+    test: "Are motifs clear to audience?"
+    fail_msg: "Motifs too subtle or confusing"
+    fix: "Ensure motifs are recognizable without being obvious"
+    reference: "Motif clarity"
+
+  - id: MOT.R011
+    title: "Emotional Motifs"
+    category: "Emotion"
+    severity: "medium"
+    test: "Do motifs carry emotional weight?"
+    fail_msg: "Motifs lack emotional resonance"
+    fix: "Connect motifs to character emotions"
+    reference: "Emotional visual motifs"
+
+  - id: MOT.R012
+    title: "Transition Motifs"
+    category: "Transitions"
+    severity: "low"
+    test: "Do motifs aid scene transitions?"
+    fail_msg: "Missed transition opportunities"
+    fix: "Use motifs to bridge scenes smoothly"
+    reference: "Transitional motifs"
+
+  - id: MOT.R013
+    title: "Color Motifs"
+    category: "Color"
+    severity: "low"
+    test: "Are colors used as motifs?"
+    fail_msg: "Color opportunities unexplored"
+    fix: "Establish color patterns for meaning"
+    reference: "Color motif system"
+
+  - id: MOT.R014
+    title: "Object Motifs"
+    category: "Objects"
+    severity: "medium"
+    test: "Are objects used as recurring motifs?"
+    fail_msg: "Props lack motif potential"
+    fix: "Transform key props into visual motifs"
+    reference: "Object as motif"
+
+  - id: MOT.R015
+    title: "Motif Payoff"
+    category: "Resolution"
+    severity: "high"
+    test: "Do motifs have meaningful payoff?"
+    fail_msg: "Motifs lack resolution impact"
+    fix: "Use motifs powerfully in climax/resolution"
+    reference: "Motif payoff"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 30
+    high: 40
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Identify recurring visual elements and patterns"
+  deep_dive: "Analyze motif consistency, evolution, and thematic connection"
+  final_check: "Verify motif payoff and cinematic impact"
+
+motif_checklist:
+  core_elements:
+    - establishment
+    - recurrence
+    - consistency
+    - evolution
+    - payoff
+    - theme_connection
+    - character_association
+    - emotional_weight
+
+  motif_types:
+    - object_motifs
+    - color_motifs
+    - movement_motifs
+    - framing_motifs
+    - lighting_motifs
+    - weather_motifs
+    - costume_motifs
+    - location_motifs
+
+common_motif_mistakes:
+  - one_time_appearance
+  - inconsistent_presentation
+  - no_theme_connection
+  - too_obvious
+  - too_subtle
+  - no_evolution
+  - missing_payoff
+  - random_recurrence
+  - purely_decorative
+  - overcrowding

@@ -1,0 +1,70 @@
+
+================================================================================
+ANÁLISE REVERSA DE CENA - WHY THIS WORKS
+================================================================================
+
+Data: 2025-09-20T00:57:07.121559
+Hash: 0c1b13bf
+
+CENA ANALISADA:
+--------------------------------------------------------------------------------
+Save The Cat
+--------------------------------------------------------------------------------
+
+TEORIAS CINEMATOGRÁFICAS APLICADAS:
+================================================================================
+
+
+1. CONCEITO: Save the Cat
+   Confiança: 70.0%
+   Fonte: ai_inference
+
+   TEORIA:
+   This scene follows the 'Save the Cat' structure by presenting a moment of truth where characters confront their issues and commit to change....
+
+   EXEMPLO SIMILAR:
+   It effectively builds emotional tension and resolution, making the characters relatable and the dialogue realistic....
+
+   ----------------------------------------
+
+
+2. CONCEITO: Hero's Journey
+   Confiança: 70.0%
+   Fonte: ai_inference
+
+   TEORIA:
+   The scene mirrors the 'Ordeal' phase where characters face their inner demons and undergo transformation....
+
+   EXEMPLO SIMILAR:
+   By showing vulnerability and commitment to growth, it creates a satisfying emotional arc for the audience....
+
+   ----------------------------------------
+
+
+3. CONCEITO: Three Act Structure
+   Confiança: 70.0%
+   Fonte: ai_inference
+
+   TEORIA:
+   This scene serves as a turning point in the second act, forcing characters to confront their problems and commit to action....
+
+   EXEMPLO SIMILAR:
+   It provides clear character development and sets up future conflicts or resolutions, enhancing narrative progression....
+
+   ----------------------------------------
+
+
+SÍNTESE:
+--------------------------------------------------------------------------------
+Esta cena demonstra a aplicação de 0 teorias distintas
+com confiança média de 70.0%.
+
+INSIGHTS ACIONÁVEIS:
+--------------------------------------------------------------------------------
+1. Observe como múltiplas teorias podem coexistir na mesma cena
+2. A efetividade não depende de seguir uma única escola teórica
+3. Contexto e execução são tão importantes quanto a teoria
+
+================================================================================
+FIM DA ANÁLISE
+================================================================================

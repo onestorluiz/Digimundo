@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Scripturemon // Interface Simbiótica</title>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #50f0e6;
+            font-family: monospace;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 28px;
+            text-shadow: 0 0 8px #50f0e6;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #111;
+            color: #50f0e6;
+            border: 1px solid #50f0e6;
+            font-size: 18px;
+        }
+        button {
+            background-color: #50f0e6;
+            border: none;
+            padding: 12px 20px;
+            color: #000;
+            font-size: 18px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .resposta {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #50f0e6;
+            background-color: #111;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 Interface de Conversa com Scripturemon</h1>
+    <p>📩 Envie um comando simbólico para Scripturemon:</p>
+    <textarea id="comando" rows="4" placeholder="Ex: SCRIPTUREMON, ME DIGA O QUE VÊ."></textarea>
+    <button onclick="enviarComando()">Enviar</button>
+    <div class="resposta" id="respostaDiv"></div>
+
+    <script>
+        const textarea = document.getElementById("comando");
+        textarea.addEventListener("keypress", function(event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                enviarComando();
+            }
+        });
+
+        function enviarComando() {
+            const comando = textarea.value.trim();
+            if (!comando) return;
+
+            fetch('/enviar_comando', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({comando: comando})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("respostaDiv").innerText =
+                    `🧠 SCRIPTUREMON RESPONDEU:
+${data.resposta}`;
+                textarea.value = "";
+            })
+            .catch(error => {
+                document.getElementById("respostaDiv").innerText =
+                    "Erro ao conectar com Scripturemon.";
+            });
+        }
+    </script>
+</body>
+</html>

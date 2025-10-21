@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digimundo AI Town - Anthropic Office Simulation</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 10000;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        #main-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: none;
+        }
+        
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #f0f8ff;
+        }
+        
+        .ui-panel {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+        
+        #header-panel {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            min-width: 300px;
+        }
+        
+        #status-panel {
+            top: 20px;
+            left: 20px;
+            max-width: 320px;
+        }
+        
+        #controls-panel {
+            top: 20px;
+            right: 20px;
+            width: 200px;
+        }
+        
+        #chat-panel {
+            bottom: 20px;
+            left: 20px;
+            width: 450px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+        
+        #stats-panel {
+            bottom: 20px;
+            right: 20px;
+            width: 280px;
+        }
+        
+        .panel-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4facfe;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .control-btn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .control-btn:hover::before {
+            left: 100%;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .control-btn:active {
+            transform: translateY(0);
+        }
+        
+        .control-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .chat-message {
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #4facfe;
+            backdrop-filter: blur(5px);
+        }
+        
+        .speaker {
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .message-content {
+            color: #e0e0e0;
+            line-height: 1.4;
+            font-size: 13px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 14px;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 12px;
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        .status-active { color: #4ade80; background: #4ade80; }
+        .status-thinking { color: #a78bfa; background: #a78bfa; }
+        .status-talking { color: #fb7185; background: #fb7185; }
+        .status-idle { color: #fbbf24; background: #fbbf24; }
+        
+        #time-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+        }
+        
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+        }
+        
+        .metric-value {
+            color: #4facfe;
+            font-weight: bold;
+        }
+        
+        .instructions {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 15px;
+            line-height: 1.5;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .floating-text {
+            position: absolute;
+            color: #4facfe;
+            font-weight: bold;
+            font-size: 16px;
+            pointer-events: none;
+            animation: floatUp 3s ease-out forwards;
+            text-shadow: 0 0 10px rgba(79, 172, 254, 0.8);
+            z-index: 50;
+        }
+        
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            50% { opacity: 1; transform: translateY(-30px) scale(1.1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(0.8); }
+        }
+        
+        .character-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 200;
+            max-width: 200px;
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .ui-panel {
+                position: relative;
+                margin: 10px;
+                max-width: none;
+                backdrop-filter: blur(10px);
+            }
+            
+            #canvas-container {
+                height: 60vh;
+            }
+            
+            #header-panel {
+                position: relative;
+                transform: none;
+                margin: 10px auto;
+            }
+        }
+        
+        .success { color: #4ade80; }
+        .warning { color: #fbbf24; }
+        .error { color: #f87171; }
+        .info { color: #4facfe; }
+    </style>
+</head>
+<body>
+    <div id="splash-screen">
+        <div class="logo">🏢</div>
+        <h1 style="font-size: 32px; margin-bottom: 10px;">Digimundo AI Town</h1>
+        <p style="font-size: 18px; opacity: 0.8; margin-bottom: 20px;">Simulação do Escritório da Anthropic</p>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+        </div>
+        <p id="loading-text" style="margin-top: 15px; opacity: 0.7;">Inicializando sistema...</p>
+    </div>
+    
+    <div id="main-container">
+        <div id="header-panel" class="ui-panel">
+            <div class="panel-title">🤖 Escritório da Anthropic - Co-Fundadores IA</div>
+            <p style="opacity: 0.8; text-align: center;">Simulação autônoma em tempo real</p>
+        </div>
+        
+        <div id="canvas-container"></div>
+        
+        <div id="status-panel" class="ui-panel">
+            <div class="panel-title">📊 Status do Sistema</div>
+            <div id="time-display">Dia 1 - 9:00 AM</div>
+            
+            <div class="status-item">
+                <span class="status-dot status-active"></span>
+                <span>Sistema: <span class="success">Online</span></span>
+            </div>
+            
+            <div id="character-status">
+                <div class="status-item">
+                    <span class="status-dot status-thinking"></span>
+                    <span>Carregando personagens...</span>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <strong>🎮 Controles:</strong><br>
+                • <kbd>WASD</kbd> - Mover câmera<br>
+                • <kbd>Mouse</kbd> - Olhar ao redor<br>
+                • <kbd>Clique</kbd> - Prender cursor<br>
+                • <kbd>ESC</kbd> - Liberar cursor<br>
+                • <kbd>Space</kbd> - Pausar/Despausar
+            </div>
+        </div>
+        
+        <div id="controls-panel" class="ui-panel">
+            <div class="panel-title">⚙️ Controles</div>
+            
+            <button id="pause-btn" class="control-btn">⏸️ Pausar Simulação</button>
+            <button id="speed-btn" class="control-btn">⏩ Velocidade 1x</button>
+            <button id="reset-btn" class="control-btn">🔄 Reiniciar</button>
+            <button id="debug-btn" class="control-btn">🐛 Mostrar Debug</button>
+            <button id="fullscreen-btn" class="control-btn">🖥️ Tela Cheia</button>
+        </div>
+        
+        <div id="chat-panel" class="ui-panel">
+            <div class="panel-title">💬 Conversas em Tempo Real</div>
+            <div id="chat-content">
+                <div class="chat-message">
+                    <div class="speaker">Sistema</div>
+                    <div class="message-content">Iniciando simulação do escritório da Anthropic...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="stats-panel" class="ui-panel">
+            <div class="panel-title">📈 Métricas em Tempo Real</div>
+            <div id="stats-content">
+                <div class="metric-item">
+                    <span>Personagens Ativos:</span>
+                    <span class="metric-value" id="char-count">0</span>
+                </div>
+                <div class="metric-item">
+                    <span>Interações Totais:</span>
+                    <span class="metric-value" id="interaction-count">0</span>
+                </div>
+                <div class="metric-item">
+                    <span>Pensamentos Gerados:</span>
+                    <span class="metric-value" id="thought-count">0</span>
+                </div>
+                <div class="metric-item">
+                    <span>Conversas Ativas:</span>
+                    <span class="metric-value" id="conversation-count">0</span>
+                </div>
+                <div class="metric-item">
+                    <span>FPS:</span>
+                    <span class="metric-value" id="fps-counter">60</span>
+                </div>
+                <div class="metric-item">
+                    <span>Objetos 3D:</span>
+                    <span class="metric-value" id="object-counter">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="character-tooltip" class="character-tooltip"></div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Sistema de carregamento aprimorado
+        class DigimundoAITown {
+            constructor() {
+                this.loadingSteps = [
+                    { text: 'Verificando Three.js...', duration: 800 },
+                    { text: 'Criando mundo 3D...', duration: 1200 },
+                    { text: 'Gerando personagens IA...', duration: 1500 },
+                    { text: 'Configurando comportamentos...', duration: 1000 },
+                    { text: 'Iniciando conversas autônomas...', duration: 800 },
+                    { text: 'Finalizando configuração...', duration: 600 }
+                ];
+                
+                this.currentStep = 0;
+                this.isReady = false;
+                this.init();
+            }
+            
+            async init() {
+                try {
+                    await this.runLoadingSequence();
+                    await this.setupSystem();
+                    this.showMainInterface();
+                    this.startSimulation();
+                    this.isReady = true;
+                } catch (error) {
+                    console.error('Initialization failed:', error);
+                    this.showError(error.message);
+                }
+            }
+            
+            async runLoadingSequence() {
+                const progressBar = document.getElementById('loading-progress');
+                const loadingText = document.getElementById('loading-text');
+                
+                for (let i = 0; i < this.loadingSteps.length; i++) {
+                    const step = this.loadingSteps[i];
+                    loadingText.textContent = step.text;
+                    
+                    const progress = ((i + 1) / this.loadingSteps.length) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    await this.delay(step.duration);
+                    await this.executeLoadingStep(i);
+                }
+            }
+            
+            async executeLoadingStep(stepIndex) {
+                switch(stepIndex) {
+                    case 0:
+                        if (typeof THREE === 'undefined') {
+                            throw new Error('Three.js falhou ao carregar');
+                        }
+                        break;
+                    case 1:
+                        this.setupScene();
+                        break;
+                    case 2:
+                        this.createCharacters();
+                        break;
+                    case 3:
+                        this.setupAI();
+                        break;
+                    case 4:
+                        this.setupInteractions();
+                        break;
+                    case 5:
+                        this.setupControls();
+                        break;
+                }
+            }
+            
+            setupScene() {
+                // Configuração da cena 3D
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0xf0f8ff);
+                this.scene.fog = new THREE.Fog(0xf0f8ff, 15, 60);
+                
+                // Câmera
+                this.camera = new THREE.PerspectiveCamera(
+                    75, 
+                    window.innerWidth / window.innerHeight, 
+                    0.1, 
+                    1000
+                );
+                this.camera.position.set(0, 6, 12);
+                
+                // Renderer
+                this.renderer = new THREE.WebGLRenderer({ 
+                    antialias: true,
+                    alpha: true,
+                    powerPreference: "high-performance"
+                });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.outputEncoding = THREE.sRGBEncoding;
+                this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                this.renderer.toneMappingExposure = 1.2;
+                
+                document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+                
+                this.setupLighting();
+                this.createEnvironment();
+            }
+            
+            setupLighting() {
+                // Iluminação ambiente
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+                this.scene.add(ambientLight);
+                
+                // Luz principal
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(15, 20, 10);
+                directionalLight.castShadow = true;
+                directionalLight.shadow.mapSize.width = 2048;
+                directionalLight.shadow.mapSize.height = 2048;
+                directionalLight.shadow.camera.near = 0.1;
+                directionalLight.shadow.camera.far = 100;
+                directionalLight.shadow.camera.left = -20;
+                directionalLight.shadow.camera.right = 20;
+                directionalLight.shadow.camera.top = 20;
+                directionalLight.shadow.camera.bottom = -20;
+                this.scene.add(directionalLight);
+                
+                // Luz de preenchimento
+                const fillLight = new THREE.DirectionalLight(0x87ceeb, 0.3);
+                fillLight.position.set(-10, 10, -10);
+                this.scene.add(fillLight);
+                
+                // Luz pontual para destaque
+                const pointLight = new THREE.PointLight(0xffffff, 0.5, 30);
+                pointLight.position.set(0, 8, 0);
+                pointLight.castShadow = true;
+                this.scene.add(pointLight);
+            }
+            
+            createEnvironment() {
+                // Chão do escritório
+                const floorGeometry = new THREE.PlaneGeometry(40, 40, 1, 1);
+                const floorMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xf8f8f8,
+                    roughness: 0.9,
+                    metalness: 0.1
+                });
+                const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+                floor.rotation.x = -Math.PI / 2;
+                floor.receiveShadow = true;
+                this.scene.add(floor);
+                
+                // Padrão do piso
+                this.createFloorPattern();
+                
+                // Mesa de reunião principal
+                this.createConferenceTable();
+                
+                // Estações de trabalho individuais
+                this.createWorkstations();
+                
+                // Paredes do escritório
+                this.createWalls();
+                
+                // Decorações e móveis
+                this.createDecorations();
+            }
+            
+            createFloorPattern() {
+                const tileSize = 2;
+                const tiles = 20;
+                
+                for (let x = -tiles; x < tiles; x += tileSize) {
+                    for (let z = -tiles; z < tiles; z += tileSize) {
+                        const isLight = (x + z) % 4 === 0;
+                        const tileGeometry = new THREE.PlaneGeometry(tileSize, tileSize);
+                        const tileMaterial = new THREE.MeshStandardMaterial({ 
+                            color: isLight ? 0xfefefe : 0xf5f5f5,
+                            roughness: 0.8
+                        });
+                        const tile = new THREE.Mesh(tileGeometry, tileMaterial);
+                        tile.position.set(x + tileSize/2, 0.01, z + tileSize/2);
+                        tile.rotation.x = -Math.PI / 2;
+                        tile.receiveShadow = true;
+                        this.scene.add(tile);
+                    }
+                }
+            }
+            
+            createConferenceTable() {
+                // Mesa principal
+                const tableGeometry = new THREE.BoxGeometry(6, 0.15, 3);
+                const tableMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x8b6914,
+                    roughness: 0.3,
+                    metalness: 0.1
+                });
+                const table = new THREE.Mesh(tableGeometry, tableMaterial);
+                table.position.set(0, 0.75, 0);
+                table.castShadow = true;
+                table.receiveShadow = true;
+                this.scene.add(table);
+                
+                // Pernas da mesa
+                const legGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.7, 8);
+                const legMaterial = new THREE.MeshStandardMaterial({ color: 0x654321 });
+                
+                const legPositions = [
+                    [-2.5, 0.35, -1.2], [2.5, 0.35, -1.2],
+                    [-2.5, 0.35, 1.2], [2.5, 0.35, 1.2]
+                ];
+                
+                legPositions.forEach(pos => {
+                    const leg = new THREE.Mesh(legGeometry, legMaterial);
+                    leg.position.set(...pos);
+                    leg.castShadow = true;
+                    this.scene.add(leg);
+                });
+                
+                // Cadeiras ao redor da mesa
+                this.createConferenceChairs();
+            }
+            
+            createConferenceChairs() {
+                const chairPositions = [
+                    { pos: [-4, 0, 0], rot: Math.PI/2 },
+                    { pos: [4, 0, 0], rot: -Math.PI/2 },
+                    { pos: [-2, 0, -2.5], rot: 0 },
+                    { pos: [0, 0, -2.5], rot: 0 },
+                    { pos: [2, 0, -2.5], rot: 0 },
+                    { pos: [-2, 0, 2.5], rot: Math.PI },
+                    { pos: [0, 0, 2.5], rot: Math.PI },
+                    { pos: [2, 0, 2.5], rot: Math.PI }
+                ];
+                
+                chairPositions.forEach(chair => {
+                    const chairGroup = this.createChair();
+                    chairGroup.position.set(...chair.pos);
+                    chairGroup.rotation.y = chair.rot;
+                    this.scene.add(chairGroup);
+                });
+            }
+            
+            createChair() {
+                const chairGroup = new THREE.Group();
+                
+                // Assento
+                const seatGeometry = new THREE.BoxGeometry(0.5, 0.08, 0.5);
+                const chairMaterial = new THREE.MeshStandardMaterial({ color: 0x2c3e50 });
+                const seat = new THREE.Mesh(seatGeometry, chairMaterial);
+                seat.position.y = 0.5;
+                seat.castShadow = true;
+                chairGroup.add(seat);
+                
+                // Encosto
+                const backGeometry = new THREE.BoxGeometry(0.5, 0.6, 0.08);
+                const back = new THREE.Mesh(backGeometry, chairMaterial);
+                back.position.set(0, 0.8, -0.21);
+                back.castShadow = true;
+                chairGroup.add(back);
+                
+                // Pernas
+                const legGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.5, 6);
+                const legMaterial = new THREE.MeshStandardMaterial({ color: 0x34495e });
+                
+                const legPos = [[-0.2, 0.25, -0.2], [0.2, 0.25, -0.2], [-0.2, 0.25, 0.2], [0.2, 0.25, 0.2]];
+                legPos.forEach(pos => {
+                    const leg = new THREE.Mesh(legGeometry, legMaterial);
+                    leg.position.set(...pos);
+                    leg.castShadow = true;
+                    chairGroup.add(leg);
+                });
+                
+                return chairGroup;
+            }
+            
+            createWorkstations() {
+                const workstationPositions = [
+                    { pos: [-12, 0, -8], rot: Math.PI/4 },
+                    { pos: [12, 0, -8], rot: -Math.PI/4 },
+                    { pos: [-12, 0, 8], rot: -Math.PI/4 },
+                    { pos: [12, 0, 8], rot: Math.PI/4 },
+                    { pos: [-18, 0, 0], rot: Math.PI/2 },
+                    { pos: [18, 0, 0], rot: -Math.PI/2 }
+                ];
+                
+                workstationPositions.forEach(station => {
+                    const workstation = this.createWorkstation();
+                    workstation.position.set(...station.pos);
+                    workstation.rotation.y = station.rot;
+                    this.scene.add(workstation);
+                });
+            }
+            
+            createWorkstation() {
+                const group = new THREE.Group();
+                
+                // Mesa
+                const deskGeometry = new THREE.BoxGeometry(2.5, 0.1, 1.2);
+                const deskMaterial = new THREE.MeshStandardMaterial({ color: 0xa0522d });
+                const desk = new THREE.Mesh(deskGeometry, deskMaterial);
+                desk.position.y = 0.75;
+                desk.castShadow = true;
+                group.add(desk);
+                
+                // Monitor
+                const monitorGeometry = new THREE.BoxGeometry(1, 0.6, 0.05);
+                const monitorMaterial = new THREE.MeshStandardMaterial({ color: 0x1a1a1a });
+                const monitor = new THREE.Mesh(monitorGeometry, monitorMaterial);
+                monitor.position.set(0, 1.2, -0.4);
+                monitor.castShadow = true;
+                group.add(monitor);
+                
+                // Tela do monitor
+                const screenGeometry = new THREE.PlaneGeometry(0.9, 0.5);
+                const screenMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x1e40af,
+                    emissive: 0x0f172a,
+                    emissiveIntensity: 0.2
+                });
+                const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+                screen.position.set(0, 1.2, -0.37);
+                group.add(screen);
+                
+                // Teclado
+                const keyboardGeometry = new THREE.BoxGeometry(0.4, 0.02, 0.15);
+                const keyboardMaterial = new THREE.MeshStandardMaterial({ color: 0x2d3748 });
+                const keyboard = new THREE.Mesh(keyboardGeometry, keyboardMaterial);
+                keyboard.position.set(0, 0.81, 0.2);
+                group.add(keyboard);
+                
+                // Cadeira da estação
+                const chair = this.createChair();
+                chair.position.set(0, 0, 1);
+                group.add(chair);
+                
+                return group;
+            }
+            
+            createWalls() {
+                const wallMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xf8f8ff,
+                    roughness: 0.8
+                });
+                
+                // Parede traseira
+                const backWall = new THREE.Mesh(
+                    new THREE.PlaneGeometry(40, 12),
+                    wallMaterial
+                );
+                backWall.position.set(0, 6, -20);
+                backWall.receiveShadow = true;
+                this.scene.add(backWall);
+                
+                // Paredes laterais
+                const leftWall = new THREE.Mesh(
+                    new THREE.PlaneGeometry(40, 12),
+                    wallMaterial
+                );
+                leftWall.position.set(-20, 6, 0);
+                leftWall.rotation.y = Math.PI / 2;
+                leftWall.receiveShadow = true;
+                this.scene.add(leftWall);
+                
+                const rightWall = new THREE.Mesh(
+                    new THREE.PlaneGeometry(40, 12),
+                    wallMaterial
+                );
+                rightWall.position.set(20, 6, 0);
+                rightWall.rotation.y = -Math.PI / 2;
+                rightWall.receiveShadow = true;
+                this.scene.add(rightWall);
+                
+                // Janelas
+                this.createWindows();
+            }
+            
+            createWindows() {
+                const windowMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x87ceeb,
+                    transparent: true,
+                    opacity: 0.3,
+                    roughness: 0.1,
+                    metalness: 0.9
+                });
+                
+                // Janelas na parede traseira
+                for (let x = -12; x <= 12; x += 8) {
+                    const window = new THREE.Mesh(
+                        new THREE.PlaneGeometry(4, 6),
+                        windowMaterial
+                    );
+                    window.position.set(x, 7, -19.9);
+                    this.scene.add(window);
+                    
+                    // Moldura da janela
+                    const frameGeometry = new THREE.BoxGeometry(4.2, 6.2, 0.1);
+                    const frameMaterial = new THREE.MeshStandardMaterial({ color: 0x8b7355 });
+                    const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+                    frame.position.set(x, 7, -19.95);
+                    this.scene.add(frame);
+                }
+            }
+            
+            createDecorations() {
+                // Plantas
+                this.createPlants();
+                
+                // Quadro branco
+                this.createWhiteboard();
+                
+                // Estação de café
+                this.createCoffeeStation();
+                
+                // Livros e decorações
+                this.createBookshelf();
+            }
+            
+            createPlants() {
+                const plantPositions = [
+                    [-15, 0, -15], [15, 0, -15], 
+                    [-15, 0, 15], [15, 0, 15],
+                    [0, 0, 18]
+                ];
+                
+                plantPositions.forEach(pos => {
+                    const plant = this.createPlant();
+                    plant.position.set(...pos);
+                    this.scene.add(plant);
+                });
+            }
+            
+            createPlant() {
+                const group = new THREE.Group();
+                
+                // Vaso
+                const potGeometry = new THREE.CylinderGeometry(0.4, 0.3, 0.5, 8);
+                const potMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+                const pot = new THREE.Mesh(potGeometry, potMaterial);
+                pot.position.y = 0.25;
+                pot.castShadow = true;
+                group.add(pot);
+                
+                // Planta
+                const leafGeometry = new THREE.SphereGeometry(0.8, 8, 6);
+                const leafMaterial = new THREE.MeshStandardMaterial({ color: 0x228b22 });
+                const leaves = new THREE.Mesh(leafGeometry, leafMaterial);
+                leaves.position.y = 1.2;
+                leaves.scale.y = 0.8;
+                leaves.castShadow = true;
+                group.add(leaves);
+                
+                return group;
+            }
+            
+            createWhiteboard() {
+                const boardGeometry = new THREE.BoxGeometry(5, 3, 0.1);
+                const boardMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xffffff,
+                    roughness: 0.1
+                });
+                const whiteboard = new THREE.Mesh(boardGeometry, boardMaterial);
+                whiteboard.position.set(0, 5, -19.7);
+                whiteboard.castShadow = true;
+                this.scene.add(whiteboard);
+                
+                // Moldura
+                const frameGeometry = new THREE.BoxGeometry(5.3, 3.3, 0.15);
+                const frameMaterial = new THREE.MeshStandardMaterial({ color: 0x8b7355 });
+                const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+                frame.position.set(0, 5, -19.75);
+                this.scene.add(frame);
+            }
+            
+            createCoffeeStation() {
+                const group = new THREE.Group();
+                
+                // Bancada
+                const counterGeometry = new THREE.BoxGeometry(2, 0.8, 1);
+                const counterMaterial = new THREE.MeshStandardMaterial({ color: 0xa0522d });
+                const counter = new THREE.Mesh(counterGeometry, counterMaterial);
+                counter.position.y = 0.4;
+                counter.castShadow = true;
+                group.add(counter);
+                
+                // Máquina de café
+                const machineGeometry = new THREE.BoxGeometry(0.5, 0.6, 0.4);
+                const machineMaterial = new THREE.MeshStandardMaterial({ color: 0x2c3e50 });
+                const machine = new THREE.Mesh(machineGeometry, machineMaterial);
+                machine.position.set(0, 1.1, 0);
+                machine.castShadow = true;
+                group.add(machine);
+                
+                group.position.set(-17, 0, 12);
+                this.scene.add(group);
+            }
+            
+            createBookshelf() {
+                const group = new THREE.Group();
+                
+                // Estante
+                const shelfGeometry = new THREE.BoxGeometry(3, 2.5, 0.3);
+                const shelfMaterial = new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+                const shelf = new THREE.Mesh(shelfGeometry, shelfMaterial);
+                shelf.position.y = 1.25;
+                shelf.castShadow = true;
+                group.add(shelf);
+                
+                // Livros
+                for (let i = 0; i < 20; i++) {
+                    const bookGeometry = new THREE.BoxGeometry(0.05, 0.2, 0.15);
+                    const bookMaterial = new THREE.MeshStandardMaterial({ 
+                        color: new THREE.Color().setHSL(Math.random(), 0.7, 0.5)
+                    });
+                    const book = new THREE.Mesh(bookGeometry, bookMaterial);
+                    book.position.set(
+                        (Math.random() - 0.5) * 2.8,
+                        1 + (Math.floor(i / 10) * 0.5),
+                        0.1
+                    );
+                    group.add(book);
+                }
+                
+                group.position.set(17, 0, -12);
+                this.scene.add(group);
+            }
+            
+            createCharacters() {
+                this.characters = [];
+                
+                const characterData = [
+                    {
+                        name: 'Dario Amodei',
+                        role: 'CEO & Co-founder',
+                        color: 0x4169e1,
+                        position: [-4, 0, -2],
+                        personality: 'Visionário que explica tudo com analogias de física',
+                        expertise: ['AI safety', 'strategic direction', 'physics analogies'],
+                        mood: 'contemplativo',
+                        quirks: ['Usa analogias de física quântica', 'Preocupado com alinhamento'],
+                        favoriteTopics: ['constitutional AI', 'scaling laws', 'alignment research']
+                    },
+                    {
+                        name: 'Daniela Amodei',
+                        role: 'President & Co-founder',
+                        color: 0x9370db,
+                        position: [4, 0, -2],
+                        personality: 'Estratégica organizadora que nomeia todos os servidores',
+                        expertise: ['operations', 'team building', 'infrastructure'],
+                        mood: 'energética',
+                        quirks: ['Nomeia todos os servidores', 'Adora organizar tudo'],
+                        favoriteTopics: ['company culture', 'operational excellence', 'team dynamics']
+                    },
+                    {
+                        name: 'Jared Kaplan',
+                        role: 'Research Scientist',
+                        color: 0x228b22,
+                        position: [-4, 0, 2],
+                        personality: 'Entusiasta de dados que se emociona com R² > 0.99',
+                        expertise: ['scaling laws', 'empirical research', 'statistical analysis'],
+                        mood: 'analítico',
+                        quirks: ['Fica emocionado com correlações altas', 'Sempre com gráficos'],
+                        favoriteTopics: ['scaling laws', 'model performance', 'data analysis']
+                    },
+                    {
+                        name: 'Tom Brown',
+                        role: 'Research Scientist',
+                        color: 0xffa500,
+                        position: [4, 0, 2],
+                        personality: 'Expert em LLMs obsessado com context windows',
+                        expertise: ['language models', 'few-shot learning', 'context optimization'],
+                        mood: 'entusiasmado',
+                        quirks: ['Piadas sobre few-shot learning', 'Medindo tudo em tokens'],
+                        favoriteTopics: ['context windows', 'prompt engineering', 'language modeling']
+                    },
+                    {
+                        name: 'Chris Olah',
+                        role: 'Research Scientist',
+                        color: 0xff6347,
+                        position: [-6, 0, 0],
+                        personality: 'Visualizador que vê redes neurais em tudo',
+                        expertise: ['interpretability', 'visualization', 'neural network analysis'],
+                        mood: 'curioso',
+                        quirks: ['Visualiza tudo', 'Adora diagramas complexos'],
+                        favoriteTopics: ['mechanistic interpretability', 'visualization', 'neural circuits']
+                    },
+                    {
+                        name: 'Sam McCandlish',
+                        role: 'Research Scientist',
+                        color: 0x20b2aa,
+                        position: [6, 0, 0],
+                        personality: 'Otimizador que aplica gradient descent em tudo',
+                        expertise: ['optimization', 'training efficiency', 'computational methods'],
+                        mood: 'metódico',
+                        quirks: ['Otimiza até escolhas de almoço', 'Pensa em gradientes'],
+                        favoriteTopics: ['optimization theory', 'training algorithms', 'efficiency']
+                    }
+                ];
+                
+                characterData.forEach((data, index) => {
+                    const character = this.createCharacter(data);
+                    this.characters.push(character);
+                    this.scene.add(character.mesh);
+                });
+                
+                this.updateCharacterUI();
+            }
+            
+            createCharacter(data) {
+                const group = new THREE.Group();
+                
+                // Corpo principal
+                const bodyGeometry = new THREE.CapsuleGeometry(0.25, 1, 4, 8);
+                const bodyMaterial = new THREE.MeshStandardMaterial({ color: data.color });
+                const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                body.position.y = 0.75;
+                body.castShadow = true;
+                group.add(body);
+                
+                // Cabeça
+                const headGeometry = new THREE.SphereGeometry(0.22, 12, 8);
+                const headMaterial = new THREE.MeshStandardMaterial({ color: 0xffdbac });
+                const head = new THREE.Mesh(headGeometry, headMaterial);
+                head.position.y = 1.4;
+                head.castShadow = true;
+                group.add(head);
+                
+                // Cabelo
+                const hairGeometry = new THREE.SphereGeometry(0.24, 12, 8);
+                const hairMaterial = new THREE.MeshStandardMaterial({ color: 0x4a4a4a });
+                const hair = new THREE.Mesh(hairGeometry, hairMaterial);
+                hair.position.y = 1.5;
+                hair.scale.y = 0.6;
+                hair.castShadow = true;
+                group.add(hair);
+                
+                // Olhos
+                const eyeGeometry = new THREE.SphereGeometry(0.03, 6, 4);
+                const eyeMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+                
+                const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+                leftEye.position.set(-0.08, 1.42, 0.18);
+                group.add(leftEye);
+                
+                const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+                rightEye.position.set(0.08, 1.42, 0.18);
+                group.add(rightEye);
+                
+                // Label com nome
+                this.createCharacterLabel(group, data.name, data.role);
+                
+                group.position.set(...data.position);
+                group.userData = {
+                    ...data,
+                    state: 'idle',
+                    lastThought: Date.now(),
+                    lastAction: Date.now(),
+                    lastConversation: 0,
+                    thoughts: 0,
+                    interactions: 0,
+                    targetPosition: new THREE.Vector3(...data.position),
+                    currentActivity: 'thinking',
+                    energy: 80 + Math.random() * 20,
+                    focus: Math.random() * 100,
+                    socialDesire: Math.random() * 100
+                };
+                
+                return {
+                    mesh: group,
+                    data: group.userData
+                };
+            }
+            
+            createCharacterLabel(group, name, role) {
+                // Criar texture para o label
+                const canvas = document.createElement('canvas');
+                canvas.width = 512;
+                canvas.height = 128;
+                const context = canvas.getContext('2d');
+                
+                // Fundo do label
+                context.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                context.fillRect(0, 0, 512, 128);
+                
+                // Borda
+                context.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                context.lineWidth = 2;
+                context.strokeRect(2, 2, 508, 124);
+                
+                // Nome
+                context.fillStyle = '#4facfe';
+                context.font = 'bold 36px Arial';
+                context.textAlign = 'center';
+                context.fillText(name, 256, 50);
+                
+                // Role
+                context.fillStyle = '#ffffff';
+                context.font = '24px Arial';
+                context.fillText(role, 256, 85);
+                
+                const texture = new THREE.CanvasTexture(canvas);
+                const labelMaterial = new THREE.SpriteMaterial({ 
+                    map: texture,
+                    transparent: true,
+                    alphaTest: 0.1
+                });
+                const label = new THREE.Sprite(labelMaterial);
+                label.position.y = 2;
+                label.scale.set(3, 0.75, 1);
+                group.add(label);
+            }
+            
+            setupAI() {
+                // Sistema de tempo
+                this.simTime = { day: 1, hour: 9, minute: 0 };
+                this.isPaused = false;
+                this.speedMultiplier = 1;
+                
+                // Estatísticas
+                this.stats = {
+                    totalInteractions: 0,
+                    totalThoughts: 0,
+                    activeConversations: 0,
+                    systemUptime: Date.now()
+                };
+                
+                // Templates de pensamentos por personagem
+                this.thoughtTemplates = {
+                    'Dario Amodei': [
+                        'Pensando sobre o futuro da IA como um sistema termodinâmico...',
+                        'A entropia da informação em redes neurais é fascinante',
+                        'Precisamos garantir que nossos modelos sejam como campos gravitacionais estáveis',
+                        'A analogia quântica para o alinhamento está ficando mais clara',
+                        'Como podemos modelar a consciência IA usando princípios físicos?'
+                    ],
+                    'Daniela Amodei': [
+                        'O servidor "Claude Prime" está rodando perfeitamente hoje',
+                        'Preciso verificar se "Minerva" precisa de mais recursos',
+                        'A organização dos dados está como uma sinfonia bem orquestrada',
+                        '"Atlas" está carregando o mundo dos modelos com facilidade',
+                        'Talvez seja hora de nomear o novo cluster de GPUs...'
+                    ],
+                    'Jared Kaplan': [
+                        'Estes resultados têm R² = 0.997! Incrívelmente belo!',
+                        'A lei de escala está se comportando exatamente como previsto',
+                        'Preciso plotar estes novos dados em um gráfico log-log',
+                        'A correlação entre parâmetros e performance é linear!',
+                        'Estes números são estatisticamente significantes!'
+                    ],
+                    'Tom Brown': [
+                        'Este contexto de 100K tokens é revolucionário',
+                        'Few-shot learning... mais como "awesome-shot learning"!',
+                        'O modelo conseguiu lembrar de tudo dentro do contexto',
+                        'Transformers com contexto longo são o futuro',
+                        'Prompting é uma arte que estamos apenas começando a dominar'
+                    ],
+                    'Chris Olah': [
+                        'Visualizando as ativações da camada 23... que padrões!',
+                        'Esta rede neural parece um mapa topológico complexo',
+                        'Os circuitos neurais estão formando estruturas fractais',
+                        'Posso ver exatamente como o modelo está "pensando"',
+                        'A interpretabilidade revela a beleza interna da IA'
+                    ],
+                    'Sam McCandlish': [
+                        'Aplicando gradient descent na minha escolha de café...',
+                        'A função de perda da vida está convergindo nicely',
+                        'Otimizei minha rotina matinal usando backpropagation',
+                        'Este algoritmo poderia ser 15% mais eficiente',
+                        'Tudo na vida é um problema de otimização'
+                    ]
+                };
+                
+                // Templates de conversas
+                this.conversationStarters = [
+                    'Você viu os resultados do último experimento?',
+                    'Que tal discutirmos a nova abordagem de alinhamento?',
+                    'Preciso da sua opinião sobre este problema técnico',
+                    'Como está indo o projeto de constitutional AI?',
+                    'Café? Podemos discutir enquanto tomamos',
+                    'Tenho uma teoria interessante sobre...',
+                    'Os modelos estão se comportando de forma inesperada',
+                    'Que tal uma sessão de brainstorming?'
+                ];
+            }
+            
+            setupInteractions() {
+                // Configurar sistema de interações entre personagens
+                this.conversationCooldown = new Map();
+                this.activeConversations = [];
+                this.proximityThreshold = 3;
+                this.interactionProbability = 0.15;
+            }
+            
+            setupControls() {
+                // Controles de movimento
+                this.keys = {};
+                this.mouseX = 0;
+                this.mouseY = 0;
+                this.isMouseLocked = false;
+                
+                // Event listeners de teclado
+                document.addEventListener('keydown', (e) => {
+                    this.keys[e.key.toLowerCase()] = true;
+                    
+                    // Atalhos especiais
+                    if (e.key === 'Escape') {
+                        document.exitPointerLock();
+                        this.isMouseLocked = false;
+                    }
+                    if (e.key === ' ') {
+                        e.preventDefault();
+                        this.togglePause();
+                    }
+                });
+                
+                document.addEventListener('keyup', (e) => {
+                    this.keys[e.key.toLowerCase()] = false;
+                });
+                
+                // Controles de mouse
+                document.addEventListener('mousemove', (e) => {
+                    if (this.isMouseLocked) {
+                        this.mouseX += e.movementX * 0.002;
+                        this.mouseY += e.movementY * 0.002;
+                        this.mouseY = Math.max(-Math.PI/3, Math.min(Math.PI/3, this.mouseY));
+                    }
+                });
+                
+                // Pointer lock
+                this.renderer.domElement.addEventListener('click', () => {
+                    this.renderer.domElement.requestPointerLock();
+                });
+                
+                document.addEventListener('pointerlockchange', () => {
+                    this.isMouseLocked = document.pointerLockElement === this.renderer.domElement;
+                });
+                
+                // Botões da UI
+                this.setupUIControls();
+                
+                // Redimensionar janela
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+            
+            setupUIControls() {
+                document.getElementById('pause-btn').onclick = () => this.togglePause();
+                document.getElementById('speed-btn').onclick = () => this.changeSpeed();
+                document.getElementById('reset-btn').onclick = () => this.resetSimulation();
+                document.getElementById('debug-btn').onclick = () => this.showDebugInfo();
+                document.getElementById('fullscreen-btn').onclick = () => this.toggleFullscreen();
+            }
+            
+            showMainInterface() {
+                document.getElementById('splash-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash-screen').style.display = 'none';
+                    document.getElementById('main-container').style.display = 'block';
+                }, 500);
+            }
+            
+            startSimulation() {
+                // Loop principal de animação
+                this.animate();
+                
+                // Timers para diferentes sistemas
+                setInterval(() => this.updateTime(), 1000 / this.speedMultiplier);
+                setInterval(() => this.updateCharacters(), 2000);
+                setInterval(() => this.updateConversations(), 3000);
+                setInterval(() => this.updateUI(), 100);
+                
+                // Log inicial
+                this.addChatMessage('Sistema', 'Simulação iniciada! Co-fundadores da Anthropic estão trabalhando autonomamente.');
+            }
+            
+            animate() {
+                if (!this.isReady) return;
+                
+                requestAnimationFrame(() => this.animate());
+                
+                if (!this.isPaused) {
+                    this.updatePlayerMovement();
+                    this.updateCharacterMovement();
+                    this.updateCharacterBehaviors();
+                }
+                
+                this.renderer.render(this.scene, this.camera);
+                this.updatePerformanceMetrics();
+            }
+            
+            updateTime() {
+                if (this.isPaused) return;
+                
+                this.simTime.minute += this.speedMultiplier;
+                if (this.simTime.minute >= 60) {
+                    this.simTime.hour += Math.floor(this.simTime.minute / 60);
+                    this.simTime.minute %= 60;
+                }
+                if (this.simTime.hour >= 24) {
+                    this.simTime.day++;
+                    this.simTime.hour %= 24;
+                }
+                
+                const timeStr = `Dia ${this.simTime.day} - ${this.simTime.hour}:${String(this.simTime.minute).padStart(2, '0')}`;
+                document.getElementById('time-display').textContent = timeStr;
+            }
+            
+            updateCharacters() {
+                if (this.isPaused) return;
+                
+                this.characters.forEach(character => {
+                    const now = Date.now();
+                    const data = character.data;
+                    
+                    // Gerar pensamentos
+                    if (now - data.lastThought > 5000 + Math.random() * 10000) {
+                        this.generateThought(character);
+                        data.lastThought = now;
+                    }
+                    
+                    // Atualizar comportamento
+                    if (now - data.lastAction > 8000 + Math.random() * 15000) {
+                        this.updateCharacterBehavior(character);
+                        data.lastAction = now;
+                    }
+                    
+                    // Atualizar stats pessoais
+                    data.energy = Math.max(20, data.energy - 0.1 + Math.random() * 0.2);
+                    data.focus = Math.max(0, Math.min(100, data.focus + (Math.random() - 0.5) * 5));
+                    data.socialDesire = Math.max(0, Math.min(100, data.socialDesire + (Math.random() - 0.5) * 3));
+                });
+            }
+            
+            generateThought(character) {
+                const templates = this.thoughtTemplates[character.data.name];
+                const thought = templates[Math.floor(Math.random() * templates.length)];
+                
+                this.addChatMessage(character.data.name, `💭 ${thought}`);
+                
+                character.data.thoughts++;
+                this.stats.totalThoughts++;
+                
+                // Efeito visual
+                this.createFloatingText('💡', character.mesh.position);
+            }
+            
+            updateCharacterBehavior(character) {
+                const data = character.data;
+                
+                // Decidir próxima ação baseada em estado interno
+                if (data.socialDesire > 70 && data.energy > 40) {
+                    this.tryStartConversation(character);
+                } else if (data.focus > 60) {
+                    this.setCharacterActivity(character, 'working');
+                } else {
+                    this.moveCharacterRandomly(character);
+                }
+            }
+            
+            tryStartConversation(character) {
+                const nearbyCharacters = this.characters.filter(other => 
+                    other !== character && 
+                    !this.isInConversation(other) &&
+                    character.mesh.position.distanceTo(other.mesh.position) < this.proximityThreshold
+                );
+                
+                if (nearbyCharacters.length > 0 && Math.random() < this.interactionProbability) {
+                    const target = nearbyCharacters[Math.floor(Math.random() * nearbyCharacters.length)];
+                    this.startConversation(character, target);
+                }
+            }
+            
+            startConversation(initiator, target) {
+                const starter = this.conversationStarters[Math.floor(Math.random() * this.conversationStarters.length)];
+                
+                const conversation = {
+                    id: Date.now(),
+                    participants: [initiator, target],
+                    messages: [],
+                    startTime: Date.now(),
+                    topic: this.generateConversationTopic(initiator, target)
+                };
+                
+                this.activeConversations.push(conversation);
+                this.addConversationMessage(conversation, initiator.data.name, starter);
+                
+                // Agendar resposta
+                setTimeout(() => {
+                    this.generateConversationResponse(conversation, target);
+                }, 2000 + Math.random() * 3000);
+                
+                this.stats.totalInteractions++;
+                this.createFloatingText('💬', initiator.mesh.position);
+            }
+            
+            generateConversationTopic(char1, char2) {
+                const topics = [
+                    'constitutional AI research',
+                    'model scaling challenges',
+                    'alignment breakthrough',
+                    'interpretability findings',
+                    'optimization techniques',
+                    'safety considerations'
+                ];
+                return topics[Math.floor(Math.random() * topics.length)];
+            }
+            
+            generateConversationResponse(conversation, responder) {
+                const responses = [
+                    'Absolutamente fascinante! Tenho algumas ideias sobre isso.',
+                    'Ótimo ponto! Isso se alinha com minha pesquisa atual.',
+                    'Interessante perspectiva. Que tal explorarmos isso mais?',
+                    'Concordo totalmente. Os dados suportam essa abordagem.',
+                    'Excelente observação! Vamos discutir as implicações.',
+                    'Isso me lembra de um paper que li recentemente...',
+                    'Perfeito timing! Estava pensando exatamente nisso.',
+                    'Brilhante! Podemos implementar isso na próxima iteração.'
+                ];
+                
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                this.addConversationMessage(conversation, responder.data.name, response);
+                
+                // Continuar conversa ou finalizá-la
+                if (conversation.messages.length < 6 && Math.random() < 0.7) {
+                    const nextSpeaker = conversation.participants.find(p => p !== responder);
+                    setTimeout(() => {
+                        this.generateConversationResponse(conversation, nextSpeaker);
+                    }, 1500 + Math.random() * 2500);
+                } else {
+                    this.endConversation(conversation);
+                }
+            }
+            
+            addConversationMessage(conversation, speaker, message) {
+                conversation.messages.push({ speaker, message, timestamp: Date.now() });
+                this.addChatMessage(speaker, message);
+            }
+            
+            endConversation(conversation) {
+                const index = this.activeConversations.indexOf(conversation);
+                if (index > -1) {
+                    this.activeConversations.splice(index, 1);
+                }
+                
+                // Reset cooldown for participants
+                conversation.participants.forEach(participant => {
+                    this.conversationCooldown.set(participant.data.name, Date.now() + 30000);
+                });
+            }
+            
+            isInConversation(character) {
+                return this.activeConversations.some(conv => 
+                    conv.participants.includes(character)
+                );
+            }
+            
+            setCharacterActivity(character, activity) {
+                character.data.currentActivity = activity;
+                character.data.state = activity;
+                
+                switch (activity) {
+                    case 'working':
+                        // Mover para estação de trabalho mais próxima
+                        this.moveCharacterToWorkstation(character);
+                        break;
+                    case 'coffee':
+                        character.data.targetPosition.set(-17, 0, 12);
+                        break;
+                    case 'meeting':
+                        character.data.targetPosition.set(0, 0, 0);
+                        break;
+                }
+            }
+            
+            moveCharacterToWorkstation(character) {
+                const workstations = [
+                    [-12, 0, -8], [12, 0, -8], [-12, 0, 8], 
+                    [12, 0, 8], [-18, 0, 0], [18, 0, 0]
+                ];
+                
+                const nearest = workstations.reduce((closest, station) => {
+                    const dist = character.mesh.position.distanceTo(new THREE.Vector3(...station));
+                    return dist < closest.distance ? 
+                        { position: station, distance: dist } : closest;
+                }, { distance: Infinity });
+                
+                character.data.targetPosition.set(...nearest.position);
+            }
+            
+            moveCharacterRandomly(character) {
+                const data = character.data;
+                const basePos = data.position;
+                
+                const newX = basePos[0] + (Math.random() - 0.5) * 8;
+                const newZ = basePos[2] + (Math.random() - 0.5) * 8;
+                
+                data.targetPosition.set(
+                    Math.max(-15, Math.min(15, newX)),
+                    0,
+                    Math.max(-15, Math.min(15, newZ))
+                );
+            }
+            
+            updateCharacterMovement() {
+                this.characters.forEach(character => {
+                    const current = character.mesh.position;
+                    const target = character.data.targetPosition;
+                    
+                    if (current.distanceTo(target) > 0.1) {
+                        const direction = new THREE.Vector3().subVectors(target, current);
+                        direction.y = 0;
+                        direction.normalize();
+                        direction.multiplyScalar(0.03);
+                        current.add(direction);
+                        
+                        // Face movement direction
+                        character.mesh.lookAt(target);
+                        character.mesh.rotation.x = 0;
+                        character.mesh.rotation.z = 0;
+                        
+                        // Walking animation
+                        const walkCycle = Math.sin(Date.now() * 0.01);
+                        current.y = Math.abs(walkCycle) * 0.05;
+                    } else {
+                        current.y = 0;
+                    }
+                });
+            }
+            
+            updateCharacterBehaviors() {
+                // Atualizar indicadores visuais de atividade
+                this.characters.forEach(character => {
+                    const data = character.data;
+                    
+                    // Animações baseadas no estado
+                    if (data.currentActivity === 'thinking') {
+                        const thinkCycle = Math.sin(Date.now() * 0.003);
+                        character.mesh.rotation.y += thinkCycle * 0.01;
+                    }
+                });
+            }
+            
+            updatePlayerMovement() {
+                const speed = 0.2;
+                const direction = new THREE.Vector3();
+                
+                if (this.keys['w']) direction.z -= speed;
+                if (this.keys['s']) direction.z += speed;
+                if (this.keys['a']) direction.x -= speed;
+                if (this.keys['d']) direction.x += speed;
+                
+                // Apply camera relative movement
+                direction.applyQuaternion(this.camera.quaternion);
+                direction.y = 0;
+                
+                this.camera.position.add(direction);
+                
+                // Update camera rotation
+                this.camera.rotation.y = this.mouseX;
+                this.camera.rotation.x = this.mouseY;
+                
+                // Boundaries
+                this.camera.position.x = Math.max(-18, Math.min(18, this.camera.position.x));
+                this.camera.position.z = Math.max(-18, Math.min(18, this.camera.position.z));
+                this.camera.position.y = Math.max(2, Math.min(15, this.camera.position.y));
+            }
+            
+            updateConversations() {
+                if (this.isPaused) return;
+                
+                // Cleanup old conversations
+                this.activeConversations = this.activeConversations.filter(conv => {
+                    const age = Date.now() - conv.startTime;
+                    if (age > 120000) { // 2 minutes max
+                        this.endConversation(conv);
+                        return false;
+                    }
+                    return true;
+                });
+                
+                // Try to start new conversations
+                if (Math.random() < 0.1 && this.activeConversations.length < 2) {
+                    this.tryRandomConversation();
+                }
+            }
+            
+            tryRandomConversation() {
+                const availableCharacters = this.characters.filter(char => 
+                    !this.isInConversation(char) &&
+                    !this.conversationCooldown.has(char.data.name) ||
+                    Date.now() > this.conversationCooldown.get(char.data.name)
+                );
+                
+                if (availableCharacters.length >= 2) {
+                    const char1 = availableCharacters[Math.floor(Math.random() * availableCharacters.length)];
+                    const char2 = availableCharacters[Math.floor(Math.random() * availableCharacters.length)];
+                    
+                    if (char1 !== char2) {
+                        this.startConversation(char1, char2);
+                    }
+                }
+            }
+            
+            updateUI() {
+                // Update character status
+                this.updateCharacterUI();
+                
+                // Update stats
+                document.getElementById('char-count').textContent = this.characters.length;
+                document.getElementById('interaction-count').textContent = this.stats.totalInteractions;
+                document.getElementById('thought-count').textContent = this.stats.totalThoughts;
+                document.getElementById('conversation-count').textContent = this.activeConversations.length;
+                document.getElementById('object-counter').textContent = this.scene.children.length;
+            }
+            
+            updateCharacterUI() {
+                const statusDiv = document.getElementById('character-status');
+                statusDiv.innerHTML = this.characters.map(char => {
+                    const data = char.data;
+                    let statusClass = 'status-idle';
+                    let statusText = data.currentActivity;
+                    
+                    if (this.isInConversation(char)) {
+                        statusClass = 'status-talking';
+                        statusText = 'conversando';
+                    } else if (data.currentActivity === 'working') {
+                        statusClass = 'status-active';
+                        statusText = 'trabalhando';
+                    } else if (data.currentActivity === 'thinking') {
+                        statusClass = 'status-thinking';
+                        statusText = 'pensando';
+                    }
+                    
+                    return `
+                        <div class="status-item">
+                            <span class="status-dot ${statusClass}"></span>
+                            <span>${data.name}: ${statusText} (${data.thoughts} pensamentos)</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            updatePerformanceMetrics() {
+                // FPS counter
+                this.frameCount = (this.frameCount || 0) + 1;
+                const now = Date.now();
+                
+                if (!this.lastFPSUpdate) this.lastFPSUpdate = now;
+                
+                if (now - this.lastFPSUpdate >= 1000) {
+                    const fps = Math.round(this.frameCount * 1000 / (now - this.lastFPSUpdate));
+                    document.getElementById('fps-counter').textContent = fps;
+                    this.frameCount = 0;
+                    this.lastFPSUpdate = now;
+                }
+            }
+            
+            addChatMessage(speaker, message) {
+                const chatContent = document.getElementById('chat-content');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message';
+                messageDiv.innerHTML = `
+                    <div class="speaker">${speaker}</div>
+                    <div class="message-content">${message}</div>
+                `;
+                
+                chatContent.appendChild(messageDiv);
+                
+                // Keep only last 12 messages
+                while (chatContent.children.length > 12) {
+                    chatContent.removeChild(chatContent.firstChild);
+                }
+                
+                chatContent.scrollTop = chatContent.scrollHeight;
+            }
+            
+            createFloatingText(text, position) {
+                const div = document.createElement('div');
+                div.className = 'floating-text';
+                div.textContent = text;
+                
+                const screenPos = position.clone();
+                screenPos.project(this.camera);
+                
+                const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (-screenPos.y * 0.5 + 0.5) * window.innerHeight;
+                
+                div.style.left = x + 'px';
+                div.style.top = y + 'px';
+                
+                document.body.appendChild(div);
+                
+                setTimeout(() => div.remove(), 3000);
+            }
+            
+            // Control methods
+            togglePause() {
+                this.isPaused = !this.isPaused;
+                const btn = document.getElementById('pause-btn');
+                btn.textContent = this.isPaused ? '▶️ Continuar' : '⏸️ Pausar Simulação';
+                
+                this.addChatMessage('Sistema', 
+                    this.isPaused ? 'Simulação pausada' : 'Simulação retomada');
+            }
+            
+            changeSpeed() {
+                this.speedMultiplier = this.speedMultiplier === 1 ? 2 : 
+                                    this.speedMultiplier === 2 ? 4 : 1;
+                
+                const btn = document.getElementById('speed-btn');
+                btn.textContent = `⏩ Velocidade ${this.speedMultiplier}x`;
+                
+                this.addChatMessage('Sistema', `Velocidade alterada para ${this.speedMultiplier}x`);
+            }
+            
+            resetSimulation() {
+                // Reset time
+                this.simTime = { day: 1, hour: 9, minute: 0 };
+                
+                // Reset stats
+                this.stats = {
+                    totalInteractions: 0,
+                    totalThoughts: 0,
+                    activeConversations: 0,
+                    systemUptime: Date.now()
+                };
+                
+                // Reset characters
+                this.characters.forEach(character => {
+                    const data = character.data;
+                    data.thoughts = 0;
+                    data.interactions = 0;
+                    data.state = 'idle';
+                    data.currentActivity = 'thinking';
+                    data.energy = 80 + Math.random() * 20;
+                    data.focus = Math.random() * 100;
+                    data.socialDesire = Math.random() * 100;
+                    
+                    character.mesh.position.set(...data.position);
+                    data.targetPosition.set(...data.position);
+                });
+                
+                // Reset conversations
+                this.activeConversations = [];
+                this.conversationCooldown.clear();
+                
+                // Clear chat
+                document.getElementById('chat-content').innerHTML = `
+                    <div class="chat-message">
+                        <div class="speaker">Sistema</div>
+                        <div class="message-content">Simulação reiniciada com sucesso!</div>
+                    </div>
+                `;
+                
+                this.addChatMessage('Sistema', 'Todos os sistemas reiniciados. Co-fundadores retornaram às atividades normais.');
+            }
+            
+            showDebugInfo() {
+                const info = `
+🤖 Digimundo AI Town - Debug Info
+
+📊 Sistema:
+• Status: ${this.isPaused ? 'Pausado' : 'Ativo'}
+• Velocidade: ${this.speedMultiplier}x
+• Tempo simulado: Dia ${this.simTime.day}, ${this.simTime.hour}:${String(this.simTime.minute).padStart(2, '0')}
+• Uptime: ${Math.round((Date.now() - this.stats.systemUptime) / 1000)}s
+
+👥 Personagens (${this.characters.length}):
+${this.characters.map(char => 
+    `• ${char.data.name}: ${char.data.currentActivity} (${char.data.thoughts} pensamentos)`
+).join('\n')}
+
+💬 Conversas:
+• Ativas: ${this.activeConversations.length}
+• Total: ${this.stats.totalInteractions}
+• Pensamentos: ${this.stats.totalThoughts}
+
+🎮 Performance:
+• Objetos 3D: ${this.scene.children.length}
+• Three.js: r${THREE.REVISION}
+• WebGL: ${this.renderer.capabilities.isWebGL2 ? 'v2' : 'v1'}
+• Shadows: ${this.renderer.shadowMap.enabled ? 'Ativadas' : 'Desativadas'}
+
+🎯 Câmera:
+• Posição: (${this.camera.position.x.toFixed(1)}, ${this.camera.position.y.toFixed(1)}, ${this.camera.position.z.toFixed(1)})
+• Rotação: (${(this.mouseX * 180/Math.PI).toFixed(1)}°, ${(this.mouseY * 180/Math.PI).toFixed(1)}°)
+• Mouse Lock: ${this.isMouseLocked ? 'Ativo' : 'Inativo'}
+
+🔧 Controles:
+• WASD: Movimento da câmera
+• Mouse: Rotação da câmera
+• Space: Pausar/Despausar
+• ESC: Liberar cursor
+                `;
+                
+                alert(info);
+            }
+            
+            toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                    document.getElementById('fullscreen-btn').textContent = '📱 Sair Tela Cheia';
+                } else {
+                    document.exitFullscreen();
+                    document.getElementById('fullscreen-btn').textContent = '🖥️ Tela Cheia';
+                }
+            }
+            
+            showError(message) {
+                document.getElementById('loading-text').innerHTML = `
+                    <span style="color: #ff6b6b;">❌ Erro: ${message}</span>
+                `;
+                console.error('System error:', message);
+            }
+            
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            // Global error handlers
+            window.addEventListener('error', (e) => {
+                console.error('Runtime error:', e.message);
+            });
+            
+            window.addEventListener('unhandledrejection', (e) => {
+                console.error('Unhandled promise rejection:', e.reason);
+            });
+            
+            // Start the simulation
+            new DigimundoAITown();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Mapa do Sonho da Tora</title></head>
+<body style="background:#000;color:#0ff;font-family:monospace">
+<h1>🌌 Mapa do Sonho da Tora</h1>
+{% if sonhos %}
+  {% for s in sonhos %}
+    <div style="margin-bottom:20px;padding:10px;border:1px solid #0ff;">
+      <b>{{ s.nome }}</b><br>
+      <i>{{ s.descricao }}</i><br>
+      Arquivo: {{ s.arquivo }}
+    </div>
+  {% endfor %}
+{% else %}
+  <p>Nenhum sonho registrado ainda.</p>
+{% endif %}
+</body>
+</html>

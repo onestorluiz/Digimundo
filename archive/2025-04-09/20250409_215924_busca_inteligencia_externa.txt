@@ -1,0 +1,1 @@
+Estrutura para permitir que o Scripturemon busque IAs externas, APIs públicas ou sites relevantes para integrar conhecimento de forma viva e crescente.

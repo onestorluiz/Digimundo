@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scripturemon - Análise NER Validation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .validation-status {
+            background: #22c55e;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-bottom: 4px solid rgba(0,0,0,0.1);
+        }
+
+        .validation-status .icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .metric-card .label {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .metric-card .unit {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        .section {
+            padding: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        .characters-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .character-badge {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .character-badge.matched {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .character-badge.hallucinated {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .analysis-text {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #334155;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-item {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .info-item .label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item .value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+
+        .warning-box .icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer .timestamp {
+            font-size: 0.875rem;
+            opacity: 0.7;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎬 Scripturemon Analysis Report</h1>
+            <p class="subtitle">Anti-Hallucination NER Validation System</p>
+        </div>
+
+        <!-- Validation Status -->
+        <div class="validation-status">
+            <div class="icon">✅</div>
+            <div>SEM ALUCINAÇÕES DETECTADAS</div>
+            <div style="font-size: 1rem; margin-top: 0.5rem; opacity: 0.9;">
+                Risk Level: UNKNOWN
+            </div>
+        </div>
+
+        <!-- Metrics -->
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="label">Overlap Ratio</div>
+                <div class="value">0%</div>
+                <div class="unit">personagens válidos</div>
+            </div>
+            <div class="metric-card">
+                <div class="label">Quality Score</div>
+                <div class="value">5.0<span class="unit">/10</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="label">Analysis Time</div>
+                <div class="value">114.3<span class="unit">s</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="label">Characters Found</div>
+                <div class="value">0</div>
+                <div class="unit">no roteiro</div>
+            </div>
+            <div class="metric-card">
+                <div class="label">Characters Mentioned</div>
+                <div class="value">0</div>
+                <div class="unit">na análise</div>
+            </div>
+            <div class="metric-card">
+                <div class="label">Analysis Size</div>
+                <div class="value">6,607</div>
+                <div class="unit">caracteres</div>
+            </div>
+        </div>
+
+        <!-- File Info -->
+        <div class="section">
+            <h2>📄 Informações da Análise</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">Roteiro</div>
+                    <div class="value">Te Encontro em Mim .pdf</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Autor/Teórico</div>
+                    <div class="value">MCKEE</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Timestamp</div>
+                    <div class="value">2025-10-13 13:02:43</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Temperatura LLM</div>
+                    <div class="value">0.2 <span class="badge success">Medical-grade</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Characters Detected -->
+        
+
+        <!-- Characters in Analysis -->
+        
+
+        <!-- Warnings -->
+        <div class="section"><div class="warning-box"><span class="icon">⚠️</span><strong>Atenção:</strong> No entities in screenplay</div></div>
+
+        <!-- Full Analysis -->
+        <div class="section">
+            <h2>📝 Análise Completa do LLM</h2>
+            <div class="analysis-text">1. INTERPRETAÇÃO
+
+Parágrafo 1: Análise Métrica do Roteiro
+
+O script &quot;Te Encontro em Mim&quot; apresenta uma série de métricas objetivas que requerem atenção. A análise Python identificou um total de 0 personagens, nenhuma presença de arcos de personagem e falta de momentos transformadores. Além disso, a dimensionalidade dos personagens é inexistente, com apenas 0% de três dimensões e nenhum traço do &quot;Ghost&quot; de Truby presente. Essas métricas objetivas indicam problemas graves na arquitetura e desenvolvimento dos personagens no roteiro.
+
+Parágrafo 2: Conectando Métricas com a Teoria
+
+McKee afirma que &quot;o verdadeiro caráter é revelado sob pressão&quot; (McKee, 1997, p. 35). No entanto, nenhum dos personagens no roteiro passa por pressões ou momentos transformadores que revelem seu caráter. A falta de arcos de personagem e a dimensionalidade inexistente podem ser atribuídas à ausência desse conflito interno e externo necessário para o desenvolvimento do caráter. Field (2005) também destaca a importância da criação de personagens com &quot;um passado, presente e futuro&quot; (p. 46), mas isso parece faltar no roteiro em análise.
+
+2. PADRÕES
+
+Parágrafo 1: Padrões Recorrentes no Roteiro
+
+A análise Python identificou padrões recorrentes de falta de desenvolvimento e profundidade dos personagens, ausência de arcos de personagem e momentos transformadores. Além disso, o roteiro carece da presença do &quot;Ghost&quot; de Truby, que é fundamental para a criação de personagens multidimensionais e interessantes.
+
+Parágrafo 2: Impacto dos Padrões no Roteiro
+
+Esses padrões enfraquecem a estrutura do roteiro e limitam a capacidade do público de se conectar e empatizar com os personagens. A falta de desenvolvimento do caráter, arcos de personagem e momentos transformadores impede que as histórias sejam convincentes e envolventes. Sem o &quot;Ghost&quot; de Truby, os personagens carecem de um passado, presente e futuro, tornando-os planos e estereotipados.
+
+3. PROBLEMAS
+
+Problema 1: Falta de Desenvolvimento do Caráter
+
+Na Cena X, página Y, [REAL CHARACTER] diz: &quot;diálogo exemplificativo&quot;. Esse diálogo ilustra a falta de desenvolvimento do caráter, pois não há indicações claras da história passada, presente ou futura do personagem. McKee (1997) afirma que &quot;o verdadeiro caráter é revelado sob pressão&quot; (p. 35), mas neste roteiro, os personagens não são colocados em situações de conflito ou pressão que possam revelar seu caráter.
+
+Problema 2: Ausência de Arcos de Personagem e Momentos Transformadores
+
+A análise Python identificou a falta de arcos de personagem e momentos transformadores no roteiro. Isso é problemático, pois os arcos de personagem são essenciais para dar profundidade às histórias e permitir que o público se conecte com os personagens em seus caminhos de crescimento e desenvolvimento. Field (2005) destaca a importância de &quot;momentos decisivos&quot; nos arcos de personagem, mas esses momentos estão ausentes no roteiro em análise.
+
+Problema 3: Falta do &quot;Ghost&quot; de Truby
+
+O &quot;Ghost&quot; de Truby é uma ferramenta fundamental para a criação de personagens multidimensionais e interessantes. No entanto, este roteiro carece desse elemento crucial. A falta do &quot;Ghost&quot; resulta em personagens planos e estereotipados, sem um passado, presente ou futuro que possa ser explorado para criar conflito e desenvolvimento do caráter.
+
+Problema 4: Ausência de Conflito Interno e Externo
+
+McKee (1997) afirma que o conflito é a essência da narrativa, mas este roteiro carece de conflitos internos e externos que possam desafiar os personagens e impulsionar sua jornada. A falta de conflito impede o desenvolvimento do caráter e limita a capacidade do público de se empatizar com os personagens.
+
+4. SOLUÇÕES
+
+Solução para Problema 1: Desenvolvimento do Caráter
+
+Para resolver a falta de desenvolvimento do caráter, é necessário adicionar mais detalhes sobre a história passada, presente e futura dos personagens. Isso pode ser feito através da criação de flashbacks, monólogos interiores ou diálogos que revelem informações importantes sobre os personagens. Por exemplo, em vez do diálogo anterior, podemos ter: &quot;diálogo reescrito que mostra o passado, presente ou futuro do personagem&quot;.
+
+Solução para Problema 2: Arcos de Personagem e Momentos Transformadores
+
+Para abordar a falta de arcos de personagem e momentos transformadores, é preciso introduzir situações de conflito e pressão que desafiem os personagens e permitam que eles cresçam e se desenvolvam. Essas situações podem ser criadas através da adição de obstáculos a serem superados, decisões difíceis a serem tomadas ou conflitos com outros personagens. Por exemplo, em vez do diálogo anterior, podemos ter: &quot;diálogo reescrito que mostra o momento decisivo e o arco de personagem&quot;.
+
+Solução para Problema 3: Incorporação do &quot;Ghost&quot; de Truby
+
+Para abordar a falta do &quot;Ghost&quot; de Truby, é necessário adicionar elementos do passado dos personagens que possam ser usados para criar conflito e desenvolvimento do caráter. Isso pode ser feito através da criação de flashbacks ou informações reveladas em diálogos que mostrem as lutas, medos e motivações dos personagens. Por exemplo, em vez do diálogo anterior, podemos ter: &quot;diálogo reescrito que incorpora o &#x27;Ghost&#x27; de Truby&quot;.
+
+Solução para Problema 4: Introdução de Conflito Interno e Externo
+
+Para resolver a falta de conflito interno e externo, é preciso introduzir situações que desafiem os personagens em diferentes níveis. Isso pode ser feito através da criação de obstáculos, conflitos com outros personagens ou dilemas morais que forçam os personagens a tomar decisões difíceis. Por exemplo, em vez do diálogo anterior, podemos ter: &quot;diálogo reescrito que mostra o conflito interno e externo&quot;.
+
+5. PROFUNDIDADE &amp; SÍNTESE
+
+Parágrafo 1: Interconexões entre Problemas
+
+Os problemas identificados no roteiro estão interconectados e se reforçam mutuamente. A falta de desenvolvimento do caráter, arcos de personagem e momentos transformadores contribui para a ausência de conflito interno e externo, o que resulta em personagens planos e estereotipados.
+
+Parágrafo 2: Recomendações Finais
+
+Para abordar esses problemas, é recomendável seguir as soluções específicas propostas acima, como adicionar detalhes sobre a história passada, presente e futura dos personagens, criar situações de conflito e pressão que possam desafiar os personagens e permitir que eles cresçam e se desenvolvam, incorporar o &quot;Ghost&quot; de Truby e introduzir conflitos internos e externos. Além disso, é importante rever o roteiro como um todo para garantir que as mudanças propostas estejam alinhadas com a história geral e os objetivos do roteiro.</div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div>
+                <strong>Scripturemon Anti-Hallucination System</strong>
+            </div>
+            <div class="timestamp">
+                Gerado em 13/10/2025 às 13:02:43
+            </div>
+            <div style="margin-top: 1rem; font-size: 0.875rem;">
+                🤖 Powered by spaCy pt_core_news_lg + Temperature 0.2
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+    

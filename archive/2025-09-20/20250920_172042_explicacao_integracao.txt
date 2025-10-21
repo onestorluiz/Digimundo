@@ -1,0 +1,2 @@
+Esse painel é o início da conexão entre o mundo simbólico (Digimundo) e o navegador real.
+Cada Digimon poderá futuramente ser acessado por rota própria, com avatar, ficha e mensagens.

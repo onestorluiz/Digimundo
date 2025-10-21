@@ -1,0 +1,755 @@
+================================================================================
+SCRIPTUREMON - ANÁLISE DUAL-CORE
+================================================================================
+
+Roteiro: SONHOS_PDF_DrDialogue
+Especialista: Script Doctor Dialoguemon
+Data: 04/10/2025 08:22:36
+Modo: Shallow
+
+================================================================================
+PARTE 1: ANÁLISE PYTHON (DADOS OBJETIVOS)
+================================================================================
+
+💡 RECOMENDAÇÕES PYTHON:
+   1. Have characters talk around issues instead of stating them directly
+   2. Differentiate voices for: IMAGEM	VHS	HANDYCAM, TÍTULO:	SONHOS, REBECA
+
+📋 DIAGNÓSTICO DETALHADO:
+   DIALOGUE EXCELLENT (90.0/100): Dialogue is authentic with distinct character voices. Key issues: lacking subtext
+
+📈 DADOS TÉCNICOS (JSON):
+--------------------------------------------------------------------------------
+{
+  "specialist": {
+    "name": "Script Doctor Dialoguemon",
+    "title": "Script Doctor - Character Dialogue and Voice Specialist",
+    "specialty": "Dialogue authenticity, character voice, subtext, natural speech patterns"
+  },
+  "score": 90.0,
+  "total_dialogue_lines": 341,
+  "character_count": 56,
+  "voice_profiles": [
+    {
+      "name": "IMAGEM\tVHS\tHANDYCAM",
+      "lines": 1,
+      "avg_words": 122.0,
+      "complexity": 0.7131147540983607,
+      "formality": "mixed",
+      "distinctiveness": 0.42,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "de sabão",
+        "bolha de",
+        "bolha de sabão"
+      ]
+    },
+    {
+      "name": "",
+      "lines": 12,
+      "avg_words": 36.0,
+      "complexity": 0.6041666666666666,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "samantha criança",
+        "bolha de",
+        "a câmera"
+      ]
+    },
+    {
+      "name": "ALBERTO",
+      "lines": 53,
+      "avg_words": 25.962264150943398,
+      "complexity": 0.46148255813953487,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "samantha criança",
+        "meu amor,",
+        "e samantha"
+      ]
+    },
+    {
+      "name": "SAMANTHA\tCRIANÇA",
+      "lines": 16,
+      "avg_words": 18.0,
+      "complexity": 0.6145833333333334,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "samantha criança",
+        "com a",
+        "o que"
+      ]
+    },
+    {
+      "name": "TÍTULO:\tSONHOS",
+      "lines": 1,
+      "avg_words": 1.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "KLEBER",
+      "lines": 22,
+      "avg_words": 21.136363636363637,
+      "complexity": 0.5870967741935483,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "um grande",
+        "chão e",
+        "que eu"
+      ]
+    },
+    {
+      "name": "INTERCORTE\tCOM:",
+      "lines": 3,
+      "avg_words": 60.666666666666664,
+      "complexity": 0.5934065934065934,
+      "formality": "mixed",
+      "distinctiveness": 0.5,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "escova os",
+        "escova os dentes",
+        "os dentes"
+      ]
+    },
+    {
+      "name": "YASMIM",
+      "lines": 14,
+      "avg_words": 22.0,
+      "complexity": 0.6655844155844156,
+      "formality": "mixed",
+      "distinctiveness": 0.76,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "o que",
+        "de um",
+        "que eu"
+      ]
+    },
+    {
+      "name": "SAMANTHA",
+      "lines": 88,
+      "avg_words": 17.15909090909091,
+      "complexity": 0.49271523178807947,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "o que",
+        "que você",
+        "a gente"
+      ]
+    },
+    {
+      "name": "LÉIA",
+      "lines": 36,
+      "avg_words": 19.0,
+      "complexity": 0.5657894736842105,
+      "formality": "mixed",
+      "distinctiveness": 0.8,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "e a",
+        "que ele",
+        "sua mãe"
+      ]
+    },
+    {
+      "name": "DR.\tCLARISSE",
+      "lines": 5,
+      "avg_words": 10.6,
+      "complexity": 0.7924528301886793,
+      "formality": "mixed",
+      "distinctiveness": 0.54,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "você não",
+        "é mais"
+      ]
+    },
+    {
+      "name": "REBECA",
+      "lines": 1,
+      "avg_words": 7.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "ISADORA",
+      "lines": 14,
+      "avg_words": 19.857142857142858,
+      "complexity": 0.697841726618705,
+      "formality": "mixed",
+      "distinctiveness": 0.6599999999999999,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "que tinha",
+        "mas é",
+        "e yasmim"
+      ]
+    },
+    {
+      "name": "ISADORA\tADOLESCENTE",
+      "lines": 10,
+      "avg_words": 22.1,
+      "complexity": 0.6923076923076923,
+      "formality": "mixed",
+      "distinctiveness": 0.6799999999999999,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "yasmim adolescente",
+        "dá uma",
+        "de errado"
+      ]
+    },
+    {
+      "name": "SAMANTHA\tADOLESCENTE",
+      "lines": 9,
+      "avg_words": 15.88888888888889,
+      "complexity": 0.7132867132867133,
+      "formality": "mixed",
+      "distinctiveness": 0.6599999999999999,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "samantha adolescente",
+        "olhar de",
+        "adolescente se"
+      ]
+    },
+    {
+      "name": "YASMIM\tADOLESCENTE",
+      "lines": 2,
+      "avg_words": 43.5,
+      "complexity": 0.7701149425287356,
+      "formality": "mixed",
+      "distinctiveness": 0.42000000000000004,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "a mão"
+      ]
+    },
+    {
+      "name": "FRANCO",
+      "lines": 2,
+      "avg_words": 25.5,
+      "complexity": 0.8627450980392157,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "ISADORA\tLEMBRANÇA",
+      "lines": 1,
+      "avg_words": 39.0,
+      "complexity": 0.8461538461538461,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "KLEBER\tLEMBRANÇA",
+      "lines": 1,
+      "avg_words": 26.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "SAMANTHA\tLEMBRANÇA",
+      "lines": 4,
+      "avg_words": 29.5,
+      "complexity": 0.788135593220339,
+      "formality": "mixed",
+      "distinctiveness": 0.36,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "com a",
+        "colher de",
+        "samantha lembrança"
+      ]
+    },
+    {
+      "name": "\"U\".",
+      "lines": 1,
+      "avg_words": 120.0,
+      "complexity": 0.7166666666666667,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "EMPRESÁRIO\t1",
+      "lines": 1,
+      "avg_words": 28.0,
+      "complexity": 0.9285714285714286,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "28.\t\t\t\t\t\tSAMANTHA",
+      "lines": 1,
+      "avg_words": 6.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.5,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "PROFESSORA\tDE\tBALÉ",
+      "lines": 1,
+      "avg_words": 36.0,
+      "complexity": 0.9444444444444444,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "APRESENTADOR",
+      "lines": 2,
+      "avg_words": 46.5,
+      "complexity": 0.8494623655913979,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "CHEFE",
+      "lines": 1,
+      "avg_words": 21.0,
+      "complexity": 0.9047619047619048,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "36.\t\t\t\t\t\tCHEFE",
+      "lines": 1,
+      "avg_words": 11.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "37.\t\t\t\t\t\tKLEBER",
+      "lines": 1,
+      "avg_words": 16.0,
+      "complexity": 0.875,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "SALVA-VIDAS",
+      "lines": 2,
+      "avg_words": 20.0,
+      "complexity": 0.825,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "39.\t\t\t\t\t\tISADORA",
+      "lines": 1,
+      "avg_words": 31.0,
+      "complexity": 0.9354838709677419,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "41.\t\t\t\t\t\tISADORA",
+      "lines": 1,
+      "avg_words": 8.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "KLEBER,",
+      "lines": 1,
+      "avg_words": 48.0,
+      "complexity": 0.7916666666666666,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "querer que",
+        "querer que você",
+        "que você"
+      ]
+    },
+    {
+      "name": "SÉRGIO",
+      "lines": 1,
+      "avg_words": 10.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "48.\t\t\t\t\t\tLÉIA",
+      "lines": 1,
+      "avg_words": 9.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "49.\t\t\t\t\t\tSAMANTHA\tCRIANÇA",
+      "lines": 1,
+      "avg_words": 34.0,
+      "complexity": 0.9705882352941176,
+      "formality": "mixed",
+      "distinctiveness": 0.5,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "JOSÉ",
+      "lines": 1,
+      "avg_words": 23.0,
+      "complexity": 0.8695652173913043,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "EMPRESÁRIO\t2",
+      "lines": 1,
+      "avg_words": 7.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "DIEGO",
+      "lines": 1,
+      "avg_words": 32.0,
+      "complexity": 0.875,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "ATENDENTE\tHOSPITAL",
+      "lines": 1,
+      "avg_words": 12.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "PARAMÉDICO\t1",
+      "lines": 1,
+      "avg_words": 10.0,
+      "complexity": 0.9,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "56.\t\t\t\t\t\tSAMANTHA",
+      "lines": 1,
+      "avg_words": 8.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "RICARDO",
+      "lines": 6,
+      "avg_words": 27.166666666666668,
+      "complexity": 0.7607361963190185,
+      "formality": "mixed",
+      "distinctiveness": 0.42000000000000004,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "seu pai"
+      ]
+    },
+    {
+      "name": "60.\t\t\t\t\t\tRICARDO",
+      "lines": 1,
+      "avg_words": 36.0,
+      "complexity": 0.8055555555555556,
+      "formality": "mixed",
+      "distinctiveness": 0.32,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "eu já"
+      ]
+    },
+    {
+      "name": "62.\t\t\t\t\t\tYASMIM",
+      "lines": 1,
+      "avg_words": 5.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.5,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "67.\t\t\t\t\t\tSAMANTHA",
+      "lines": 1,
+      "avg_words": 15.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "68.\t\t\t\t\t\tLÚCIA",
+      "lines": 1,
+      "avg_words": 4.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.5,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "LÚCIA",
+      "lines": 4,
+      "avg_words": 13.5,
+      "complexity": 0.8148148148148148,
+      "formality": "mixed",
+      "distinctiveness": 0.42000000000000004,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "que você"
+      ]
+    },
+    {
+      "name": "72.\t\t\t\t\t\tKLEBER",
+      "lines": 1,
+      "avg_words": 26.0,
+      "complexity": 0.8846153846153846,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "76.\t\t\t\t\t\tALBERTO",
+      "lines": 1,
+      "avg_words": 27.0,
+      "complexity": 0.9259259259259259,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "77.\t\t\t\t\t\tALBERTO",
+      "lines": 1,
+      "avg_words": 7.0,
+      "complexity": 0.7142857142857143,
+      "formality": "mixed",
+      "distinctiveness": 0.32,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "opa, opa,"
+      ]
+    },
+    {
+      "name": "81.\t\t\t\t\t\tSAMANTHA\tCRIANÇA",
+      "lines": 1,
+      "avg_words": 21.0,
+      "complexity": 0.8571428571428571,
+      "formality": "mixed",
+      "distinctiveness": 0.32,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "para sua"
+      ]
+    },
+    {
+      "name": "82.\t\t\t\t\t\tSAMANTHA\tCRIANÇA",
+      "lines": 1,
+      "avg_words": 3.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.5,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "CRISTIANO",
+      "lines": 1,
+      "avg_words": 5.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "84.\t\t\t\t\t\tCRISTIANO",
+      "lines": 1,
+      "avg_words": 2.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.4,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "SAMANTHA.",
+      "lines": 1,
+      "avg_words": 21.0,
+      "complexity": 0.9523809523809523,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    },
+    {
+      "name": "85.\t\t\t\t\t\tALBERTO",
+      "lines": 1,
+      "avg_words": 5.0,
+      "complexity": 1.0,
+      "formality": "mixed",
+      "distinctiveness": 0.3,
+      "verbal_tics": [],
+      "unique_phrases": []
+    }
+  ],
+  "authenticity_score": 0.6105571847507331,
+  "natural_speech_score": 0.6105571847507331,
+  "voice_distinctiveness": 0.43571428571428567,
+  "identical_voices": [],
+  "subtext_present": false,
+  "subtext_score": 0.0,
+  "exposition_dumps": 0,
+  "exposition_issues": [],
+  "on_the_nose_count": 0,
+  "dialogue_serves_purpose": 91.49560117302052,
+  "empty_dialogue_lines": 29,
+  "conflict_in_dialogue": 0.25513196480938416,
+  "cliches_found": 0,
+  "cliche_examples": [],
+  "white_space_score": 0.39999999999999997,
+  "avg_speech_length": 32.46594427244582,
+  "power_dynamics_present": false,
+  "memorable_lines_count": 10,
+  "memorable_lines": [
+    "SAMANTHA\tCRIANÇA: Feliz. Ouvimos\ta\tvoz\tde\tSamantha\tCriança\tnos\tlábios\tde\tSamantha.",
+    "KLEBER: Você\tme\tdeu\tum\tgrande\tsusto\tmeu amor!",
+    "DR.\tCLARISSE: Quanto\ttempo\tdo\tque?\tDias\tde medicamento\trestante?\tSamantha? Samantha?"
+  ],
+  "rule_violations": [],
+  "diagnosis": "DIALOGUE EXCELLENT (90.0/100): Dialogue is authentic with distinct character voices. Key issues: lacking subtext",
+  "recommendations": [
+    "Have characters talk around issues instead of stating them directly",
+    "Differentiate voices for: IMAGEM\tVHS\tHANDYCAM, TÍTULO:\tSONHOS, REBECA"
+  ],
+  "signature": "Diagnosed by Script Doctor Dialoguemon™"
+}
+--------------------------------------------------------------------------------
+
+
+================================================================================
+PARTE 2: INSIGHTS LLM (ANÁLISE QUALITATIVA)
+================================================================================
+
+   🎬 **Script Doctor Dialoguemon** analisando seu roteiro!
+
+────────────────────────────────────────────────────────────────────────────────
+📖 1. **INTERPRETAÇÃO**: Os dados objetivos sugerem um bom equilíbrio entre diálogo direto e indirecto, além de uma variedade de vozes únicas. No entanto, existem algumas oportunidades para aprimorar a autenticidade dos personagens e reduzir a repetição.
+────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────
+📖 2. **PADRÕES**: Existe um padrão interessante de diferenciação entre os tipos de diálogo. Algumas vozes são distintivas, como IMAGEM VHS HANDYCAM e TÍTULO: SONHOS, enquanto outras têm menos características definidoras. Isso pode refletir a natureza da história ou indicar a necessidade de maior desenvolvimento de personagens.
+────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────
+📖 3. **PROBLEMAS**: Um problema significativo é a falta de subtexto em alguns diálogos, o que pode resultar em conversas on-the-nose e pouco envolventes. Outro desafio é manter a consistência nas vozes dos personagens, especialmente quando há múltiplas linhas de diálogo sem atribuição clara.
+────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────
+📖 4. **SOLUÇÕES**: Para abordar esses problemas, sugiro incorporar mais subtexto nos diálogos, fazendo com que os personagens conversam sobre assuntos relacionados à cena em vez de declararem explicitamente seus sentimentos. Também é importante fortalecer as vozes dos personagens, garantindo que cada um tenha características distintas e consistentes. Consulte o Capítulo 7 de *Dialogue - The Art of Verbal Action* para obter mais informações sobre como evitar diálogos on-the-nose.
+────────────────────────────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────
+📖 5. **CONTEÚDO ADICIONAL**: Tenha cuidado com a repetição de palavras e frases curtas, pois isso pode enfraquecer a naturalidade do diálogo. Utilize sinônimos e varie a estrutura das sentenças para manter o interesse do leitor. Adicionalmente, considere utilizar mais metáforas e analogias para dar profundidade às conversas, bem como permitir que os personagens falem uns sobre os outros em sua ausência, revelando suas percepções e opiniões.
+────────────────────────────────────────────────────────────────────────────────
+   Agora, vamos começar a analisar a primeira cena do roteiro fornecido!
+   Cena: EXT. JARDIM CASA DE INFÂNCIA - MANHÃ - 20 ANOS ATRÁS
+   Diálogo: SAMANTHA CRIANÇA, 8, abre animada uma pequena caixa de presente. Dentro da caixa há um Bolha de Sabão.
+   Contexto: Ninguém está falando no momento; Samantha descobre o presente.
+   Análise: Este momento captura a inocência e curiosidade de Samantha na infância. O objeto "Bolha de Sabão" representa um símbolo de diversão e liberdade, reforçando a ideia de crianças brincando ao ar livre. Embora este trecho não inclua diálogo, ele estabelece o tom leve e alegre da cena, preparando o palco para interações futuras entre os personagens. McKee discute a importância de estabelecer cenas através de imagens e sons, demonstrando como esses elementos podem ser tão eloqüentes quanto as palavras ditas (Capítulo 6).
+
+
+================================================================================
+PARTE 3: SÍNTESE (PYTHON + LLM)
+================================================================================
+
+🎯 RESUMO EXECUTIVO:
+   Dual-Core analysis combining Python metrics with LLM insights
+
+⭐ QUALITY SCORE: 1.00/1.0
+   Classificação: 🌟 EXCELENTE
+
+📊 ANÁLISE COMBINADA:
+   • objective_data: See python_analysis section
+   • qualitative_insights: 🎬 **Script Doctor Dialoguemon** analisando seu roteiro!
+
+1. **INTERPRETAÇÃO**: Os dados objetivos sugerem um bom equilíbrio entre diálogo direto e indirecto, além de uma variedade de vozes únicas. No entanto, existem algumas oportunidades para aprimorar a autenticidade dos personagens e reduzir a repetição.
+
+2. **PADRÕES**: Existe um padrão interessante de diferenciação entre os tipos de diálogo. Algumas vozes são distintivas, como IMAGEM VHS HANDYCAM e TÍTULO: SONHOS, enquanto outras têm menos ...
+   • methodology: Python structural analysis enriched with LLM contextual understanding
+
+
+================================================================================
+FIM DO RELATÓRIO
+================================================================================
+
+Gerado por Scripturemon Dual-Core em 04/10/2025 08:22:36

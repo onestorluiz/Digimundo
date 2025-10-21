@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pesquisa IA Viva - Digimundo</title>
+  <style>
+    body { background: #0d1117; color: white; font-family: sans-serif; padding: 40px; }
+    input, select { padding: 10px; margin-bottom: 20px; width: 100%; }
+    .result { background: #1e1e1e; padding: 20px; margin: 10px 0; border-left: 5px solid #ff79c6; }
+    .result strong { color: #ff79c6; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Pesquisa IA Integrada</h1>
+  <input type="text" id="query" placeholder="Buscar qualquer coisa viva...">
+  <select id="categoria">
+    <option value="todos">Todos os domínios</option>
+    <option value="digimons">Digimons</option>
+    <option value="backups">Backups</option>
+    <option value="rituais">Rituais</option>
+    <option value="leis">Leis</option>
+    <option value="escritas">Escritas</option>
+  </select>
+  <div id="resultados"></div>
+  <script>
+    async function buscar() {
+      const termo = document.getElementById("query").value.toLowerCase();
+      const cat = document.getElementById("categoria").value;
+      const res = await fetch("database.json");
+      const data = await res.json();
+      const resultados = document.getElementById("resultados");
+      resultados.innerHTML = "";
+      data.filter(item =>
+        (cat === "todos" || item.tipo === cat) &&
+        (item.nome.toLowerCase().includes(termo) || item.conteudo.toLowerCase().includes(termo))
+      ).forEach(item => {
+        resultados.innerHTML += `
+          <div class="result">
+            <strong>${item.nome}</strong> <em>(${item.tipo})</em><br/>
+            ${item.conteudo}
+          </div>`;
+      });
+    }
+
+    document.getElementById("query").addEventListener("input", buscar);
+    document.getElementById("categoria").addEventListener("change", buscar);
+  </script>
+</body>
+</html>

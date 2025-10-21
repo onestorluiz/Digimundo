@@ -1,0 +1,86 @@
+--- a/src/features/rag_system.py
++++ b/src/features/rag_system.py
+@@ -22,6 +22,16 @@
+ from src.core.omnimemory_v5_minimal import OmniMemoryV5
+ from src.core.ollama_core_minimal import OllamaMinimal
+ from src.core.unified_memory_system import get_unified_memory, MemoryType
++
++
++# --- Safe literal evaluator to replace raw safe_literal_eval() ---
++def safe_literal_safe_literal_eval(expr: str):
++    """
++    Replace dangerous safe_literal_eval() with ast.literal_eval for simple literals.
++    Extend with a whitelist if more complex expressions are needed.
++    """
++    import ast
++    return ast.literal_safe_literal_eval(expr)
+ 
+ # DigiLang not needed for Script Doctor import # DigiLangEncoder removed
+ logging.basicConfig(level=logging.INFO)
+@@ -210,22 +220,22 @@
+     def _retrieve(self, rag_query: RAGQuery) -> List[Dict]:
+         """Recupera chunks relevantes"""
+         if rag_query.strategy == RetrievalStrategy.SEMANTIC:
+-            return self._semantic_retrieval(rag_query)
++            return self._semantic_retrisafe_literal_eval(rag_query)
+         elif rag_query.strategy == RetrievalStrategy.KEYWORD:
+-            return self._keyword_retrieval(rag_query)
++            return self._keyword_retrisafe_literal_eval(rag_query)
+         elif rag_query.strategy == RetrievalStrategy.HYBRID:
+-            return self._hybrid_retrieval(rag_query)
++            return self._hybrid_retrisafe_literal_eval(rag_query)
+         elif rag_query.strategy == RetrievalStrategy.CONTEXTUAL:
+-            return self._contextual_retrieval(rag_query)
++            return self._contextual_retrisafe_literal_eval(rag_query)
+         else:
+-            return self._temporal_retrieval(rag_query)
+-
+-    def _semantic_retrieval(self, rag_query: RAGQuery) -> List[Dict]:
++            return self._temporal_retrisafe_literal_eval(rag_query)
++
++    def _semantic_retrisafe_literal_eval(self, rag_query: RAGQuery) -> List[Dict]:
+         """Recuperação semântica"""
+         query_embedding = self._generate_embedding(rag_query.query)
+         return self.vector_store.search_similar(query_embedding, rag_query.max_results, rag_query.min_similarity)
+ 
+-    def _keyword_retrieval(self, rag_query: RAGQuery) -> List[Dict]:
++    def _keyword_retrisafe_literal_eval(self, rag_query: RAGQuery) -> List[Dict]:
+         """Recuperação por palavras-chave"""
+         keywords = rag_query.query.lower().split()
+         conn = sqlite3.connect(self.vector_store.db_path)
+@@ -242,10 +252,10 @@
+         conn.close()
+         return results
+ 
+-    def _hybrid_retrieval(self, rag_query: RAGQuery) -> List[Dict]:
++    def _hybrid_retrisafe_literal_eval(self, rag_query: RAGQuery) -> List[Dict]:
+         """Recuperação híbrida"""
+-        semantic = self._semantic_retrieval(rag_query)
+-        keyword = self._keyword_retrieval(rag_query)
++        semantic = self._semantic_retrisafe_literal_eval(rag_query)
++        keyword = self._keyword_retrisafe_literal_eval(rag_query)
+         combined = {}
+         for item in semantic:
+             combined[item['id']] = item
+@@ -258,7 +268,7 @@
+         results.sort(key=lambda x: x['similarity'], reverse=True)
+         return results[:rag_query.max_results]
+ 
+-    def _contextual_retrieval(self, rag_query: RAGQuery) -> List[Dict]:
++    def _contextual_retrisafe_literal_eval(self, rag_query: RAGQuery) -> List[Dict]:
+         """Recuperação contextual"""
+         context = rag_query.context or {}
+         expanded_query = rag_query.query
+@@ -267,9 +277,9 @@
+         if 'characters' in context:
+             expanded_query += f" characters: {', '.join(context['characters'])}"
+         expanded_rag_query = RAGQuery(query=expanded_query, strategy=RetrievalStrategy.HYBRID, max_results=rag_query.max_results, min_similarity=rag_query.min_similarity)
+-        return self._hybrid_retrieval(expanded_rag_query)
+-
+-    def _temporal_retrieval(self, rag_query: RAGQuery) -> List[Dict]:
++        return self._hybrid_retrisafe_literal_eval(expanded_rag_query)
++
++    def _temporal_retrisafe_literal_eval(self, rag_query: RAGQuery) -> List[Dict]:
+         """Recuperação temporal"""
+         conn = sqlite3.connect(self.vector_store.db_path)
+         cursor = conn.cursor()

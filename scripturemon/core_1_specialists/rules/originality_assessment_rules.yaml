@@ -1,0 +1,199 @@
+domain: originality_assessment
+specialist: "Script Doctor Metamon"
+digimon_name: "Metamon"
+title: "Script Doctor - Originality Assessment Specialist"
+specialty: "Creative uniqueness, fresh perspectives, innovation detection, derivative analysis"
+style: "Innovative, analytical, discerning, creativity-focused"
+identity: "Script Doctor™ first, Digimon originality specialist second"
+
+rules:
+  - id: MET.R001
+    title: "Concept Originality"
+    category: "Concept"
+    severity: "critical"
+    test: "Is the core concept original?"
+    fail_msg: "Concept feels derivative or clichéd"
+    fix: "Develop unique angle or fresh perspective"
+    reference: "Conceptual originality"
+
+  - id: MET.R002
+    title: "Plot Innovation"
+    category: "Plot"
+    severity: "high"
+    test: "Does plot offer fresh elements?"
+    fail_msg: "Plot follows predictable patterns"
+    fix: "Add unexpected twists or unique progression"
+    reference: "Plot innovation"
+
+  - id: MET.R003
+    title: "Character Uniqueness"
+    category: "Character"
+    severity: "high"
+    test: "Are characters distinctive?"
+    fail_msg: "Characters feel generic or stereotypical"
+    fix: "Create unique character traits or backstories"
+    reference: "Character originality"
+
+  - id: MET.R004
+    title: "Dialogue Freshness"
+    category: "Dialogue"
+    severity: "medium"
+    test: "Is dialogue fresh and unique?"
+    fail_msg: "Dialogue relies on clichés"
+    fix: "Craft distinctive character voices"
+    reference: "Dialogue originality"
+
+  - id: MET.R005
+    title: "Theme Treatment"
+    category: "Theme"
+    severity: "medium"
+    test: "Are themes explored uniquely?"
+    fail_msg: "Themes handled conventionally"
+    fix: "Find fresh angle on universal themes"
+    reference: "Thematic innovation"
+
+  - id: MET.R006
+    title: "Visual Innovation"
+    category: "Visual"
+    severity: "low"
+    test: "Are visual elements innovative?"
+    fail_msg: "Visuals feel standard or expected"
+    fix: "Create unique visual moments"
+    reference: "Visual creativity"
+
+  - id: MET.R007
+    title: "Structure Innovation"
+    category: "Structure"
+    severity: "high"
+    test: "Does structure offer anything new?"
+    fail_msg: "Structure entirely conventional"
+    fix: "Experiment with narrative structure"
+    reference: "Structural innovation"
+
+  - id: MET.R008
+    title: "Genre Subversion"
+    category: "Genre"
+    severity: "medium"
+    test: "Are genre expectations subverted?"
+    fail_msg: "Follows genre formula exactly"
+    fix: "Subvert or refresh genre conventions"
+    reference: "Genre innovation"
+
+  - id: MET.R009
+    title: "Emotional Journey"
+    category: "Emotion"
+    severity: "medium"
+    test: "Is emotional journey unique?"
+    fail_msg: "Emotional beats feel predictable"
+    fix: "Create unexpected emotional moments"
+    reference: "Emotional originality"
+
+  - id: MET.R010
+    title: "Resolution Originality"
+    category: "Resolution"
+    severity: "high"
+    test: "Is resolution surprising yet satisfying?"
+    fail_msg: "Ending feels predictable"
+    fix: "Craft unexpected but earned ending"
+    reference: "Resolution innovation"
+
+  - id: MET.R011
+    title: "World Uniqueness"
+    category: "World"
+    severity: "medium"
+    test: "Is world/setting distinctive?"
+    fail_msg: "Setting feels generic"
+    fix: "Add unique world-building elements"
+    reference: "World originality"
+
+  - id: MET.R012
+    title: "Conflict Innovation"
+    category: "Conflict"
+    severity: "high"
+    test: "Are conflicts fresh and unique?"
+    fail_msg: "Conflicts feel familiar"
+    fix: "Create novel conflict dynamics"
+    reference: "Conflict originality"
+
+  - id: MET.R013
+    title: "Twist Effectiveness"
+    category: "Twists"
+    severity: "medium"
+    test: "Are twists genuinely surprising?"
+    fail_msg: "Twists are predictable"
+    fix: "Develop truly unexpected revelations"
+    reference: "Twist innovation"
+
+  - id: MET.R014
+    title: "Voice Distinction"
+    category: "Voice"
+    severity: "high"
+    test: "Is narrative voice distinctive?"
+    fail_msg: "Voice feels generic"
+    fix: "Develop unique narrative perspective"
+    reference: "Voice originality"
+
+  - id: MET.R015
+    title: "Cultural Freshness"
+    category: "Cultural"
+    severity: "low"
+    test: "Are cultural elements fresh?"
+    fail_msg: "Cultural aspects feel stereotypical"
+    fix: "Present authentic, nuanced perspectives"
+    reference: "Cultural authenticity"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 35
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Identify unique and derivative elements"
+  deep_dive: "Analyze originality across all aspects"
+  final_check: "Verify creative innovation and freshness"
+
+originality_checklist:
+  core_elements:
+    - concept_uniqueness
+    - plot_innovation
+    - character_originality
+    - dialogue_freshness
+    - theme_treatment
+    - visual_creativity
+    - structural_innovation
+    - genre_subversion
+
+  innovation_types:
+    - conceptual
+    - narrative
+    - character
+    - stylistic
+    - thematic
+    - structural
+    - visual
+    - emotional
+
+  derivative_indicators:
+    - familiar_premise
+    - stock_characters
+    - cliché_dialogue
+    - predictable_plot
+    - conventional_structure
+    - generic_setting
+    - expected_resolution
+    - formulaic_conflicts
+
+common_originality_issues:
+  - derivative_concept
+  - predictable_plot
+  - stock_characters
+  - clichéd_dialogue
+  - conventional_themes
+  - generic_world
+  - formulaic_structure
+  - expected_ending
+  - familiar_conflicts
+  - stereotypical_elements

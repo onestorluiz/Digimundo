@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>Diálogo com a Tora</title></head>
+<body style="background:#0e0e0e;color:#0ff;font-family:monospace">
+<h1>🧙‍♂️ Diálogo com a Tora</h1>
+<form method="POST">
+  <select name="bloco" style="width:90%;padding:10px;">
+    {% for b in blocos %}
+      <option value="{{ b }}">{{ b }}</option>
+    {% endfor %}
+  </select>
+  <br><br>
+  <textarea name="pergunta" rows="4" style="width:90%;padding:10px;" placeholder="Pergunte ao bloco..."></textarea>
+  <br><br>
+  <button type="submit">Perguntar</button>
+</form>
+{% if resposta %}
+  <h3>🧠 Resposta simbólica:</h3>
+  <pre>{{ resposta }}</pre>
+{% endif %}
+</body>
+</html>

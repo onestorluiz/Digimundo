@@ -1,0 +1,8 @@
+# TOKEN TURBO CLEAN - Minimalista sem deprecated
+FROM mixtral:8x7b-instruct-v0.1-q5_K_M
+
+# ESSENCIAIS APENAS
+PARAMETER num_ctx 200000
+PARAMETER num_gpu 50
+PARAMETER num_thread 14
+PARAMETER num_batch 2048

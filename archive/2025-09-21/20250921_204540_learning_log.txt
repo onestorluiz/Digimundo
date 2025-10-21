@@ -1,0 +1,50 @@
+DIGIMUNDO PRESENTE! 🔥
+🧹 Verificando processos órfãos...
+  Encontrados 5 processos Ollama
+    PID 65475: /opt/homebrew/Cellar/python@3.13/3.13.5/Frameworks
+    PID 65465: /bin/zsh -c -l source /Users/clubproducoes/.claude
+    PID 65252: /Applications/Ollama.app/Contents/MacOS/Ollama --f
+    PID 65191: ollama serve
+    PID 65188: /Applications/Ollama.app/Contents/Resources/ollama
+  ⚠️ Múltiplas instâncias detectadas!
+  💡 Para limpar: pkill ollama && sleep 2 && ollama serve
+🔍 Verificando conexão com Ollama...
+✅ Ollama conectado com sucesso!
+✅ Modelo mixtral-token-turbo:latest disponível
+
+============================================================
+🚀 INICIANDO APRENDIZADO CONTÍNUO EVOLUTIVO
+📊 Ciclo atual: #4
+============================================================
+
+🔄 CICLO 4
+------------------------------------------------------------
+
+🎬 FASE 1: ANÁLISE DE TEORIAS DE ROTEIRO
+============================================================
+📂 Checkpoint carregado: 23 análises prévias
+📚 13 teorias disponíveis
+🎬 35 roteiros profissionais para análise
+
+📖 Processando teoria: making-a-good-script-great_-revised-_-expanded-seger_-linda-3_-ed_-rev_-_-expanded_-_1_-silman-jame.docx.txt
+  📚 Extraindo técnicas de making-a-good-script-great_-re...
+  📡 Enviando request...
+  ✅ Resposta recebida com sucesso
+    ⚠️ Erro ao decodificar JSON: Invalid \escape: line 2 column 10 (char 11)
+    ⚠️ Usando técnicas genéricas como fallback
+
+  🎬 Analisando: the_matrix_-_release.docx.txt
+Traceback (most recent call last):
+  File "/Users/clubproducoes/Digimundo/scripturemon-ultimate/ollama_continuous_learning.py", line 685, in <module>
+    main()
+    ~~~~^^
+  File "/Users/clubproducoes/Digimundo/scripturemon-ultimate/ollama_continuous_learning.py", line 682, in main
+    learner.run_continuous_learning(cycles=args.cycles)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/Users/clubproducoes/Digimundo/scripturemon-ultimate/ollama_continuous_learning.py", line 641, in run_continuous_learning
+    self.phase1_theory_analysis(max_theories=5)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/clubproducoes/Digimundo/scripturemon-ultimate/ollama_continuous_learning.py", line 533, in phase1_theory_analysis
+    screenplay_content = self.doctor.read_file(str(screenplay_file))
+                         ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ScriptDoctor' object has no attribute 'read_file'

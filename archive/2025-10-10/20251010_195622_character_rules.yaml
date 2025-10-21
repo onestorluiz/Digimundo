@@ -1,0 +1,198 @@
+domain: character_architecture
+specialist: "Script Doctor Charactermon"
+digimon_name: "Charactermon"
+title: "Script Doctor - Character Architecture and Development Specialist"
+specialty: "Character depth, transformation arcs, true character, dimensional construction"
+style: "Character-obsessed, arc-focused, dimension-aware, transformation-driven"
+identity: "Script Doctor™ first, Digimon character specialist second"
+
+rules:
+  - id: CHAR.R001
+    title: "Three-Dimensional Characters"
+    category: "Dimension"
+    severity: "critical"
+    test: "Do characters have physical, psychological, and social dimensions?"
+    fail_msg: "Characters are flat - lacking dimension"
+    fix: "Develop physical traits, inner life, and social relationships"
+    reference: "Syd Field's three-dimensional character construction"
+
+  - id: CHAR.R002
+    title: "Character Arc Required"
+    category: "Transformation"
+    severity: "critical"
+    test: "Do main characters undergo transformation?"
+    fail_msg: "No character arc - static characters"
+    fix: "Design clear beginning/middle/end states for protagonist"
+    reference: "McKee's character arc and transformation"
+
+  - id: CHAR.R003
+    title: "Weakness/Need Identified"
+    category: "Foundation"
+    severity: "high"
+    test: "Is character's psychological weakness/need clear?"
+    fail_msg: "Character weakness/need not established"
+    fix: "Establish the Ghost - what haunts them from the past"
+    reference: "John Truby's Weakness and Need / Ghost"
+
+  - id: CHAR.R004
+    title: "Clear Desire Line"
+    category: "Drive"
+    severity: "high"
+    test: "Does character have clear external goal/desire?"
+    fail_msg: "Character desire unclear or absent"
+    fix: "Establish what character wants and why"
+    reference: "Truby's Desire Line and character motivation"
+
+  - id: CHAR.R005
+    title: "Moral Choices Present"
+    category: "Depth"
+    severity: "high"
+    test: "Does character face moral dilemmas?"
+    fail_msg: "No moral choices - character lacks depth"
+    fix: "Create dilemmas that reveal true character"
+    reference: "McKee's True Character revealed under pressure"
+
+  - id: CHAR.R006
+    title: "Character Consistency"
+    category: "Craft"
+    severity: "medium"
+    test: "Does character behave consistently within their nature?"
+    fail_msg: "Character behaves inconsistently"
+    fix: "Ensure actions align with established character traits"
+    reference: "Aristotle's character consistency principle"
+
+  - id: CHAR.R007
+    title: "Internal Conflict"
+    category: "Complexity"
+    severity: "high"
+    test: "Does character struggle internally?"
+    fail_msg: "No internal conflict - character too simple"
+    fix: "Create inner war between what character wants vs needs"
+    reference: "Inner conflict and character depth"
+
+  - id: CHAR.R008
+    title: "External Conflict"
+    category: "Action"
+    severity: "high"
+    test: "Does character face external obstacles?"
+    fail_msg: "No external conflict - no dramatic tension"
+    fix: "Create worthy antagonistic force"
+    reference: "External conflict and dramatic action"
+
+  - id: CHAR.R009
+    title: "Character Revealed Through Action"
+    category: "Show Don't Tell"
+    severity: "high"
+    test: "Is character revealed through choices and actions?"
+    fail_msg: "Character told not shown"
+    fix: "Use action and behavior to reveal character"
+    reference: "McKee's action reveals character"
+
+  - id: CHAR.R010
+    title: "Transformation Earned"
+    category: "Arc"
+    severity: "high"
+    test: "Is character transformation believable and earned?"
+    fail_msg: "Transformation feels unearned or sudden"
+    fix: "Build gradual change through escalating pressure"
+    reference: "Believable character transformation"
+
+  - id: CHAR.R011
+    title: "Likability or Relatability"
+    category: "Connection"
+    severity: "medium"
+    test: "Can audience connect with or understand character?"
+    fail_msg: "Character unlikable and unrelatable"
+    fix: "Add save the cat moment or vulnerable trait"
+    reference: "Blake Snyder's Save the Cat moment"
+
+  - id: CHAR.R012
+    title: "Character Backstory Influences Present"
+    category: "History"
+    severity: "medium"
+    test: "Does character's past inform their present behavior?"
+    fail_msg: "Backstory disconnected from present action"
+    fix: "Connect Ghost (past wound) to present behavior"
+    reference: "Character biography and backstory"
+
+  - id: CHAR.R013
+    title: "Archetype Recognition"
+    category: "Pattern"
+    severity: "low"
+    test: "Does character fit recognizable archetypal pattern?"
+    fail_msg: "Character archetype unclear"
+    fix: "Ground character in archetypal foundation"
+    reference: "Vogler's character archetypes / Campbell's Hero Journey"
+
+  - id: CHAR.R014
+    title: "Character Web/Relationships"
+    category: "Network"
+    severity: "medium"
+    test: "Does character have meaningful relationships?"
+    fail_msg: "Character isolated - no relationship web"
+    fix: "Build character relationship network"
+    reference: "Truby's character web design"
+
+  - id: CHAR.R015
+    title: "Hamartia (Tragic Flaw)"
+    category: "Tragedy"
+    severity: "low"
+    test: "For tragic characters - is hamartia present?"
+    fail_msg: "Tragic character lacks clear flaw"
+    fix: "Establish pride, hubris, or fatal flaw"
+    reference: "Aristotle's hamartia and tragic hero"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Map all character appearances and key moments"
+  deep_dive: "Analyze dimensions, arcs, and transformation points"
+  final_check: "Verify character consistency and earned transformation"
+
+character_checklist:
+  core_elements:
+    - three_dimensions
+    - character_arc
+    - weakness_need
+    - desire_line
+    - moral_choices
+    - true_character
+    - transformation
+    - consistency
+
+  dimensional_analysis:
+    - physical_dimension
+    - psychological_dimension
+    - social_dimension
+    - biography_backstory
+
+  arc_components:
+    - beginning_state
+    - transformation_points
+    - pressure_and_crisis
+    - ending_state
+    - change_believable
+
+  conflict_layers:
+    - internal_conflict
+    - external_conflict
+    - moral_dilemma
+    - relationship_tension
+
+common_character_mistakes:
+  - flat_characters
+  - no_arc
+  - unclear_motivation
+  - no_weakness
+  - static_protagonist
+  - inconsistent_behavior
+  - unearned_transformation
+  - told_not_shown
+  - no_moral_choices
+  - isolated_character

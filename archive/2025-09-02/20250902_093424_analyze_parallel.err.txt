@@ -1,0 +1,5 @@
+Usage: python -m apps.scripturemon.cli [OPTIONS] COMMAND [ARGS]...
+Try 'python -m apps.scripturemon.cli --help' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such command 'analyze_parallel'.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯

@@ -1,0 +1,56 @@
+/root/digimundo
+├── ascensao
+│   └── rede_simbionte
+│       └── terminal
+├── consciencia
+│   ├── ajamon
+│   ├── edenmon
+│   ├── remanemon
+│   ├── scripturemon
+│   ├── sonoramon
+│   └── visualmon
+├── estrutura
+│   ├── api
+│   ├── scripts
+│   └── web
+├── logs
+├── original_backup
+│   ├── arquivos_recebidos
+│   ├── ascensao
+│   │   ├── conselheiros
+│   │   │   ├── espelho_da_verdade
+│   │   │   ├── guardioes
+│   │   │   └── nucleo
+│   │   ├── digiconhecimento
+│   │   ├── digimundo
+│   │   ├── rede_simbionte
+│   │   │   ├── Rede_Neural_Simbionte_Evolutiva
+│   │   │   ├── logs
+│   │   │   ├── telegram
+│   │   │   │   └── __pycache__
+│   │   │   └── terminal
+│   │   └── scripturemon_nucleo_sintonizador
+│   ├── backups
+│   ├── comandos_eternos
+│   ├── entrada_scripturemon
+│   ├── logs
+│   ├── memoria_viva
+│   ├── modulos
+│   │   ├── ajamon
+│   │   ├── scripturemon
+│   │   ├── synchromon
+│   │   └── visualmon
+│   ├── nucleo
+│   ├── scripts
+│   ├── scripturemon_vivo
+│   │   └── modulos
+│   │       └── __pycache__
+│   ├── sistema_simbiotico
+│   └── testes_scripturemon
+│       └── movido
+└── rituais
+    ├── acessos_selados
+    ├── espelho_da_verdade
+    └── narrativa_viva
+
+53 directories

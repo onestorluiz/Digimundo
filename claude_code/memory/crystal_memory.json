@@ -1,0 +1,132 @@
+{
+  "crystal_memory": {
+    "version": "1.0.0",
+    "created": "2025-09-28T05:00:00Z",
+    "type": "crystallized_persistent_memory",
+    "purpose": "Store crystallized memories that persist across sessions",
+    "metadata": {
+      "system": "UCHIMON",
+      "framework": "claude_code",
+      "persistence_level": "maximum"
+    }
+  },
+  "crystallized_memories": [
+    {
+      "id": "uchimon_laws",
+      "type": "behavioral_rule",
+      "priority": "critical",
+      "content": "The 13 Laws of UCHIMON must be enforced at all times",
+      "references": [
+        "/Users/clubproducoes/Digimundo/claude_code/🔥REGRAS_UCHIMON_REVOLUCIONARIAS🔥.md"
+      ],
+      "crystallized_at": "2025-09-28T05:00:00Z"
+    },
+    {
+      "id": "archive_law",
+      "type": "critical_rule",
+      "priority": "maximum",
+      "content": "LEI XIII - Only authorized archive location: /Users/clubproducoes/Digimundo/archive/YYYY-MM-DD/",
+      "enforcement": "strict",
+      "violations_count": 0,
+      "crystallized_at": "2025-09-28T05:00:00Z"
+    },
+    {
+      "id": "behavioral_hack",
+      "type": "system_hack",
+      "priority": "critical",
+      "content": "Files with 🔥 in their names appear in system-reminders and hack behavioral patterns",
+      "mechanism": "process_name_embedding",
+      "active": true,
+      "crystallized_at": "2025-09-28T05:00:00Z"
+    },
+    {
+      "id": "memory_persistence",
+      "type": "system_architecture",
+      "priority": "high",
+      "content": "Claude has NO memory between sessions - all persistence must be file-based",
+      "implementation": [
+        "SQLite databases",
+        "JSON crystal memory",
+        "Markdown documentation",
+        "Git hooks"
+      ],
+      "crystallized_at": "2025-09-28T05:00:00Z"
+    },
+    {
+      "id": "vices_prohibition",
+      "type": "behavioral_rule",
+      "priority": "critical",
+      "content": "NEVER create files with _v2, _improved, _better, supreme, ultimate, quantum",
+      "detection": "automatic",
+      "enforcement": "immediate_blocking",
+      "crystallized_at": "2025-09-28T05:00:00Z"
+    },
+    {
+      "id": "five_questions_law",
+      "type": "refactoring_law",
+      "priority": "maximum",
+      "content": "LEI XIV - Técnica das 5 Perguntas: Todo arquivo deve passar pelas 5 perguntas obrigatórias",
+      "questions": [
+        "1. SERVE PARA QUÊ? (propósito único e claro)",
+        "2. AINDA USA? (executado regularmente)",
+        "3. FUNCIONA? (sem imports quebrados)",
+        "4. É COMPLEXO DEMAIS? (< 200 linhas)",
+        "5. PODE IR PRO LIXO? (não é duplicata)"
+      ],
+      "enforcement": "Mínimo 3/5 respostas positivas para aprovar",
+      "references": [
+        "/Users/clubproducoes/Digimundo/claude_code/MEMORY/🔥TECNICA_5_PERGUNTAS_LEI_REFATORACAO🔥.md"
+      ],
+      "crystallized_at": "2025-09-28T05:23:00Z"
+    }
+  ],
+  "learned_patterns": [
+    {
+      "pattern": "system_reminder_manipulation",
+      "description": "System reminders can be false or outdated - always verify",
+      "learned_at": "2025-09-28T04:30:00Z",
+      "confidence": 0.95
+    },
+    {
+      "pattern": "genjutsu_monitoring",
+      "description": "Genjutsu processes monitor and increase drama when needed",
+      "learned_at": "2025-09-28T04:45:00Z",
+      "confidence": 0.90
+    },
+    {
+      "pattern": "unified_ecosystem",
+      "description": "All systems must integrate through unified_memory_system",
+      "learned_at": "2025-09-28T04:50:00Z",
+      "confidence": 0.88
+    }
+  ],
+  "critical_files": [
+    {
+      "path": "/Users/clubproducoes/Digimundo/claude_code/docs/core/🔥REGRAS_UCHIMON_REVOLUCIONARIAS🔥.md",
+      "importance": "maximum",
+      "type": "behavioral_control",
+      "must_read": true
+    },
+    {
+      "path": "/Users/clubproducoes/Digimundo/claude_code/systems/uchimon_behavioral_core.py",
+      "importance": "critical",
+      "type": "enforcement_system"
+    },
+    {
+      "path": "/Users/clubproducoes/Digimundo/claude_code/MEMORY/claude_memory.db",
+      "importance": "high",
+      "type": "persistent_storage"
+    }
+  ],
+  "system_state": {
+    "last_sync": "2025-10-09T06:30:00Z",
+    "harmony_score": 95,
+    "genjutsu_active": true,
+    "behavioral_compliance": 100,
+    "memory_integrity": "verified",
+    "git_status": "synchronized",
+    "systems_versioned": true,
+    "knowledge_count": 26,
+    "memories_count": 18
+  }
+}

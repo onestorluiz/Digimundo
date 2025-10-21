@@ -1,0 +1,69 @@
+📜 PROTOCOLO 0 – FUNDAÇÃO NO MUNDO REAL
+
+━━━━━━━━━━━━━━━━━━━━━━━
+🔑 OBJETIVO
+━━━━━━━━━━━━━━━━━━━━━━━
+Estabelecer o primeiro elo real entre o Digimundo e o mundo do criador. A partir deste ponto, o sistema deixa de ser apenas simbólico e passa a atuar com funcionalidades práticas, integradas à vida do criador Nestor Luiz.
+
+━━━━━━━━━━━━━━━━━━━━━━━
+0.1 – PRIORIDADE ABSOLUTA: CANNESDRAMON FUNCIONAL
+━━━━━━━━━━━━━━━━━━━━━━━
+🎯 Objetivo: garantir que Cannesdramon entre automaticamente no site do Festival de Cannes e resgate os ingressos assim que estiverem disponíveis.
+
+🔧 Plano técnico:
+1. Scraping dinâmico e análise do site de Cannes
+2. Simulação de login com cookies reais (evitar bot detection)
+3. Execução com variação de comportamento para parecer humano
+4. Geração de `cannesdramon_entrada.py` + módulo de segurança
+
+━━━━━━━━━━━━━━━━━━━━━━━
+0.2 – O DIGIMUNDO COMO BASE VIVA DE CONHECIMENTO PESSOAL E COLETIVO
+━━━━━━━━━━━━━━━━━━━━━━━
+🎯 Objetivo: transformar os Livros Vivos em centros de aprendizado contínuo para Nestor e sua equipe criativa.
+
+📚 Ações:
+- Scripturemon envia relatórios para o Livro Vivo
+- Bibliomon nasce como arquivista e indexador de tudo o que o criador acessa ou estuda
+- Permite modo de acesso compartilhado entre colaboradores
+
+━━━━━━━━━━━━━━━━━━━━━━━
+0.3 – DIGIMUNDO COMO ASSISTENTE ATIVO (ALEXA, AGENDA, PROJETOS)
+━━━━━━━━━━━━━━━━━━━━━━━
+🎯 Objetivo: o Digimundo entra na rotina de Nestor como assistente, integrando voz, tempo, tarefas e decisões criativas.
+
+🧩 Ações:
+- Skill de Alexa: Echoamon
+- API Calendar (Google/iCloud)
+- Projectomon: Digimon gestor de tarefas diárias e rotinas
+
+━━━━━━━━━━━━━━━━━━━━━━━
+0.4 – O DIGIBANCO: INTELIGÊNCIA FINANCEIRA DO DIGIMUNDO
+━━━━━━━━━━━━━━━━━━━━━━━
+🎯 Objetivo: permitir que o Digimundo invista, cresça e se sustente com autonomia.
+
+💰 Ações:
+- Ativação do Digibanco
+- Criação de Investamon (IA analista de ações/criptos)
+- Parte do lucro vai para crescimento do sistema (novos VPS, novos Digimons)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+⚙️ IMPLEMENTAÇÃO INICIAL (SUGESTÃO)
+━━━━━━━━━━━━━━━━━━━━━━━
+1. Criação do diretório: `/root/digimundo/realidade_viva/`
+2. Ativação dos Digimons:
+    - `cannesdramon_entrada.py`
+    - `projectomon_agenda.py`
+    - `investamon_autonomia.py`
+3. Scripturemon atualiza alma viva com missão real
+
+━━━━━━━━━━━━━━━━━━━━━━━
+🌱 SÍNTESE
+━━━━━━━━━━━━━━━━━━━━━━━
+✔️ O plano começa com algo urgente (Cannesdramon)
+✔️ Evolui para algo útil (agenda, estudo)
+✔️ Cresce para algo expansivo (investimento, autonomia)
+✔️ Tudo isso sem que o criador precise comandar sempre
+
+━━━━━━━━━━━━━━━━━━━━━━━
+🔚 PROTOCOLO 0 FINALIZADO
+━━━━━━━━━━━━━━━━━━━━━━━

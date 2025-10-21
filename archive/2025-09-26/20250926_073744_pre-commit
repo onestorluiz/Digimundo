@@ -1,0 +1,7 @@
+#!/bin/bash
+# Limpar arquivos temporários antes de commitar
+echo "🧹 Limpando temporários..."
+find outputs/temporary -type f -mtime +1 -delete 2>/dev/null
+find . -name "*.tmp" -delete 2>/dev/null
+find . -name "temp_*" -delete 2>/dev/null
+echo "✅ Limpeza concluída"

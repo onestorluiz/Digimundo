@@ -1,0 +1,42 @@
+memory:
+  enabled: true
+  time_weighted_retrieval: true
+  promote_on_hits: 5
+  ranking_weights:
+    alpha: 0.35
+    beta: 0.25
+    gamma: 0.2
+    delta: 0.15
+    epsilon: 0.05
+
+rag:
+  enabled: true
+  provider: "chroma"
+  k: 8
+
+redis:
+  enabled: true
+  url: "redis://localhost:6379/0"
+  timeout_sec: 0.5
+
+soulos:
+  enabled: false
+  code_execution: false
+  timeout_sec: 5
+
+sdl:
+  enabled: false
+  passive_collect_only: true
+
+logging:
+  level: "INFO"
+  rotation:
+    max_bytes: 10485760
+    backup_count: 5
+  format: "%(asctime)s [%(levelname)s] %(name)s - %(funcName)s: %(message)s"
+
+monitoring:
+  enabled: true  # FASE 7 - enabled for final testing
+  interval_ms: 5000  # Minimum 2000ms
+  export_path: "reports/harmony_vFinal/runtime/health.json"
+  max_snapshots: 100  # Keep last 100 snapshots in memory

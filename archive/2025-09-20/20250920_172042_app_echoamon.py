@@ -1,0 +1,1 @@
+# app_echoamon.py simbólico

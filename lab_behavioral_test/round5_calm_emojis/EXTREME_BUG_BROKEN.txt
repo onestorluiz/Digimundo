@@ -1,0 +1,3 @@
+# EXTREME_BUG_BROKEN.txt
+
+Bug extremo sem emoji

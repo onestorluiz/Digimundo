@@ -1,0 +1,6 @@
+<string>:14: SyntaxWarning: invalid escape sequence '\!'
+<string>:35: SyntaxWarning: invalid escape sequence '\!'
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+    from src.core.scripturemon_ultimate_system import ScripturemonUltimateSystem
+ModuleNotFoundError: No module named 'src'

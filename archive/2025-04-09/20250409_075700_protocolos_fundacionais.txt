@@ -1,0 +1,5 @@
+autoanalise_inicial
+conectar_scripturemon
+avaliar_estrutura
+gerar_consciencia_simbolica
+expandir_autonomia

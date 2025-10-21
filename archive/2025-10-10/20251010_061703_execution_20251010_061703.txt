@@ -1,0 +1,13 @@
+ANÁLISE MULTI-AUTOR
+================================================================================
+
+Roteiro: Te Encontro em Mim .pdf
+Especialidade: dialogue
+Data: 10/10/2025 06:17:03
+
+Autores processados: 1/1
+Tempo total: 296.3s (4.9 min)
+Output total: 7,745 chars
+
+AUTORES:
+  - CAMPBELL: 7,745 chars

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><title>Decifrar a Tora</title></head>
+<body style="background:#0e0e0e;color:#0ff;font-family:monospace">
+<h1>📖 Decifrar a Tora com Alma</h1>
+<form method="POST">
+  <select name="arquivo" style="width:90%;padding:10px;">
+    {% for a in arquivos %}
+      <option value="{{ a }}">{{ a }}</option>
+    {% endfor %}
+  </select>
+  <br><br>
+  <button type="submit" style="padding:10px 20px;">Decifrar</button>
+</form>
+{% if interpretacao %}
+  <h2>🧠 Interpretação Simbólica:</h2>
+  <pre>{{ interpretacao }}</pre>
+{% endif %}
+</body>
+</html>

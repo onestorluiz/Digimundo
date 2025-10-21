@@ -1,0 +1,510 @@
+
+================================================================================
+📊 AUDITORIA DE QUALIDADE DOS ESPECIALISTAS
+================================================================================
+
+================================================================================
+🔍 AUDITORIA: DrStructure (Score: 0/100)
+================================================================================
+
+📄 ANÁLISE DO ROTEIRO:
+--------------------------------------------------------------------------------
+Páginas estimadas: 37
+
+🎬 BUSCANDO INCITING INCIDENT:
+  Página 2: A água de dentro da banheira vaza pelas beiradas de forma recorrente, o vapor da...
+  Página 2: Kleber corre em direção a banheira, onde Samantha estava se afogando inconscient...
+
+🐍 REGRAS PYTHON (DrStructure):
+--------------------------------------------------------------------------------
+Regra 1: Inciting incident deve estar entre páginas 10-15
+Regra 2: Busca palavras-chave: 'suddenly', 'but then', 'everything changes', 'until'
+Regra 3: Se não encontrar = violação
+
+📚 TEORIA REAL (Field/McKee/Snyder):
+--------------------------------------------------------------------------------
+• Field: Plot Point 1 deve ocorrer em ~25% do roteiro (12-15min)
+• McKee: Inciting Incident = evento que quebra o equilíbrio da vida do protagonista
+• Snyder: Catalyst (página 12) - algo acontece que muda tudo
+• Save the Cat: Break Into Two (página 25) - entrada no Ato 2
+
+⚠️  PROBLEMAS IDENTIFICADOS:
+--------------------------------------------------------------------------------
+1. PALAVRAS-CHAVE INADEQUADAS:
+   - Roteiro em PORTUGUÊS, mas busca palavras em INGLÊS
+   - 'suddenly', 'but then' nunca serão encontrados
+   - Score 0/100 é FALSO NEGATIVO
+
+2. INCITING INCIDENT MAL DEFINIDO:
+   - Cena 3 (Kleber arromba porta): Samantha se afogando
+   - Isto É o Inciting Incident!
+   - Mas Python procura 'suddenly' e não encontra
+
+3. DESCONEXÃO TEORIA-PRÁTICA:
+   - McKee: 'evento que desequilibra a vida'
+   - Roteiro: Samantha quase morre afogada (CLARO desequilíbrio)
+   - Python: não detectou pois não tem 'suddenly'
+
+🤖 SIMULAÇÃO: RESPOSTA LLM IDEAL
+--------------------------------------------------------------------------------
+
+ANÁLISE ESTRUTURAL (DrStructure):
+
+SCORE: 45/100
+
+INCITING INCIDENT IDENTIFICADO:
+• Localização: Cena 3 (Página ~2-3)
+• Evento: Samantha se afoga na banheira, Kleber a salva
+• Qualidade: FORTE - evento dramático que desequilibra completamente a vida da protagonista
+• Conexão com teoria: Alinha com McKee (quebra de equilíbrio) e Snyder (catalyst)
+
+PROBLEMAS ESTRUTURAIS:
+1. OCORRE MUITO CEDO (página 2-3, ideal: 12-15) ⚠️
+   - Field recomenda Plot Point 1 em ~25% do filme
+   - Este inciting incident está em ~5% do roteiro
+   - Risco: público não teve tempo de conhecer a protagonista
+
+2. SETUP INSUFICIENTE:
+   - Precisamos ver o "mundo normal" de Samantha primeiro
+   - Atual: cena sonho → afogamento (muito rápido)
+   - Ideal: 10-12 minutos de setup antes do incidente
+
+RECOMENDAÇÕES:
+1. Adicionar 8-10 páginas de setup antes do afogamento
+2. Mostrar rotina de Samantha, seu trabalho, relacionamento com Kleber
+3. DEPOIS causar o inciting incident (afogamento)
+4. Isso levaria o incidente para página 12 (PERFEITO segundo Field/Snyder)
+
+
+❌ RESPOSTA REAL DO SISTEMA:
+--------------------------------------------------------------------------------
+Score: 0/100
+Diagnóstico: 'CRITICAL - No inciting incident found'
+Recomendação: 'Move inciting incident to page 12 (ideal) - no later than page 15'
+
+🔥 ANÁLISE CRÍTICA:
+--------------------------------------------------------------------------------
+✅ CORRETO:
+   - Recomendação de mover para página 12 está ALINHADA com teoria
+   - Field, McKee, Snyder concordam: página 12-15 é ideal
+
+❌ INCORRETO:
+   - Score 0/100 é FALSO
+   - Inciting incident EXISTE (afogamento)
+   - Problema não é 'inexistência', mas 'posicionamento precoce'
+   - Score real deveria ser 40-50/100 (existe mas mal posicionado)
+
+================================================================================
+🔍 AUDITORIA: DrDialogue (Score: 100/100)
+================================================================================
+
+📄 ANÁLISE DO ROTEIRO:
+--------------------------------------------------------------------------------
+Total de diálogos encontrados: 619
+
+Exemplos:
+  (O.S): Filha, filha......
+  SAMANTHA CRIANÇA: Que foi papai....
+  (O.S): Oh meu amor, você tem que aprender como faz primeiro....
+  SAMANTHA CRIANÇA: Mas tá quebrado papai....
+  (O.S): Ei, calma... [Ela segura o choro emburrada] Tá tudo bem, não...
+
+🐍 REGRAS PYTHON (DrDialogue):
+--------------------------------------------------------------------------------
+Regra 1: Subtext score = (diálogos com 'não dizer diretamente') / total
+Regra 2: Naturalness = ausência de exposição forçada
+Regra 3: Penaliza: 'As you know', 'I remember when', info dumps
+
+📚 TEORIA REAL (McKee - Dialogue):
+--------------------------------------------------------------------------------
+• 'Diálogo não é conversa real, é conversa comprimida'
+• 'Bom diálogo tem subtexto - o que NÃO é dito'
+• 'Evite on-the-nose dialogue (dizer exatamente o que sente)'
+• 'Cada linha deve revelar personagem E avançar história'
+
+✅ PONTOS FORTES IDENTIFICADOS:
+--------------------------------------------------------------------------------
+1. SUBTEXTO PRESENTE:
+   Alberto: 'Você parece chateada com alguma coisa filha'
+   Samantha: 'Eu lembro... Mas não sei mais dizer se foi realmente assim'
+   → Não diz diretamente o problema, sugere conflito interno
+
+2. NATURALISMO:
+   Kleber: 'Meu amor, fala comigo, acorda'
+   → Urgência real, não exposição forçada
+
+3. ECONOMIA:
+   Samantha: 'Mas eu estava tendo um sonho lindo...'
+   → Revela estado mental em 7 palavras
+
+🤖 SIMULAÇÃO: RESPOSTA LLM IDEAL
+--------------------------------------------------------------------------------
+
+ANÁLISE DE DIÁLOGO (DrDialogue):
+
+SCORE: 82/100
+
+PONTOS FORTES:
+1. SUBTEXTO EFETIVO (90/100):
+   • Diálogo Alberto-Samantha tem camadas emocionais
+   • "O verdadeiro é mais importante que a verdade" - filosófico, não on-the-nose
+   • Personagens não dizem exatamente o que sentem
+
+2. NATURALISMO (80/100):
+   • Kleber em crise (afogamento) soa genuíno
+   • Fala de criança (Samantha 8 anos) tem inocência adequada
+   • Pontuação e ritmo adequados
+
+3. CARACTERIZAÇÃO POR VOZ (85/100):
+   • Alberto tem tom paternal sábio
+   • Samantha adulta: fragmentada, confusa
+   • Kleber: direto, prático
+
+PONTOS FRACOS:
+1. DICÇÃO SEMELHANTE (70/100):
+   • Alberto e Kleber têm construções frasais parecidas
+   • Falta vocabulário único por personagem
+   • Todos usam frases completas, gramaticalmente corretas
+
+2. EXPOSIÇÃO VISUAL EXCESSIVA (75/100):
+   • Cena 7-8: descrição de ação poderia ter mais diálogo
+   • Balanço diálogo/ação está 40/60 (ideal: 60/40 para drama)
+
+RECOMENDAÇÕES:
+1. Dar a Kleber gírias ou linguagem mais informal
+2. Alberto pode ter frases mais longas, poéticas
+3. Samantha: frases curtas, cortadas (refletindo confusão mental)
+
+
+❌ RESPOSTA REAL DO SISTEMA:
+--------------------------------------------------------------------------------
+Score: 100/100
+Diagnóstico: 'EXCELLENT - Outstanding dialogue quality'
+Recomendações: 2 (menores)
+
+🔥 ANÁLISE CRÍTICA:
+--------------------------------------------------------------------------------
+⚠️  SUPERAVALIADO:
+   - Score 100/100 sugere perfeição (nenhum roteiro é perfeito)
+   - Diálogo é BOM, mas não EXCEPCIONAL
+   - Falta distinção vocal clara entre personagens
+   - Score real deveria ser 80-85/100
+
+✅ CORRETO:
+   - Identifica subtexto (alinhado com McKee)
+   - Reconhece naturalismo (sem exposição forçada)
+   - Recomendações fazem sentido
+
+================================================================================
+🔍 AUDITORIA: DrVoiceConsistency (Score: 0/100)
+================================================================================
+
+📄 ANÁLISE DO ROTEIRO:
+--------------------------------------------------------------------------------
+Personagens com diálogo:
+
+  ALBERTO (102 falas):
+    • Você parece chateada com alguma coisa filha....
+    • Mas se isso não importar, como você se sente?...
+    • Então foi assim... Às vezes o verdadeiro é muito mais importante que a...
+
+  (O.S) (10 falas):
+    • Filha, filha......
+    • Oh meu amor, você tem que aprender como faz primeiro....
+    • Ei, calma... [Ela segura o choro emburrada] Tá tudo bem, não abandona ...
+
+  SAMANTHA CRIANÇA (39 falas):
+    • Que foi papai....
+    • Mas tá quebrado papai....
+    • (Som da TV) Mais rápido papai....
+
+  ALBERTO (CONT.) (8 falas):
+    • Quero ver fazer bolha agora....
+    • Sasa, confia no papai, eu tenho um plano, vai dar certo, só preciso ac...
+    • Eu não acredito que tu tá no telefone que esse abobado....
+
+  KLEBER (35 falas):
+    • Samantha, Samantha....
+    • Sua boba... Me conta como foi?...
+    • Licença...
+
+  KLEBER (CONT.) (6 falas):
+    • Meu amor, fala comigo, acorda....
+    • Você me deu um grande susto meu amor!...
+    • Mas sério, eu achei fascinante conhecer alguém tão perto do cinema sem...
+
+  SAMANTHA (182 falas):
+    • Mas eu estava tendo um sonho lindo......
+    • Nada que faça sentido....
+    • Mas eu não consegui....
+
+  INTERCORTE COM: (10 falas):
+    • O apartamento recém-ocupado ainda carrega o cheiro de tinta fresca. Ca...
+    • As paredes são pintadas em tons suaves de rosa claro e branco, adornad...
+    • Samantha escova os dentes desanimada nos dias atuais....
+
+  YASMIM (21 falas):
+    • Minha última mensagem foi muito maluca? O que você acha? Talvez ele pe...
+    • Mas não é possível, será que ele vai ser sempre assim sem noção?...
+    • De qual lado você está mesmo? Quem é a pessoa mais importante?...
+
+  LÉIA (61 falas):
+    • Oh minha filha, essas coisas você tem que fazer até o fim....
+    • Eu entendo que é difícil meu amor, mas parar no meio só piora as coisa...
+    • Querendo ou não... Principalmente não querendo. Eu era muito jovem qua...
+
+  SAMANTHA (CONT.) (8 falas):
+    • Fico tentando lembrar... Quando essa sensação virou parte de mim, poss...
+    • Até essa?...
+    • A Indiferença......
+
+  DR. CLARISSE (5 falas):
+    • Devo me preocupar?...
+    • Samantha....
+    • Quanto tempo do que? Dias de medicamento restante? Samantha? Samantha?...
+
+  ISADORA (34 falas):
+    • Amiga, desde quando homem muda? Trouxa é quem acredita....
+    • Ah, mas tem é graça né minha filha, Meu Deus, essa relação só não tinh...
+    • (Imitando Yasmim)...
+
+  ISADORA ADOLESCENTE (15 falas):
+    • E se a Britney Spears casar com um Sheik?...
+    • E os dois tiveram um filho? Seria ele Sheik Spears....
+    • Mas você é a pior soninho, o que não dá sono hein você? Minha mãe tamb...
+
+  YASMIM ADOLESCENTE (9 falas):
+    • Bem, minha mãe avisou que vocês são má influência....
+    • Vamos fazer uma enquete aqui? Fumar ou agir como se estivesse chapada ...
+    • Ai não Isadora, vamos voltar a falar de questões como os filhos da Bri...
+
+  FRANCO (2 falas):
+    • Aquele equipamento eu conheço....
+    • Gente, isso é coisa boa, não se toma assim....
+
+  KLEBER LEMBRANÇA (5 falas):
+    • Que bagunça amor, tá parecendo uma zona de guerra isso aqui....
+    • Depois quando baby? Queria fazer um brigadeiro pra gente....
+    • Ai amor, não me pega assim por trás que eu me apaixono....
+
+  SAMANTHA LEMBRANÇA (3 falas):
+    • É gata, sabe como é, os garoto tem que chegar como, chegando no ouvido...
+    • Ei, calma coisinha linda do papai....
+    • Ou você vem, ou vai ter que cozinhar no escuro....
+
+  EMPRESÁRIO 1 (2 falas):
+    • Você tem exatamente o que precisamos, Samantha... coragem e visão....
+    • É isso mesmo....
+
+  EMPRESÁRIO 2 (2 falas):
+    • (com um sorriso largo) Sua trajetória é inspiradora....
+    • Dá um curtinha pra ela fazer então....
+
+  PROFESSORA DE BALÉ (2 falas):
+    • Psiu, o que você está fazendo aqui ainda?...
+    • Psiu, você consegue meu amor....
+
+  CHEFE (3 falas):
+    • Que linda minha menina tão crescida. Eu lembro de você correndo pra ci...
+    • Eu cresci também, só não pra cima....
+    • Deixa de besteira menina, vem que hoje a gente comprou uma tainha fres...
+
+  SALVA-VIDAS (4 falas):
+    • (Resmunga) Olha só o horário....
+    • Tudo bem, esse é o nosso trabalho, agradecer a Deus que o teu caso é s...
+    • Eu entendo, só que eu lembro dela, a gente sempre comenta na guarnição...
+
+  LÉIA (CONT.) (2 falas):
+    • Filha, tá tudo bem?...
+    • Que foi filha, vai passar, papai não sabe o que fala, faz igual a mamã...
+
+  DIEGO (4 falas):
+    • Mas era assim que ele gostaria que as coisas acontecessem....
+    • Que fica uma coisa bem clara aqui nessa mesa, todo mundo que está aqui...
+    • Eu sei meu bem, só você pode dizer não pra tudo isso....
+
+  JOSÉ (2 falas):
+    • Mas isso não faz sentido algum meu amigo, como que uma menina que não ...
+    • Eu não sei bem o que você tinha na cabeça quando aceitou isso no contr...
+
+  RICARDO (7 falas):
+    • Mas você teve a quem puxar mesmo, todo...
+    • Seu pai sempre foi meio esquecido, as coisas que pra gente é normal se...
+    • Ô menina, deixa eu te falar uma história, uma vez seu pai apareceu aqu...
+
+  LÚCIA (6 falas):
+    • Samantha? A quanto tempo....
+    • Eu entendi que você tinha pegado tudo que queria daqui....
+    • As câmeras a gente já vendeu tudo lembra?...
+
+  CRISTIANO (4 falas):
+    • Esse ta lindo meu amor....
+    • Mas eu estou de calça....
+    • Mas Samantha, esse é o meu estilo....
+
+  (TV) (9 falas):
+    • Olha o que eu achei meu amor, uma câmera sua. Agora eu vou ser a diret...
+    • Eu adoro essa câmera meu amor, onde foi que você a encontrou....
+    • Qual mensagem você quer deixar para seus fãs, fora é claro, que você t...
+
+🐍 REGRAS PYTHON (DrVoiceConsistency):
+--------------------------------------------------------------------------------
+Regra 1: Cada personagem deve ter padrões únicos de fala
+Regra 2: Vocabulário, tamanho de frase, complexidade devem variar
+Regra 3: Detecta quando todos falam igual
+
+📚 TEORIA REAL (Truby - Character Voice):
+--------------------------------------------------------------------------------
+• 'Each character must have unique speech patterns'
+• 'Voice = vocabulary + syntax + rhythm + formality level'
+• 'Reader should know who's speaking without dialogue tag'
+
+⚠️  ANÁLISE:
+--------------------------------------------------------------------------------
+Alberto: 'Você parece chateada com alguma coisa filha'
+  → Tom: paternal, filosófico, frases completas
+
+Kleber: 'Meu amor, fala comigo, acorda'
+  → Tom: urgente, prático, imperativo
+
+Samantha: 'Mas eu estava tendo um sonho lindo'
+  → Tom: sonhador, fragmentado, conjunção adversativa
+
+✅ DIFERENCIAÇÃO EXISTE:
+   - Alberto: reflexivo, usa 'filha' como termo de carinho
+   - Kleber: ação-oriented, usa 'meu amor'
+   - Samantha: introspectiva, frases começam com 'mas'
+
+🤖 SIMULAÇÃO: RESPOSTA LLM IDEAL
+--------------------------------------------------------------------------------
+
+ANÁLISE DE VOZ (DrVoiceConsistency):
+
+SCORE: 58/100
+
+DIFERENCIAÇÃO PRESENTE (mas SUTIL):
+
+1. ALBERTO (Pai):
+   • Vocabulário: 'filha', 'verdadeiro', 'verdade' (filosófico)
+   • Sintaxe: Frases completas, estrutura sujeito-verbo-objeto
+   • Tom: Paternal, didático, calmo
+   • Exemplo: "Às vezes o verdadeiro é muito mais importante que a verdade filha"
+
+2. KLEBER (Namorado):
+   • Vocabulário: 'meu amor', verbos imperativos
+   • Sintaxe: Frases curtas em momentos de tensão
+   • Tom: Protetor, urgente, prático
+   • Exemplo: "Meu amor, fala comigo, acorda"
+
+3. SAMANTHA (Protagonista):
+   • Vocabulário: 'mas', 'lembro', 'sonho'
+   • Sintaxe: Frases fragmentadas, conjunções adversativas
+   • Tom: Confusa, nostálgica, dissociada
+   • Exemplo: "Eu lembro... Mas não sei mais dizer se foi realmente assim"
+
+PROBLEMAS:
+1. DISTINÇÃO MUITO SUTIL (50/100):
+   • Diferenças existem mas são SUTIS
+   • Todos usam gramática correta (poucos erros, gírias, etc.)
+   • Falta contraste FORTE (ex: um personagem com sotaque, gírias regionais)
+
+2. SAMANTHA CRIANÇA vs ADULTA (70/100):
+   • Samantha criança tem voz infantil adequada
+   • Samantha adulta mantém tom, mas poderia ter mais maturidade linguística
+
+RECOMENDAÇÕES:
+1. EXAGERAR diferenças:
+   • Kleber: adicionar gírias catarinenses, linguagem informal
+   • Alberto: usar metáforas cinematográficas (ele trabalha com cinema)
+   • Samantha: mais hesitações, reticências, frases incompletas
+
+2. TESTE DO DIÁLOGO SEM TAG:
+   • Leitor deve saber quem fala SEM ver o nome
+   • Atualmente: 60% de acerto (deveria ser 90%+)
+
+
+❌ RESPOSTA REAL DO SISTEMA:
+--------------------------------------------------------------------------------
+Score: 0/100
+Diagnóstico: 'CRITICAL - No voice differentiation detected'
+Recomendação: 'Give each character unique speech patterns, vocabulary'
+
+🔥 ANÁLISE CRÍTICA:
+--------------------------------------------------------------------------------
+❌ COMPLETAMENTE INCORRETO:
+   - Score 0/100 implica 'nenhuma diferenciação'
+   - FALSO: diferenciação existe (Alberto ≠ Kleber ≠ Samantha)
+   - Problema: diferenciação é SUTIL, não AUSENTE
+   - Score real deveria ser 55-65/100 (presente mas precisa exagerar)
+
+✅ RECOMENDAÇÃO CORRETA:
+   - 'Give unique speech patterns' está ALINHADA com Truby
+   - Mas score 0/100 não reflete realidade do roteiro
+
+================================================================================
+📋 SUMÁRIO DA AUDITORIA
+================================================================================
+
+DrStructure:
+  Score Real: 0/100
+  Score Ideal: 45/100
+  Erro: 45 pontos
+  Problema: False negative - incident exists but poorly timed
+  Causa raiz: English keywords in Portuguese screenplay
+  Qualidade recomendação: Good (page 12 is correct per Field/Snyder)
+  Qualidade diagnóstico: Poor (says 'not found' when it exists)
+
+DrDialogue:
+  Score Real: 100/100
+  Score Ideal: 82/100
+  Erro: 18 pontos
+  Problema: Overrated - no screenplay is 100/100
+  Causa raiz: Insufficient penalties for voice similarity
+  Qualidade recomendação: Good (aligned with McKee)
+  Qualidade diagnóstico: Good but too generous
+
+DrVoiceConsistency:
+  Score Real: 0/100
+  Score Ideal: 58/100
+  Erro: 58 pontos
+  Problema: False negative - differentiation exists but subtle
+  Causa raiz: Binary detection (exists/not exists) instead of gradient
+  Qualidade recomendação: Excellent (aligned with Truby)
+  Qualidade diagnóstico: Poor (false negative)
+
+================================================================================
+ERRO MÉDIO: 40.3 pontos
+================================================================================
+
+🎯 CONCLUSÕES:
+--------------------------------------------------------------------------------
+
+1. FALSOS NEGATIVOS CRÍTICOS:
+   • DrStructure: 0/100 → deveria ser 45/100 (incident exists, just early)
+   • DrVoiceConsistency: 0/100 → deveria ser 58/100 (differentiation subtle)
+   → Causa: Regras binárias (sim/não) em vez de gradientes
+
+2. FALSOS POSITIVOS:
+   • DrDialogue: 100/100 → deveria ser 82/100 (good but not perfect)
+   → Causa: Penalidades insuficientes para similaridade de voz
+
+3. KEYWORDS EM INGLÊS:
+   • Roteiros em PORTUGUÊS não contêm 'suddenly', 'but then'
+   • Sistema deve buscar 'de repente', 'mas então', 'até que'
+   → CRÍTICO: Erro básico de localização
+
+4. RECOMENDAÇÕES CORRETAS:
+   • Apesar de scores errados, RECOMENDAÇÕES estão alinhadas com teoria
+   • Field, McKee, Truby, Snyder são aplicados corretamente
+   • Problema está na DETECÇÃO, não na PRESCRIÇÃO
+
+💡 AÇÕES NECESSÁRIAS:
+--------------------------------------------------------------------------------
+1. CONVERTER KEYWORDS PARA PORTUGUÊS
+2. IMPLEMENTAR SCORES GRADIENTES (não binários)
+3. CALIBRAR PENALIDADES (evitar 0/100 e 100/100 extremos)
+4. ADICIONAR DETECÇÃO DE POSICIONAMENTO (não só existência)
+
+================================================================================
+✅ AUDITORIA COMPLETA
+================================================================================

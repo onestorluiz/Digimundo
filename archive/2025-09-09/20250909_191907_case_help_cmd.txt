@@ -1,0 +1,17 @@
+============================================================
+CASE: help_cmd
+TIMESTAMP: 2025-09-09T19:19:07.416068
+============================================================
+
+INPUT:
+/help
+
+RESPONSE:
+🎬 COMANDOS DO SCRIPTUREMON
+• /persona - Lista personas
+• /analyze - Análise de roteiro
+• /status - Status do sistema
+• /quit - Sair
+
+NON-EMPTY: True
+LENGTH: 131 chars

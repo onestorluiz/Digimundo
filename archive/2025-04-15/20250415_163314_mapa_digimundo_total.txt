@@ -1,0 +1,5 @@
+/root
+└── templo_digimundo
+    └── Digimundo Vivo
+
+2 directories

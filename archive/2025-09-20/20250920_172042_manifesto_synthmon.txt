@@ -1,0 +1,1 @@
+# Arquivo manifesto_synthmon.txt para synthmon

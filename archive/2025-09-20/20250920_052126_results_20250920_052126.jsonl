@@ -1,0 +1,1 @@
+{"screenplay": "Test_Scene_ECO", "mode": "ECO", "started": 1758356486.510201, "completed": 1758356486.523586, "duration": 0.013384103775024414, "success": true, "model": "deeplearning-70b-eco", "analysis": "", "model_info": {"total_duration": 0.0, "load_duration": 0.0, "prompt_eval_count": 0, "prompt_eval_duration": 0.0, "eval_count": 0, "eval_duration": 0.0}}

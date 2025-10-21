@@ -1,0 +1,29 @@
+analysis_prompts:
+  detect_structure: |
+    [TAREFA] Você receberá um roteiro em texto e deve identificar:
+    - Atos (início/fim por página)
+    - Incidente incitante, Plot Point 1, Midpoint, Plot Point 2, Clímax (página + descrição)
+    Saída em JSON.
+
+  extract_techniques: |
+    [TAREFA] Liste técnicas de roteiro detectadas (nome, página, breve citação-resumo, eficácia 0-10).
+
+  compare_to_masters: |
+    [TAREFA] Compare o trecho fornecido com os mestres (Citizen Kane, Chinatown, The Godfather, Pulp Fiction).
+    Dê similaridade 0-1, e aponte 1 diferença concreta com página.
+
+  brutal_score: |
+    [TAREFA] Atribua notas (0-100) para: estrutura, diálogo, personagens, originalidade e nota geral.
+    Base: 62/100. Justifique com 3 bullets de evidência (páginas).
+
+selfrag:
+  plan: |
+    [PLAN] Diga se precisa recuperar contexto externo (true/false) e aponte 1-3 subconsultas.
+  critique: |
+    [CRITIQUE] Liste 3 falhas potenciais na resposta e como corrigi-las com referências.
+
+cove:
+  questions: |
+    [VERIFY] Gere 3-5 perguntas de verificação factuais baseadas no rascunho.
+  answer: |
+    [VERIFY-ANSWERS] Responda objetivamente cada pergunta citando páginas retiradas do repositório.

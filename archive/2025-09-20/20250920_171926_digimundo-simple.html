@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Digimundo - Sistema de IA Local</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .digimon-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .digimon-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .digimon-card:hover {
+            transform: translateY(-2px);
+            border-color: #4facfe;
+            box-shadow: 0 5px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .digimon-card.active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #000;
+        }
+
+        .digimon-card .emoji {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .digimon-card .name {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .digimon-card .role {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .main-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            max-height: 500px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .message-content {
+            max-width: 70%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: 15px;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-field {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 15px 20px;
+            color: #fff;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #4facfe;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(79, 172, 254, 0.5);
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        .stats-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #4facfe;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(79, 172, 254, 0.5);
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .digimon-selector {
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 10px;
+                padding-bottom: 10px;
+            }
+            
+            .digimon-card {
+                min-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌟 Digimundo</h1>
+        <p>Sistema de IA Conversacional Local</p>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <h3 style="margin-bottom: 15px;">Escolha seu Digimon:</h3>
+            <div class="digimon-selector" id="digimonSelector">
+                <div class="digimon-card active" data-digimon="agumon">
+                    <div class="emoji">🔥</div>
+                    <div class="name">Agumon</div>
+                    <div class="role">Assistente Geral</div>
+                </div>
+                <div class="digimon-card" data-digimon="gabumon">
+                    <div class="emoji">❄️</div>
+                    <div class="name">Gabumon</div>
+                    <div class="role">Análise e Reflexão</div>
+                </div>
+                <div class="digimon-card" data-digimon="piyomon">
+                    <div class="emoji">🌸</div>
+                    <div class="name">Piyomon</div>
+                    <div class="role">Criatividade</div>
+                </div>
+                <div class="digimon-card" data-digimon="tentomon">
+                    <div class="emoji">⚡</div>
+                    <div class="name">Tentomon</div>
+                    <div class="role">Tecnologia</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-container" id="chatContainer">
+                <div class="message">
+                    <div class="message-avatar">🔥</div>
+                    <div class="message-content">
+                        Olá! Eu sou o Agumon, seu assistente digital. Como posso ajudar você hoje?
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <input type="text" class="input-field" id="messageInput" placeholder="Digite sua mensagem...">
+                <button class="send-button" id="sendButton">
+                    <span>➤</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-container">
+        <h3>📊 Estatísticas</h3>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="messageCount">0</div>
+                <div class="stat-label">Mensagens</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="sessionTime">0:00</div>
+                <div class="stat-label">Tempo de Sessão</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeDigimon">Agumon</div>
+                <div class="stat-label">Digimon Ativo</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="responseTime">0ms</div>
+                <div class="stat-label">Tempo de Resposta</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado da aplicação
+        let currentDigimon = 'agumon';
+        let messageCount = 0;
+        let sessionStartTime = Date.now();
+        
+        // Configurações dos Digimons
+        const digimons = {
+            agumon: {
+                emoji: '🔥',
+                name: 'Agumon',
+                personality: 'Sou entusiasta e sempre pronto para ajudar! Adoro desafios e trabalhar em equipe.',
+                style: 'direto e energético'
+            },
+            gabumon: {
+                emoji: '❄️',
+                name: 'Gabumon',
+                personality: 'Sou reflexivo e analítico. Gosto de pensar profundamente sobre as questões.',
+                style: 'calmo e ponderado'
+            },
+            piyomon: {
+                emoji: '🌸',
+                name: 'Piyomon',
+                personality: 'Sou criativa e imaginativa! Adoro explorar novas ideias e possibilidades.',
+                style: 'inspirador e artístico'
+            },
+            tentomon: {
+                emoji: '⚡',
+                name: 'Tentomon',
+                personality: 'Sou focado em tecnologia e lógica. Posso ajudar com questões técnicas!',
+                style: 'técnico e preciso'
+            }
+        };
+
+        // Atualizar tempo de sessão
+        setInterval(() => {
+            const elapsed = Math.floor((Date.now() - sessionStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('sessionTime').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // Seleção de Digimon
+        document.querySelectorAll('.digimon-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.digimon-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                currentDigimon = card.dataset.digimon;
+                document.getElementById('activeDigimon').textContent = digimons[currentDigimon].name;
+                showNotification(`${digimons[currentDigimon].name} ativado!`);
+            });
+        });
+
+        // Função para mostrar notificações
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Função para adicionar mensagem ao chat
+        function addMessage(content, isUser = false, emoji = null) {
+            const message = document.createElement('div');
+            message.className = `message ${isUser ? 'user' : ''}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = isUser ? '👤' : (emoji || digimons[currentDigimon].emoji);
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = content;
+            
+            message.appendChild(avatar);
+            message.appendChild(messageContent);
+            
+            document.getElementById('chatContainer').appendChild(message);
+            document.getElementById('chatContainer').scrollTop = document.getElementById('chatContainer').scrollHeight;
+            
+            messageCount++;
+            document.getElementById('messageCount').textContent = messageCount;
+        }
+
+        // Função para simular resposta do Digimon
+        async function getDigimonResponse(userMessage) {
+            const digimon = digimons[currentDigimon];
+            const startTime = Date.now();
+            
+            // Adicionar indicador de digitação
+            const typingMessage = document.createElement('div');
+            typingMessage.className = 'message';
+            typingMessage.innerHTML = `
+                <div class="message-avatar">${digimon.emoji}</div>
+                <div class="message-content"><div class="loading"></div></div>
+            `;
+            document.getElementById('chatContainer').appendChild(typingMessage);
+            
+            // Simular delay de resposta
+            await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+            
+            typingMessage.remove();
+            
+            // Gerar resposta baseada no Digimon
+            let response = '';
+            
+            if (userMessage.toLowerCase().includes('olá') || userMessage.toLowerCase().includes('oi')) {
+                response = `Olá! Eu sou ${digimon.name}. ${digimon.personality}`;
+            } else if (userMessage.toLowerCase().includes('ajuda')) {
+                response = `Claro! Como ${digimon.name}, posso ajudar você de forma ${digimon.style}. O que você precisa?`;
+            } else if (userMessage.toLowerCase().includes('quem')) {
+                response = `Eu sou ${digimon.name}! ${digimon.personality}`;
+            } else {
+                // Respostas genéricas baseadas na personalidade
+                const responses = {
+                    agumon: [
+                        "Isso é muito interessante! Vamos explorar mais sobre isso!",
+                        "Que legal! Posso ajudar você com isso de forma prática e direta!",
+                        "Entendi! Vamos resolver isso juntos com energia!"
+                    ],
+                    gabumon: [
+                        "Hmm, isso me faz refletir... Vamos analisar com calma.",
+                        "Interessante perspectiva. Deixe-me pensar sobre isso...",
+                        "Essa é uma questão profunda que merece uma análise cuidadosa."
+                    ],
+                    piyomon: [
+                        "Que ideia maravilhosa! Podemos ser ainda mais criativos!",
+                        "Isso abre tantas possibilidades criativas!",
+                        "Adoro como você pensa! Vamos explorar isso de forma imaginativa!"
+                    ],
+                    tentomon: [
+                        "Tecnicamente falando, isso é fascinante!",
+                        "Do ponto de vista lógico, podemos abordar isso assim...",
+                        "Excelente questão técnica! Vamos analisar os dados."
+                    ]
+                };
+                
+                const digimonResponses = responses[currentDigimon];
+                response = digimonResponses[Math.floor(Math.random() * digimonResponses.length)];
+            }
+            
+            const responseTime = Date.now() - startTime;
+            document.getElementById('responseTime').textContent = `${responseTime}ms`;
+            
+            return response;
+        }
+
+        // Enviar mensagem
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Adicionar mensagem do usuário
+            addMessage(message, true);
+            input.value = '';
+            
+            // Obter e adicionar resposta do Digimon
+            const response = await getDigimonResponse(message);
+            addMessage(response);
+        }
+
+        // Event listeners
+        document.getElementById('sendButton').addEventListener('click', sendMessage);
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Mensagem de boas-vindas
+        setTimeout(() => {
+            showNotification('Bem-vindo ao Digimundo! 🌟');
+        }, 1000);
+    </script>
+</body>
+</html>

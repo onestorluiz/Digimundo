@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>🧪 Teste Visual do Google Flow</title>
+    <style>
+        body {
+            font-family: -apple-system, system-ui;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        h1 { color: #667eea; }
+        .test-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 18px;
+            margin: 20px 10px;
+            transition: all 0.3s;
+        }
+        .test-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        .code {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        .instructions {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste Visual do Google Flow</h1>
+        
+        <div class="instructions">
+            <h3>📋 Como usar:</h3>
+            <p>1. Arraste um dos botões abaixo para sua barra de favoritos</p>
+            <p>2. Abra o Google Flow</p>
+            <p>3. Clique no favorito que você salvou</p>
+        </div>
+
+        <a href="javascript:(function(){alert('🧪 TESTE DO FLOW\n\n✅ Canvas: '+(document.querySelector('canvas')?'Encontrado':'Não encontrado')+'\n🔘 Botões: '+document.querySelectorAll('button').length+'\n📝 Projeto: '+document.title+'\n📐 Tela: '+window.innerWidth+'x'+window.innerHeight)})();" 
+           class="test-btn">
+            🚀 Teste Simples
+        </a>
+
+        <a href="javascript:(function(){var d=document,b=d.body,r=d.createElement('div');r.style.cssText='position:fixed;top:20px;right:20px;background:white;color:black;padding:20px;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.3);z-index:99999;font-family:system-ui;max-width:300px';r.innerHTML='<h3 style=color:#667eea>✅ Teste do Flow</h3><p>Canvas: '+(d.querySelector('canvas')?'✅':'❌')+'</p><p>Botões: '+d.querySelectorAll('button').length+'</p><p>Título: '+d.title+'</p><button onclick=this.parentElement.remove() style=margin-top:10px;padding:8px;background:#667eea;color:white;border:none;border-radius:5px;cursor:pointer>Fechar</button>';b.appendChild(r)})();" 
+           class="test-btn">
+            🎨 Teste Visual
+        </a>
+
+        <div class="code">
+            <h4>💡 Ou cole este código na barra de endereço:</h4>
+            <pre>javascript:alert('Canvas: '+(document.querySelector('canvas')?'✅':'❌')+' | Botões: '+document.querySelectorAll('button').length)</pre>
+        </div>
+
+        <h3>🤔 O que cada teste verifica:</h3>
+        <ul style="text-align: left;">
+            <li><strong>Canvas:</strong> Se a área de desenho carregou</li>
+            <li><strong>Botões:</strong> Quantas ferramentas estão disponíveis</li>
+            <li><strong>Projeto:</strong> Nome do seu projeto</li>
+            <li><strong>Tela:</strong> Tamanho da janela</li>
+        </ul>
+    </div>
+</body>
+</html>

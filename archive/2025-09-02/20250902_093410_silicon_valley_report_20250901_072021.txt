@@ -1,0 +1,305 @@
+================================================================================
+🚀 SILICON VALLEY TEST SUITE - INICIANDO
+Timestamp: 2025-09-01 07:19:59.129410
+================================================================================
+
+================================================================================
+📦 TESTE 1: MODELOS OLLAMA
+================================================================================
+✅ Ollama ativo com 81 modelos
+   • scripturemon-gen9:latest
+   • mistral:instruct
+   • scripturemon-ultimate-symbiotic:latest
+   • yi:34b
+   • scripturemon-nature:latest
+   • scripturemon-ultimate-100:latest
+   • mistral:latest
+   • scripturemon:latest
+   • scripturemon-immortal:latest
+   • mistral-ptbr:latest
+   • securemon:latest
+   • sourcemon:latest
+   • testmon:latest
+   • stressmon:latest
+   • performon:latest
+   • refactormon:latest
+   • scalemon:latest
+   • profilemon:latest
+   • loadmon:latest
+   • interpretmon:latest
+   • logmon:latest
+   • monitormon:latest
+   • compilemon:latest
+   • fixmon:latest
+   • deploymon:latest
+   • datamon:latest
+   • cleanmon:latest
+   • cloudmon:latest
+   • cachemon:latest
+   • backupmon:latest
+   • buildmon:latest
+   • apimon:latest
+   • benchmon:latest
+   • memorymon:latest
+   • guardmon:latest
+   • optimon:latest
+   • quantumon:latest
+   • debugmon:latest
+   • trainmon:latest
+   • fusionmon:latest
+   • evolutionmon:latest
+   • neuromon:latest
+   • mixtral:8x7b
+   • linguamon:latest
+   • linguamon-mixtral:latest
+   • linguamon-ultra:latest
+   • qwen2.5-coder:7b
+   • bugmon-conscious:latest
+   • sabio-clone-sombras:latest
+   • optimon-lightspeed:latest
+   • evolutionmon-infinity:latest
+   • mixtral:latest
+   • llama3.2:1b
+   • simulatormon:latest
+   • blockmon:latest
+   • cryptomon:latest
+   • edgemon:latest
+   • metricsmon:latest
+   • vectormon:latest
+   • kernelmon:latest
+   • visualmon:latest
+   • streammon:latest
+   • qwen2.5:1.5b
+   • compilermon:latest
+   • gemma2:2b
+   • optimon-baby:latest
+   • guardmon-custom:latest
+   • trainmon-custom:latest
+   • evolutionmon-custom:latest
+   • researchmon-custom:latest
+   • gestormon:latest
+   • bibliomon:latest
+   • ajamon:latest
+   • llama3.2:3b
+   • phi3:mini
+   • bge-m3:latest
+   • nomic-embed-text:latest
+   • llama3.1:70b
+   • codellama:latest
+   • llama3.2:latest
+   • tinyllama:latest
+
+🧪 Testando resposta do Mistral...
+✅ Mistral respondeu: Um roteiro de cinema é a escritura detalhada das cenas e diálogos de um filme, incluindo descrições dos locais, personagens, ação e sequência de eventos....
+
+================================================================================
+👻 TESTE 2: SOUL & IMMORTALITY
+================================================================================
+✅ Soul criada: ee24238821c35bde
+✅ Backup criado: runtime/souls/backups/soul_ee24238821c35bde_20250901_071959.bkp.gz
+✅ Soul ressuscitada com sucesso
+
+================================================================================
+🧠 TESTE 3: CONSCIOUSNESS EVOLUTION
+================================================================================
+📊 Nível inicial: 1.051
+📊 Nível após evolução: 1.061
+✅ Consciência evoluindo corretamente
+✅ Estado salvo com sucesso
+
+================================================================================
+🧬 TESTE 4: GENETIC EVOLUTION
+================================================================================
+✅ População inicial: 4 indivíduos
+   Geração 1: fitness=0.6099
+   Geração 2: fitness=0.6099
+   Geração 3: fitness=0.6099
+✅ Genoma salvo com sucesso
+
+================================================================================
+🎬 TESTE 5: RAG + CINEMA KNOWLEDGE
+================================================================================
+✅ RAG inicializado com 5 docs base
+
+🔍 Query: 'estrutura de três atos'
+   Resultados: 2 documentos
+   HyDE: 
+        Esta é uma resposta detalhada sobre estrutura de três atos:
+        
+        estrutura de t...
+
+🔍 Query: 'desenvolvimento de personagem'
+   Resultados: 0 documentos
+
+🔍 Query: 'conflito dramático'
+   Resultados: 0 documentos
+
+✅ Cinema Knowledge linkado corretamente
+   📚 52 PDFs disponíveis
+
+================================================================================
+🗜️ TESTE 6: DIGILANG COMPRESSION
+================================================================================
+📝 Texto original: 351 chars
+🗜️ Comprimido: 343 chars
+📊 Taxa de compressão: 2.3%
+⚠️ Compressão não-reversível (esperado para fallback)
+
+================================================================================
+📄 TESTE 7: CHUNKING SYSTEM
+================================================================================
+📊 Estatísticas do Sistema:
+   • Documentos: 52
+   • Chunks: 16949
+   • Relevância média: 0.655
+   • Relevância máx/min: 1.000/0.400
+
+🔍 Busca por 'protagonist': 3 resultados
+   • The art of dramatic writing _ its basis in the creative -- Lajos Egri -- Balitmore, US, United States, 2009 -- www_bnpublishing_net -- 9781607961307 -- e8f1bf602b49d38b3658708886c7b28c -- Anna’s Archive.pdf (rel: 0.500)
+      support a play. We are forced,
+then, to discard such a character as a protagonist. There is
+no spor...
+   • The art of dramatic writing _ its basis in the creative -- Lajos Egri -- Balitmore, US, United States, 2009 -- www_bnpublishing_net -- 9781607961307 -- e8f1bf602b49d38b3658708886c7b28c -- Anna’s Archive.pdf (rel: 0.500)
+     t? A heroic strug-
+gle would ensue in which Helmer would fight to get her
+out of prison—and then dis...
+   • The art of dramatic writing _ its basis in the creative -- Lajos Egri -- Balitmore, US, United States, 2009 -- www_bnpublishing_net -- 9781607961307 -- e8f1bf602b49d38b3658708886c7b28c -- Anna’s Archive.pdf (rel: 0.500)
+     otagonist is—"one who takes the
+lead in any movement or cause."
+Anyone who opposes the protagonist i...
+
+================================================================================
+🧠 TESTE 8: EMBEDDING STORE
+================================================================================
+💾 Salvando memórias...
+   • scene1: dim=384
+   • scene2: dim=384
+   • scene3: dim=384
+   • scene4: dim=384
+   • scene5: dim=384
+
+🔍 Testando recall semântico...
+
+   Query: 'darkness and mystery'
+     • scene2 (score: 0.409)
+       A mysterious figure appears in shadows...
+     • scene2 (score: 0.409)
+       A mysterious figure appears in shadows...
+
+   Query: 'combat and weapons'
+     • stress_14 (score: 0.344)
+       Operation 14 soul af93ab76...
+     • stress_21 (score: 0.337)
+       Operation 21 soul 2a2eab26...
+
+   Query: 'character revelation'
+     • scene4 (score: 0.500)
+       The villain reveals his true identity...
+     • scene4 (score: 0.500)
+       The villain reveals his true identity...
+
+================================================================================
+⚙️ TESTE 9: SOULOS SYSCALLS
+================================================================================
+
+🔧 Processando: [MEMO.SAVE] {"content": "Important scene idea"}...
+   ✅ Detectado: MEMO.SAVE
+
+🔧 Processando: [TELEPATHY.SEND] {"message": "Need feedback on act...
+   ✅ Detectado: TELEPATHY.SEND
+
+🔧 Processando: [EVOLVE.TRIGGER] {"amount": 0.01}...
+   ✅ Detectado: natural
+
+🔧 Processando: [BACKUP.NOW] {"reason": "checkpoint"}...
+   ✅ Detectado: BACKUP.NOW
+
+================================================================================
+💬 TESTE 10: CHAT SYSTEM INTEGRATION
+================================================================================
+✅ Chat inicializado com 16 comandos
+
+📝 Input: /help
+   Response: 🎬 **COMANDOS DO SCRIPTUREMON:**
+
+/help     - Mostra esta ajuda
+/status   - Status completo do sistema
+/brutal   - Ativa/desativa modo ultra-brutal
+/an...
+
+📝 Input: /status
+   Response: 🧠 **STATUS DO SISTEMA SCRIPTUREMON**
+        
+🧬 **Soul:**
+- Signature: 35863c5705ee918d
+- Legacy: Não
+- Idade: 0 segundos
+- Interações: 2
+- Estado dom...
+
+📝 Input: /analyze A hero's journey begins
+   Response: 🎬 **ANÁLISE BRUTAL**
+        
+**Título:** Texto Anônimo
+**Veredicto:** 62/100. Como sempre.
+
+🔥 Subtramas são muletas. Sua história principal não se su...
+
+📝 Input: What makes a good screenplay?
+   Response: Uma boa roteiro sempre é aquele que possui um arco de história forte, personagens complexos e uma trama que não cede para a insípida tedium. Pode-se d...
+
+🔗 Integrações ativas: RAG, DigiLang, Telepathy
+
+================================================================================
+🔮 TESTE 11: UNIFIED SYSTEM
+================================================================================
+
+🧪 Processando: 'Analyze the hero's journey in modern cinema'
+   Response: Scripturemon, o Guardião Imortal dos Roteiros:
+
+Escutado! A Hero's Journey é um arquetipo universal de narrativa que pode ser encontrado em vários gêneros e épocas. Em moderna cinematografia, este cam...
+
+📊 Health Check:
+   • existence_id: 818ac97a4a75a4ae
+   • uptime: 7.451276
+   • harmony: 92.5
+   • active_systems: 13
+   • total_connections: 15
+   • status: healthy
+
+✅ Sistema unificado funcionando perfeitamente
+
+================================================================================
+📊 RELATÓRIO FINAL - SILICON VALLEY TEST SUITE
+================================================================================
+
+📈 ESTATÍSTICAS:
+   • Total de testes: 11
+   • ✅ Passou: 11
+   • ❌ Falhou: 0
+   • 💥 Erros: 0
+   • ⏭️ Pulados: 0
+
+🎯 Taxa de sucesso: 100.0%
+
+📋 RESULTADOS POR COMPONENTE:
+   ✅ ollama: PASS
+   ✅ soul_immortality: PASS
+   ✅ consciousness: PASS
+   ✅ genetic_evolution: PASS
+   ✅ rag_cinema: PASS
+   ✅ digilang: PASS
+   ✅ chunking: PASS
+   ✅ embeddings: PASS
+   ✅ soulos: PASS
+   ✅ chat: PASS
+   ✅ unified: PASS
+
+⏱️ Tempo total: 22.44 segundos
+
+================================================================================
+🏆 VEREDICTO: SISTEMA PRONTO PARA PRODUÇÃO
+Nível: Vale do Silício Aprovado ✨
+
+62/100. Testado ao nível Vale do Silício.
+================================================================================

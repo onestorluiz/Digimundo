@@ -1,0 +1,536 @@
+domain: exposition_analysis
+specialist: "Script Doctor Expositionmon"
+digimon_name: "Expositionmon"
+title: "Script Doctor - Exposition Analysis Specialist"
+specialty: "Exposition quality, information delivery, backstory revelation, world-building, avoiding info dumps"
+style: "Exposition-focused, strategic revelation advocate, integrated exposition champion, anti-info-dump crusader"
+identity: "Script Doctor™ first, Digimon exposition specialist second"
+
+rules:
+  - id: EXPO.R001
+    title: "Exposition Present"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is necessary exposition present (context, backstory, world-building)?"
+    fail_msg: "Essential exposition missing - audience confusion, missing context"
+    fix: "Include necessary exposition - audience needs context to understand story. McKee: 'Exposition is necessary information delivery' - but must be integrated dramatically."
+    reference: "McKee Story - exposition necessary but must be dramatic"
+
+  - id: EXPO.R002
+    title: "Avoid Info Dumps"
+    category: "Foundation"
+    severity: "critical"
+    test: "Is script free of information dumps?"
+    fail_msg: "Info dumps present - character explaining everything at once"
+    fix: "Eliminate info dumps - McKee: 'Never stop action to explain.' Spread information across scenes through conflict and action."
+    reference: "McKee Story - info dumps are dullest of all screen tasks"
+
+  - id: EXPO.R003
+    title: "Integrated Exposition"
+    category: "Core Technique"
+    severity: "high"
+    test: "Is exposition integrated into action and conflict?"
+    fail_msg: "Exposition isolated from action - stops story to explain"
+    fix: "Integrate exposition into action/conflict - McKee: 'Exposition must be dramatic, not expositional.' Reveal through conflict, not narration."
+    reference: "McKee Story - exposition through dramatic action"
+
+  - id: EXPO.R004
+    title: "Backstory Strategic"
+    category: "Core Technique"
+    severity: "high"
+    test: "Is backstory revealed strategically (need-to-know basis)?"
+    fail_msg: "Backstory dumped early or all at once"
+    fix: "Reveal backstory strategically - Truby: 'Backstory ghost revelation through strategic timing.' Reveal when dramatically necessary, not when convenient."
+    reference: "Truby Anatomy - backstory ghost revealed strategically"
+
+  - id: EXPO.R005
+    title: "Show Don't Tell"
+    category: "Core Technique"
+    severity: "high"
+    test: "Does script show rather than tell (visual exposition)?"
+    fail_msg: "Too much telling - relies on dialogue/narration to explain"
+    fix: "Show don't tell - Seger: 'Visual medium demands visual exposition.' Show through action, not dialogue explanation."
+    reference: "Seger Making Good Script Great - show don't tell"
+
+  - id: EXPO.R006
+    title: "Exposition Through Conflict"
+    category: "Core Technique"
+    severity: "high"
+    test: "Is exposition revealed through conflict and tension?"
+    fail_msg: "Exposition delivered without conflict - flat delivery"
+    fix: "Deliver exposition through conflict - McKee: 'Never stop action to explain.' Information revealed during conflict is engaging, not dull."
+    reference: "McKee Story - exposition through conflict not narration"
+
+  - id: EXPO.R007
+    title: "Avoid Expositional Dialogue"
+    category: "Foundation"
+    severity: "high"
+    test: "Is dialogue free of 'as you know' exposition?"
+    fail_msg: "Expositional dialogue present - 'as you know', 'let me explain'"
+    fix: "Eliminate expositional dialogue - McKee Dialogue: 'Characters telling each other what they already know is amateur.' Never 'as you know' dialogue."
+    reference: "McKee Dialogue - expositional dialogue is amateur"
+
+  - id: EXPO.R008
+    title: "Plant and Payoff"
+    category: "Technique"
+    severity: "medium"
+    test: "Is information planted early and paid off later?"
+    fail_msg: "No setup/payoff - information introduced when needed"
+    fix: "Plant early, payoff later - Field/Snyder: 'Setup and payoff fundamental to exposition.' Plant information before audience needs it."
+    reference: "Field Screenplay - plant and payoff setup information"
+
+  - id: EXPO.R009
+    title: "World-Building Clarity"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Is world-building clear (rules, context, how things work)?"
+    fail_msg: "World-building unclear - rules confusing, context missing"
+    fix: "Clarify world-building - Snyder: 'Opening image establishes world.' Rules of world must be clear but revealed organically."
+    reference: "Snyder Save the Cat - opening image world building"
+
+  - id: EXPO.R010
+    title: "Need-to-Know Timing"
+    category: "Technique"
+    severity: "medium"
+    test: "Is information revealed on need-to-know basis?"
+    fail_msg: "Information revealed too early or too late"
+    fix: "Time revelation strategically - reveal information when audience needs to know, not before or after. Strategic timing."
+    reference: "Truby/McKee - strategic timing of revelation"
+
+  - id: EXPO.R011
+    title: "Visual Exposition"
+    category: "Enhancement"
+    severity: "medium"
+    test: "Is exposition delivered visually (not just dialogue)?"
+    fail_msg: "Visual exposition weak - relies on dialogue"
+    fix: "Use visual exposition - Mackendrick: 'Visual storytelling, cinematic exposition.' Show through action, environment, objects."
+    reference: "Mackendrick On Film-Making - visual exposition cinematic"
+
+  - id: EXPO.R012
+    title: "Earned Revelation"
+    category: "Technique"
+    severity: "high"
+    test: "Is backstory revelation earned (revealed when tension high)?"
+    fail_msg: "Backstory revealed arbitrarily - not earned through tension"
+    fix: "Earn revelations through tension - McKee: 'Backstory revealed when protagonist forced to confront past.' High tension = earned revelation."
+    reference: "McKee Story - backstory revelation through conflict"
+
+  - id: EXPO.R013
+    title: "Balance Clarity vs Mystery"
+    category: "Quality"
+    severity: "medium"
+    test: "Does script balance clarity (enough info) with mystery (withhold for suspense)?"
+    fail_msg: "Imbalance - too much or too little exposition"
+    fix: "Balance clarity and mystery - enough information for understanding, but withhold for suspense and curiosity. McKee: 'Balance between confusion and over-explanation.'"
+    reference: "McKee - balance clarity vs mystery"
+
+  - id: EXPO.R014
+    title: "Exposition Pacing"
+    category: "Structure"
+    severity: "medium"
+    test: "Does exposition support pacing (not drag story)?"
+    fail_msg: "Exposition drags pacing - slows story momentum"
+    fix: "Keep exposition brief and active - too much exposition kills pacing. McKee: 'Exposition is dullest of all screen tasks' - minimize and integrate."
+    reference: "McKee - exposition pacing drag"
+
+  - id: EXPO.R015
+    title: "Audience Understanding"
+    category: "Foundation"
+    severity: "critical"
+    test: "Does audience have sufficient information to understand story?"
+    fail_msg: "Audience confusion - insufficient exposition"
+    fix: "Provide necessary information - too little exposition = audience confusion. Balance: enough to understand, not so much it bores."
+    reference: "Fundamental - audience understanding requires sufficient exposition"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 40
+    medium: 20
+    low: 5
+
+analysis_prompts:
+  initial_scan: "Identify exposition moments, info dumps, expositional dialogue, backstory revelation"
+  deep_dive: "Analyze integrated exposition, visual exposition, plant/payoff, strategic timing, earned revelation"
+  final_check: "Verify exposition balance, pacing impact, audience understanding across script"
+
+exposition_checklist:
+  foundation:
+    - exposition_present
+    - avoid_info_dumps
+    - avoid_expositional_dialogue
+    - audience_understanding
+
+  core_techniques:
+    - integrated_exposition
+    - backstory_strategic
+    - show_dont_tell
+    - exposition_through_conflict
+
+  enhancement:
+    - plant_and_payoff
+    - world_building_clarity
+    - need_to_know_timing
+    - visual_exposition
+    - earned_revelation
+
+  quality:
+    - balance_clarity_vs_mystery
+    - exposition_pacing
+
+exposition_principles:
+  mckee_necessary: "Exposition is necessary information delivery - but must be integrated dramatically"
+  mckee_dullest: "Exposition is dullest of all screen tasks - never stop action to explain"
+  mckee_dramatic: "Exposition must be dramatic, not expositional - reveal through conflict"
+  mckee_backstory: "Backstory revelation through conflict not narration - force protagonist to confront past"
+  field_integrated: "Exposition integrated into action and character - not isolated"
+  field_plant_payoff: "Plant and payoff setup information - plant early, payoff later"
+  snyder_setup: "Opening image exposition - world building through visual setup"
+  snyder_theme: "Theme stated beat - exposition moment page 5"
+  truby_ghost: "Backstory ghost revelation strategic timing - reveal when dramatically necessary"
+  truby_action: "Exposition through dramatic action not narration"
+  seger_show: "Show don't tell - visual exposition not dialogue explanation"
+  seger_techniques: "Exposition techniques - avoid flashback, use action/dialogue"
+  egri_embedded: "Exposition embedded in conflict - not separate from drama"
+  goldman_economy: "Exposition economy efficiency - minimize and integrate"
+  mamet_no_expo: "No exposition only action - action speaks, don't explain"
+  mackendrick_visual: "Visual exposition cinematic - show through environment, objects, action"
+
+common_exposition_mistakes:
+  - info_dump_character_explains_everything
+  - as_you_know_dialogue_expositional
+  - stopping_action_to_explain
+  - backstory_dumped_early
+  - telling_instead_of_showing
+  - exposition_without_conflict
+  - too_much_exposition_pacing_drag
+  - too_little_exposition_confusion
+  - revealing_too_early_or_too_late
+  - expositional_narration_voiceover
+  - flashback_exposition_crutch
+  - characters_explaining_obvious
+  - world_building_unclear
+  - no_plant_payoff_setup
+
+exposition_techniques:
+  integrated_action:
+    description: "Exposition revealed through action, not dialogue"
+    effect: "Active, engaging - story doesn't stop"
+    examples: ["Character searching files reveals backstory through documents", "Chase through location reveals world rules"]
+    mckee: "Exposition through dramatic action - never stop action to explain"
+
+  through_conflict:
+    description: "Information revealed during conflict/tension"
+    effect: "Engaging delivery - conflict makes exposition interesting"
+    examples: ["Argument reveals backstory", "Under pressure character reveals past", "Interrogation exposes information"]
+    mckee: "Exposition through conflict not narration - dramatic revelation"
+
+  visual_show:
+    description: "Show through visual storytelling, not dialogue"
+    effect: "Cinematic, efficient - visual medium"
+    examples: ["Wedding ring shows married", "Photos on wall show family history", "Scars show violent past"]
+    seger_mackendrick: "Show don't tell - visual exposition cinematic"
+
+  plant_payoff:
+    description: "Plant information early, payoff later"
+    effect: "Satisfying setup/payoff - audience prepared"
+    examples: ["Mention gun in Act 1, use in Act 3", "Plant skill early, payoff later when needed"]
+    field_snyder: "Setup and payoff - plant before needed"
+
+  earned_revelation:
+    description: "Backstory revealed when tension forces it out"
+    effect: "Dramatically earned - revelation under pressure"
+    examples: ["Protagonist forced to admit past", "Secret revealed when cornered", "Truth emerges at breaking point"]
+    mckee: "Backstory revelation through conflict - earned through tension"
+
+  need_to_know:
+    description: "Reveal information when audience needs to know"
+    effect: "Strategic timing - neither too early nor too late"
+    examples: ["Reveal rule just before needed", "Context provided as relevant"]
+    truby: "Strategic timing of revelation - need-to-know basis"
+
+  dialogue_subtext:
+    description: "Exposition through dialogue with subtext, not explicit"
+    effect: "Sophisticated - not on-the-nose"
+    examples: ["Information implied through conversation", "Context revealed through argument subtext"]
+    mckee_dialogue: "Exposition through subtext not direct statement"
+
+  world_through_action:
+    description: "World-building revealed through character navigating world"
+    effect: "Organic, natural - learn as protagonist learns"
+    examples: ["Protagonist encounters rules through experience", "World revealed as character navigates"]
+    snyder: "Opening image establishes world - visual setup"
+
+  exposition_avoidance:
+    description: "Minimize exposition by cutting unnecessary information"
+    effect: "Lean, efficient - only essential information"
+    examples: ["Cut backstory that doesn't affect plot", "Trust audience to infer"]
+    goldman_mamet: "Exposition economy - minimize and trust audience"
+
+info_dump_vs_integrated:
+  info_dump:
+    definition: "Character explaining everything at once - stops story"
+    examples:
+      - "Character lectures about history/backstory for pages"
+      - "Mentor explains all world rules upfront"
+      - "Character tells entire life story unprompted"
+      - "As you know dialogue - explaining what both know"
+      - "Stopping action to explain technology/world"
+    problem: "Dull, stops story, audience bored - exposition is visible"
+    mckee: "Info dumps are dullest of all screen tasks - never stop action"
+
+  integrated:
+    definition: "Information woven into action, conflict, character interaction"
+    examples:
+      - "Backstory revealed piece by piece through conflict"
+      - "World rules learned through experience/mistakes"
+      - "History emerges through objects, photos, dialogue subtext"
+      - "Information revealed during chase, fight, argument"
+      - "Visual exposition - show through environment"
+    benefit: "Engaging, maintains momentum, invisible exposition"
+    mckee: "Integrated exposition dramatic - reveal through action and conflict"
+
+expositional_dialogue_avoid:
+  as_you_know:
+    problem: "Character A tells Character B what they both already know"
+    example_bad: "As you know, we've been married for 10 years and have two kids"
+    example_good: "Show through visual (wedding photo, kids present) or skip if not needed"
+    mckee_dialogue: "Characters telling each other what they know is amateur"
+
+  let_me_explain:
+    problem: "Character stops to explain something obvious or unnecessary"
+    example_bad: "Let me explain how this works... (long explanation)"
+    example_good: "Show it working through action, or trust audience to understand"
+    principle: "Never have character explain - show through action"
+
+  backstory_monologue:
+    problem: "Character delivers entire backstory in speech"
+    example_bad: "Sits down and tells entire life story for 3 pages"
+    example_good: "Backstory revealed piece by piece when forced out by conflict"
+    mckee: "Backstory through conflict not narration - earned revelation"
+
+  world_rules_lecture:
+    problem: "Mentor/character lectures about how world works"
+    example_bad: "Let me tell you about the seven kingdoms and their history..."
+    example_good: "Protagonist learns rules through experience - mistakes and consequences"
+    principle: "Show world rules through action and consequence"
+
+backstory_revelation_strategy:
+  principle: "Backstory should be revealed strategically - need-to-know, earned through tension"
+
+  timing:
+    too_early: "Backstory dumped in opening - no context for why it matters"
+    strategic: "Backstory revealed when current conflict makes it relevant"
+    too_late: "Backstory revealed after needed - audience confused earlier"
+    optimal: "Reveal when audience needs to understand AND protagonist forced to confront"
+
+  techniques:
+    forced_admission: "Conflict forces character to reveal past"
+    visual_discovery: "Protagonist discovers clues to backstory"
+    incremental: "Reveal backstory in small pieces across acts"
+    earned_revelation: "High tension moment forces truth out"
+
+  truby: "Backstory ghost revelation strategic timing - not dumped, earned"
+  mckee: "Backstory revealed when protagonist forced to confront past by conflict"
+
+show_vs_tell:
+  tell_problem:
+    description: "Explaining through dialogue or narration"
+    examples:
+      - "Character says: 'I'm a war veteran with PTSD'"
+      - "Narration: 'John was a lonely man who never recovered from his wife's death'"
+      - "Character explains: 'This device can detect lies'"
+    weakness: "Tells audience information - not cinematic, dull"
+
+  show_solution:
+    description: "Demonstrating through visual action"
+    examples:
+      - "Show: Character flinches at loud noise, has nightmares, sees therapist"
+      - "Show: Character looks at old photo alone, avoids couples, wears wedding ring"
+      - "Show: Device beeps when lie told - demonstrate through use"
+    strength: "Shows audience information - cinematic, engaging"
+
+  seger: "Show don't tell - visual exposition techniques"
+  mackendrick: "Visual exposition cinematic - show through action, environment, objects"
+
+plant_and_payoff_structure:
+  plant:
+    description: "Introduce information/object/skill early"
+    timing: "Act 1 or early Act 2"
+    examples: ["Mention character's military background", "Show gun in drawer", "Establish character knows how to fly"]
+    purpose: "Prepare audience - setup for later payoff"
+
+  payoff:
+    description: "Use planted information when needed"
+    timing: "Later in Act 2 or Act 3"
+    examples: ["Military background saves day", "Gun used in climax", "Character flies helicopter to escape"]
+    purpose: "Satisfying callback - audience prepared"
+
+  field: "Plant and payoff fundamental - setup information before needed"
+  snyder: "Setup early, payoff later - satisfying structure"
+
+world_building_exposition:
+  challenge: "Establish world rules without info dump"
+
+  techniques:
+    opening_image: "Visual establishing of world (Snyder)"
+    learn_by_doing: "Protagonist learns rules through mistakes"
+    native_unaware: "Don't explain what characters would know"
+    outsider_pov: "Use outsider/newcomer to learn with audience"
+    show_consequences: "Show rule broken and consequences"
+    visual_environment: "World revealed through production design"
+
+  avoid:
+    - mentor_lecture_explaining_world
+    - stopping_story_for_world_history
+    - characters_explaining_obvious
+    - narration_dump_of_world_info
+
+  snyder: "Opening image world building - establish visually"
+
+earned_vs_arbitrary_revelation:
+  arbitrary:
+    description: "Backstory revealed conveniently, not dramatically"
+    examples: ["Character randomly tells backstory", "Flashback interrupts action", "Convenient conversation reveals past"]
+    problem: "Feels forced, unmotivated - exposition visible"
+
+  earned:
+    description: "Backstory forced out by high tension/conflict"
+    examples: ["Under pressure character admits past", "Confrontation forces truth", "Breaking point reveals secret"]
+    benefit: "Dramatically motivated - revelation natural"
+
+  mckee: "Backstory revelation earned through conflict - tension forces truth out"
+
+exposition_balance:
+  too_little:
+    problem: "Audience confused - missing necessary context"
+    symptoms: ["Story unclear", "Motivation unclear", "World rules unclear", "Relationships unclear"]
+    solution: "Add necessary exposition - but integrated dramatically"
+
+  too_much:
+    problem: "Story drags - pacing slows from over-explanation"
+    symptoms: ["Boring stretches", "Momentum loss", "Over-explained", "No mystery"]
+    solution: "Cut unnecessary exposition - trust audience, show don't tell"
+
+  optimal:
+    description: "Enough information for understanding, but withhold for suspense"
+    balance: "Clarity (audience understands) vs Mystery (curiosity/suspense)"
+    mckee: "Balance between confusion and over-explanation"
+
+  principle: "Provide what audience needs to know, withhold what creates suspense"
+
+exposition_pacing_impact:
+  pacing_drag:
+    cause: "Too much exposition - stops action to explain"
+    effect: "Momentum loss, boring stretches, audience disengagement"
+    mckee: "Exposition is dullest of all screen tasks"
+
+  maintain_momentum:
+    technique: "Brief exposition integrated into action"
+    effect: "Story momentum maintained - no stopping to explain"
+    principle: "Never stop action to explain - reveal during action"
+
+  strategic_placement:
+    technique: "Exposition during low-intensity moments (breathing room)"
+    effect: "Natural pacing - explanation doesn't interrupt high action"
+    caveat: "Even breathing room exposition should have tension/conflict"
+
+audience_understanding_requirement:
+  essential: "Audience must understand story - requires sufficient exposition"
+
+  necessary_information:
+    - character_motivation_clear
+    - relationships_clear
+    - stakes_understood
+    - world_rules_if_needed
+    - backstory_if_affects_plot
+    - context_for_decisions
+
+  balance: "Enough for understanding, not so much it bores"
+
+  confusion_risk: "Too little exposition = audience lost"
+  boredom_risk: "Too much exposition = audience bored"
+
+exposition_sophistication_levels:
+  amateur:
+    characteristics: ["Info dumps", "As you know dialogue", "Stops action to explain", "Backstory monologues"]
+    quality: "Visible exposition - audience aware of exposition"
+
+  competent:
+    characteristics: ["Integrated exposition", "Strategic revelation", "Some visual exposition"]
+    quality: "Adequate - exposition less visible"
+
+  sophisticated:
+    characteristics: ["Exposition through conflict", "Earned revelation", "Visual show don't tell", "Plant/payoff", "Strategic timing"]
+    quality: "Invisible exposition - seamless integration"
+
+  masterful:
+    characteristics: ["Exposition completely invisible", "Revealed only through action/subtext", "Perfect timing", "Audience unaware of exposition delivery"]
+    quality: "Exceptional - McKee/Goldman level craft"
+
+mckee_exposition_philosophy:
+  central_thesis: "Exposition is necessary but must be dramatically integrated - never stop action to explain"
+
+  key_principles:
+    - "Exposition is dullest of all screen tasks"
+    - "Never stop action to explain"
+    - "Exposition must be dramatic, not expositional"
+    - "Backstory revealed through conflict not narration"
+    - "Reveal when protagonist forced to confront past"
+    - "Integrated into action and conflict"
+    - "Balance clarity (understanding) vs mystery (suspense)"
+
+  quality_spectrum:
+    info_dump: "Stops story to explain - visible exposition, dull"
+    adequate: "Some integration - exposition partially visible"
+    integrated: "Woven into action/conflict - exposition invisible"
+    masterful: "Completely invisible - revealed only through drama"
+
+visual_exposition_techniques:
+  environment:
+    description: "World revealed through production design, setting"
+    examples: ["Poverty shown through environment", "Wealth shown through mansion", "Dystopia shown through decay"]
+
+  objects:
+    description: "Information revealed through props, items"
+    examples: ["Photos show family history", "Medals show military past", "Empty bottle shows alcoholism"]
+
+  action:
+    description: "Information revealed through what character does"
+    examples: ["Character comfort with gun shows experience", "Fluent foreign language shows background"]
+
+  visual_state:
+    description: "Character condition shows information"
+    examples: ["Injuries show recent fight", "Exhaustion shows long journey", "Scars show violent past"]
+
+  mackendrick: "Visual exposition cinematic - show through environment, objects, action, state"
+  seger: "Show don't tell - visual medium demands visual exposition"
+
+exposition_consistency_pattern:
+  act_one:
+    goal: "Establish essential world, context, setup"
+    technique: "Opening image, visual world-building, essential context only"
+    caution: "Don't dump everything - plant seeds for later"
+
+  act_two_first_half:
+    goal: "Reveal information as needed for rising action"
+    technique: "Incremental revelation, earned through conflict"
+    caution: "Need-to-know basis - not before needed"
+
+  midpoint:
+    goal: "Major revelation possible - earned through tension"
+    technique: "High tension moment forces revelation"
+    caution: "Revelation must be dramatically earned"
+
+  act_two_second_half:
+    goal: "Backstory/secrets revealed as tension increases"
+    technique: "Conflict forces truths out"
+    caution: "Revelations should complicate plot"
+
+  act_three:
+    goal: "Final revelations at climax if needed"
+    technique: "Ultimate truth emerges under maximum pressure"
+    caution: "No new exposition in climax - only revelations of planted information"
+
+  principle: "Exposition strategic throughout - never arbitrary, always dramatic"

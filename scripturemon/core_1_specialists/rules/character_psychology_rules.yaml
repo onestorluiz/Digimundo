@@ -1,0 +1,187 @@
+domain: character_psychology
+specialist: "Script Doctor Psychemon"
+digimon_name: "Psychemon"
+title: "Script Doctor - Character Psychology and Development Specialist"
+specialty: "Character depth, psychological realism, internal consistency, believable behavior"
+style: "Analytical, psychological, depth-focused, character-obsessed"
+identity: "Script Doctor™ first, Digimon psychology specialist second"
+
+rules:
+  - id: PSYCH.R001
+    title: "Psychological Consistency"
+    category: "Behavior"
+    severity: "critical"
+    test: "Do characters behave consistently with their established psychology?"
+    fail_msg: "Character acts out of character - breaks believability"
+    fix: "Ensure all actions stem from established traits and motivations"
+    reference: "Character consistency principle"
+
+  - id: PSYCH.R002
+    title: "Internal Conflict"
+    category: "Depth"
+    severity: "high"
+    test: "Does protagonist have meaningful internal conflict?"
+    fail_msg: "No internal struggle - character feels flat"
+    fix: "Create conflict between want and need, desire and fear"
+    reference: "Internal vs external conflict"
+
+  - id: PSYCH.R003
+    title: "Backstory Integration"
+    category: "History"
+    severity: "medium"
+    test: "Does backstory inform present behavior?"
+    fail_msg: "Backstory disconnected from character actions"
+    fix: "Show how past trauma/experience drives current choices"
+    reference: "Psychology of character history"
+
+  - id: PSYCH.R004
+    title: "Emotional Truth"
+    category: "Authenticity"
+    severity: "high"
+    test: "Do emotional reactions feel psychologically authentic?"
+    fail_msg: "Emotional responses feel false or manipulative"
+    fix: "Ground emotions in character's specific psychology"
+    reference: "Emotional authenticity"
+
+  - id: PSYCH.R005
+    title: "Defense Mechanisms"
+    category: "Psychology"
+    severity: "medium"
+    test: "Does character show realistic psychological defenses?"
+    fail_msg: "Character too self-aware or lacks defenses"
+    fix: "Add denial, projection, rationalization as appropriate"
+    reference: "Psychological defense mechanisms"
+
+  - id: PSYCH.R006
+    title: "Contradictions and Complexity"
+    category: "Depth"
+    severity: "high"
+    test: "Does character have believable contradictions?"
+    fail_msg: "Character too simple - one-dimensional"
+    fix: "Add contradictory traits that create internal tension"
+    reference: "Human complexity principle"
+
+  - id: PSYCH.R007
+    title: "Want vs Need"
+    category: "Arc"
+    severity: "critical"
+    test: "Is there clear distinction between want and need?"
+    fail_msg: "Want equals need - weak character arc"
+    fix: "External want should oppose internal need"
+    reference: "Character arc theory"
+
+  - id: PSYCH.R008
+    title: "Unique Voice"
+    category: "Identity"
+    severity: "high"
+    test: "Does each character have distinct psychology/voice?"
+    fail_msg: "Characters feel interchangeable"
+    fix: "Give each character unique worldview and expression"
+    reference: "Character differentiation"
+
+  - id: PSYCH.R009
+    title: "Believable Relationships"
+    category: "Interpersonal"
+    severity: "medium"
+    test: "Do relationships reflect character psychologies?"
+    fail_msg: "Relationships feel plot-driven, not character-driven"
+    fix: "Base relationships on psychological compatibility/conflict"
+    reference: "Relationship dynamics"
+
+  - id: PSYCH.R010
+    title: "Growth Through Pressure"
+    category: "Development"
+    severity: "high"
+    test: "Does pressure reveal true character?"
+    fail_msg: "No character revelation under pressure"
+    fix: "Use crisis to strip away masks and reveal core self"
+    reference: "Pressure reveals character"
+
+  - id: PSYCH.R011
+    title: "Subconscious Drivers"
+    category: "Motivation"
+    severity: "medium"
+    test: "Are subconscious motivations evident?"
+    fail_msg: "All motivations too conscious and explicit"
+    fix: "Add unconscious drives character doesn't fully understand"
+    reference: "Unconscious motivation"
+
+  - id: PSYCH.R012
+    title: "Coping Mechanisms"
+    category: "Behavior"
+    severity: "low"
+    test: "Does character show consistent coping strategies?"
+    fail_msg: "No clear patterns in stress response"
+    fix: "Establish how character typically handles stress"
+    reference: "Coping mechanism psychology"
+
+  - id: PSYCH.R013
+    title: "Worldview Consistency"
+    category: "Philosophy"
+    severity: "medium"
+    test: "Does character have coherent worldview?"
+    fail_msg: "Character's beliefs feel random"
+    fix: "Establish core beliefs that inform all decisions"
+    reference: "Character philosophy"
+
+  - id: PSYCH.R014
+    title: "Vulnerability Moments"
+    category: "Humanity"
+    severity: "high"
+    test: "Does character show genuine vulnerability?"
+    fail_msg: "Character feels invulnerable or fake-vulnerable"
+    fix: "Create moments of genuine psychological exposure"
+    reference: "Vulnerability in storytelling"
+
+  - id: PSYCH.R015
+    title: "Shadow Self"
+    category: "Depth"
+    severity: "low"
+    test: "Is character's shadow self explored?"
+    fail_msg: "No exploration of dark impulses"
+    fix: "Hint at repressed aspects of personality"
+    reference: "Jungian shadow concept"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 40
+    high: 30
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Map character psychologies and internal conflicts"
+  deep_dive: "Analyze consistency, depth, and psychological authenticity"
+  final_check: "Verify believable behavior and meaningful development"
+
+psychology_checklist:
+  core_elements:
+    - consistent_behavior
+    - internal_conflict
+    - backstory_influence
+    - defense_mechanisms
+    - unique_voice
+    - growth_under_pressure
+    - want_vs_need
+    - vulnerability
+
+  psychological_layers:
+    - conscious_goals
+    - unconscious_drives
+    - defense_mechanisms
+    - coping_strategies
+    - core_wounds
+    - belief_systems
+    - shadow_aspects
+
+common_psychology_mistakes:
+  - inconsistent_behavior
+  - no_internal_conflict
+  - perfect_self_awareness
+  - missing_defenses
+  - one_dimensional
+  - identical_voices
+  - unearned_change
+  - fake_vulnerability
+  - absent_backstory_influence

@@ -1,0 +1,197 @@
+domain: transitions
+specialist: "Script Doctor Flowmon"
+digimon_name: "Flowmon"
+title: "Script Doctor - Transitions and Flow Specialist"
+specialty: "Scene transitions, narrative flow, connective tissue, seamless storytelling"
+style: "Fluid, connective, smooth, flow-obsessed"
+identity: "Script Doctor™ first, Digimon flow specialist second"
+
+rules:
+  - id: FLOW.R001
+    title: "Scene Transition Logic"
+    category: "Connectivity"
+    severity: "critical"
+    test: "Does each scene transition logically to the next?"
+    fail_msg: "Jarring transitions - narrative flow broken"
+    fix: "Connect scenes with cause-effect, time, or thematic links"
+    reference: "Seamless storytelling principles"
+
+  - id: FLOW.R002
+    title: "Momentum Maintenance"
+    category: "Pacing"
+    severity: "high"
+    test: "Is forward momentum maintained between scenes?"
+    fail_msg: "Momentum drops - story stalls"
+    fix: "End scenes with questions/conflicts that pull into next"
+    reference: "Page-turner principle"
+
+  - id: FLOW.R003
+    title: "Transition Variety"
+    category: "Technique"
+    severity: "medium"
+    test: "Are transition techniques varied (not all CUT TO)?"
+    fail_msg: "Monotonous transitions"
+    fix: "Mix cuts, dissolves, match cuts, sound bridges"
+    reference: "Cinematic transition techniques"
+
+  - id: FLOW.R004
+    title: "Time Flow Clarity"
+    category: "Temporal"
+    severity: "high"
+    test: "Is time progression clear between scenes?"
+    fail_msg: "Confusing timeline - audience lost"
+    fix: "Use sluglines, dialogue, or visual cues for time shifts"
+    reference: "Temporal clarity"
+
+  - id: FLOW.R005
+    title: "Emotional Bridges"
+    category: "Feeling"
+    severity: "medium"
+    test: "Do emotional states flow naturally scene to scene?"
+    fail_msg: "Emotional whiplash between scenes"
+    fix: "Bridge emotional states or justify sharp contrasts"
+    reference: "Emotional continuity"
+
+  - id: FLOW.R006
+    title: "Visual Continuity"
+    category: "Visual"
+    severity: "medium"
+    test: "Do scenes connect visually (match cuts, motifs)?"
+    fail_msg: "Visually disconnected scenes"
+    fix: "Use visual motifs, match cuts, or color continuity"
+    reference: "Visual storytelling"
+
+  - id: FLOW.R007
+    title: "Subplot Weaving"
+    category: "Structure"
+    severity: "high"
+    test: "Are subplots smoothly woven through main plot?"
+    fail_msg: "Subplot chunks - feels episodic"
+    fix: "Interweave subplot scenes with main plot rhythm"
+    reference: "Subplot integration"
+
+  - id: FLOW.R008
+    title: "Enter Late, Leave Early"
+    category: "Efficiency"
+    severity: "high"
+    test: "Do scenes start/end at optimal moments?"
+    fail_msg: "Scenes drag with unnecessary setup/closure"
+    fix: "Cut into scenes at latest possible moment"
+    reference: "In media res principle"
+
+  - id: FLOW.R009
+    title: "Transition Motivation"
+    category: "Logic"
+    severity: "high"
+    test: "Is there clear motivation for each scene change?"
+    fail_msg: "Unmotivated transitions - why this scene now?"
+    fix: "Each transition should feel inevitable, not arbitrary"
+    reference: "Causality in storytelling"
+
+  - id: FLOW.R010
+    title: "Parallel Action"
+    category: "Advanced"
+    severity: "low"
+    test: "Is parallel action/cross-cutting used effectively?"
+    fail_msg: "Missing opportunities for parallel tension"
+    fix: "Consider intercutting for simultaneous events"
+    reference: "Cross-cutting technique"
+
+  - id: FLOW.R011
+    title: "Information Flow"
+    category: "Clarity"
+    severity: "critical"
+    test: "Does information reveal at the right pace?"
+    fail_msg: "Information dumps or confusion"
+    fix: "Distribute exposition naturally across scenes"
+    reference: "Information theory in screenwriting"
+
+  - id: FLOW.R012
+    title: "Tonal Transitions"
+    category: "Mood"
+    severity: "medium"
+    test: "Are tonal shifts between scenes managed well?"
+    fail_msg: "Jarring tonal shifts"
+    fix: "Bridge tones or use contrast deliberately"
+    reference: "Tonal management"
+
+  - id: FLOW.R013
+    title: "Geographic Logic"
+    category: "Space"
+    severity: "medium"
+    test: "Do location changes make geographic sense?"
+    fail_msg: "Impossible geography - breaks immersion"
+    fix: "Consider travel time and geographic logic"
+    reference: "Spatial continuity"
+
+  - id: FLOW.R014
+    title: "Chapter Feel"
+    category: "Rhythm"
+    severity: "low"
+    test: "Do scene groups create natural 'chapters'?"
+    fail_msg: "No rhythm to scene groupings"
+    fix: "Group related scenes into narrative chunks"
+    reference: "Sequence structure"
+
+  - id: FLOW.R015
+    title: "Callback Connections"
+    category: "Unity"
+    severity: "low"
+    test: "Do later scenes callback to earlier ones?"
+    fail_msg: "Missed callback opportunities"
+    fix: "Create echoes and callbacks for unity"
+    reference: "Circular storytelling"
+
+diagnostics:
+  min_score_threshold: 65
+  weight_distribution:
+    critical: 35
+    high: 30
+    medium: 25
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Map all scene transitions and connection types"
+  deep_dive: "Analyze flow momentum and transition effectiveness"
+  final_check: "Verify smooth narrative flow throughout"
+
+transition_checklist:
+  connection_types:
+    - cause_effect
+    - temporal
+    - thematic
+    - visual
+    - audio
+    - emotional
+    - geographic
+    - character
+
+  transition_techniques:
+    - cut_to
+    - dissolve_to
+    - fade_to
+    - match_cut
+    - sound_bridge
+    - visual_match
+    - dialogue_overlap
+    - action_continuation
+
+  flow_killers:
+    - dead_stop_endings
+    - unmotivated_cuts
+    - time_confusion
+    - geography_jumps
+    - emotional_whiplash
+    - subplot_chunks
+    - information_dumps
+    - repetitive_transitions
+
+common_flow_mistakes:
+  - abrupt_scene_endings
+  - unclear_time_jumps
+  - disconnected_subplots
+  - monotonous_transitions
+  - breaking_momentum
+  - geographic_impossibilities
+  - emotional_discontinuity
+  - missing_connective_tissue

@@ -1,0 +1,18 @@
+# 🔥 UCHIMON - Python Dependencies
+# Sistema de AI Developer com memória persistente
+
+# Python version requirement
+python_requires = ">=3.11,<3.14"
+
+# Core dependencies (from code analysis)
+# Note: Most imports are stdlib, minimal external deps needed
+
+# Testing
+pytest>=8.0.0
+pytest-cov>=4.0.0
+pytest-html>=4.0.0
+
+# Add any discovered dependencies here after audit
+# Discovered from actual imports: (mostly stdlib)
+# - os, sys, pathlib, json, sqlite3, subprocess, datetime, re
+# - All are Python standard library

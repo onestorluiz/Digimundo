@@ -1,0 +1,1 @@
+scripturemon is an alias for $SCRIPTUREMON_HOME/bin/scripturemon

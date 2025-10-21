@@ -1,0 +1,8 @@
+🚀 Usando DigiLang Fallback MELHORADO
+✓ chat.py imports successfully
+📚 Carregados 81 itens de conhecimento dos PDFs
+🧠 Carregadas 4 memórias do usuário
+🔤 DigiLang Integration inicializada
+   Sistema de compressão: Avançado
+   Cache: Ativo
+✓ ScripturemonChat instantiates

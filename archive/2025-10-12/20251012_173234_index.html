@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTUREMON - Digimon World 3 Style</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ============================================================================ -->
+    <!-- MAIN MENU SCREEN -->
+    <!-- ============================================================================ -->
+    <div class="screen" id="mainMenu">
+        <div class="grid-background animated"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">SCRIPTUREMON v11.0</div>
+            <div class="subtitle">SCREENPLAY ANALYSIS SYSTEM</div>
+        </div>
+
+        <!-- Main Menu Options -->
+        <div class="window main-menu-window">
+            <div class="menu-option selected" onclick="navigateTo('screenplaySelect')">
+                <span class="icon">📄</span>
+                <span class="text">New Screenplay</span>
+                <span class="arrow">▶</span>
+            </div>
+            <div class="menu-option" onclick="navigateTo('monitoring')">
+                <span class="icon">💾</span>
+                <span class="text">Continue Analysis</span>
+                <span class="arrow">▶</span>
+            </div>
+            <div class="menu-option" onclick="navigateTo('specialistView')">
+                <span class="icon">🔬</span>
+                <span class="text">View Specialists</span>
+                <span class="arrow">▶</span>
+            </div>
+            <div class="menu-option" onclick="navigateTo('settings')">
+                <span class="icon">⚙️</span>
+                <span class="text">Settings</span>
+                <span class="arrow">▶</span>
+            </div>
+        </div>
+
+        <!-- Stats Window (Real Data) -->
+        <div class="window stats-window">
+            <div class="stat-line">
+                <span class="stat-icon hp-icon"></span>
+                <span class="stat-label">Total</span>
+                <span class="stat-value" id="menuTotalAnalyses">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon mp-icon"></span>
+                <span class="stat-label">Running</span>
+                <span class="stat-value" id="menuRunningCount">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon exp-icon"></span>
+                <span class="stat-label">Items</span>
+                <span class="stat-value" id="menuTotalItems">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon gold-icon"></span>
+                <span class="stat-label">Time</span>
+                <span class="stat-value" id="menuTotalTime">0h</span>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="button-help">
+                <span class="btn">○</span> Select
+                <span class="btn">△</span> Confirm
+                <span class="btn">✕</span> Exit
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================================ -->
+    <!-- SCREENPLAY SELECTION SCREEN -->
+    <!-- ============================================================================ -->
+    <div class="screen hidden" id="screenplaySelect">
+        <div class="grid-background animated"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">NEW SCREENPLAY ANALYSIS</div>
+            <div class="subtitle">Select File and Model</div>
+        </div>
+
+        <!-- Screenplay List -->
+        <div class="window screenplay-list-window">
+            <div class="section-title">AVAILABLE SCREENPLAYS</div>
+            <div id="screenplayListContainer" class="screenplay-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Model Selection -->
+        <div class="window model-select-window">
+            <div class="section-title">SELECT MODEL</div>
+            <div class="model-options">
+                <div class="model-option selected" data-model="ollama">
+                    <span class="model-icon">🤖</span>
+                    <div class="model-info">
+                        <div class="model-name">Ollama (Local)</div>
+                        <div class="model-desc">Fast, Free, Private</div>
+                    </div>
+                    <span class="model-check">✓</span>
+                </div>
+                <div class="model-option" data-model="gpt-5">
+                    <span class="model-icon">🧠</span>
+                    <div class="model-info">
+                        <div class="model-name">GPT-5 (OpenAI)</div>
+                        <div class="model-desc">Premium Quality</div>
+                    </div>
+                    <span class="model-check">✓</span>
+                </div>
+                <div class="model-option" data-model="both">
+                    <span class="model-icon">⚡</span>
+                    <div class="model-info">
+                        <div class="model-name">Both (Parallel)</div>
+                        <div class="model-desc">Compare Results</div>
+                    </div>
+                    <span class="model-check">✓</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <div class="action-btn-large" onclick="startNewAnalysis()">
+                    <span class="icon">▶️</span>
+                    <span class="text">START ANALYSIS</span>
+                </div>
+                <div class="action-btn-large cancel" onclick="navigateTo('mainMenu')">
+                    <span class="icon">◀️</span>
+                    <span class="text">BACK</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="button-help">
+                <span class="btn">○</span> Select
+                <span class="btn">△</span> Start
+                <span class="btn">✕</span> Back
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================================ -->
+    <!-- MONITORING SCREEN (Real-time progress) -->
+    <!-- ============================================================================ -->
+    <div class="screen hidden" id="monitoring">
+        <div class="grid-background animated"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">REAL-TIME MONITORING</div>
+            <div class="subtitle">Analysis Progress Dashboard</div>
+        </div>
+
+        <!-- Stats Bar (Real Data) -->
+        <div class="window stats-window">
+            <div class="stat-line">
+                <span class="stat-icon hp-icon"></span>
+                <span class="stat-label">Total</span>
+                <span class="stat-value" id="totalAnalyses">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon mp-icon"></span>
+                <span class="stat-label">Running</span>
+                <span class="stat-value" id="runningCount">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon exp-icon"></span>
+                <span class="stat-label">Items</span>
+                <span class="stat-value" id="totalItems">0</span>
+            </div>
+            <div class="stat-line">
+                <span class="stat-icon gold-icon"></span>
+                <span class="stat-label">Time</span>
+                <span class="stat-value" id="totalTime">0h</span>
+            </div>
+        </div>
+
+        <!-- Running Analyses List (Real Data) -->
+        <div class="window analyses-window">
+            <div class="section-title">RUNNING ANALYSES</div>
+            <div id="analysesContainer">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="button-help">
+                <span class="btn">○</span> Select
+                <span class="btn">△</span> Continue
+                <span class="btn">□</span> Results
+                <span class="btn">✕</span> Menu
+            </div>
+            <div class="nav-button" onclick="navigateTo('mainMenu')">
+                <span>◀ MAIN MENU</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================================ -->
+    <!-- SPECIALIST VIEW SCREEN -->
+    <!-- ============================================================================ -->
+    <div class="screen hidden" id="specialistView">
+        <div class="grid-background animated"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">SPECIALIST DATABASE</div>
+            <div class="subtitle">24 Analysis Specialists × 13 Authors = 312 Total</div>
+        </div>
+
+        <!-- Specialist Grid -->
+        <div class="window specialist-grid-window">
+            <div id="specialistGridContainer" class="specialist-grid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Selected Specialist Info -->
+        <div class="window specialist-info-window">
+            <div id="specialistInfoContainer">
+                <div class="no-selection">Select a specialist to view details</div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="button-help">
+                <span class="btn">○</span> Select
+                <span class="btn">△</span> Details
+                <span class="btn">✕</span> Back
+            </div>
+            <div class="nav-button" onclick="navigateTo('mainMenu')">
+                <span>◀ MAIN MENU</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================================ -->
+    <!-- SETTINGS SCREEN -->
+    <!-- ============================================================================ -->
+    <div class="screen hidden" id="settings">
+        <div class="grid-background animated"></div>
+
+        <!-- Header -->
+        <div class="window header-window">
+            <div class="window-title">SYSTEM SETTINGS</div>
+            <div class="subtitle">Configuration & Status</div>
+        </div>
+
+        <!-- System Status -->
+        <div class="window settings-status-window">
+            <div class="section-title">SYSTEM STATUS</div>
+            <div id="systemStatusContainer" class="settings-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Paths Info -->
+        <div class="window settings-paths-window">
+            <div class="section-title">SYSTEM PATHS</div>
+            <div id="systemPathsContainer" class="settings-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="button-help">
+                <span class="btn">○</span> Select
+                <span class="btn">🔄</span> Refresh
+                <span class="btn">✕</span> Back
+            </div>
+            <div class="nav-button" onclick="navigateTo('mainMenu')">
+                <span>◀ MAIN MENU</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================================ -->
+    <!-- STATUS MESSAGE TOAST -->
+    <!-- ============================================================================ -->
+    <div id="statusMsg" class="status-toast hidden"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

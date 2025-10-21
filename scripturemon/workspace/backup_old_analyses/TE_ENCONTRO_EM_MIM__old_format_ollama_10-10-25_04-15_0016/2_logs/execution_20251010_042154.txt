@@ -1,0 +1,13 @@
+ANÁLISE MULTI-AUTOR
+================================================================================
+
+Roteiro: Te Encontro em Mim .pdf
+Especialidade: dialogue
+Data: 10/10/2025 04:21:54
+
+Autores processados: 1/1
+Tempo total: 408.8s (6.8 min)
+Output total: 7,938 chars
+
+AUTORES:
+  - TRUBY: 7,938 chars

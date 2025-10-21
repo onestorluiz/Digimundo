@@ -1,0 +1,174 @@
+"""
+Token Phrase Dictionary Builder - mines token n-grams for compression.
+Works at token level, not character level, for maximum efficiency.
+"""
+import json
+import tiktoken
+from collections import Counter
+from typing import List, Tuple, Dict, Set
+from pathlib import Path
+from datetime import datetime
+import numpy as np
+
+def tokenize(text: str) -> List[int]:
+    """Tokenize text to token IDs using cl100k_base."""
+    enc = tiktoken.get_encoding('cl100k_base')
+    return enc.encode(text)
+
+def detokenize(ids: List[int]) -> str:
+    """Convert token IDs back to text."""
+    enc = tiktoken.get_encoding('cl100k_base')
+    return enc.decode(ids)
+
+def mine_token_ngrams(token_ids: List[int], n_min: int=2, n_max: int=8) -> Counter:
+    """
+    Mine n-grams of tokens from a sequence.
+    Returns Counter mapping (token_tuple) -> frequency.
+    """
+    ngrams = Counter()
+    for n in range(n_min, n_max + 1):
+        for i in range(len(token_ids) - n + 1):
+            ngram = tuple(token_ids[i:i + n])
+            ngrams[ngram] += 1
+    return ngrams
+
+def score_candidates(counter: Counter) -> List[Tuple[Tuple[int, ...], int, int]]:
+    """
+    Score n-gram candidates by potential token savings.
+    Returns list of (ngram, freq, gain_tokens) sorted by gain.
+    """
+    candidates = []
+    for ngram, freq in counter.items():
+        gain_tokens = (len(ngram) - 1) * freq
+        candidates.append((ngram, freq, gain_tokens))
+    candidates.sort(key=lambda x: x[2], reverse=True)
+    return candidates
+
+def find_occurrences(haystack: List[int], needle: Tuple[int, ...]) -> List[int]:
+    """Find all starting positions of needle in haystack."""
+    positions = []
+    needle_len = len(needle)
+    for i in range(len(haystack) - needle_len + 1):
+        if tuple(haystack[i:i + needle_len]) == needle:
+            positions.append(i)
+    return positions
+
+def calculate_overlap(ngram1: Tuple[int, ...], pos1: List[int], ngram2: Tuple[int, ...], pos2: List[int]) -> float:
+    """
+    Calculate what fraction of ngram1's occurrences overlap with ngram2.
+    """
+    if not pos1:
+        return 0.0
+    overlaps = 0
+    len1 = len(ngram1)
+    len2 = len(ngram2)
+    for p1 in pos1:
+        for p2 in pos2:
+            if not (p1 + len1 <= p2 or p2 + len2 <= p1):
+                overlaps += 1
+                break
+    return overlaps / len(pos1)
+
+def select_dictionary(candidates: List[Tuple[Tuple[int, ...], int, int]], K: int, token_ids: List[int]=None, overlap_guard: float=0.6) -> Dict[Tuple[int, ...], str]:
+    """
+    Select top-K n-grams by gain, avoiding excessive overlap.
+    Returns mapping from ngram to glyph placeholder (to be assigned later).
+    """
+    selected = {}
+    selected_positions = {}
+    for ngram, freq, gain in candidates:
+        if len(selected) >= K:
+            break
+        if token_ids:
+            positions = find_occurrences(token_ids, ngram)
+            max_overlap = 0.0
+            for selected_ngram, selected_pos in selected_positions.items():
+                overlap = calculate_overlap(ngram, positions, selected_ngram, selected_pos)
+                max_overlap = max(max_overlap, overlap)
+            if max_overlap > overlap_guard:
+                continue
+            selected_positions[ngram] = positions
+        selected[ngram] = f'GLYPH_{len(selected)}'
+    return selected
+
+def build_glyph_pool(M: int, used_glyphs: Set[str]=None) -> List[str]:
+    """
+    Build pool of M single-token glyphs from tokenizer_utils.
+    Avoids collision with already used glyphs.
+    """
+    from .apps.scripturemon.digilang.tokenizer_utils import get_single_token_strings
+    pool = get_single_token_strings(max_candidates=M + 500)
+    if used_glyphs:
+        pool = [g for g in pool if g not in used_glyphs]
+    return pool[:M]
+
+def assign_glyphs(mapping: Dict[Tuple[int, ...], str], glyph_pool: List[str]) -> Dict[Tuple[int, ...], str]:
+    """
+    Assign actual glyphs from pool to ngrams.
+    """
+    final_mapping = {}
+    for i, (ngram, _) in enumerate(mapping.items()):
+        if i < len(glyph_pool):
+            final_mapping[ngram] = glyph_pool[i]
+    return final_mapping
+
+def save_token_dict(data: dict, path: str='src/digilang/token_dict.json'):
+    """
+    Save token dictionary with metadata.
+    Format: {"meta": {...}, "map": {glyph: [token_ids]}}
+    """
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+def build_tpd_from_corpus(corpus_dir: str='data/original', K: int=1200, n_min: int=2, n_max: int=8, freq_min: int=3, overlap_guard: float=0.6) -> Dict[str, List[int]]:
+    """
+    Main pipeline to build Token Phrase Dictionary from corpus.
+    """
+    print(f'Building TPD with K={K}, n={n_min}-{n_max}, freq_min={freq_min}')
+    texts = []
+    for p in Path(corpus_dir).rglob('*.txt'):
+        if p.stat().st_size > 0:
+            texts.append(p.read_text(encoding='utf-8', errors='ignore'))
+    full_text = '\n\n'.join(texts)
+    print(f'Corpus size: {len(full_text)} chars')
+    token_ids = tokenize(full_text)
+    print(f'Token count: {len(token_ids)}')
+    print('Mining n-grams...')
+    counter = mine_token_ngrams(token_ids, n_min, n_max)
+    counter = {k: v for k, v in counter.items() if v >= freq_min}
+    print(f'Found {len(counter)} n-grams with freq >= {freq_min}')
+    print('Scoring candidates...')
+    candidates = score_candidates(counter)
+    print('Selecting dictionary with overlap guard...')
+    mapping = select_dictionary(candidates, K, token_ids, overlap_guard)
+    print(f'Selected {len(mapping)} n-grams')
+    existing_glyphs = set()
+    vocab_path = Path('src/digilang/vocab.json')
+    if vocab_path.exists():
+        vocab = json.loads(vocab_path.read_text())
+        for v in vocab.get('symbols', {}).values():
+            existing_glyphs.add(v)
+        for v in vocab.get('mwe_map', {}).values():
+            existing_glyphs.add(v)
+        for v in vocab.get('entity_prefix', {}).values():
+            existing_glyphs.add(v)
+        existing_glyphs.update(vocab.get('num_alphabet', []))
+    print('Assigning glyphs...')
+    glyph_pool = build_glyph_pool(K + 200, existing_glyphs)
+    final_mapping = assign_glyphs(mapping, glyph_pool)
+    result = {}
+    total_gain = 0
+    for ngram, glyph in final_mapping.items():
+        result[glyph] = list(ngram)
+        freq = counter.get(ngram, 0)
+        gain = (len(ngram) - 1) * freq
+        total_gain += gain
+    print(f'Total potential token savings: {total_gain}')
+    print(f'Average savings per substitution: {total_gain / len(result):.1f} tokens')
+    return result
+if __name__ == '__main__':
+    tpd = build_tpd_from_corpus(K=100, n_min=2, n_max=4)
+    data = {'meta': {'tokenizer': 'cl100k_base', 'K': 100, 'n_range': [2, 4], 'freq_min': 3, 'built_at': datetime.utcnow().isoformat() + 'Z'}, 'map': tpd}
+    save_token_dict(data, 'test_token_dict.json')
+    print(f'Saved test dictionary with {len(tpd)} entries')

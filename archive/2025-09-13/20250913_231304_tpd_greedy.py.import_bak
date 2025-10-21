@@ -1,0 +1,144 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import annotations
+from pathlib import Path
+from typing import Dict, List, Tuple, Iterable
+from collections import Counter, defaultdict
+import json, time, math, tiktoken
+from .tokenizer_utils import ENC_NAME, get_single_token_strings
+
+Enc = tiktoken.get_encoding(ENC_NAME)
+
+def tokenize(text:str)->List[int]:
+    return Enc.encode(text)
+
+def detokenize(ids:List[int])->str:
+    return Enc.decode(ids)
+
+def mine_token_ngrams(ids: List[int], n_min:int=2, n_max:int=8, freq_min:int=3) -> Counter:
+    c = Counter()
+    L = len(ids)
+    for n in range(n_min, n_max+1):
+        for i in range(L-n+1):
+            c[tuple(ids[i:i+n])] += 1
+    # filter
+    return Counter({k:v for k,v in c.items() if v >= freq_min})
+
+def head_index(ids: List[int]) -> Dict[int, List[int]]:
+    idx = defaultdict(list)
+    for i,tid in enumerate(ids):
+        idx[tid].append(i)
+    return idx
+
+def find_positions(ids: List[int], ngram: Tuple[int,...], idx_head: Dict[int, List[int]]) -> List[int]:
+    """Return start positions where ngram occurs (exact)."""
+    starts = []
+    head = ngram[0]
+    cand = idx_head.get(head, [])
+    L = len(ids); N = len(ngram)
+    for i in cand:
+        if i+N <= L and tuple(ids[i:i+N]) == ngram:
+            starts.append(i)
+    return starts
+
+def score_candidates(counter: Counter) -> List[Tuple[Tuple[int,...], int, int]]:
+    out=[]
+    for ngram,freq in counter.items():
+        gain = (len(ngram)-1)*freq
+        if gain>0:
+            out.append((ngram, freq, gain))
+    out.sort(key=lambda x:(-x[2], -len(x[0]), -x[1]))
+    return out
+
+def build_glyph_pool(K:int, reserved:set|None=None)->List[str]:
+    reserved = reserved or set()
+    pool=[]
+    for s in get_single_token_strings(max_candidates=K*6):
+        if s not in reserved:
+            pool.append(s)
+        if len(pool)>=K:
+            break
+    return pool
+
+def greedy_submodular_select(ids: List[int],
+                             candidates: List[Tuple[Tuple[int,...], int, int]],
+                             K:int=1200,
+                             max_cands:int=20000,
+                             overlap_guard:float=0.0) -> Dict[Tuple[int,...], str]:
+    """
+    Greedy por ganho marginal: reconta apenas ocorrências NÃO cobertas.
+    Aproximação: ocorrência que toca região coberta é descartada (subestima, mas é rápido).
+    """
+    L = len(ids)
+    covered = [False]*L
+    idx_head = head_index(ids)
+
+    # limitar candidatos para tornar viável
+    cands = candidates[:max_cands]
+    selected: Dict[Tuple[int,...], str] = {}
+    for _ in range(K):
+        best = None
+        best_gain = 0
+        best_occ = None
+        # avalia ganho marginal
+        for ngram, freq, _ in cands:
+            starts = find_positions(ids, ngram, idx_head)
+            if not starts: 
+                continue
+            N = len(ngram)
+            gain_marg = 0
+            valid_occ = []
+            for s in starts:
+                # se qualquer token desta janela já coberto, pula (evita sobreposição)
+                if any(covered[s:s+N]):
+                    continue
+                gain_marg += (N-1)
+                valid_occ.append(s)
+                # early break se ganho já não superará best em cenário pequeno
+            if gain_marg > best_gain:
+                best_gain = gain_marg
+                best = ngram
+                best_occ = valid_occ
+        if not best or best_gain <= 0:
+            break
+        # marca cobertura das ocorrências selecionadas do 'best'
+        N = len(best)
+        for s in best_occ:
+            for j in range(s, s+N):
+                covered[j] = True
+        selected[best] = ""  # glyph preenchido depois
+        # remove 'best' dos candidatos para não reavaliar demais
+        cands = [c for c in cands if c[0] != best]
+    return selected
+
+def build_tpd_greedy_for_corpus(corpus_dir:str,
+                                K:int=1200,
+                                n_min:int=2,
+                                n_max:int=8,
+                                freq_min:int=3,
+                                reserved_glyphs:set|None=None,
+                                max_cands:int=20000) -> Dict[str, List[int]]:
+    texts=[]
+    for p in Path(corpus_dir).rglob("*.txt"):
+        try:
+            t = p.read_text(encoding="utf-8", errors="ignore")
+            if t: texts.append(t)
+        except: pass
+    full = "\n\n".join(texts)
+    ids = tokenize(full)
+    counter = mine_token_ngrams(ids, n_min, n_max, freq_min=freq_min)
+    cands = score_candidates(counter)
+    sel = greedy_submodular_select(ids, cands, K=K, max_cands=max_cands)
+    pool = build_glyph_pool(len(sel)+200, reserved_glyphs or set())
+    mapping = {}
+    i=0
+    for ngram in sel.keys():
+        glyph = pool[i]; i+=1
+        mapping[glyph] = list(ngram)
+        sel[ngram] = glyph
+    return mapping  # glyph -> [ids...]
+
+def save_token_dict(mapping:Dict[str,List[int]], out_path:str, meta:dict):
+    Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+    payload = {"meta": meta, "map": mapping}
+    Path(out_path).write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")

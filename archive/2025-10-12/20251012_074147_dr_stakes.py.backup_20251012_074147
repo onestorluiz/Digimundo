@@ -1,0 +1,1314 @@
+"""
+Script Doctor Stakesmon - Stakes and Consequences Analysis Specialist
+A Script Doctor™ in Digimon form specializing in stakes clarity, personal/external/emotional stakes, escalation, consequences.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class StakesProfile:
+    """Overall stakes analysis."""
+    stakes_clear: bool
+    stakes_established_early: bool  # First 15-20 pages
+    personal_stakes_present: bool  # What protagonist stands to lose/gain personally
+    external_stakes_present: bool  # What world/others stand to lose/gain
+    emotional_stakes_present: bool  # Relationships at risk
+    stakes_escalation: float  # 0-1 (stakes progressively raised)
+    life_death_stakes: bool  # Survival stakes (highest stakes)
+    stakes_consequences_clear: bool  # What happens if protagonist fails
+    audience_investment: float  # 0-1 (we care because protagonist cares)
+    stakes_reinforced: bool  # Stakes reminded throughout
+    stakes_maximized_at_climax: bool  # Everything at risk at climax
+    low_stakes_detected: bool  # PENALTY (nothing meaningful at risk)
+    unclear_stakes_detected: bool  # PENALTY (audience doesn't know what's at risk)
+    non_escalating_stakes: bool  # PENALTY (flat stakes throughout)
+    overall_stakes_quality: float
+
+
+@dataclass
+class StakesAnalysisResults:
+    """Complete stakes analysis results."""
+    stakes_profile: StakesProfile
+    personal_stakes_list: List[str]
+    external_stakes_list: List[str]
+    emotional_stakes_list: List[str]
+    stakes_escalation_moments: List[str]
+    consequences_list: List[str]
+    score: float
+    diagnosis: str
+    recommendations: List[str]
+
+
+class DrStakes:
+    """
+    Script Doctor Stakesmon - The Stakes and Consequences Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing stakes clarity,
+    personal/external/emotional stakes, stakes escalation, consequences, audience investment.
+
+    Identity: Script Doctor first, Digimon stakes specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Stakesmon with rules and configuration."""
+        self.name = "Script Doctor Stakesmon"
+        self.digimon_name = "Stakesmon"
+        self.title = "Script Doctor - Stakes and Consequences Analysis Specialist"
+        self.specialty = "Stakes clarity, personal/external/emotional stakes, escalation, consequences, audience investment"
+        self.identity = "I am Script Doctor Stakesmon, a professional Script Doctor™ specializing in stakes analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "stakes_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - STAKES SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Stakes architecture
+            "McKee Story stakes what's at risk protagonist stands lose gain",
+            "McKee Story consequences of failure success stakes clear defined",
+            "McKee Story audience investment emotional stakes we care protagonist",
+            "McKee Story stakes escalation progressive raising mounting pressure building",
+            "McKee Story climax stakes maximized everything at risk supreme moment",
+            "McKee Story personal external emotional stakes multi-layered dimensional depth",
+            "McKee Story gap theory stakes desire vs reality outcome uncertain",
+            "McKee Story value at stake positive negative charge consequences clear",
+
+            # McKee Story - VALUE AT STAKE & GAP THEORY (ultra-specific manual reading)
+            "McKee Story value at stake life death love hate truth lie stakes",
+            "McKee Story gap stakes what protagonist stands lose gain risk clear",
+            "McKee Story stakes escalation gap widens value charge intensifies mounting",
+
+            # Truby Anatomy - Stakes layers
+            "Truby Anatomy personal stakes protagonist character loses gains consequences",
+            "Truby external stakes world level society consequences beyond protagonist",
+            "Truby emotional stakes relationships at risk love loss connection",
+            "Truby stakes desire what protagonist wants goal clear defined",
+            "Truby consequences of failure need transformation required or lost",
+            "Truby opponent stakes pressure mounting opposition escalating threat increasing",
+            "Truby stakes revelation discovery truth exposed consequences irreversible life-changing",
+
+            # Field Screenplay - Stakes clarity
+            "Field Screenplay stakes clear what's at risk audience knows",
+            "Field stakes established early opening first act clarity immediate",
+            "Field consequences of failure success stakes defined understood audience",
+            "Field stakes escalation progressive building tension mounting pressure climax",
+            "Field dramatic need stakes protagonist want obstacle consequences clear",
+            "Field midpoint stakes raised escalation shift pressure intensified urgency",
+            "Field climax stakes maximized everything at risk supreme confrontation",
+
+            # Snyder Save the Cat - Stakes beats
+            "Snyder Save the Cat stakes clear opening what's at risk",
+            "Snyder catalyst stakes established inciting incident consequences initiated",
+            "Snyder break into two stakes commitment journey begins consequences accepted",
+            "Snyder midpoint stakes raised false victory defeat shift escalation",
+            "Snyder all is lost stakes maximized lowest point everything risk",
+            "Snyder finale stakes supreme everything at risk climax confrontation ultimate",
+            "Snyder save the cat stakes likable protagonist we care investment",
+            "Snyder promise premise stakes genre expectations delivered consequences matter",
+
+            # Vogler Writer's Journey - Stakes journey
+            "Vogler Writer's Journey ordeal stakes supreme life death survival",
+            "Vogler stakes escalation tests approach ordeal mounting pressure building",
+            "Vogler threshold crossing stakes commitment consequences accepted journey begun",
+            "Vogler reward stakes earned treasure won transformation achieved consequences",
+            "Vogler resurrection stakes final test death rebirth everything at risk",
+            "Vogler return stakes bringing boon back world consequences for all",
+
+            # Campbell Hero 1000 Faces - Mythic stakes
+            "Campbell Hero 1000 Faces trials stakes tests mounting challenges escalating",
+            "Campbell life death stakes abyss belly whale survival transformation",
+            "Campbell consequences of failure return refusal boon lost world suffers",
+            "Campbell ultimate boon stakes supreme treasure revelation transformation won",
+            "Campbell atonement father stakes confrontation authority reconciliation or destruction",
+
+            # Aristotle Poetics - Tragic stakes
+            "Aristotle Poetics stakes magnitude serious consequences weighty important matters",
+            "Aristotle consequences hamartia tragic flaw character fate destruction reversal",
+            "Aristotle catharsis stakes emotional purification fear pity audience investment",
+            "Aristotle reversal peripeteia stakes fortune shifts consequences irreversible dramatic",
+            "Aristotle recognition anagnorisis stakes truth revealed consequences life-changing",
+
+            # Egri Art Dramatic Writing - Stakes premise
+            "Egri Art Dramatic Writing premise stakes character plus conflict equals",
+            "Egri consequences of choices character fate actions determine outcome",
+            "Egri stakes unity of opposites conflict opposition consequences inevitable",
+            "Egri orchestration stakes multiple characters diverse outcomes consequences varied",
+            "Egri rising stakes escalation conflict intensifying mounting building climax",
+
+            # Seger Making Good Script Great - Stakes craft
+            "Seger Making Good Script Great stakes clear what's at risk",
+            "Seger stakes established early first act opening clarity immediate",
+            "Seger stakes escalation progressive complications mounting building climax",
+            "Seger consequences of failure success payoff stakes defined understood",
+            "Seger audience investment stakes we care protagonist relatable human",
+            "Seger personal external emotional stakes multi-layered dimensional depth complexity",
+            "Seger stakes maximized climax everything at risk supreme moment",
+
+            # Weiland Creating Character Arcs - Stakes arc
+            "Weiland Creating Character Arcs stakes lie believed false truth",
+            "Weiland ghost wound stakes past trauma consequences affecting present",
+            "Weiland want vs need stakes external desire vs internal necessity",
+            "Weiland moment truth stakes supreme test character choice defining",
+            "Weiland stakes escalation arc mirrors internal external synchronized pressure",
+            "Weiland climactic choice stakes lie rejected truth embraced transformation",
+
+            # Goldman Adventures Screen Trade - Audience investment
+            "Goldman Adventures Screen Trade stakes what's at risk audience investment",
+            "Goldman stakes personal character-driven we care protagonist relatable human",
+            "Goldman consequences clear stakes defined understood audience tracks engaged",
+            "Goldman stakes compulsive page-turning engagement investment emotional connection",
+
+            # Rhimes Year of Yes - Emotional stakes
+            "Rhimes Year of Yes stakes emotional investment personal character-driven",
+            "Rhimes stakes relationships at risk love loss connection consequences",
+            "Rhimes audience investment stakes we care characters relatable authentic",
+            "Rhimes stakes escalation mounting pressure building climax everything at risk",
+
+            # Mamet Three Uses of the Knife - Stakes conflict
+            "Mamet Three Uses Knife stakes conflict what's at risk opposition",
+            "Mamet consequences clear stakes defined understood audience engaged invested",
+            "Mamet stakes withholding revelation strategic timing payoff maximized",
+
+            # Mackendrick On Film-Making - Visual stakes
+            "Mackendrick On Film-Making stakes visual consequences shown not told",
+            "Mackendrick stakes cinematic objective obstacle opposition tangible visible",
+
+            # General stakes concepts - comprehensive
+            "stakes clarity what's at risk protagonist stands lose gain clear",
+            "personal stakes protagonist character individual consequences direct immediate",
+            "external stakes world level society beyond protagonist consequences universal",
+            "emotional stakes relationships at risk love loss connection human",
+            "stakes escalation progressive raising mounting building climax maximized supreme",
+            "life death stakes survival ultimate consequences highest stakes possible",
+            "consequences of failure success stakes outcomes defined understood audience",
+            "audience investment we care stakes protagonist relatable human sympathetic",
+            "stakes maximized climax everything at risk supreme moment confrontation",
+            "low stakes nothing at risk audience doesn't care uninvested disengaged",
+            "unclear stakes audience doesn't know what's at risk confused lost",
+            "flat stakes non-escalating static boring audience loses interest disengaged",
+            "stakes multi-layered personal external emotional dimensional depth complexity"
+        ]
+
+        # Stakes analysis patterns (bilingual: EN + PT) - 150-170+ markers
+
+        # Stakes clear markers (what's at risk)
+        self.stakes_clear_markers = [
+            # English
+            "at stake", "what's at risk", "stands to lose", "stands to gain",
+            "everything depends on", "if he fails", "if she wins", "lose everything",
+            "consequences", "the cost", "price of failure", "reward",
+            # Portuguese
+            "em jogo", "o que está em risco", "pode perder", "pode ganhar",
+            "tudo depende de", "se ele falhar", "se ela vencer", "perder tudo",
+            "consequências", "o custo", "preço do fracasso", "recompensa"
+        ]
+
+        # Personal stakes markers (protagonist personal loss/gain)
+        self.personal_stakes_markers = [
+            # English
+            "my life", "my family", "my career", "my reputation", "my future",
+            "I'll lose", "I'll die", "I'll be ruined", "my dream", "my hope",
+            "everything I have", "all I've worked for", "my chance",
+            # Portuguese
+            "minha vida", "minha família", "minha carreira", "minha reputação", "meu futuro",
+            "vou perder", "vou morrer", "serei arruinado", "meu sonho", "minha esperança",
+            "tudo que tenho", "tudo que trabalhei", "minha chance"
+        ]
+
+        # External stakes markers (world-level consequences)
+        self.external_stakes_markers = [
+            # English
+            "the world", "humanity", "civilization", "the country", "the city",
+            "everyone will die", "destroy everything", "save the world", "millions",
+            "apocalypse", "catastrophe", "disaster", "end of the world",
+            # Portuguese
+            "o mundo", "humanidade", "civilização", "o país", "a cidade",
+            "todos vão morrer", "destruir tudo", "salvar o mundo", "milhões",
+            "apocalipse", "catástrofe", "desastre", "fim do mundo"
+        ]
+
+        # Emotional stakes markers (relationships at risk)
+        self.emotional_stakes_markers = [
+            # English
+            "lose you", "lose her", "lose him", "lose them", "relationship",
+            "love", "trust", "friendship", "family bond", "connection",
+            "never speak again", "never forgive", "break up", "abandon",
+            # Portuguese
+            "perder você", "perder ela", "perder ele", "perder eles", "relacionamento",
+            "amor", "confiança", "amizade", "laço familiar", "conexão",
+            "nunca mais falar", "nunca perdoar", "terminar", "abandonar"
+        ]
+
+        # Stakes escalation markers (progressive raising)
+        self.stakes_escalation_markers = [
+            # English
+            "and now", "it gets worse", "but that's not all", "even more",
+            "raise the stakes", "things get worse", "complications", "higher stakes",
+            "more to lose", "everything changes", "turns out", "discover",
+            # Portuguese
+            "e agora", "fica pior", "mas não é tudo", "ainda mais",
+            "aumentar a aposta", "as coisas pioram", "complicações", "apostas maiores",
+            "mais a perder", "tudo muda", "acontece que", "descobrir"
+        ]
+
+        # Life/death stakes markers (survival stakes - highest)
+        self.life_death_stakes_markers = [
+            # English
+            "die", "death", "kill", "murder", "survival", "life or death",
+            "fatal", "deadly", "execute", "assassinate", "live or die",
+            # Portuguese
+            "morrer", "morte", "matar", "assassinar", "sobrevivência", "vida ou morte",
+            "fatal", "mortal", "executar", "assassinar", "viver ou morrer"
+        ]
+
+        # Stakes consequences clear markers (what happens if fail)
+        self.consequences_markers = [
+            # English
+            "if you fail", "if we lose", "then we'll", "the result will be",
+            "consequences", "what happens next", "outcome", "price",
+            # Portuguese
+            "se você falhar", "se perdermos", "então vamos", "o resultado será",
+            "consequências", "o que acontece depois", "resultado", "preço"
+        ]
+
+        # Audience investment markers (we care because protagonist cares)
+        self.audience_investment_markers = [
+            # English
+            "I have to", "I must", "I need to", "it means everything",
+            "this is important", "can't let this happen", "won't allow",
+            "my only chance", "last hope", "desperate",
+            # Portuguese
+            "eu tenho que", "eu devo", "eu preciso", "significa tudo",
+            "isso é importante", "não posso deixar", "não vou permitir",
+            "minha única chance", "última esperança", "desesperado"
+        ]
+
+        # Stakes reinforced markers (reminded throughout)
+        self.stakes_reinforced_markers = [
+            # English
+            "remember what's at stake", "don't forget", "we're running out of time",
+            "remind", "still at risk", "haven't forgotten", "clock is ticking",
+            # Portuguese
+            "lembre o que está em jogo", "não esqueça", "estamos sem tempo",
+            "lembrar", "ainda em risco", "não esqueci", "tempo está correndo"
+        ]
+
+        # Stakes maximized at climax markers (everything at risk)
+        self.climax_stakes_markers = [
+            # English
+            "everything on the line", "all or nothing", "this is it", "final chance",
+            "now or never", "no turning back", "everything depends on this",
+            # Portuguese
+            "tudo em jogo", "tudo ou nada", "é agora", "última chance",
+            "agora ou nunca", "sem volta", "tudo depende disso"
+        ]
+
+        # Low stakes markers (PENALTY - nothing meaningful at risk)
+        self.low_stakes_markers = [
+            # English
+            "doesn't matter", "no big deal", "not important", "who cares",
+            "whatever", "not much at stake", "low stakes", "trivial",
+            # Portuguese
+            "não importa", "não é grande coisa", "não é importante", "quem se importa",
+            "tanto faz", "pouco em jogo", "baixas apostas", "trivial"
+        ]
+
+        # Unclear stakes markers (PENALTY - audience doesn't know what's at risk)
+        self.unclear_stakes_markers = [
+            # English
+            "not sure what", "don't know what", "unclear", "confused",
+            "what's the point", "why does it matter", "so what",
+            # Portuguese
+            "não sei o que", "não entendo", "não claro", "confuso",
+            "qual o ponto", "por que importa", "e daí"
+        ]
+
+        # Non-escalating stakes markers (PENALTY - flat stakes throughout)
+        self.non_escalating_markers = [
+            # English
+            "same stakes", "no worse", "no higher", "still the same",
+            "flat", "unchanging", "static stakes", "not escalating",
+            # Portuguese
+            "mesmas apostas", "não pior", "não maior", "ainda o mesmo",
+            "plano", "sem mudança", "apostas estáticas", "não aumentando"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze stakes in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete stakes diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract opening (first 15-20 pages) for stakes establishment
+        opening_text = self._extract_pages(screenplay_text, 0, 20)
+
+        # Extract Act 2 for stakes escalation
+        act2_text = self._extract_pages(screenplay_text, int(page_count * 0.25), int(page_count * 0.75))
+
+        # Extract climax (last 15 pages) for stakes maximization
+        climax_text = self._extract_pages(screenplay_text, max(0, page_count - 15), page_count)
+
+        # Analyze stakes clear (what's at risk)
+        stakes_clear = self._analyze_stakes_clear(screenplay_text, opening_text)
+
+        # Analyze stakes established early (first 15-20 pages)
+        stakes_early = self._analyze_stakes_established_early(opening_text)
+
+        # Analyze personal stakes (protagonist personal loss/gain)
+        personal_stakes = self._analyze_personal_stakes(screenplay_text)
+
+        # Analyze external stakes (world-level consequences)
+        external_stakes = self._analyze_external_stakes(screenplay_text)
+
+        # Analyze emotional stakes (relationships at risk)
+        emotional_stakes = self._analyze_emotional_stakes(screenplay_text)
+
+        # Analyze stakes escalation (progressive raising)
+        stakes_escalation = self._analyze_stakes_escalation(act2_text, screenplay_text)
+
+        # Analyze life/death stakes (survival stakes)
+        life_death_stakes = self._analyze_life_death_stakes(screenplay_text)
+
+        # Analyze consequences clear (what happens if fail)
+        consequences = self._analyze_consequences_clear(screenplay_text)
+
+        # Analyze audience investment (we care because protagonist cares)
+        audience_investment = self._analyze_audience_investment(screenplay_text)
+
+        # Analyze stakes reinforced (reminded throughout)
+        stakes_reinforced = self._analyze_stakes_reinforced(screenplay_text)
+
+        # Analyze stakes maximized at climax (everything at risk)
+        climax_stakes = self._analyze_climax_stakes(climax_text)
+
+        # Detect low stakes (PENALTY - nothing meaningful at risk)
+        low_stakes = self._detect_low_stakes(screenplay_text)
+
+        # Detect unclear stakes (PENALTY - audience doesn't know what's at risk)
+        unclear_stakes = self._detect_unclear_stakes(screenplay_text)
+
+        # Detect non-escalating stakes (PENALTY - flat stakes throughout)
+        non_escalating = self._detect_non_escalating_stakes(stakes_escalation)
+
+        # Build stakes profile
+        stakes_profile = StakesProfile(
+            stakes_clear=stakes_clear["clear"],
+            stakes_established_early=stakes_early["established"],
+            personal_stakes_present=personal_stakes["present"],
+            external_stakes_present=external_stakes["present"],
+            emotional_stakes_present=emotional_stakes["present"],
+            stakes_escalation=stakes_escalation["escalation"],
+            life_death_stakes=life_death_stakes["present"],
+            stakes_consequences_clear=consequences["clear"],
+            audience_investment=audience_investment["score"],
+            stakes_reinforced=stakes_reinforced["reinforced"],
+            stakes_maximized_at_climax=climax_stakes["maximized"],
+            low_stakes_detected=low_stakes["detected"],
+            unclear_stakes_detected=unclear_stakes["detected"],
+            non_escalating_stakes=non_escalating["detected"],
+            overall_stakes_quality=0.0  # calculated below
+        )
+
+        # Calculate overall stakes quality
+        stakes_profile.overall_stakes_quality = self._calculate_overall_stakes_quality(stakes_profile)
+
+        # Check against rules
+        rule_violations = self._check_stakes_rules(
+            stakes_profile, stakes_clear, stakes_early, personal_stakes,
+            external_stakes, emotional_stakes, stakes_escalation,
+            life_death_stakes, consequences, audience_investment,
+            stakes_reinforced, climax_stakes, low_stakes, unclear_stakes, non_escalating
+        )
+
+        # Calculate score
+        score = self._calculate_stakes_score(stakes_profile, rule_violations)
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(score, stakes_profile, rule_violations)
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "stakes_clear": {
+                "clear": stakes_clear["clear"],
+                "count": stakes_clear["count"]
+            },
+            "stakes_established_early": {
+                "established": stakes_early["established"],
+                "description": stakes_early.get("description", "")
+            },
+            "personal_stakes": {
+                "present": personal_stakes["present"],
+                "stakes_list": personal_stakes["stakes_list"][:10]
+            },
+            "external_stakes": {
+                "present": external_stakes["present"],
+                "stakes_list": external_stakes["stakes_list"][:10]
+            },
+            "emotional_stakes": {
+                "present": emotional_stakes["present"],
+                "stakes_list": emotional_stakes["stakes_list"][:10]
+            },
+            "stakes_escalation": {
+                "escalation": stakes_escalation["escalation"],
+                "moments": stakes_escalation["moments"][:10]
+            },
+            "life_death_stakes": {
+                "present": life_death_stakes["present"],
+                "count": life_death_stakes["count"]
+            },
+            "consequences": {
+                "clear": consequences["clear"],
+                "consequences_list": consequences["consequences_list"][:10]
+            },
+            "audience_investment": {
+                "score": audience_investment["score"]
+            },
+            "stakes_reinforced": {
+                "reinforced": stakes_reinforced["reinforced"],
+                "count": stakes_reinforced["count"]
+            },
+            "climax_stakes": {
+                "maximized": climax_stakes["maximized"]
+            },
+            "low_stakes": {
+                "detected": low_stakes["detected"],
+                "penalty": low_stakes.get("penalty", False)
+            },
+            "unclear_stakes": {
+                "detected": unclear_stakes["detected"],
+                "penalty": unclear_stakes.get("penalty", False)
+            },
+            "non_escalating_stakes": {
+                "detected": non_escalating["detected"],
+                "penalty": non_escalating.get("penalty", False)
+            },
+            "overall_stakes_quality": stakes_profile.overall_stakes_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, stakes_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_pages(self, screenplay: str, start_page: int, end_page: int) -> str:
+        """Extract specific page range from screenplay."""
+        lines = screenplay.split('\n')
+        start_line = start_page * 55
+        end_line = end_page * 55
+        return '\n'.join(lines[start_line:end_line])
+
+    def _analyze_stakes_clear(self, screenplay: str, opening_text: str) -> Dict[str, Any]:
+        """
+        Analyze stakes clarity (what's at risk).
+
+        McKee/Field: "Stakes must be clear - audience knows what protagonist stands to lose/gain."
+        """
+        clear = False
+
+        # Check for stakes clear markers
+        stakes_count = 0
+        for marker in self.stakes_clear_markers:
+            stakes_count += screenplay.lower().count(marker)
+
+        if stakes_count >= 5:
+            clear = True
+        elif stakes_count >= 3:
+            clear = True
+
+        return {
+            "clear": clear,
+            "count": stakes_count
+        }
+
+    def _analyze_stakes_established_early(self, opening_text: str) -> Dict[str, Any]:
+        """
+        Analyze stakes established early (first 15-20 pages).
+
+        Field/Snyder: "Stakes must be established early - first 15-20 pages."
+        """
+        established = False
+        description = ""
+
+        # Check for stakes markers in opening
+        opening_stakes_count = 0
+        for marker in self.stakes_clear_markers:
+            opening_stakes_count += opening_text.lower().count(marker)
+
+        if opening_stakes_count >= 3:
+            established = True
+            description = "Stakes clearly established in opening"
+        elif opening_stakes_count >= 2:
+            established = True
+            description = "Stakes established but could be clearer"
+        else:
+            description = "Stakes not established in opening"
+
+        return {
+            "established": established,
+            "count": opening_stakes_count,
+            "description": description
+        }
+
+    def _analyze_personal_stakes(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze personal stakes (protagonist personal loss/gain).
+
+        McKee/Truby: "Personal stakes = what protagonist stands to lose/gain personally."
+        """
+        present = False
+        stakes_list = []
+
+        # Check for personal stakes markers
+        personal_count = 0
+        for marker in self.personal_stakes_markers:
+            count = screenplay.lower().count(marker)
+            personal_count += count
+            if count > 0:
+                # Extract personal stakes context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        stakes_list.append(line.strip()[:100])
+                        if len(stakes_list) >= 20:
+                            break
+
+        if personal_count >= 5:
+            present = True
+        elif personal_count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": personal_count,
+            "stakes_list": stakes_list
+        }
+
+    def _analyze_external_stakes(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze external stakes (world-level consequences).
+
+        Truby: "External stakes = what world/others stand to lose/gain."
+        """
+        present = False
+        stakes_list = []
+
+        # Check for external stakes markers
+        external_count = 0
+        for marker in self.external_stakes_markers:
+            count = screenplay.lower().count(marker)
+            external_count += count
+            if count > 0:
+                # Extract external stakes context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        stakes_list.append(line.strip()[:100])
+                        if len(stakes_list) >= 20:
+                            break
+
+        if external_count >= 3:
+            present = True
+        elif external_count >= 2:
+            present = True
+
+        return {
+            "present": present,
+            "count": external_count,
+            "stakes_list": stakes_list
+        }
+
+    def _analyze_emotional_stakes(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze emotional stakes (relationships at risk).
+
+        McKee: "Emotional stakes = relationships at risk - love, trust, friendship."
+        """
+        present = False
+        stakes_list = []
+
+        # Check for emotional stakes markers
+        emotional_count = 0
+        for marker in self.emotional_stakes_markers:
+            count = screenplay.lower().count(marker)
+            emotional_count += count
+            if count > 0:
+                # Extract emotional stakes context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        stakes_list.append(line.strip()[:100])
+                        if len(stakes_list) >= 20:
+                            break
+
+        if emotional_count >= 5:
+            present = True
+        elif emotional_count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": emotional_count,
+            "stakes_list": stakes_list
+        }
+
+    def _analyze_stakes_escalation(self, act2_text: str, full_text: str) -> Dict[str, Any]:
+        """
+        Analyze stakes escalation (progressive raising).
+
+        McKee/Field: "Stakes must escalate progressively - get worse throughout story."
+        """
+        escalation = 0.0
+        moments = []
+
+        # Check for stakes escalation markers
+        escalation_count = 0
+        for marker in self.stakes_escalation_markers:
+            count = full_text.lower().count(marker)
+            escalation_count += count
+            if count > 0:
+                # Extract escalation moments
+                for line in full_text.split('\n'):
+                    if marker in line.lower():
+                        moments.append(line.strip()[:100])
+                        if len(moments) >= 20:
+                            break
+
+        # Calculate escalation score (more escalation markers = progressive raising)
+        if escalation_count >= 10:
+            escalation = 1.0
+        elif escalation_count >= 7:
+            escalation = 0.8
+        elif escalation_count >= 5:
+            escalation = 0.6
+        elif escalation_count >= 3:
+            escalation = 0.4
+        else:
+            escalation = 0.2
+
+        return {
+            "escalation": escalation,
+            "count": escalation_count,
+            "moments": moments
+        }
+
+    def _analyze_life_death_stakes(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze life/death stakes (survival stakes - highest).
+
+        McKee/Vogler: "Life/death stakes = survival stakes - highest possible stakes."
+        """
+        present = False
+
+        # Check for life/death stakes markers
+        life_death_count = 0
+        for marker in self.life_death_stakes_markers:
+            life_death_count += screenplay.lower().count(marker)
+
+        if life_death_count >= 5:
+            present = True
+        elif life_death_count >= 3:
+            present = True
+
+        return {
+            "present": present,
+            "count": life_death_count
+        }
+
+    def _analyze_consequences_clear(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze consequences clear (what happens if fail).
+
+        McKee/Field: "Consequences must be clear - audience knows what happens if protagonist fails."
+        """
+        clear = False
+        consequences_list = []
+
+        # Check for consequences markers
+        consequences_count = 0
+        for marker in self.consequences_markers:
+            count = screenplay.lower().count(marker)
+            consequences_count += count
+            if count > 0:
+                # Extract consequences context
+                for line in screenplay.split('\n'):
+                    if marker in line.lower():
+                        consequences_list.append(line.strip()[:100])
+                        if len(consequences_list) >= 20:
+                            break
+
+        if consequences_count >= 5:
+            clear = True
+        elif consequences_count >= 3:
+            clear = True
+
+        return {
+            "clear": clear,
+            "count": consequences_count,
+            "consequences_list": consequences_list
+        }
+
+    def _analyze_audience_investment(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze audience investment (we care because protagonist cares).
+
+        McKee: "Audience investment = we care about stakes because protagonist cares deeply."
+        """
+        score = 0.0
+
+        # Check for audience investment markers
+        investment_count = 0
+        for marker in self.audience_investment_markers:
+            investment_count += screenplay.lower().count(marker)
+
+        # Calculate investment score (protagonist cares = audience cares)
+        if investment_count >= 10:
+            score = 1.0
+        elif investment_count >= 7:
+            score = 0.8
+        elif investment_count >= 5:
+            score = 0.6
+        elif investment_count >= 3:
+            score = 0.4
+        else:
+            score = 0.2
+
+        return {
+            "score": score,
+            "count": investment_count
+        }
+
+    def _analyze_stakes_reinforced(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze stakes reinforced (reminded throughout).
+
+        Field: "Stakes must be reinforced throughout - remind audience what's at risk."
+        """
+        reinforced = False
+
+        # Check for stakes reinforced markers
+        reinforced_count = 0
+        for marker in self.stakes_reinforced_markers:
+            reinforced_count += screenplay.lower().count(marker)
+
+        if reinforced_count >= 3:
+            reinforced = True
+        elif reinforced_count >= 2:
+            reinforced = True
+
+        return {
+            "reinforced": reinforced,
+            "count": reinforced_count
+        }
+
+    def _analyze_climax_stakes(self, climax_text: str) -> Dict[str, Any]:
+        """
+        Analyze stakes maximized at climax (everything at risk).
+
+        McKee: "Stakes must be maximized at climax - everything protagonist has at risk."
+        """
+        maximized = False
+
+        # Check for climax stakes markers
+        climax_count = 0
+        for marker in self.climax_stakes_markers:
+            climax_count += climax_text.lower().count(marker)
+
+        # Also check for high stakes markers in climax
+        for marker in self.stakes_clear_markers:
+            climax_count += climax_text.lower().count(marker)
+
+        if climax_count >= 5:
+            maximized = True
+        elif climax_count >= 3:
+            maximized = True
+
+        return {
+            "maximized": maximized,
+            "count": climax_count
+        }
+
+    def _detect_low_stakes(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect low stakes (PENALTY - nothing meaningful at risk).
+
+        Low stakes = nothing meaningful at risk - audience doesn't care.
+        """
+        detected = False
+        penalty = False
+
+        # Check for low stakes markers
+        low_count = 0
+        for marker in self.low_stakes_markers:
+            low_count += screenplay.lower().count(marker)
+
+        if low_count >= 3:
+            detected = True
+            penalty = True
+        elif low_count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": low_count
+        }
+
+    def _detect_unclear_stakes(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect unclear stakes (PENALTY - audience doesn't know what's at risk).
+
+        Unclear stakes = audience doesn't know what's at risk - confusion.
+        """
+        detected = False
+        penalty = False
+
+        # Check for unclear stakes markers
+        unclear_count = 0
+        for marker in self.unclear_stakes_markers:
+            unclear_count += screenplay.lower().count(marker)
+
+        if unclear_count >= 3:
+            detected = True
+            penalty = True
+        elif unclear_count >= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "count": unclear_count
+        }
+
+    def _detect_non_escalating_stakes(self, stakes_escalation: Dict) -> Dict[str, Any]:
+        """
+        Detect non-escalating stakes (PENALTY - flat stakes throughout).
+
+        Non-escalating stakes = stakes don't increase - flat tension.
+        """
+        detected = False
+        penalty = False
+
+        # Check stakes escalation score
+        if stakes_escalation["escalation"] < 0.4:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "escalation": stakes_escalation["escalation"]
+        }
+
+    def _calculate_overall_stakes_quality(self, profile: StakesProfile) -> float:
+        """Calculate overall stakes quality score."""
+        scores = [
+            1.0 if profile.stakes_clear else 0.3,
+            1.0 if profile.stakes_established_early else 0.5,
+            1.0 if profile.personal_stakes_present else 0.4,
+            1.0 if profile.external_stakes_present else 0.7,  # Not always needed
+            1.0 if profile.emotional_stakes_present else 0.6,
+            profile.stakes_escalation,
+            1.0 if profile.life_death_stakes else 0.7,  # Not always needed
+            1.0 if profile.stakes_consequences_clear else 0.4,
+            profile.audience_investment,
+            1.0 if profile.stakes_reinforced else 0.6,
+            1.0 if profile.stakes_maximized_at_climax else 0.4,
+            0.0 if profile.low_stakes_detected else 1.0,  # PENALTY
+            0.0 if profile.unclear_stakes_detected else 1.0,  # PENALTY
+            0.0 if profile.non_escalating_stakes else 1.0  # PENALTY
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_stakes_rules(self, profile: StakesProfile, stakes_clear: Dict,
+                           stakes_early: Dict, personal_stakes: Dict,
+                           external_stakes: Dict, emotional_stakes: Dict,
+                           stakes_escalation: Dict, life_death_stakes: Dict,
+                           consequences: Dict, audience_investment: Dict,
+                           stakes_reinforced: Dict, climax_stakes: Dict,
+                           low_stakes: Dict, unclear_stakes: Dict,
+                           non_escalating: Dict) -> List[Dict]:
+        """Check stakes against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "STAKES.R001":
+                # Stakes Clear
+                if not profile.stakes_clear:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Stakes unclear - audience doesn't know what's at risk",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R002":
+                # Stakes Established Early
+                if not profile.stakes_established_early:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Stakes not established in first 15-20 pages",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R003":
+                # Personal Stakes Present
+                if not profile.personal_stakes_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Personal stakes weak - protagonist has little personal investment",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R004":
+                # Emotional Stakes Present
+                if not profile.emotional_stakes_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Emotional stakes weak - relationships not at risk",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R005":
+                # Stakes Escalation
+                if profile.stakes_escalation < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Stakes escalation weak ({profile.stakes_escalation:.1f}/1.0) - stakes not progressively raised",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R006":
+                # Consequences Clear
+                if not profile.stakes_consequences_clear:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Consequences unclear - audience doesn't know what happens if protagonist fails",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R007":
+                # Audience Investment
+                if profile.audience_investment < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Audience investment low ({profile.audience_investment:.1f}/1.0) - protagonist doesn't care enough",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R008":
+                # Stakes Reinforced
+                if not profile.stakes_reinforced:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Stakes not reinforced throughout - audience forgets what's at risk",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R009":
+                # Stakes Maximized at Climax
+                if not profile.stakes_maximized_at_climax:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Stakes not maximized at climax - everything should be at risk",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R010":
+                # Avoid Low Stakes
+                if profile.low_stakes_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Low stakes detected - nothing meaningful at risk",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R011":
+                # Avoid Unclear Stakes
+                if profile.unclear_stakes_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Unclear stakes detected - audience doesn't know what's at risk",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R012":
+                # Avoid Non-Escalating Stakes
+                if profile.non_escalating_stakes:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Non-escalating stakes - stakes remain flat throughout",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R013":
+                # Multiple Stakes Layers
+                layers = sum([
+                    profile.personal_stakes_present,
+                    profile.external_stakes_present,
+                    profile.emotional_stakes_present
+                ])
+                if layers < 2:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Limited stakes layers ({layers}/3) - needs personal + emotional + external",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "STAKES.R014":
+                # Stakes Proportional to Genre
+                # Genre-specific check would require genre detection
+                pass
+
+            elif rule["id"] == "STAKES.R015":
+                # External Stakes (if applicable)
+                # Optional check - not all stories need external stakes
+                pass
+
+        return violations
+
+    def _calculate_stakes_score(self, profile: StakesProfile, violations: List) -> float:
+        """Calculate overall stakes score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for major issues
+        if profile.low_stakes_detected:
+            score -= 25  # critical penalty
+        if profile.unclear_stakes_detected:
+            score -= 20  # major penalty
+        if profile.non_escalating_stakes:
+            score -= 15
+
+        # Bonus for excellence
+        if profile.overall_stakes_quality > 0.85:
+            score += 5
+        elif profile.overall_stakes_quality > 0.75:
+            score += 3
+
+        if profile.stakes_clear and profile.stakes_established_early:
+            score += 3
+
+        if profile.stakes_escalation > 0.8:
+            score += 3
+
+        if profile.audience_investment > 0.8:
+            score += 2
+
+        if profile.stakes_maximized_at_climax:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: StakesProfile,
+                          violations: List) -> str:
+        """Generate stakes diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Stakes clear and escalating with strong audience investment"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Stakes present but could escalate more"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Stakes problems - unclear or not escalating"
+        else:
+            level = "POOR"
+            summary = "Major stakes problems - low stakes or flat"
+
+        diagnosis = f"STAKES {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.stakes_clear:
+            issues.append("unclear stakes")
+        if not profile.stakes_established_early:
+            issues.append("late stakes")
+        if profile.low_stakes_detected:
+            issues.append("low stakes")
+        if profile.unclear_stakes_detected:
+            issues.append("confusing")
+        if profile.non_escalating_stakes:
+            issues.append("flat stakes")
+        if profile.stakes_escalation < 0.5:
+            issues.append("weak escalation")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: StakesProfile) -> List[str]:
+        """Generate specific stakes recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.stakes_clear:
+            recommendations.append("Clarify stakes - McKee/Field: 'Stakes must be clear - what does protagonist stand to lose/gain?' - establish what's at risk")
+
+        if not profile.stakes_established_early:
+            recommendations.append("Establish stakes early - Field: 'Stakes must be clear in first 15-20 pages' - don't wait to reveal what's at risk")
+
+        if profile.low_stakes_detected:
+            recommendations.append("Raise stakes - McKee: 'Nothing meaningful at risk = audience doesn't care' - increase consequences of failure")
+
+        if profile.non_escalating_stakes:
+            recommendations.append("Escalate stakes - Field: 'Stakes must progressively raise' - make things worse through Act 2, maximize at climax")
+
+        if profile.audience_investment < 0.5:
+            recommendations.append("Increase protagonist investment - McKee: 'Audience cares because protagonist cares' - show protagonist's deep personal investment")
+
+        if not profile.stakes_maximized_at_climax:
+            recommendations.append("Maximize stakes at climax - McKee: 'Everything protagonist has should be at risk at climax' - all or nothing moment")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - stakes and consequences fundamental")
+            recommendations.append("Study Field's Screenplay - stakes escalation essential")
+
+        return recommendations[:5]
+
+    def export_stakes_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export stakes features for correlation/analysis.
+
+        Returns structured data with stakes metrics.
+        """
+        page_count = self._estimate_page_count(screenplay_text)
+        opening_text = self._extract_pages(screenplay_text, 0, 20)
+        stakes_clear = self._analyze_stakes_clear(screenplay_text, opening_text)
+        personal_stakes = self._analyze_personal_stakes(screenplay_text)
+
+        return {
+            "stakes": {
+                "clear": stakes_clear["clear"],
+                "personal_present": personal_stakes["present"]
+            },
+            "meta": {
+                "source": "DrStakes",
+                "focus": "Stakes clarity and escalation"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrStakesAnalysis(DrStakes):
+    """Alias for compatibility with test framework."""
+    pass

@@ -1,0 +1,216 @@
+{
+  "analysis": {
+    "title": "The Art of Dramatic Writing by Lajos Egri",
+    "concepts": [
+      {
+        "text": "Dramatic writing is a craft that requires careful planning, structure, and character development to create compelling stories."
+      },
+      {
+        "text": "The foundation of dramatic writing is the premise, which is a statement that summarizes the central conflict or theme of the story."
+      },
+      {
+        "text": "Characters are the driving force of a story and must be well-developed with clear motivations, desires, and flaws."
+      },
+      {
+        "text": "Conflict is essential to drama and arises when characters have opposing goals or desires."
+      },
+      {
+        "text": "Dialogue should reveal character, advance the plot, and create tension between characters."
+      },
+      {
+        "text": "Setting is an important element of dramatic writing as it establishes the time and place of the story and can influence the characters' actions and decisions."
+      },
+      {
+        "text": "Plot structure is crucial to a successful play, with a clear beginning, middle, and end that builds to a climax and resolution."
+      },
+      {
+        "text": "Themes are recurring ideas or messages that run throughout the story and give it deeper meaning."
+      },
+      {
+        "text": "Subtext is the underlying meaning or emotion behind a character's words or actions, which can add depth and complexity to the story."
+      },
+      {
+        "text": "Exposition is the background information needed to understand the story, which should be gradually revealed throughout the play rather than all at once."
+      },
+      {
+        "text": "Tension is created when characters face obstacles or challenges that create uncertainty and anticipation for the audience."
+      },
+      {
+        "text": "Suspense is created when the outcome of a situation is uncertain, keeping the audience engaged and invested in the story."
+      },
+      {
+        "text": "Resolution is the satisfying conclusion to a story that provides closure and answers to the central conflict or theme."
+      },
+      {
+        "text": "Genre refers to the category or type of play, such as tragedy, comedy, or drama."
+      },
+      {
+        "text": "Point of view refers to the perspective from which the story is told, whether it is from a single character's perspective or an omniscient narrator."
+      }
+    ],
+    "concept_graph": [
+      {
+        "parent": "dramatic writing",
+        "children": [
+          "premise",
+          "characters",
+          "conflict",
+          "dialogue",
+          "setting",
+          "plot structure",
+          "themes",
+          "subtext",
+          "exposition",
+          "tension",
+          "suspense",
+          "resolution",
+          "genre",
+          "point of view"
+        ]
+      },
+      {
+        "parent": "premise",
+        "children": []
+      },
+      {
+        "parent": "characters",
+        "children": [
+          "motivations",
+          "desires",
+          "flaws"
+        ]
+      },
+      {
+        "parent": "conflict",
+        "children": []
+      },
+      {
+        "parent": "dialogue",
+        "children": [
+          "reveal character",
+          "advance plot",
+          "create tension"
+        ]
+      },
+      {
+        "parent": "setting",
+        "children": []
+      },
+      {
+        "parent": "plot structure",
+        "children": [
+          "beginning",
+          "middle",
+          "end",
+          "climax",
+          "resolution"
+        ]
+      },
+      {
+        "parent": "themes",
+        "children": []
+      },
+      {
+        "parent": "subtext",
+        "children": []
+      },
+      {
+        "parent": "exposition",
+        "children": []
+      },
+      {
+        "parent": "tension",
+        "children": []
+      },
+      {
+        "parent": "suspense",
+        "children": []
+      },
+      {
+        "parent": "resolution",
+        "children": []
+      },
+      {
+        "parent": "genre",
+        "children": []
+      },
+      {
+        "parent": "point of view",
+        "children": []
+      }
+    ],
+    "vocabulary": [
+      "premise",
+      "characters",
+      "conflict",
+      "dialogue",
+      "setting",
+      "plot structure",
+      "themes",
+      "subtext",
+      "exposition",
+      "tension",
+      "suspense",
+      "resolution",
+      "genre",
+      "point of view",
+      "motivations",
+      "desires",
+      "flaws",
+      "climax",
+      "omniscient narrator"
+    ],
+    "examples": [
+      {
+        "text": "In A Doll's House by Henrik Ibsen, the premise is 'a woman must find herself before she can truly belong to her family.' The main character, Nora, is a well-developed character with clear motivations, desires, and flaws. The conflict arises when Nora is faced with a difficult decision that challenges her sense of self and her relationships with her husband and children. The dialogue reveals character and creates tension between the characters. The setting, a Victorian home in Norway, establishes the time and place of the story and influences the characters' actions and decisions. The plot structure builds to a climax and resolution. The themes include identity, gender roles, and societal expectations."
+      },
+      {
+        "text": "In Romeo and Juliet by William Shakespeare, the premise is 'star-crossed lovers defy their families' feud to be together.' The main characters, Romeo and Juliet, are well-developed with clear motivations, desires, and flaws. The conflict arises when their families' feud threatens their love. The dialogue reveals character and creates tension between the characters. The setting, Verona, Italy during the Renaissance, establishes the time and place of the story and influences the characters' actions and decisions. The plot structure builds to a climax and resolution. The themes include love, fate, and family."
+      },
+      {
+        "text": "In Death of a Salesman by Arthur Miller, the premise is 'a man struggles to maintain his dignity in the face of failure.' The main character, Willy Loman, is a well-developed character with clear motivations, desires, and flaws. The conflict arises when Willy's failures threaten his sense of self and his relationships with his family. The dialogue reveals character and creates tension between the characters. The setting, a suburban home in the 1940s, establishes the time and place of the story and influences the characters' actions and decisions. The plot structure builds to a climax and resolution. The themes include identity, masculinity, and the American Dream."
+      }
+    ],
+    "quotes": [
+      {
+        "text": "The premise is the soul of the play."
+      },
+      {
+        "text": "Characters are the foundation of a play. If they are not believable, nothing else matters."
+      },
+      {
+        "text": "Dialogue should be like icebergs: only one-tenth above water."
+      },
+      {
+        "text": "The setting is more than just background; it influences the characters' actions and decisions."
+      },
+      {
+        "text": "Plot structure is the skeleton of a play. Without it, there is no story."
+      },
+      {
+        "text": "Themes give a play depth and meaning beyond the surface story."
+      },
+      {
+        "text": "Subtext adds layers of complexity to a character's words and actions."
+      },
+      {
+        "text": "Exposition should be woven throughout the play, not dumped all at once."
+      },
+      {
+        "text": "Tension keeps the audience engaged and on the edge of their seats."
+      },
+      {
+        "text": "Suspense keeps the audience invested in the story, wondering what will happen next."
+      },
+      {
+        "text": "Resolution provides a satisfying conclusion to the story and answers the central conflict or theme."
+      },
+      {
+        "text": "Genre helps define the tone and style of a play."
+      },
+      {
+        "text": "Point of view determines whose perspective the story is told from, which can influence the audience's interpretation of the story."
+      }
+    ]
+  }
+}

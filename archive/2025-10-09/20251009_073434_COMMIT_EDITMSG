@@ -1,0 +1,27 @@
+🔥 CRÍTICO: Adicionar READMEs de uso correto do Triple-Core
+
+Problema identificado:
+- Claude esquece de usar TripleCoreWrapper
+- Usa apenas Core 1 (Python) perdendo 2/3 do sistema
+- Perde Core 2 (Theory Index) e Core 3 (LLM)
+
+Solução:
+- 🔥🔥🔥TRIPLE_CORE_USAGE🔥🔥🔥.md (raiz)
+- 🔥🔥🔥COMO_USAR_TRIPLE_CORE_DRDIALOGUE🔥🔥🔥.md (dialogue/)
+
+Behavioral hack UCHIMON:
+- Arquivos com 🔥 aparecem em system-reminders
+- Força lembrança do uso correto
+- Exemplos completos de código
+- Regra de ouro clara
+
+SEMPRE usar:
+wrapper = TripleCoreWrapper(specialist, llm_model, deep_context=True)
+result = wrapper.analyze(screenplay)
+
+NUNCA usar apenas:
+result = specialist.analyze(screenplay)  # ← Só 1/3 do sistema!
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>

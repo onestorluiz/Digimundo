@@ -1,0 +1,16 @@
+2025-09-09 18:54:46,933 - apps.scripturemon.quadruple_pipeline - INFO - 🔄 Pipeline Quádruplo Robusto inicializado
+2025-09-09 18:54:46,933 - apps.scripturemon.quadruple_pipeline - INFO -    Modelos disponíveis: 12
+2025-09-09 18:54:46,933 - apps.scripturemon.quadruple_pipeline - INFO - Using normal mode (no deep triggers found)
+2025-09-09 18:54:46,933 - apps.scripturemon.quadruple_pipeline - INFO - === STARTING QUADRUPLE PIPELINE - Mode: normal ===
+2025-09-09 18:54:46,933 - apps.scripturemon.quadruple_pipeline - INFO - Input length: 67 chars
+2025-09-09 18:54:46,933 - apps.scripturemon.quadruple_pipeline - INFO - >>> Stage: extract
+2025-09-09 18:54:46,933 - apps.scripturemon.quadruple_pipeline - INFO - [extract] Starting - Model: deepseek-r1:7b (light), Timeout: 30s
+2025-09-09 18:55:16,937 - apps.scripturemon.quadruple_pipeline - WARNING - [extract] Timeout: Stage extract timed out after 30s
+2025-09-09 18:55:16,937 - apps.scripturemon.quadruple_pipeline - INFO - [extract] FAILED - Duration: 30004ms
+2025-09-09 18:55:16,937 - apps.scripturemon.quadruple_pipeline - INFO - [extract] Output length: 0 chars
+2025-09-09 18:55:16,937 - apps.scripturemon.quadruple_pipeline - INFO - >>> Stage: analyze
+2025-09-09 18:55:16,937 - apps.scripturemon.quadruple_pipeline - INFO - [analyze] Starting - Model: deepseek-r1:32b (heavy), Timeout: 60s
+2025-09-09 18:55:47,600 - apps.scripturemon.quadruple_pipeline - INFO - [analyze] SUCCESS - Duration: 30662ms
+2025-09-09 18:55:47,600 - apps.scripturemon.quadruple_pipeline - INFO - [analyze] Output length: 2975 chars
+2025-09-09 18:55:47,600 - apps.scripturemon.quadruple_pipeline - INFO - >>> Stage: evaluate
+2025-09-09 18:55:47,600 - apps.scripturemon.quadruple_pipeline - INFO - [evaluate] Starting - Model: deepseek-r1:70b (heavy), Timeout: 90s

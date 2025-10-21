@@ -1,0 +1,32 @@
+
+DIGILANG V8.1 SUPREME - RELATÓRIO BATCH PROCESSING
+================================================
+Processamento: 2025-09-14T13:14:55.037271 até 2025-09-14T13:15:52.632326
+Tempo total: 57.60 segundos
+
+📊 ESTATÍSTICAS GERAIS
+=====================
+Total de arquivos: 59
+Processados com sucesso: 55
+Falhas: 4
+Taxa de sucesso: 93.2%
+
+🔥 COMPRESSÃO
+=============
+Tokens originais: 3,969,892
+Tokens comprimidos: 3,965,066
+Economia total: 4,826 tokens
+Taxa média de compressão: 0.17%
+Total de padrões aplicados: 3,966
+
+🏆 MELHORES E PIORES
+==================
+Melhor compressão: The Two Towers - Screenplay.pdf (1.39%)
+Pior compressão: Making-a-Good-Script-Great_-Revised-_-Expanded-Seger_-Linda-3_-ed__-rev_-_-expanded_-_1_-Silman-Jame.pdf (-0.01%)
+
+📁 POR TIPO DE ARQUIVO
+=====================
+.PDF: 53 arquivos - 0.17% compressão média
+.TXT: 2 arquivos - 0.08% compressão média
+
+⚠️ Abaixo da meta: 0.17% (meta: 20%)

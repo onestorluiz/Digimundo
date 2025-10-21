@@ -1,0 +1,19 @@
+CHAVES QUE PRECISAM SER FORNECIDAS POR UM HUMANO:
+----------------------------------------
+openai
+tmdb
+omdb
+google_books
+unsplash
+pexels
+notion
+youtube
+europeana
+digipool
+chat_nucleo
+espelho_simbolico
+tora_integradora
+sistema_guardioes
+backup_externo
+explorador_extensao
+interface_dinamica

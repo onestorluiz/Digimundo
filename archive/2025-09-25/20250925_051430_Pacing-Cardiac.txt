@@ -1,0 +1,117 @@
+🫀 PHASE 1: VITAL SIGNS CHECK (175 words)
+
+**Heart Rate (Scene Tempo):**
+- Resting: Pages 1-3 baseline BPM (60 BPM)
+- Current: Present pacing speed (90 BPM)
+- Target Zone: Optimal for genre - Thriller/Suspense (70-90 BPM)
+- Bradycardia: Not present (within target zone)
+- Tachycardia: Momentarily at 120 BPM during climax, but quickly returns to normal range.
+
+**Blood Pressure (Dramatic Tension):**
+- Systolic peaks: Climax moment - BANG (140 mmHg)
+- Diastolic valleys: Rest periods - Conversation between Alex and Jordan (80 mmHg)
+- Hypertension: Not present
+- Hypotension: Not present
+
+**Pulse Pattern Recognition:**
+- Regular rhythm: Predictable pacing
+- Arrhythmia: Absent
+- Flutter: Absent
+- Fibrillation: Absent
+
+**Cardiac Output (Story Energy):**
+Calculated energy delivery per page - Conflict × Stakes × Pace = Energy
+- Page 1: 0 × 2 × 60 = 0 J/page
+- Page 2: 1 × 2 × 90 = 180 J/page
+- Page 3: 1 × 3 × 120 = 360 J/page
+Total energy delivered in the script is 540 Joules.
+
+📈 PHASE 2: EKG READING (175 words)
+
+**P-Wave (Setup):**
+- Scene opening strength: Intriguing with introduction of tension between characters (6/10)
+- Electrical initiation quality: Clear and engaging (8/10)
+- Atrial function (preparation): Good setup for the conflict (7/10)
+
+**QRS Complex (Conflict):**
+- Sharp spike of action: Gunshot scene creates a sharp increase in tension (9/10)
+- Width indicates scene intensity: Short width, indicating high intensity (9/10)
+- Height shows conflict magnitude: High magnitude due to life-threatening situation (9/10)
+
+**T-Wave (Resolution):**
+- Scene closure effectiveness: Sudden and impactful (8/10)
+- Recovery before next beat: Room for further development (6/10)
+- Repolarization quality: Adequate considering the genre (7/10)
+
+**ST Segment Analysis:**
+- Elevation: Slightly overexcited pacing due to climax (2/10)
+- Depression: Absent
+- Normal: Baseline is generally balanced progression (8/10)
+
+**Wave Intervals:**
+- PR interval: Setup to conflict time - Appropriate for the genre (7/10)
+- QT interval: Total scene duration - Adequate (7/10)
+- RR interval: Scene-to-scene spacing - Balanced (7/10)
+
+**Detecting Abnormalities:**
+- Premature beats: Absent
+- Skipped beats: Absent
+- Block patterns: Absent
+- Bundle branch blocks: Absent
+
+💊 PHASE 3: STRESS TEST (175 words)
+
+**Exercise Protocol:**
+- Stage 1: Opening hook - Warm-up (pages 1-2)
+- Stage 2: First plot point - Jogging (page 2, gun revelation)
+- Stage 3: Midpoint - Running (page 3, increasing tension)
+- Stage 4: Crisis - Sprinting (page 3, climax)
+- Stage 5: Climax - Maximum effort (page 3, conclusion)
+
+**Recovery Analysis:**
+- Pace normalizes quickly after the climax.
+- Rest periods are adequate for the genre.
+- Fatigue does not accumulate due to the short length of the script.
+
+**Ischemic Episodes:**
+- Scenes starved of conflict: Absent
+- Moments lacking oxygen (stakes): Absent
+- Dead tissue (cuttable scenes): Absent
+
+**Ejection Fraction:**
+- Energy used is >55%, showing healthy delivery (6/10)
+
+**Metabolic Equivalents (METs):**
+- Act 1: 3-4 METs (light activity) - Appropriate for opening hook
+
+🏥 PHASE 4: TREATMENT PLAN (175 words)
+
+**Immediate Interventions:**
+- Cardioversion: Not required
+- Pacemaker: Not required
+- Defibrillation: Not required
+- Medication: Adjusting pacing chemistry by adding more background information or expanding on the characters' motivations.
+
+**Surgical Options:**
+- Bypass: Not required
+- Ablation: Not required
+- Stent: Not required
+- Transplant: Not required
+
+**Prescriptions:**
+- Beta-blockers: To slow rushed sections if any are added in future revisions.
+- Stimulants: Accelerate sluggish parts, but not necessary for this script.
+- Anticoagulants: Improve flow by adding subplots or connections between characters.
+- Vasodilators: Expand tight moments with more character development and dialogue.
+
+**Lifestyle Changes:**
+- Exercise: Regular tension/release - Adding more scenes to balance the pacing throughout the story
+- Diet: Balanced scene nutrition - Improving overall structure of the script by ensuring it contains all necessary elements for a thriller/suspense genre
+- Sleep: Adequate rest beats - Allowing for pauses and moments of relaxation between high-tension scenes
+- Stress management: Controlled peaks - Ensuring that dramatic tension is carefully managed throughout the script.
+
+**Follow-up Protocol:**
+- Weekly rhythm monitoring: Regular review of pacing and adjustments as needed
+- Monthly stress testing: Testing the story's ability to create tension and sustain interest
+- Quarterly flow studies: Analyzing how well scenes connect and contribute to the overall narrative
+- Annual comprehensive exam: Full evaluation of structure, characters, and plot development.

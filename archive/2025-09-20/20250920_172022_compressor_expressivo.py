@@ -1,0 +1,1 @@
+# Converte texto em blocos simbólicos compreensíveis pelos Digimons

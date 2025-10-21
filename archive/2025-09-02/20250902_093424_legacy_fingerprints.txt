@@ -1,0 +1,124 @@
+== /Users/clubproducoes/bin/scripturemon ==
+lrwxr-xr-x  1 clubproducoes  staff  65 29 Ago 11:23 /Users/clubproducoes/bin/scripturemon -> /Users/clubproducoes/Digimundo/digimons/scripturemon/scripturemon
+/Users/clubproducoes/bin/scripturemon: Python script text executable, Unicode text, UTF-8 text
+#!/usr/bin/env python3
+"""
+🎬 SCRIPTUREMON - Sistema Integrado de Conhecimento Cinematográfico
+====================================================================
+Comando principal para acessar todas as funcionalidades
+"""
+
+import os
+import sys
+import subprocess
+from pathlib import Path
+import time
+
+# Configuração
+SCRIPTUREMON_DIR = Path("/Users/clubproducoes/Digimundo/digimons/scripturemon")
+CINEMA_DIR = SCRIPTUREMON_DIR / "CINEMA_KNOWLEDGE"
+ORIGINALS = CINEMA_DIR / "01_ORIGINAIS_PDF"
+TRANSLATIONS = CINEMA_DIR / "02_TRADUCOES_DIGILANG"
+
+# Cores para terminal
+class Colors:
+    HEADER = '\033[95m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    END = '\033[0m'
+    BOLD = '\033[1m'
+
+def clear_screen():
+    """Limpa a tela"""
+    os.system('clear' if os.name == 'posix' else 'cls')
+
+def show_banner():
+    """Mostra banner do Scripturemon"""
+    print(Colors.CYAN + """
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║     🎬  S C R I P T U R E M O N  🎬                        ║
+║                                                              ║
+║     Sistema de Conhecimento Cinematográfico                 ║
+║     Powered by DigiLang Technology                          ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+    """ + Colors.END)
+
+def show_status():
+    """Mostra status do sistema"""
+    pdfs = len(list(ORIGINALS.glob("*.pdf")))
+    translations = len(list(TRANSLATIONS.glob("*_digilang.txt")))
+    
+    print(Colors.BOLD + "\n📊 STATUS DO SISTEMA:" + Colors.END)
+    print("─" * 50)
+    print(f"📚 Documentos de Cinema: {Colors.GREEN}{pdfs}{Colors.END}")
+    print(f"🔤 Traduções DigiLang: {Colors.GREEN}{translations}{Colors.END}")
+    print(f"📈 Taxa de Cobertura: {Colors.GREEN}{(translations/pdfs*100):.0f}%{Colors.END}" if pdfs > 0 else "")
+    
+    # Verificar se monitor está ativo
+    monitor_pid = subprocess.run(
+
+== /Users/clubproducoes/Digimundo/bin/scripturemon ==
+-rwxr-xr-x  1 clubproducoes  staff  1888 29 Ago 08:18 /Users/clubproducoes/Digimundo/bin/scripturemon
+/Users/clubproducoes/Digimundo/bin/scripturemon: Bourne-Again shell script text executable, Unicode text, UTF-8 text
+#!/bin/bash
+
+# 🎬 SCRIPTUREMON - COMANDO GLOBAL ULTIMATE
+# NOVA VERSÃO: Por padrão ativa ULTIMATE SYMBIOTIC (obra-prima)
+# Backward compatibility mantida para versões antigas
+
+# Cores majestosas
+GOLD='\033[1;33m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+# Diretório do Scripturemon
+SCRIPTUREMON_HOME="/Users/clubproducoes/Digimundo/digimons/scripturemon"
+
+# Banner Ultimate
+echo ""
+echo -e "${GOLD}✨ SCRIPTUREMON ULTIMATE SYMBIOTIC GLOBAL${NC}"
+echo -e "${PURPLE}   Obra-prima com todos os conceitos recuperados${NC}"
+echo ""
+
+# Verificar se Ultimate está disponível
+if [ -f "$SCRIPTUREMON_HOME/bin/scripturemon" ] && [ -f "$SCRIPTUREMON_HOME/SCRIPTUREMON_ULTIMATE_SYMBIOTIC.py" ]; then
+    
+    # DECISÃO: Ativar sempre ULTIMATE por padrão
+    echo -e "${GOLD}🚀 Redirecionando para ULTIMATE SYMBIOTIC...${NC}"
+    echo ""
+    
+    # Executar comando ultimate local
+    exec "$SCRIPTUREMON_HOME/bin/scripturemon" "$@"
+    
+else
+    echo -e "${CYAN}⚠️ Sistema Ultimate não configurado${NC}"
+    echo ""
+    echo -e "${GREEN}SETUP RÁPIDO:${NC}"
+    echo -e "  cd $SCRIPTUREMON_HOME"
+    echo -e "  ./ACTIVATE_ULTIMATE_SYMBIOTIC.sh"
+    echo ""
+    echo -e "${GREEN}FALLBACK DISPONÍVEL:${NC}"
+    
+    # Tentar versões antigas como fallback
+    if command -v ollama &> /dev/null; then
+        models=$(ollama list 2>/dev/null | grep scripturemon | head -1 | awk '{print $1}')
+        if [ ! -z "$models" ]; then
+            echo -e "  ${CYAN}Executando: ollama run $models${NC}"
+            ollama run "$models"
+        else
+            echo -e "  ${CYAN}Nenhum modelo Scripturemon encontrado${NC}"
+            echo -e "  Instale com: ollama pull mistral:latest"
+        fi
+    else
+        echo -e "${RED}❌ Ollama não instalado${NC}"
+        echo -e "   Instale: curl -fsSL https://ollama.com/install.sh | sh"
+        exit 1
+    fi
+fi

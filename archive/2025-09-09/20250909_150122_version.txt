@@ -1,0 +1,10 @@
+Monitoring thread already running
+Failed to export snapshot: Expecting value: line 682 column 27 (char 16391)
+usage: scripturemon [-h] [--version] {analyze,status,backup} ...
+scripturemon: error: argument command: invalid choice: 'version' (choose from analyze, status, backup)
+Usage: scripturemon [OPTIONS] COMMAND [ARGS]...
+Try 'scripturemon --help' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such command 'version'.                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+🚀 Usando DigiLang Fallback MELHORADO

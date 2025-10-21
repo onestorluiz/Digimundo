@@ -1,0 +1,1 @@
+[OK] strategy panel+menu+sidebar -> reports/index.html

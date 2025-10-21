@@ -1,0 +1,1549 @@
+"""
+Script Doctor Actionmon - Action Analysis Specialist
+A Script Doctor™ in Digimon form specializing in action sequences, visual storytelling, show-don't-tell, active vs passive protagonist, and physical beats.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class ActionSequence:
+    """Individual action sequence analysis."""
+    sequence_number: int
+    page_start: int
+    page_end: int
+    duration_pages: float
+    action_type: str  # "chase", "fight", "escape", "confrontation", etc.
+    escalation_present: bool
+    choreography_clarity: float  # 0-1
+    character_revealed: bool
+    visual_quality: float  # 0-1
+    issues: List[str]
+
+
+@dataclass
+class ActionProfile:
+    """Overall action analysis."""
+    total_action_sequences: int
+    total_action_pages: float
+    show_vs_tell_ratio: float
+    protagonist_activity_score: float  # 0-1 (1=fully active)
+    visual_storytelling_score: float
+    action_reveals_character_score: float
+    action_escalation_present: bool
+    set_pieces_count: int
+    choreography_avg_clarity: float
+    passive_voice_count: int
+    action_drives_plot: bool
+    physical_conflict_score: float
+    overall_action_quality: float
+    active_protagonist: bool
+    show_dont_tell_quality: str
+    visual_writing_quality: str
+
+
+class DrAction:
+    """
+    Script Doctor Actionmon - The Action Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing action sequences,
+    visual storytelling, show-don't-tell principles, active vs passive protagonist,
+    physical beats, and cinematic action.
+
+    Identity: Script Doctor first, Digimon action specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Actionmon with rules and configuration."""
+        self.name = "Script Doctor Actionmon"
+        self.digimon_name = "Actionmon"
+        self.title = "Script Doctor - Action Analysis Specialist"
+        self.specialty = "Action sequences, visual storytelling, show-don't-tell, active protagonist, physical beats"
+        self.identity = "I am Script Doctor Actionmon, a professional Script Doctor™ specializing in action analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "action_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - ACTION SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Action foundations
+            "McKee Story action sequences design visual storytelling cinematic",
+            "McKee Story active protagonist makes choices drives story forward",
+            "McKee Story passive protagonist reactive observer lacks agency fails",
+            "McKee Story show don't tell action behavior reveals character",
+            "McKee Story character revealed through action under pressure choices",
+            "McKee Story action gap expectation result reveals character truth",
+            "McKee Story visual storytelling cinematic show action not dialogue",
+
+            # McKee Story - ACTION vs ACTIVITY & CHARACTER REVELATION (ultra-specific manual reading)
+            "McKee Story action behavior reveals character truth choices show essence",
+            "McKee Story activity versus action nonevent versus story event value turn",
+            "McKee Story physical action external visible behavior demonstrates character",
+
+            # Field Screenplay - Visual action writing
+            "Field Screenplay action sequences construction visual writing cinematic",
+            "Field action character through behavior physical action reveals",
+            "Field visual writing cinematic action description techniques craft",
+            "Field protagonist must active driving force makes choices agency",
+            "Field passive protagonist fails lacks drive reactive observer",
+            "Field action description concrete specific visual cinematic clear",
+            "Field action scenes construction beginning middle end escalation",
+
+            # Snyder Save Cat - Set pieces and beats
+            "Snyder Save Cat action beats physical storytelling visual sequences",
+            "Snyder fun games action sequences entertainment promise premise",
+            "Snyder set pieces major action highlights memorable moments",
+            "Snyder active protagonist makes choices drives narrative forward",
+            "Snyder finale action climax confrontation physical peak moment",
+            "Snyder bad guys close in action complications escalate pressure",
+
+            # Truby Anatomy - Action steps
+            "Truby Anatomy 22 action steps building blocks structure design",
+            "Truby character revealed action physical choices behavior decisions",
+            "Truby action serves character plot not spectacle empty meaningless",
+            "Truby moral choices physical action ethical decisions embodied",
+            "Truby plan action character attempts achieve goal strategy",
+            "Truby battle action climax confrontation physical peak moment",
+
+            # Vogler Writer's Journey - Physical trials
+            "Vogler Journey trials tests action sequences physical challenges",
+            "Vogler ordeal supreme action sequence death rebirth crisis",
+            "Vogler physical challenges reveal character strength courage growth",
+            "Vogler tests allies enemies action sequences learn obstacles",
+            "Vogler approach inmost cave action prepare danger confrontation",
+            "Vogler resurrection action final test purification cleansing climax",
+
+            # Campbell Hero 1000 Faces - Mythic action
+            "Campbell Hero 1000 Faces trials ordeals action physical tests",
+            "Campbell tests allies enemies action sequences mythic journey",
+            "Campbell physical journey archetypal action hero transformation",
+            "Campbell abyss ordeal action death crisis transformation rebirth",
+            "Campbell threshold crossing action commitment point no return",
+
+            # Aristotle Poetics - Action as foundation
+            "Aristotle Poetics action praxis drama imitation action not men",
+            "Aristotle action mimesis characters revealed through action behavior",
+            "Aristotle drama imitation action plot structure action driven",
+            "Aristotle action necessity probability causal chain inevitable",
+            "Aristotle spectacle visual action opsis least artistic element",
+
+            # Seger Making Good Script Great - Visual craft
+            "Seger Making Good Script Great action sequences pacing rhythm",
+            "Seger show don't tell visual storytelling action not exposition",
+            "Seger action reveals character physical behavior choices decisions",
+            "Seger visual writing techniques cinematic action craft description",
+            "Seger subtext action behavior reveals unspoken emotions thoughts",
+            "Seger action description specific concrete visual cinematic clear",
+
+            # Egri Art Dramatic Writing - Action consequence
+            "Egri Art Dramatic Writing action follows character decision choice",
+            "Egri character decision leads action physical consequence result",
+            "Egri action rising escalation crisis to crisis building tension",
+            "Egri action reveals character spine dominant trait nature",
+
+            # Weiland Creating Character Arcs - Action mirrors arc
+            "Weiland Creating Character Arcs action reflects character arc stage",
+            "Weiland character action changes arc progresses growth transformation",
+            "Weiland lie truth action character behavior shifts evolves",
+
+            # Goldman/Rhimes/Mamet/Mackendrick - Practical action
+            "Goldman Adventures Screen Trade action sequence construction craft",
+            "Goldman visual storytelling action choreography cinematic writing",
+            "Goldman action scenes clarity geography spatial logic clear",
+            "Rhimes Year of Yes storytelling visual action beats authentic",
+            "Rhimes action emotional authentic real stakes investment",
+            "Mamet Three Uses Knife action dramatic action want obstacle",
+            "Mamet action physical pursuit want goal objective obstacle",
+            "Mackendrick On Film-Making visual action sequences cinematic craft",
+            "Mackendrick action visual storytelling external behavior internal",
+            "Mackendrick montage action compression time visual sequences",
+
+            # General action concepts - comprehensive
+            "action sequences escalation intensity building progressive rise",
+            "show don't tell visual storytelling principles craft foundation",
+            "active protagonist makes choices drives story agency forward",
+            "passive protagonist reactive observer lacks agency fails story",
+            "physical action revealing character truth behavior choices",
+            "action beats scene construction beginning middle end escalation",
+            "action sequence pacing rhythm tempo speed choreography timing",
+            "set pieces action highlights memorable moments peak sequences",
+            "choreography action sequences spatial logic geography clarity",
+            "visual writing cinematic action description concrete specific",
+            "action driven narrative momentum forward story engine",
+            "action description length balance detail clarity pacing",
+            "action lines white space page readability visual flow"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story action opens gap expectation result creates significant change",
+        "McKee Story activity expected behavior no value change pointless",
+        "McKee Story movies about making mental things physical behavior beats",
+        "McKee Story visual beat exchange behavior gesture look prop business",
+        "McKee Story silent screenplay avoid dialogue express story visually",
+        "McKee Story screen present tense kinetic imagery vivid motion",
+
+        # McKee DIALOGUE - GPT-5 extracted (12 Oct 2025)
+        "McKee Dialogue verbal action performative through-speech words doing tasks",
+        "McKee Dialogue activity versus action talk surface doing inner intent",
+        "McKee Dialogue five steps behavior desire antagonism choice action expression",
+
+
+        ]
+
+        # Action analysis patterns (bilingual: EN + PT)
+
+        # General action markers
+        self.action_markers = [
+            # English
+            "action", "fight", "chase", "runs", "jumps", "attacks", "strikes",
+            "battles", "confronts", "charges", "rushes", "leaps", "kicks",
+            "punches", "dodges", "escapes", "flees", "pursues", "crashes",
+            # Portuguese
+            "ação", "luta", "perseguição", "corre", "pula", "ataca", "golpeia",
+            "batalha", "confronta", "avança", "corre", "salta", "chuta",
+            "soca", "esquiva", "escapa", "foge", "persegue", "colide"
+        ]
+
+        # Physical markers
+        self.physical_markers = [
+            # English
+            "physical", "movement", "gesture", "motion", "body", "hand",
+            "face", "eyes", "moves", "walks", "stands", "sits", "grabs",
+            "reaches", "touches", "holds", "pushes", "pulls", "throws",
+            # Portuguese
+            "físico", "movimento", "gesto", "moção", "corpo", "mão",
+            "rosto", "olhos", "move", "caminha", "fica de pé", "senta", "agarra",
+            "alcança", "toca", "segura", "empurra", "puxa", "joga"
+        ]
+
+        # Visual markers
+        self.visual_markers = [
+            # English
+            "visual", "show", "see", "watch", "observe", "look", "stare",
+            "glance", "notice", "reveal", "display", "appear", "visible",
+            "seen", "shown", "appears", "reveals", "displays",
+            # Portuguese
+            "visual", "mostra", "vê", "assiste", "observa", "olha", "encara",
+            "olhada", "nota", "revela", "exibe", "aparece", "visível",
+            "visto", "mostrado", "aparece", "revela", "exibe"
+        ]
+
+        # Active protagonist markers
+        self.active_protagonist_markers = [
+            # English
+            "acts", "decides", "chooses", "takes action", "initiates",
+            "drives", "leads", "commands", "controls", "determines",
+            "forces", "makes happen", "causes", "creates", "achieves",
+            # Portuguese
+            "age", "decide", "escolhe", "toma ação", "inicia",
+            "dirige", "lidera", "comanda", "controla", "determina",
+            "força", "faz acontecer", "causa", "cria", "alcança"
+        ]
+
+        # Passive protagonist markers (negative)
+        self.passive_protagonist_markers = [
+            # English
+            "reacts", "watches", "waits", "receives", "accepts",
+            "is told", "is shown", "is given", "is forced",
+            "happens to", "victim", "passive", "helpless",
+            # Portuguese
+            "reage", "assiste", "espera", "recebe", "aceita",
+            "é dito", "é mostrado", "é dado", "é forçado",
+            "acontece com", "vítima", "passivo", "indefeso"
+        ]
+
+        # Show-don't-tell markers
+        self.show_dont_tell_markers = [
+            # English
+            "shows", "demonstrates", "reveals through action", "displays",
+            "exhibits", "manifests", "expresses through behavior",
+            # Portuguese
+            "mostra", "demonstra", "revela através da ação", "exibe",
+            "manifesta", "expressa através do comportamento"
+        ]
+
+        # Tell-don't-show markers (negative)
+        self.tell_dont_show_markers = [
+            # English
+            "explains", "tells", "says that", "narrates", "describes feeling",
+            "is angry", "is sad", "is happy", "is scared", "feels",
+            # Portuguese
+            "explica", "diz", "narra", "descreve sentimento",
+            "está bravo", "está triste", "está feliz", "está com medo", "sente"
+        ]
+
+        # Action sequence markers
+        self.sequence_markers = [
+            # English
+            "sequence", "set piece", "chase", "fight scene", "battle",
+            "confrontation", "showdown", "climax action", "action sequence",
+            # Portuguese
+            "sequência", "cena de ação", "perseguição", "cena de luta", "batalha",
+            "confronto", "confronto final", "ação do clímax", "sequência de ação"
+        ]
+
+        # Escalation markers
+        self.escalation_markers = [
+            # English
+            "intensifies", "escalates", "builds", "accelerates", "heightens",
+            "increases", "grows", "rises", "mounts", "compounds",
+            # Portuguese
+            "intensifica", "escala", "constrói", "acelera", "aumenta",
+            "cresce", "eleva", "sobe", "acumula", "agrava"
+        ]
+
+        # Set piece markers
+        self.set_piece_markers = [
+            # English
+            "major action", "spectacular", "memorable sequence", "highlight",
+            "showstopper", "centerpiece", "signature scene", "iconic moment",
+            # Portuguese
+            "ação principal", "espetacular", "sequência memorável", "destaque",
+            "cena principal", "peça central", "cena marcante", "momento icônico"
+        ]
+
+        # Choreography markers
+        self.choreography_markers = [
+            # English
+            "choreography", "moves", "sequence of actions", "step by step",
+            "first then", "after that", "meanwhile", "simultaneously",
+            # Portuguese
+            "coreografia", "movimentos", "sequência de ações", "passo a passo",
+            "primeiro depois", "depois disso", "enquanto isso", "simultaneamente"
+        ]
+
+        # Visual writing markers
+        self.visual_writing_markers = [
+            # English
+            "visual", "cinematic", "we see", "camera", "shot",
+            "angle", "close-up", "wide shot", "image", "picture",
+            # Portuguese
+            "visual", "cinematográfico", "vemos", "câmera", "plano",
+            "ângulo", "close", "plano aberto", "imagem", "foto"
+        ]
+
+        # Character revealed through action markers
+        self.character_through_action_markers = [
+            # English
+            "reveals character", "shows personality", "demonstrates nature",
+            "proves who they are", "action reveals", "behavior shows",
+            # Portuguese
+            "revela personagem", "mostra personalidade", "demonstra natureza",
+            "prova quem é", "ação revela", "comportamento mostra"
+        ]
+
+        # Physical conflict markers
+        self.physical_conflict_markers = [
+            # English
+            "fight", "battle", "struggle", "combat", "clash",
+            "confrontation", "violence", "physical conflict", "wrestle",
+            # Portuguese
+            "luta", "batalha", "luta", "combate", "confronto",
+            "conflito", "violência", "conflito físico", "briga"
+        ]
+
+        # Passive voice markers (to detect and penalize)
+        self.passive_voice_markers = [
+            # English
+            "is", "are", "was", "were", "been", "being",
+            "is attacked", "is hit", "is struck", "is thrown",
+            "are forced", "was told", "were given", "been shown",
+            # Portuguese
+            "é", "são", "foi", "foram", "sido", "sendo",
+            "é atacado", "é atingido", "é jogado",
+            "são forçados", "foi dito", "foram dados", "sido mostrado"
+        ]
+
+        # Action driving plot markers
+        self.action_drives_plot_markers = [
+            # English
+            "leads to", "causes", "results in", "triggers", "sets off",
+            "because of this action", "the action causes", "this leads to",
+            # Portuguese
+            "leva a", "causa", "resulta em", "dispara", "desencadeia",
+            "por causa desta ação", "a ação causa", "isso leva a"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze action in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete action diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Analyze show vs tell ratio
+        show_tell = self._analyze_show_vs_tell(screenplay_text)
+
+        # Analyze protagonist activity
+        protagonist_activity = self._analyze_protagonist_activity(screenplay_text)
+
+        # Detect action sequences
+        action_sequences = self._detect_action_sequences(screenplay_text, scenes)
+
+        # Analyze physical beats
+        physical_beats = self._analyze_physical_beats(screenplay_text)
+
+        # Analyze visual storytelling
+        visual_storytelling = self._analyze_visual_storytelling(screenplay_text)
+
+        # Analyze action reveals character
+        action_character = self._analyze_action_reveals_character(screenplay_text)
+
+        # Analyze action escalation
+        action_escalation = self._analyze_action_escalation(screenplay_text, action_sequences)
+
+        # Detect set pieces
+        set_pieces = self._detect_set_pieces(screenplay_text, action_sequences)
+
+        # Analyze choreography
+        choreography = self._analyze_choreography(screenplay_text, action_sequences)
+
+        # Analyze action pacing
+        action_pacing = self._analyze_action_pacing(screenplay_text, action_sequences)
+
+        # Detect passive voice
+        passive_voice = self._detect_passive_voice(screenplay_text)
+
+        # Analyze action-plot connection
+        action_plot = self._analyze_action_plot_connection(screenplay_text)
+
+        # Analyze physical conflict
+        physical_conflict = self._analyze_physical_conflict(screenplay_text)
+
+        # Analyze visual writing style
+        visual_writing = self._analyze_visual_writing_style(screenplay_text)
+
+        # Assess action-character integration
+        action_character_integration = self._assess_action_character_integration(
+            action_character, protagonist_activity
+        )
+
+        # Build action profile
+        action_profile = ActionProfile(
+            total_action_sequences=len(action_sequences),
+            total_action_pages=sum(seq.duration_pages for seq in action_sequences),
+            show_vs_tell_ratio=show_tell["ratio"],
+            protagonist_activity_score=protagonist_activity["activity_score"],
+            visual_storytelling_score=visual_storytelling["score"],
+            action_reveals_character_score=action_character["score"],
+            action_escalation_present=action_escalation["present"],
+            set_pieces_count=len(set_pieces),
+            choreography_avg_clarity=choreography["avg_clarity"],
+            passive_voice_count=passive_voice["count"],
+            action_drives_plot=action_plot["drives_plot"],
+            physical_conflict_score=physical_conflict["score"],
+            overall_action_quality=0.0,  # calculated below
+            active_protagonist=protagonist_activity["is_active"],
+            show_dont_tell_quality=show_tell["quality"],
+            visual_writing_quality=visual_writing["quality"]
+        )
+
+        # Calculate overall action quality
+        action_profile.overall_action_quality = self._calculate_overall_action_quality(action_profile)
+
+        # Check against rules
+        rule_violations = self._check_action_rules(
+            action_profile, show_tell, protagonist_activity, action_sequences,
+            physical_beats, visual_storytelling, passive_voice
+        )
+
+        # Calculate score
+        score = self._calculate_action_score(
+            action_profile, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, action_profile, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "show_vs_tell": {
+                "ratio": show_tell["ratio"],
+                "show_count": show_tell.get("show_count", 0),
+                "tell_count": show_tell.get("tell_count", 0),
+                "quality": show_tell["quality"],
+                "issues": show_tell.get("issues", [])
+            },
+            "protagonist_activity": {
+                "activity_score": protagonist_activity["activity_score"],
+                "is_active": protagonist_activity["is_active"],
+                "active_count": protagonist_activity.get("active_count", 0),
+                "passive_count": protagonist_activity.get("passive_count", 0),
+                "assessment": protagonist_activity.get("assessment", "")
+            },
+            "action_sequences": {
+                "total": len(action_sequences),
+                "total_pages": action_profile.total_action_pages,
+                "sequences": [
+                    {
+                        "number": seq.sequence_number,
+                        "page_start": seq.page_start,
+                        "page_end": seq.page_end,
+                        "duration": seq.duration_pages,
+                        "type": seq.action_type,
+                        "escalation": seq.escalation_present,
+                        "choreography_clarity": seq.choreography_clarity,
+                        "character_revealed": seq.character_revealed,
+                        "visual_quality": seq.visual_quality,
+                        "issues": seq.issues
+                    }
+                    for seq in action_sequences[:5]  # Top 5
+                ]
+            },
+            "physical_beats": {
+                "count": physical_beats["count"],
+                "quality": physical_beats.get("quality", "medium"),
+                "examples": physical_beats.get("examples", [])[:3]
+            },
+            "visual_storytelling": {
+                "score": visual_storytelling["score"],
+                "quality": visual_storytelling["quality"],
+                "visual_writing_count": visual_storytelling.get("visual_count", 0),
+                "issues": visual_storytelling.get("issues", [])
+            },
+            "action_reveals_character": {
+                "score": action_character["score"],
+                "present": action_character.get("present", False),
+                "examples": action_character.get("examples", [])[:3]
+            },
+            "action_escalation": {
+                "present": action_escalation["present"],
+                "escalation_points": action_escalation.get("escalation_count", 0),
+                "quality": action_escalation.get("quality", "medium")
+            },
+            "set_pieces": {
+                "count": len(set_pieces),
+                "effective": set_pieces.get("effective", False) if isinstance(set_pieces, dict) else len(set_pieces) > 0,
+                "highlights": [sp.get("description", "") for sp in (set_pieces if isinstance(set_pieces, list) else [])][:3]
+            },
+            "choreography": {
+                "avg_clarity": choreography["avg_clarity"],
+                "clear": choreography.get("clear", False),
+                "issues": choreography.get("issues", [])
+            },
+            "action_pacing": {
+                "appropriate": action_pacing.get("appropriate", False),
+                "avg_duration": action_pacing.get("avg_duration", 0),
+                "issues": action_pacing.get("issues", [])
+            },
+            "passive_voice": {
+                "count": passive_voice["count"],
+                "severity": passive_voice.get("severity", "low"),
+                "examples": passive_voice.get("examples", [])[:3]
+            },
+            "action_drives_plot": {
+                "drives_plot": action_plot["drives_plot"],
+                "connection_strength": action_plot.get("strength", "medium"),
+                "examples": action_plot.get("examples", [])[:2]
+            },
+            "physical_conflict": {
+                "score": physical_conflict["score"],
+                "present": physical_conflict.get("present", False),
+                "count": physical_conflict.get("count", 0)
+            },
+            "visual_writing_style": {
+                "quality": visual_writing["quality"],
+                "cinematic_score": visual_writing.get("cinematic_score", 0.5),
+                "visual_clarity": visual_writing.get("clarity", "medium")
+            },
+            "action_character_integration": {
+                "integration_score": action_character_integration["score"],
+                "unified": action_character_integration.get("unified", False),
+                "notes": action_character_integration.get("notes", "")
+            },
+            "overall_action_quality": action_profile.overall_action_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, action_profile, show_tell, passive_voice
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _analyze_show_vs_tell(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze show vs tell ratio.
+
+        Seger/McKee: "Show don't tell - reveal through action, not exposition."
+        """
+        # Count show markers
+        show_count = 0
+        for marker in self.show_dont_tell_markers:
+            show_count += screenplay.lower().count(marker)
+
+        # Also count visual markers as "showing"
+        for marker in self.visual_markers:
+            show_count += screenplay.lower().count(marker) // 2
+
+        # Count tell markers
+        tell_count = 0
+        for marker in self.tell_dont_show_markers:
+            tell_count += screenplay.lower().count(marker)
+
+        # Calculate ratio (show / tell)
+        if tell_count > 0:
+            ratio = show_count / tell_count
+        else:
+            ratio = show_count  # No telling = excellent
+
+        # Determine quality
+        if ratio >= 3.0:
+            quality = "excellent"
+        elif ratio >= 1.5:
+            quality = "good"
+        elif ratio >= 0.8:
+            quality = "fair"
+        else:
+            quality = "poor"
+
+        issues = []
+        if ratio < 1.0:
+            issues.append("Too much telling, not enough showing")
+        if tell_count > show_count * 2:
+            issues.append("Exposition-heavy - needs more visual storytelling")
+
+        return {
+            "ratio": ratio,
+            "show_count": show_count,
+            "tell_count": tell_count,
+            "quality": quality,
+            "issues": issues
+        }
+
+    def _analyze_protagonist_activity(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze protagonist activity (active vs passive).
+
+        McKee/Field/Snyder: "Protagonist must be ACTIVE - making choices,
+        driving the story, not passive observer."
+        """
+        # Count active markers
+        active_count = 0
+        for marker in self.active_protagonist_markers:
+            active_count += screenplay.lower().count(marker)
+
+        # Count passive markers
+        passive_count = 0
+        for marker in self.passive_protagonist_markers:
+            passive_count += screenplay.lower().count(marker)
+
+        # Calculate activity score (0-1)
+        total = active_count + passive_count
+        if total > 0:
+            activity_score = active_count / total
+        else:
+            activity_score = 0.5
+
+        is_active = activity_score >= 0.6
+
+        # Assessment
+        if activity_score >= 0.8:
+            assessment = "Highly active protagonist - drives story"
+        elif activity_score >= 0.6:
+            assessment = "Active protagonist - makes choices"
+        elif activity_score >= 0.4:
+            assessment = "Somewhat passive - needs more agency"
+        else:
+            assessment = "Passive protagonist - victim of circumstances"
+
+        return {
+            "activity_score": activity_score,
+            "is_active": is_active,
+            "active_count": active_count,
+            "passive_count": passive_count,
+            "assessment": assessment
+        }
+
+    def _detect_action_sequences(self, screenplay: str, scenes: List[Dict]) -> List[ActionSequence]:
+        """
+        Detect action sequences in screenplay.
+
+        Action sequence = sustained physical action, conflict, movement.
+        """
+        sequences = []
+        sequence_number = 0
+
+        for scene in scenes:
+            scene_text = '\n'.join(scene['content'])
+
+            # Count action markers in scene
+            action_marker_count = 0
+            for marker in self.action_markers:
+                action_marker_count += scene_text.lower().count(marker)
+
+            # If scene has significant action markers, it's likely an action sequence
+            if action_marker_count >= 5:
+                sequence_number += 1
+
+                # Determine action type
+                if "chase" in scene_text.lower() or "runs" in scene_text.lower():
+                    action_type = "chase"
+                elif "fight" in scene_text.lower() or "battle" in scene_text.lower():
+                    action_type = "fight"
+                elif "escape" in scene_text.lower() or "flee" in scene_text.lower():
+                    action_type = "escape"
+                else:
+                    action_type = "confrontation"
+
+                # Check escalation
+                escalation_count = sum(1 for marker in self.escalation_markers if marker in scene_text.lower())
+                escalation_present = escalation_count >= 1
+
+                # Check choreography clarity
+                choreography_count = sum(1 for marker in self.choreography_markers if marker in scene_text.lower())
+                choreography_clarity = min(1.0, choreography_count / 5.0)
+
+                # Check character revealed
+                character_action_count = sum(1 for marker in self.character_through_action_markers if marker in scene_text.lower())
+                character_revealed = character_action_count >= 1
+
+                # Check visual quality
+                visual_count = sum(1 for marker in self.visual_writing_markers if marker in scene_text.lower())
+                visual_quality = min(1.0, visual_count / 5.0)
+
+                # Identify issues
+                issues = []
+                if choreography_clarity < 0.3:
+                    issues.append("Unclear choreography")
+                if not character_revealed:
+                    issues.append("Doesn't reveal character")
+                if visual_quality < 0.3:
+                    issues.append("Weak visual writing")
+
+                duration_pages = (scene['end_page'] - scene['start_page']) + 1
+
+                sequences.append(ActionSequence(
+                    sequence_number=sequence_number,
+                    page_start=scene['start_page'],
+                    page_end=scene['end_page'],
+                    duration_pages=duration_pages,
+                    action_type=action_type,
+                    escalation_present=escalation_present,
+                    choreography_clarity=choreography_clarity,
+                    character_revealed=character_revealed,
+                    visual_quality=visual_quality,
+                    issues=issues
+                ))
+
+        return sequences
+
+    def _analyze_physical_beats(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze physical beats (physical action moments).
+
+        Physical beats = specific physical actions that reveal character/advance plot.
+        """
+        physical_count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            # Count physical markers
+            for marker in self.physical_markers:
+                if marker in line.lower():
+                    physical_count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:80])
+                    break
+
+        # Determine quality
+        if physical_count >= 100:
+            quality = "excellent"
+        elif physical_count >= 50:
+            quality = "good"
+        elif physical_count >= 20:
+            quality = "fair"
+        else:
+            quality = "poor"
+
+        return {
+            "count": physical_count,
+            "quality": quality,
+            "examples": examples
+        }
+
+    def _analyze_visual_storytelling(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze visual storytelling quality.
+
+        Mackendrick/Seger: "Film is a visual medium - tell story through images."
+        """
+        # Count visual markers
+        visual_count = 0
+        for marker in self.visual_markers:
+            visual_count += screenplay.lower().count(marker)
+
+        # Count visual writing markers
+        visual_writing_count = 0
+        for marker in self.visual_writing_markers:
+            visual_writing_count += screenplay.lower().count(marker)
+
+        total_visual = visual_count + visual_writing_count
+
+        # Calculate score
+        score = min(1.0, total_visual / 100.0)
+
+        # Determine quality
+        if score >= 0.8:
+            quality = "excellent"
+        elif score >= 0.6:
+            quality = "good"
+        elif score >= 0.4:
+            quality = "fair"
+        else:
+            quality = "poor"
+
+        issues = []
+        if score < 0.4:
+            issues.append("Weak visual storytelling - too much dialogue/exposition")
+        if visual_writing_count < 10:
+            issues.append("Lacks cinematic visual writing style")
+
+        return {
+            "score": score,
+            "quality": quality,
+            "visual_count": total_visual,
+            "issues": issues
+        }
+
+    def _analyze_action_reveals_character(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze how action reveals character.
+
+        Aristotle/McKee/Truby: "Character is revealed through action under pressure."
+        """
+        # Count character-through-action markers
+        count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.character_through_action_markers:
+                if marker in line.lower():
+                    count += 1
+                    if len(examples) < 5:
+                        examples.append(line.strip()[:80])
+                    break
+
+        # Also check for action + character markers co-occurrence
+        lines = screenplay.split('\n')
+        cooccurrence = 0
+        for line in lines:
+            has_action = any(marker in line.lower() for marker in self.action_markers)
+            has_character = any(word in line.lower() for word in ["character", "personality", "nature", "who they are"])
+            if has_action and has_character:
+                cooccurrence += 1
+
+        total = count + cooccurrence
+        score = min(1.0, total / 10.0)
+        present = total >= 3
+
+        return {
+            "score": score,
+            "present": present,
+            "count": total,
+            "examples": examples
+        }
+
+    def _analyze_action_escalation(self, screenplay: str, sequences: List[ActionSequence]) -> Dict[str, Any]:
+        """
+        Analyze action escalation (does action build/intensify?).
+
+        McKee/Field: "Action must escalate - build in intensity and stakes."
+        """
+        # Count escalation markers
+        escalation_count = 0
+        for marker in self.escalation_markers:
+            escalation_count += screenplay.lower().count(marker)
+
+        # Check if sequences escalate (later sequences should be bigger)
+        if len(sequences) >= 2:
+            first_half = sequences[:len(sequences)//2]
+            second_half = sequences[len(sequences)//2:]
+
+            avg_first = sum(seq.duration_pages for seq in first_half) / len(first_half) if first_half else 0
+            avg_second = sum(seq.duration_pages for seq in second_half) / len(second_half) if second_half else 0
+
+            sequences_escalate = avg_second > avg_first
+        else:
+            sequences_escalate = False
+
+        present = escalation_count >= 3 or sequences_escalate
+
+        # Determine quality
+        if present and escalation_count >= 5:
+            quality = "excellent"
+        elif present:
+            quality = "good"
+        else:
+            quality = "poor"
+
+        return {
+            "present": present,
+            "escalation_count": escalation_count,
+            "sequences_escalate": sequences_escalate,
+            "quality": quality
+        }
+
+    def _detect_set_pieces(self, screenplay: str, sequences: List[ActionSequence]) -> List[Dict]:
+        """
+        Detect set pieces (major action highlights).
+
+        Snyder/Goldman: "Set pieces are memorable action highlights - big moments."
+        """
+        set_pieces = []
+
+        # Method 1: Look for set piece markers
+        for line in screenplay.split('\n'):
+            for marker in self.set_piece_markers:
+                if marker in line.lower():
+                    set_pieces.append({
+                        "description": line.strip()[:100],
+                        "method": "keyword"
+                    })
+                    break
+
+        # Method 2: Longest/most intense action sequences are likely set pieces
+        if sequences:
+            # Sort by duration
+            sorted_sequences = sorted(sequences, key=lambda s: s.duration_pages, reverse=True)
+
+            # Top 20% of sequences by length are potential set pieces
+            top_count = max(1, len(sorted_sequences) // 5)
+            for seq in sorted_sequences[:top_count]:
+                if seq.duration_pages >= 2.0:  # At least 2 pages
+                    set_pieces.append({
+                        "description": f"{seq.action_type.title()} sequence at page {seq.page_start}",
+                        "method": "duration",
+                        "pages": seq.duration_pages
+                    })
+
+        # Deduplicate
+        unique_set_pieces = []
+        seen = set()
+        for sp in set_pieces:
+            desc = sp["description"][:50]
+            if desc not in seen:
+                seen.add(desc)
+                unique_set_pieces.append(sp)
+
+        return unique_set_pieces
+
+    def _analyze_choreography(self, screenplay: str, sequences: List[ActionSequence]) -> Dict[str, Any]:
+        """
+        Analyze choreography clarity (is action clear and followable?).
+
+        Goldman/Mackendrick: "Action choreography must be CLEAR - audience must follow it."
+        """
+        if sequences:
+            avg_clarity = sum(seq.choreography_clarity for seq in sequences) / len(sequences)
+        else:
+            avg_clarity = 0.0
+
+        clear = avg_clarity >= 0.6
+
+        issues = []
+        for seq in sequences:
+            if seq.choreography_clarity < 0.4:
+                issues.append(f"Sequence at page {seq.page_start} has unclear choreography")
+
+        return {
+            "avg_clarity": avg_clarity,
+            "clear": clear,
+            "issues": issues[:3]
+        }
+
+    def _analyze_action_pacing(self, screenplay: str, sequences: List[ActionSequence]) -> Dict[str, Any]:
+        """
+        Analyze pacing within action sequences.
+
+        Action should have rhythm - not too slow, not too rushed.
+        """
+        if sequences:
+            durations = [seq.duration_pages for seq in sequences]
+            avg_duration = sum(durations) / len(durations)
+
+            # Good action sequence: 1-4 pages typically
+            if 1.0 <= avg_duration <= 4.0:
+                appropriate = True
+                issues = []
+            elif avg_duration < 1.0:
+                appropriate = False
+                issues = ["Action sequences too short - may feel rushed"]
+            else:
+                appropriate = False
+                issues = ["Action sequences too long - may drag"]
+        else:
+            avg_duration = 0.0
+            appropriate = False
+            issues = ["No action sequences detected"]
+
+        return {
+            "appropriate": appropriate,
+            "avg_duration": avg_duration,
+            "issues": issues
+        }
+
+    def _detect_passive_voice(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Detect passive voice (to be penalized).
+
+        Active voice stronger for action: "He attacks" > "He is attacked"
+        """
+        # Count passive voice constructions
+        count = 0
+        examples = []
+
+        lines = screenplay.split('\n')
+        for line in lines:
+            # Look for "is/was/are + past participle" patterns
+            if re.search(r'\b(is|was|are|were|been|being)\s+\w+ed\b', line.lower()):
+                count += 1
+                if len(examples) < 5:
+                    examples.append(line.strip()[:80])
+
+        # Determine severity
+        if count >= 50:
+            severity = "high"
+        elif count >= 20:
+            severity = "medium"
+        elif count >= 5:
+            severity = "low"
+        else:
+            severity = "none"
+
+        return {
+            "count": count,
+            "severity": severity,
+            "examples": examples
+        }
+
+    def _analyze_action_plot_connection(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze how action drives plot forward.
+
+        Truby/McKee: "Action must serve plot - not just spectacle."
+        """
+        # Count action-drives-plot markers
+        connection_count = 0
+        examples = []
+
+        for line in screenplay.split('\n'):
+            for marker in self.action_drives_plot_markers:
+                if marker in line.lower():
+                    connection_count += 1
+                    if len(examples) < 3:
+                        examples.append(line.strip()[:80])
+                    break
+
+        drives_plot = connection_count >= 3
+
+        # Determine strength
+        if connection_count >= 10:
+            strength = "strong"
+        elif connection_count >= 5:
+            strength = "medium"
+        else:
+            strength = "weak"
+
+        return {
+            "drives_plot": drives_plot,
+            "connection_count": connection_count,
+            "strength": strength,
+            "examples": examples
+        }
+
+    def _analyze_physical_conflict(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze physical conflict presence and quality.
+
+        Physical conflict creates visceral engagement.
+        """
+        # Count physical conflict markers
+        count = 0
+        for marker in self.physical_conflict_markers:
+            count += screenplay.lower().count(marker)
+
+        score = min(1.0, count / 20.0)
+        present = count >= 5
+
+        return {
+            "score": score,
+            "present": present,
+            "count": count
+        }
+
+    def _analyze_visual_writing_style(self, screenplay: str) -> Dict[str, Any]:
+        """
+        Analyze overall visual writing style (cinematic quality).
+
+        Mackendrick/Seger: "Write visually - describe what we SEE."
+        """
+        # Count visual writing markers
+        visual_writing_count = 0
+        for marker in self.visual_writing_markers:
+            visual_writing_count += screenplay.lower().count(marker)
+
+        cinematic_score = min(1.0, visual_writing_count / 50.0)
+
+        # Determine quality
+        if cinematic_score >= 0.8:
+            quality = "excellent"
+            clarity = "high"
+        elif cinematic_score >= 0.6:
+            quality = "good"
+            clarity = "medium"
+        elif cinematic_score >= 0.4:
+            quality = "fair"
+            clarity = "medium"
+        else:
+            quality = "poor"
+            clarity = "low"
+
+        return {
+            "quality": quality,
+            "cinematic_score": cinematic_score,
+            "clarity": clarity,
+            "visual_writing_count": visual_writing_count
+        }
+
+    def _assess_action_character_integration(self, action_character: Dict, protagonist_activity: Dict) -> Dict[str, Any]:
+        """
+        Assess how well action and character are integrated.
+
+        Action should reveal character + protagonist should be active.
+        """
+        action_score = action_character.get("score", 0.0)
+        activity_score = protagonist_activity.get("activity_score", 0.5)
+
+        # Integration score = average of both
+        integration_score = (action_score + activity_score) / 2.0
+
+        unified = integration_score >= 0.6
+
+        if unified:
+            notes = "Action and character well integrated - action reveals character"
+        else:
+            notes = "Action and character disconnected - action feels arbitrary"
+
+        return {
+            "score": integration_score,
+            "unified": unified,
+            "notes": notes
+        }
+
+    def _calculate_overall_action_quality(self, profile: ActionProfile) -> float:
+        """Calculate overall action quality score."""
+        scores = [
+            profile.show_vs_tell_ratio / 3.0,  # Normalize to 0-1
+            profile.protagonist_activity_score,
+            profile.visual_storytelling_score,
+            profile.action_reveals_character_score,
+            profile.choreography_avg_clarity,
+            profile.physical_conflict_score,
+            1.0 if profile.action_drives_plot else 0.0,
+            1.0 if profile.action_escalation_present else 0.0
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        # Penalties
+        if profile.passive_voice_count > 50:
+            overall -= 0.2
+        elif profile.passive_voice_count > 20:
+            overall -= 0.1
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_action_rules(self, profile: ActionProfile, show_tell: Dict,
+                           protagonist_activity: Dict, action_sequences: List[ActionSequence],
+                           physical_beats: Dict, visual_storytelling: Dict,
+                           passive_voice: Dict) -> List[Dict]:
+        """Check action against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "ACTION.R001":
+                # Show Don't Tell
+                if show_tell["quality"] in ["poor", "fair"]:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Show vs tell quality: {show_tell['quality']}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R002":
+                # Active Protagonist
+                if not profile.active_protagonist:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Protagonist too passive: {profile.protagonist_activity_score:.1%}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R003":
+                # Action Sequences Present
+                if profile.total_action_sequences < 3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Only {profile.total_action_sequences} action sequences - needs more",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R004":
+                # Physical Beats Clear
+                if physical_beats["quality"] == "poor":
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Physical beats weak or unclear",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R005":
+                # Visual Storytelling
+                if visual_storytelling["quality"] in ["poor", "fair"]:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Visual storytelling weak: {visual_storytelling['quality']}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R006":
+                # Action Reveals Character
+                if profile.action_reveals_character_score < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Action doesn't reveal character",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R007":
+                # Action Escalates
+                if not profile.action_escalation_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No action escalation - flat intensity",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R008":
+                # Set Pieces Effective
+                if profile.set_pieces_count < 2:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Only {profile.set_pieces_count} set pieces - needs more highlights",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R009":
+                # Choreography Clear
+                if profile.choreography_avg_clarity < 0.5:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Action choreography unclear: {profile.choreography_avg_clarity:.1%}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R010":
+                # Action Pacing Appropriate
+                # (checked in analyze_action_pacing)
+                pass
+
+            elif rule["id"] == "ACTION.R011":
+                # Avoiding Passive Voice
+                if passive_voice["severity"] in ["high", "medium"]:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Too much passive voice: {passive_voice['count']} occurrences",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R012":
+                # Action Drives Plot
+                if not profile.action_drives_plot:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Action doesn't drive plot - feels arbitrary",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R013":
+                # Physical Conflict
+                if profile.physical_conflict_score < 0.3:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Lacks physical conflict",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R014":
+                # Visual Writing Style
+                if profile.visual_writing_quality == "poor":
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Visual writing style weak - not cinematic",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "ACTION.R015":
+                # Action-Character Integration
+                integration_score = (profile.action_reveals_character_score + profile.protagonist_activity_score) / 2.0
+                if integration_score < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Action and character disconnected",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_action_score(self, profile: ActionProfile, violations: List) -> float:
+        """Calculate overall action score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Bonus for excellence
+        if profile.overall_action_quality > 0.8:
+            score += 5
+        elif profile.overall_action_quality > 0.7:
+            score += 3
+
+        if profile.show_vs_tell_ratio >= 2.0 and profile.active_protagonist:
+            score += 3
+
+        if profile.set_pieces_count >= 3 and profile.action_escalation_present:
+            score += 2
+
+        if profile.passive_voice_count < 10:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: ActionProfile,
+                          violations: List) -> str:
+        """Generate action diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Action is clear, dynamic, and reveals character"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Action is present but could be more dynamic"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Action unclear or protagonist too passive"
+        else:
+            level = "POOR"
+            summary = "Major action problems - too much telling, passive protagonist"
+
+        diagnosis = f"ACTION {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.active_protagonist:
+            issues.append("passive protagonist")
+        if profile.show_vs_tell_ratio < 1.0:
+            issues.append("too much telling")
+        if profile.choreography_avg_clarity < 0.5:
+            issues.append("unclear choreography")
+        if not profile.action_drives_plot:
+            issues.append("action doesn't drive plot")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: ActionProfile, show_tell: Dict,
+                                 passive_voice: Dict) -> List[str]:
+        """Generate specific action recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.active_protagonist:
+            recommendations.append("Make protagonist ACTIVE - must make choices and drive story (McKee/Field/Snyder)")
+
+        if show_tell["ratio"] < 1.0:
+            recommendations.append("SHOW DON'T TELL - reveal through action, not exposition (Seger/McKee)")
+
+        if profile.choreography_avg_clarity < 0.5:
+            recommendations.append("Clarify action choreography - audience must follow action (Goldman/Mackendrick)")
+
+        if not profile.action_drives_plot:
+            recommendations.append("Ensure action serves plot - not just spectacle (Truby/McKee)")
+
+        if passive_voice["severity"] in ["high", "medium"]:
+            recommendations.append("Reduce passive voice - use active constructions (Strunk & White)")
+
+        if profile.set_pieces_count < 2:
+            recommendations.append("Add memorable set pieces - action highlights (Snyder/Goldman)")
+
+        if profile.visual_storytelling_score < 0.5:
+            recommendations.append("Strengthen visual storytelling - film is visual medium (Mackendrick/Seger)")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study Aristotle's Poetics - drama is imitation of ACTION, not of men")
+            recommendations.append("Study McKee's Story - character revealed through action under pressure")
+
+        return recommendations[:5]
+
+    def export_action_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export action features for correlation/analysis.
+
+        Returns structured data with action metrics.
+        Useful for external indexing, correlation engines, or ML pipelines.
+
+        Args:
+            screenplay_text: Full screenplay text
+
+        Returns:
+            Dict with action metrics
+        """
+        show_tell = self._analyze_show_vs_tell(screenplay_text)
+        protagonist_activity = self._analyze_protagonist_activity(screenplay_text)
+
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+        action_sequences = self._detect_action_sequences(screenplay_text, scenes)
+
+        return {
+            "show_vs_tell": {
+                "ratio": show_tell["ratio"],
+                "quality": show_tell["quality"]
+            },
+            "protagonist_activity": {
+                "activity_score": protagonist_activity["activity_score"],
+                "is_active": protagonist_activity["is_active"]
+            },
+            "action_sequences": {
+                "total": len(action_sequences),
+                "total_pages": sum(seq.duration_pages for seq in action_sequences)
+            },
+            "meta": {
+                "source": "DrAction",
+                "focus": "Action sequences and visual storytelling"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrActionAnalysis(DrAction):
+    """Alias for compatibility with test framework."""
+    pass

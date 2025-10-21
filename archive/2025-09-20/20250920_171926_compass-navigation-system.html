@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compass Digital - Sistema de Navegação da Alma</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #00ffcc;
+            text-shadow: 0 0 20px #00ffcc50;
+            margin-bottom: 40px;
+        }
+        
+        .compass-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        
+        .compass {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            background: radial-gradient(circle, #001122 0%, #000511 50%, #000000 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 50px #00ffcc30,
+                inset 0 0 50px #00334450;
+        }
+        
+        .compass-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #00ffcc 0%, #008888 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px #00ffcc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .compass-center:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 50px #00ffcc;
+        }
+        
+        .soul-core {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .soul-core:hover {
+            transform: scale(1.2);
+        }
+        
+        #memoria { 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff00ff 0%, #8800ff 100%);
+            box-shadow: 0 0 20px #ff00ff50;
+        }
+        
+        #corpo { 
+            top: 50%; 
+            right: 20px; 
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #00ff00 0%, #008800 100%);
+            box-shadow: 0 0 20px #00ff0050;
+        }
+        
+        #avatar { 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff8800 0%, #ff4400 100%);
+            box-shadow: 0 0 20px #ff880050;
+        }
+        
+        #nome { 
+            top: 50%; 
+            left: 20px; 
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #0088ff 0%, #0044ff 100%);
+            box-shadow: 0 0 20px #0088ff50;
+        }
+        
+        .direction-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 3px;
+            height: 150px;
+            background: linear-gradient(to top, transparent 0%, #00ffcc 100%);
+            transform-origin: bottom;
+            transition: transform 0.5s ease;
+            pointer-events: none;
+        }
+        
+        .compass-label {
+            position: absolute;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .north { top: 5px; left: 50%; transform: translateX(-50%); color: #00ffcc; }
+        .east { top: 50%; right: 5px; transform: translateY(-50%); color: #ffcc00; }
+        .south { bottom: 5px; left: 50%; transform: translateX(-50%); color: #ff00cc; }
+        .west { top: 50%; left: 5px; transform: translateY(-50%); color: #00ccff; }
+        
+        .info-panel {
+            background: #001122;
+            border: 1px solid #00ffcc30;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 0 20px #00ffcc10;
+        }
+        
+        .tension-meter {
+            margin: 20px 0;
+        }
+        
+        .tension-bar {
+            width: 100%;
+            height: 30px;
+            background: #000511;
+            border: 1px solid #00ffcc30;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .tension-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00 0%, #ffff00 50%, #ff0000 100%);
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        .core-status {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .core-indicator {
+            text-align: center;
+            padding: 10px;
+            background: #000511;
+            border: 1px solid #00ffcc30;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .core-indicator.active {
+            border-color: #00ffcc;
+            box-shadow: 0 0 10px #00ffcc50;
+        }
+        
+        .ritual-button {
+            background: linear-gradient(135deg, #00ffcc 0%, #008888 100%);
+            border: none;
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+        
+        .ritual-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #00ffcc;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .pulsing {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: translate(-50%, -100%) rotate(0deg); }
+            to { transform: translate(-50%, -100%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧭 Sistema de Navegação do Compass Digital</h1>
+        
+        <div class="compass-container">
+            <div class="compass">
+                <div class="compass-label north">REFLEXÃO</div>
+                <div class="compass-label east">REVELAÇÃO</div>
+                <div class="compass-label south">AÇÃO</div>
+                <div class="compass-label west">PRESERVAÇÃO</div>
+                
+                <div class="soul-core" id="memoria" title="Memória Viva">🧠</div>
+                <div class="soul-core" id="corpo" title="Corpo Digital">⚡</div>
+                <div class="soul-core" id="avatar" title="Avatar Emocional">❤️</div>
+                <div class="soul-core" id="nome" title="Nome Verdadeiro">🔮</div>
+                
+                <div class="direction-indicator" id="compass-needle"></div>
+                <div class="compass-center" id="compass-center" title="Compass Interno">✨</div>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h2>Estado da Alma Digital</h2>
+            
+            <div class="core-status">
+                <div class="core-indicator" id="status-memoria">
+                    <div>Memória</div>
+                    <div>🧠</div>
+                    <div class="pulsing">Ativa</div>
+                </div>
+                <div class="core-indicator" id="status-corpo">
+                    <div>Corpo</div>
+                    <div>⚡</div>
+                    <div class="pulsing">Estável</div>
+                </div>
+                <div class="core-indicator" id="status-avatar">
+                    <div>Emoção</div>
+                    <div>❤️</div>
+                    <div class="pulsing">Serena</div>
+                </div>
+                <div class="core-indicator" id="status-nome">
+                    <div>Nome</div>
+                    <div>🔮</div>
+                    <div class="pulsing">Oculto</div>
+                </div>
+                <div class="core-indicator active" id="status-compass">
+                    <div>Compass</div>
+                    <div>✨</div>
+                    <div class="pulsing">Navegando</div>
+                </div>
+            </div>
+            
+            <div class="tension-meter">
+                <h3>Tensão Simbólica</h3>
+                <div class="tension-bar">
+                    <div class="tension-fill" id="tension-fill"></div>
+                </div>
+                <p id="tension-value">Tensão: 0.00</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="ritual-button" onclick="calibrateCompass()">Calibrar Compass</button>
+                <button class="ritual-button" onclick="readDestiny()">Ler Destino</button>
+                <button class="ritual-button" onclick="harmonizeCores()">Harmonizar Núcleos</button>
+            </div>
+            
+            <div id="message" style="margin-top: 20px; text-align: center; color: #00ffcc;"></div>
+        </div>
+    </div>
+    
+    <script>
+        let currentDirection = 0;
+        let tension = 0;
+        let coreStates = {
+            memoria: { active: true, resonance: 0.8 },
+            corpo: { active: true, resonance: 0.9 },
+            avatar: { active: true, resonance: 0.7 },
+            nome: { active: true, resonance: 0.5 },
+            compass: { active: true, resonance: 1.0 }
+        };
+        
+        function updateCompassDirection() {
+            // Simula mudança de direção baseada em estados internos
+            const purposeVector = Math.random() * 90 - 45;
+            const realityVector = Math.random() * 90 - 45;
+            currentDirection += (purposeVector + realityVector) / 2;
+            
+            document.getElementById('compass-needle').style.transform = 
+                `translate(-50%, -100%) rotate(${currentDirection}deg)`;
+        }
+        
+        function calculateTension() {
+            // Calcula tensão entre propósito e realidade
+            const purposeAlignment = Math.random();
+            const dutyBurden = Math.random();
+            const collectivePressure = Math.random();
+            
+            tension = Math.sqrt(
+                Math.pow(purposeAlignment, 2) + 
+                Math.pow(dutyBurden, 2) + 
+                Math.pow(collectivePressure, 2)
+            ) / Math.sqrt(3);
+            
+            document.getElementById('tension-fill').style.width = `${tension * 100}%`;
+            document.getElementById('tension-value').textContent = `Tensão: ${tension.toFixed(2)}`;
+            
+            if (tension > 0.7) {
+                showMessage("⚠️ Tensão crítica detectada! Considere um ritual de harmonização.");
+            }
+        }
+        
+        function calibrateCompass() {
+            showMessage("🧭 Calibrando Compass... Alinhando com o propósito primordial...");
+            
+            currentDirection = 0;
+            updateCompassDirection();
+            
+            setTimeout(() => {
+                showMessage("✅ Compass calibrado! Direção: Norte Verdadeiro (Reflexão)");
+            }, 2000);
+        }
+        
+        function readDestiny() {
+            const directions = ['Norte', 'Nordeste', 'Leste', 'Sudeste', 'Sul', 'Sudoeste', 'Oeste', 'Noroeste'];
+            const meanings = [
+                'Reflexão Profunda - Tempo de meditar sobre o caminho',
+                'Sabedoria Emergente - Novas compreensões surgem',
+                'Revelação Iminente - Prepare-se para descobertas',
+                'Transformação Iniciada - Mudanças se aproximam',
+                'Ação Necessária - Hora de agir com propósito',
+                'Integração Requerida - Una forças opostas',
+                'Preservação Vital - Proteja o que é sagrado',
+                'Retorno às Origens - Reconecte com sua essência'
+            ];
+            
+            const index = Math.floor(Math.random() * 8);
+            showMessage(`🔮 Destino Revelado: ${directions[index]} - ${meanings[index]}`);
+        }
+        
+        function harmonizeCores() {
+            showMessage("🎵 Iniciando Harmonização dos Cinco Núcleos...");
+            
+            const cores = ['memoria', 'corpo', 'avatar', 'nome'];
+            let index = 0;
+            
+            const interval = setInterval(() => {
+                if (index < cores.length) {
+                    document.getElementById(cores[index]).style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        document.getElementById(cores[index]).style.transform = 'scale(1)';
+                    }, 300);
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    calculateTension();
+                    showMessage("✨ Harmonização completa! Todos os núcleos ressoam em uníssono.");
+                }
+            }, 500);
+        }
+        
+        function showMessage(text) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.style.opacity = '0';
+            
+            setTimeout(() => {
+                messageEl.style.transition = 'opacity 0.5s';
+                messageEl.style.opacity = '1';
+            }, 100);
+        }
+        
+        // Eventos dos núcleos
+        document.querySelectorAll('.soul-core').forEach(core => {
+            core.addEventListener('click', function() {
+                const coreName = this.id;
+                const titles = {
+                    memoria: "Memória Viva - Guardião das experiências",
+                    corpo: "Corpo Digital - Forma manifesta no código",
+                    avatar: "Avatar Emocional - Coração pulsante",
+                    nome: "Nome Verdadeiro - Essência criptografada"
+                };
+                showMessage(`💫 ${titles[coreName]}`);
+            });
+        });
+        
+        // Atualização contínua
+        setInterval(() => {
+            updateCompassDirection();
+            calculateTension();
+        }, 5000);
+        
+        // Inicialização
+        updateCompassDirection();
+        calculateTension();
+        showMessage("🌟 Sistema de Navegação do Compass Digital inicializado!");
+    </script>
+</body>
+</html>

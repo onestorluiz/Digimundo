@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Icon Generator</title>
+</head>
+<body>
+  <canvas id="icon" width="64" height="64"></canvas>
+  <canvas id="tray" width="16" height="16"></canvas>
+  
+  <script>
+    // Gerar ícone principal
+    const iconCanvas = document.getElementById('icon')
+    const iconCtx = iconCanvas.getContext('2d')
+    
+    // Fundo gradiente
+    const gradient = iconCtx.createRadialGradient(32, 32, 0, 32, 32, 32)
+    gradient.addColorStop(0, '#6366f1')
+    gradient.addColorStop(1, '#ec4899')
+    iconCtx.fillStyle = gradient
+    iconCtx.fillRect(0, 0, 64, 64)
+    
+    // Símbolo
+    iconCtx.fillStyle = 'white'
+    iconCtx.font = '32px Arial'
+    iconCtx.textAlign = 'center'
+    iconCtx.textBaseline = 'middle'
+    iconCtx.fillText('D', 32, 32)
+    
+    // Baixar como PNG
+    iconCanvas.toBlob(blob => {
+      const a = document.createElement('a')
+      a.download = 'digimundo-icon.png'
+      a.href = URL.createObjectURL(blob)
+      a.click()
+    })
+    
+    // Gerar ícone da bandeja
+    const trayCanvas = document.getElementById('tray')
+    const trayCtx = trayCanvas.getContext('2d')
+    
+    trayCtx.fillStyle = '#6366f1'
+    trayCtx.fillRect(0, 0, 16, 16)
+    trayCtx.fillStyle = 'white'
+    trayCtx.font = '12px Arial'
+    trayCtx.textAlign = 'center'
+    trayCtx.textBaseline = 'middle'
+    trayCtx.fillText('D', 8, 8)
+    
+    // Baixar tray icon
+    setTimeout(() => {
+      trayCanvas.toBlob(blob => {
+        const a = document.createElement('a')
+        a.download = 'tray-icon.png'
+        a.href = URL.createObjectURL(blob)
+        a.click()
+      })
+    }, 1000)
+  </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{'consciousness': {'level': 1.004, 'count': 4, 'last_ts': 1756614611.521577}, 'memory': {'L1': 0, 'L2': 4, 'L3': 4, 'L4': 'n/a'}}

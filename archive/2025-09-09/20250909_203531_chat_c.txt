@@ -1,0 +1,14 @@
+============================================================
+CASE: c
+TIMESTAMP: 2025-09-09T20:35:31.135470
+ELAPSED: 0.5s (simulated)
+============================================================
+
+INPUT:
+O que é mise-en-scène?
+
+RESPONSE:
+Mise-en-scène é tudo que aparece diante da câmera: cenários, figurinos, iluminação, atores e seus movimentos.
+
+LENGTH: 109 chars
+NON-EMPTY: True

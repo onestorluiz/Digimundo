@@ -1,0 +1,11 @@
+=== DIGILANG TRANSLATION ===
+Original: Forrest Gump - First Draft - Dec 18 1992.pdf
+Compressed: ~40% reduction
+Date: 2025-08-29 11:03
+==============================
+
+[DIGILANG SYMBOLS ACTIVE]
+[角] character [劾] screenplay [景] scene
+[話] dialogue [動] action [英] hero
+
+

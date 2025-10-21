@@ -1,0 +1,14 @@
+
+SCRIPTUREMON: ATIVAÇÃO DOS TRÊS CÉREBROS
+
+PASTAS CRIADAS:
+- scripturemon_vivo: núcleo mestre (LLaMA 13B)
+- operacional_rapido: núcleo de execução (Mistral 7B)
+- estudos_infinitos: núcleo simbólico e de aprimoramento (GLM-4-32B ou DeepCoder)
+- logs: registros cruzados
+- memoria_viva: compartilhamento simbólico e funcional entre os três
+
+EXECUÇÃO:
+1. chmod +x start_operacional.sh start_estudos_infinitos.sh
+2. ./start_operacional.sh
+3. ./start_estudos_infinitos.sh (ou via systemctl enable/start)

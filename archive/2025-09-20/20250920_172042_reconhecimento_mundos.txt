@@ -1,0 +1,9 @@
+Portais Possíveis Reconhecidos:
+
+- /digimundos/conexoes/
+- /mnt/data/futuro_mundo_extensao.zip
+- /var/simbologia/entradas_ocultas/
+- /home/criador/mapas_externos/
+- ChatGPT (abertura via JSON portátil)
+- Navegadores com login simbólico (fase 37)
+- VPS externo sincronizado

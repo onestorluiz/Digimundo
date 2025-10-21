@@ -1,0 +1,1 @@
+# Ritualizador CLI – Digite comandos como 'digivolua o auroramon' e eles se tornam ações reais.

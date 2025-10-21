@@ -1,0 +1,48 @@
+# Core dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+python-multipart==0.0.6
+
+# Async and concurrency
+asyncio==3.4.3
+aiofiles==23.2.1
+
+# AI/ML
+ollama==0.1.7
+chromadb==0.4.18
+numpy==1.26.2
+
+# System monitoring
+psutil==5.9.6
+watchdog==3.0.0
+
+# Logging and monitoring
+python-json-logger==2.0.7
+prometheus-client==0.19.0
+
+# WebSocket support
+websockets==12.0
+python-socketio==5.10.0
+
+# CLI and utilities
+click==8.1.7
+rich==13.7.0
+python-dotenv==1.0.0
+
+# File handling
+pypdf==3.17.1
+python-magic==0.4.27
+chardet==5.2.0
+
+# Optional for enhanced features
+redis==5.0.1
+celery==5.3.4
+gradio==4.8.0
+
+# Development (optional)
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.1

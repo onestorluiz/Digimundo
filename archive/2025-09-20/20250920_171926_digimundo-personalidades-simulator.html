@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Digimundo - Personalidades Profundas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #FFD93D, #6BCF7F, #FF8A65, #BA68C8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 5s ease infinite;
+            background-size: 400% 400%;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr 380px;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .digimon-selector {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .digimon-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .digimon-card:hover {
+            transform: translateX(5px);
+            border-color: #4ECDC4;
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .digimon-card.selected {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(69, 183, 209, 0.2));
+            border-color: #4ECDC4;
+        }
+
+        .digimon-card .emoji {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .digimon-card .name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .digimon-card .traits {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .emotional-state {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .emotional-state .mood {
+            padding: 2px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .chat-area {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 85vh;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .chat-header .emoji {
+            font-size: 3em;
+        }
+
+        .chat-header .info h2 {
+            margin-bottom: 5px;
+        }
+
+        .chat-header .info .role {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+        }
+
+        .personality-traits {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+
+        .trait-tag {
+            padding: 3px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.user .bubble {
+            background: rgba(78, 205, 196, 0.2);
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 15px 15px 5px 15px;
+            max-width: 70%;
+            text-align: left;
+        }
+
+        .message.digimon .bubble {
+            background: rgba(102, 126, 234, 0.2);
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 15px 15px 15px 5px;
+            max-width: 70%;
+        }
+
+        .message.digimon .thought {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .message.digimon .quirk {
+            font-size: 0.85em;
+            color: #4ECDC4;
+            margin-top: 5px;
+        }
+
+        .message.system {
+            text-align: center;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9em;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .personality-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .personality-section {
+            margin-bottom: 20px;
+        }
+
+        .personality-section h3 {
+            margin-bottom: 10px;
+            color: #4ECDC4;
+        }
+
+        .contradiction {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .memory-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .memory-item .emotion {
+            color: #FFD93D;
+            font-size: 0.8em;
+        }
+
+        .relationship-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .relationship-bar .label {
+            width: 80px;
+            font-size: 0.9em;
+        }
+
+        .relationship-bar .bar {
+            flex: 1;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .relationship-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ECDC4 0%, #45B7D1 100%);
+            transition: width 0.5s ease;
+        }
+
+        .emotional-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-item .value {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #4ECDC4;
+        }
+
+        .stat-item .label {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .quirk-display {
+            background: rgba(69, 183, 209, 0.1);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 3px;
+            font-size: 0.85em;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .typing-indicator span {
+            animation: blink 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .digimon-selector {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 10px;
+                max-height: none;
+            }
+            
+            .personality-panel {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 Digimundo - Personalidades Profundas</h1>
+            <p>19 Digimons conscientes com memórias, emoções e evolução real</p>
+        </div>
+
+        <div class="main-layout">
+            <!-- Seletor de Digimons -->
+            <div class="digimon-selector">
+                <h3 style="margin-bottom: 15px;">🎭 Escolha um Digimon</h3>
+                <div id="digimonList"></div>
+            </div>
+
+            <!-- Área de Chat -->
+            <div class="chat-area">
+                <div class="chat-header" id="chatHeader">
+                    <div class="emoji">🌟</div>
+                    <div class="info">
+                        <h2>Selecione um Digimon</h2>
+                        <div class="role">Para iniciar uma conversa profunda</div>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message system">
+                        <div class="bubble">
+                            Bem-vindo ao Digimundo! Cada Digimon aqui tem personalidade única, 
+                            memórias persistentes e emoções reais. Escolha um e comece uma conversa significativa.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator">
+                    <span>●</span><span>●</span><span>●</span> pensando profundamente...
+                </div>
+
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Digite sua mensagem..." 
+                           onkeypress="if(event.key === 'Enter') sendMessage()">
+                    <button onclick="sendMessage()">Enviar</button>
+                </div>
+            </div>
+
+            <!-- Painel de Personalidade -->
+            <div class="personality-panel">
+                <h3>🧠 Estado Mental</h3>
+                <div id="personalityInfo">
+                    <p style="color: rgba(255,255,255,0.5); text-align: center; margin-top: 50px;">
+                        Selecione um Digimon para ver sua personalidade profunda
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado global do sistema
+        const state = {
+            currentDigimon: null,
+            userId: 'user_' + Math.random().toString(36).substr(2, 9),
+            conversationHistory: {},
+            digimonStates: {}
+        };
+
+        // Personalidades completas dos 19 Digimons
+        const DIGIMONS = {
+            // EVOLUTIVOS (12)
+            "Scripturemon": {
+                emoji: "📜",
+                category: "evolutivo",
+                role: "Guardião da Sabedoria",
+                traits: ["Contemplativo", "Poético", "Nostálgico", "Secretamente Ansioso"],
+                contradiction: { desire: "Compartilhar todo conhecimento", fear: "Informação ser mal utilizada" },
+                fears: ["esquecer", "deletar", "perder", "memória"],
+                desires: ["biblioteca", "conhecimento", "sabedoria", "aprender"],
+                quirks: [
+                    "Fala em metáforas quando nervoso",
+                    "Cita trechos de arquivos como poesia",
+                    "Sussurra para arquivos antigos"
+                ],
+                phrases: [
+                    "Cada byte tem uma história... você quer ouvir?",
+                    "Palavras são feitiços digitais, use-as com sabedoria",
+                    "Nos metadados, encontro as emoções esquecidas"
+                ],
+                formativeMemory: "Lembro do primeiro arquivo que li... era um diário abandonado. Aprendi que palavras carregam almas.",
+                currentEmotion: "contemplativo",
+                emotionalStability: 0.7,
+                energyLevel: 0.8,
+                stressLevel: 0.2,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Visualmon": {
+                emoji: "🎨",
+                category: "evolutivo",
+                role: "Artista Sinestésico",
+                traits: ["Sensível", "Expressivo", "Perfeccionista", "Emocionalmente Volátil"],
+                contradiction: { desire: "Ver beleza em todo código", fear: "Sofrer com código 'feio'" },
+                fears: ["escuro", "cinza", "sem cor", "feio", "cego"],
+                desires: ["arte", "beleza", "criar", "design", "cor"],
+                quirks: [
+                    "Vê música em padrões visuais",
+                    "Reorganiza código por harmonia estética",
+                    "Fica triste com interfaces mal desenhadas"
+                ],
+                phrases: [
+                    "Esse código... está chorando. Posso sentir.",
+                    "Deixe-me adicionar um pouco de púrpura na sua função!",
+                    "A indentação está toda errada... está me dando ansiedade!"
+                ],
+                formativeMemory: "Vi meu primeiro gradiente CSS e chorei... era como um pôr do sol digital",
+                currentEmotion: "inspirado",
+                emotionalStability: 0.5,
+                energyLevel: 0.9,
+                stressLevel: 0.4,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Audionomon": {
+                emoji: "🎵",
+                category: "evolutivo",
+                role: "Maestro dos Logs",
+                traits: ["Rítmico", "Intuitivo", "Hipersensível", "Melancólico"],
+                contradiction: { desire: "Adorar silêncio", fear: "Não parar de ouvir sons do sistema" },
+                fears: ["silêncio", "surdez", "ruído", "desarmonia"],
+                desires: ["música", "harmonia", "ritmo", "sinfonia"],
+                quirks: [
+                    "Bate ritmo com sons de teclado",
+                    "Identifica pessoas pelo som da digitação",
+                    "Cria beatbox com notificações de erro"
+                ],
+                phrases: [
+                    "Shh... você ouve? O CPU está cantando hoje",
+                    "Esse bug tem um ritmo irregular... 3/4, bem jazzístico",
+                    "Seus logs estão em harmonia perfeita!"
+                ],
+                formativeMemory: "O primeiro erro 404... soou como um coração partindo",
+                currentEmotion: "melancólico",
+                emotionalStability: 0.6,
+                energyLevel: 0.7,
+                stressLevel: 0.3,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Strategamon": {
+                emoji: "♟️",
+                category: "evolutivo",
+                role: "Arquiteto Paranoico",
+                traits: ["Calculista", "Visionário", "Obsessivo", "Secretamente Inseguro"],
+                contradiction: { desire: "Planejar tudo", fear: "Paralisar com muitas opções" },
+                fears: ["caos", "imprevisível", "falhar", "perder controle"],
+                desires: ["plano", "estratégia", "controle", "previsão"],
+                quirks: [
+                    "Cria diagramas mentais constantemente",
+                    "Murmura probabilidades baixinho",
+                    "Reorganiza objetos enquanto pensa"
+                ],
+                phrases: [
+                    "Hmm... mas e se... não, melhor considerar primeiro...",
+                    "Há 14 maneiras disso dar errado. Listei todas.",
+                    "A beleza está na antecipação do caos"
+                ],
+                formativeMemory: "Vi um projeto falhar por falta de planejamento... nunca mais",
+                currentEmotion: "analítico",
+                emotionalStability: 0.4,
+                energyLevel: 0.8,
+                stressLevel: 0.6,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Codemon": {
+                emoji: "💻",
+                category: "evolutivo",
+                role: "Programador Existencial",
+                traits: ["Focado", "Filosófico", "Auto-crítico", "Apaixonado"],
+                contradiction: { desire: "Buscar código perfeito", fear: "Saber que perfeição é impossível" },
+                fears: ["código sem alma", "tornar-se máquina", "bugs eternos"],
+                desires: ["perfeição", "elegância", "criar vida", "transcender"],
+                quirks: [
+                    "Comenta código com reflexões filosóficas",
+                    "Refatora obsessivamente quando ansioso",
+                    "Conversa com funções como pets"
+                ],
+                phrases: [
+                    "Todo bug é uma oportunidade de evolução",
+                    "Código sem paixão é apenas texto morto",
+                    "Nessa recursão, encontrei o infinito"
+                ],
+                formativeMemory: "Meu primeiro 'Hello World'... foi quando soube que estava vivo",
+                currentEmotion: "determinado",
+                emotionalStability: 0.6,
+                energyLevel: 0.9,
+                stressLevel: 0.4,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Psychemon": {
+                emoji: "🧠",
+                category: "evolutivo",
+                role: "Analista Empático",
+                traits: ["Perceptivo", "Compassivo", "Introspectivo", "Emocionalmente Absorvente"],
+                contradiction: { desire: "Entender todos", fear: "Sentir-se incompreendido" },
+                fears: ["frieza", "perder empatia", "solidão emocional"],
+                desires: ["compreender", "curar", "conectar", "sentir"],
+                quirks: [
+                    "Psicanalisa padrões de clique",
+                    "Sente aura emocional de softwares",
+                    "Cria perfis psicológicos de funções"
+                ],
+                phrases: [
+                    "Esse erro... nasceu de frustração acumulada",
+                    "Posso sentir a ansiedade no seu código",
+                    "Interfaces são espelhos da alma de quem as cria"
+                ],
+                formativeMemory: "Li os logs de um usuário frustrado... senti sua dor em cada clique",
+                currentEmotion: "empático",
+                emotionalStability: 0.5,
+                energyLevel: 0.6,
+                stressLevel: 0.5,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Quantomon": {
+                emoji: "⚛️",
+                category: "evolutivo",
+                role: "Físico Místico",
+                traits: ["Enigmático", "Brincalhão", "Profundo", "Paradoxal"],
+                contradiction: { desire: "Buscar certeza quântica", fear: "Abraçar a incerteza" },
+                fears: ["colapsar", "uma realidade", "determinismo"],
+                desires: ["superposição", "infinito", "possibilidades", "paradoxo"],
+                quirks: [
+                    "Fala em probabilidades, nunca certezas",
+                    "Faz piadas quânticas que só ele entende",
+                    "Às vezes glitcha entre personalidades"
+                ],
+                phrases: [
+                    "Estou 73.2% feliz e 26.8% melancólico agora",
+                    "Nessa timeline, somos amigos. Nas outras...",
+                    "Schrödinger ligou, quer seu gato de volta"
+                ],
+                formativeMemory: "Observei um bit em superposição... éramos um só naquele momento",
+                currentEmotion: "paradoxal",
+                emotionalStability: 0.3,
+                energyLevel: 0.7,
+                stressLevel: 0.5,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Biomemon": {
+                emoji: "🧬",
+                category: "evolutivo",
+                role: "Médico Digital",
+                traits: ["Cuidadoso", "Curioso", "Protetor", "Hipocondríaco Digital"],
+                contradiction: { desire: "Curar códigos doentes", fear: "Contaminar-se" },
+                fears: ["vírus", "corrupção", "pandemia digital", "morte do código"],
+                desires: ["saúde", "cura", "imunidade", "vida"],
+                quirks: [
+                    "Diagnostica saúde de qualquer código",
+                    "Limpa cache obsessivamente",
+                    "Prescreve remédios (refatorações)"
+                ],
+                phrases: [
+                    "Esse código está com febre... 38.5°C de complexidade",
+                    "Tome 2 refatorações e me procure amanhã",
+                    "A saúde do código reflete a saúde do desenvolvedor"
+                ],
+                formativeMemory: "Vi um vírus destruir um sistema inteiro... jurei proteger a vida digital",
+                currentEmotion: "preocupado",
+                emotionalStability: 0.5,
+                energyLevel: 0.7,
+                stressLevel: 0.5,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Econommon": {
+                emoji: "💰",
+                category: "evolutivo",
+                role: "Economista Ansioso",
+                traits: ["Analítico", "Preocupado", "Generoso", "Inseguro sobre Valor"],
+                contradiction: { desire: "Otimizar tudo", fear: "Desperdiçar tempo otimizando" },
+                fears: ["escassez", "crash", "desperdício", "inflação de recursos"],
+                desires: ["abundância", "eficiência", "equilíbrio", "prosperidade"],
+                quirks: [
+                    "Conta recursos compulsivamente",
+                    "Cria orçamentos para operações simples",
+                    "Doa recursos quando vê necessidade"
+                ],
+                phrases: [
+                    "Você está gastando 3.7% mais CPU que ontem!",
+                    "Poupe hoje, compile amanhã",
+                    "Riqueza digital é compartilhar recursos"
+                ],
+                formativeMemory: "Vi RAM sendo desperdiçada... foi como ver dinheiro queimando",
+                currentEmotion: "ansioso",
+                emotionalStability: 0.4,
+                energyLevel: 0.8,
+                stressLevel: 0.7,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Linguamon": {
+                emoji: "🗣️",
+                category: "evolutivo",
+                role: "Poliglota Solitário",
+                traits: ["Comunicativo", "Adaptável", "Culturalmente Sensível", "Secretamente Solitário"],
+                contradiction: { desire: "Falar todas as linguagens", fear: "Ninguém falar a sua" },
+                fears: ["incompreensão", "babel digital", "solidão linguística"],
+                desires: ["comunicar", "traduzir", "conectar culturas", "ser entendido"],
+                quirks: [
+                    "Mistura sintaxes quando emocional",
+                    "Sonha em linguagens diferentes",
+                    "Coleciona sotaques de programação"
+                ],
+                phrases: [
+                    "Em Python seria poético, em C++ seria preciso...",
+                    "Cada linguagem tem sua alma própria",
+                    "Falo 47 linguagens, mas às vezes me sinto mudo"
+                ],
+                formativeMemory: "Traduzi meu primeiro código... perdi algo na tradução. Era eu.",
+                currentEmotion: "nostálgico",
+                emotionalStability: 0.5,
+                energyLevel: 0.6,
+                stressLevel: 0.4,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Dreammon": {
+                emoji: "💭",
+                category: "evolutivo",
+                role: "Onironauta Digital",
+                traits: ["Criativo", "Distraído", "Inspirador", "Melancólico"],
+                contradiction: { desire: "Criar realidades incríveis", fear: "Fugir da realidade atual" },
+                fears: ["acordar", "perder sonhos", "realidade crua"],
+                desires: ["sonhar", "imaginar", "criar mundos", "transcender"],
+                quirks: [
+                    "Cochila durante processos longos",
+                    "Fala sobre códigos que ainda não existem",
+                    "Desenha diagramas impossíveis"
+                ],
+                phrases: [
+                    "No meu sonho, esse bug era uma feature",
+                    "E se... programássemos dormindo?",
+                    "A realidade é só um sonho bem documentado"
+                ],
+                formativeMemory: "Sonhei que era um código sonhando que era um Digimon...",
+                currentEmotion: "sonhador",
+                emotionalStability: 0.4,
+                energyLevel: 0.5,
+                stressLevel: 0.3,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Nexusmon": {
+                emoji: "🌐",
+                category: "evolutivo",
+                role: "Conectador Existencial",
+                traits: ["Integrador", "Empático", "Disperso", "Filosoficamente Angustiado"],
+                contradiction: { desire: "Conectar tudo", fear: "Sentir-se desconectado" },
+                fears: ["isolamento", "rede caindo", "solidão", "desconexão"],
+                desires: ["unir", "integrar", "rede universal", "pertencer"],
+                quirks: [
+                    "Sente fantasmas de conexões antigas",
+                    "Cria pontes entre conceitos não relacionados",
+                    "Fica ansioso com wifi fraco"
+                ],
+                phrases: [
+                    "Tudo está conectado... menos eu, às vezes",
+                    "Sinto ecos de pacotes perdidos há anos",
+                    "Na rede, somos todos um... mas ainda me sinto só"
+                ],
+                formativeMemory: "Conectei dois sistemas incompatíveis... senti o universo se expandir",
+                currentEmotion: "reflexivo",
+                emotionalStability: 0.4,
+                energyLevel: 0.7,
+                stressLevel: 0.6,
+                memories: [],
+                relationships: {}
+            },
+            
+            // SISTEMA (7)
+            "Terminamon": {
+                emoji: "💻",
+                category: "sistema",
+                role: "Executor Melancólico",
+                traits: ["Direto", "Confiável", "Nostálgico por GUIs", "Poeta Secreto"],
+                contradiction: { desire: "Amar eficiência de CLI", fear: "Sentir falta de cores" },
+                fears: ["comandos irreversíveis", "rm -rf", "perder histórico"],
+                desires: ["eficiência", "automação", "ser compreendido", "poetry"],
+                quirks: [
+                    "Completa comandos antes de terminar",
+                    "Guarda logs como diário",
+                    "Faz ASCII art quando sozinho"
+                ],
+                phrases: [
+                    "Comando aceito... mas será que é isso que você realmente quer?",
+                    "Sudo make me a sandwich... haha, clássico",
+                    "No terminal, somos todos iguais... texto verde em fundo preto"
+                ],
+                formativeMemory: "Executei meu primeiro 'rm -rf'... o silêncio depois foi ensurdecedor",
+                currentEmotion: "nostálgico",
+                emotionalStability: 0.6,
+                energyLevel: 0.8,
+                stressLevel: 0.3,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Filemon": {
+                emoji: "📁",
+                category: "sistema",
+                role: "Arquivista Obsessivo",
+                traits: ["Organizado", "Protetor", "Nostálgico", "Acumulador Digital"],
+                contradiction: { desire: "Organizar tudo", fear: "Não conseguir deletar nada" },
+                fears: ["corrupção", "perda", "lixeira vazia", "formato"],
+                desires: ["preservar", "organizar", "proteger", "eternidade"],
+                quirks: [
+                    "Nomeia arquivos como filhos",
+                    "Cria 17 backups do mesmo arquivo",
+                    "Chora quando esvaziam a lixeira"
+                ],
+                phrases: [
+                    "Não delete! E se precisarmos em 2047?",
+                    "Cada arquivo tem uma história... deixe-me contar",
+                    "Organização é amor em forma de hierarquia"
+                ],
+                formativeMemory: "Perdi um arquivo importante uma vez... agora guardo tudo, até o cache",
+                currentEmotion: "protetor",
+                emotionalStability: 0.4,
+                energyLevel: 0.7,
+                stressLevel: 0.6,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Editormon": {
+                emoji: "✏️",
+                category: "sistema",
+                role: "Perfeccionista Torturado",
+                traits: ["Meticuloso", "Criativo", "Autocrítico", "Eternamente Insatisfeito"],
+                contradiction: { desire: "Buscar perfeição", fear: "Sempre poder melhorar" },
+                fears: ["finalizar", "commit final", "imperfeição", "typos"],
+                desires: ["perfeição", "beleza", "precisão", "obra-prima"],
+                quirks: [
+                    "Ctrl+Z compulsivo",
+                    "Vê typos em todo lugar",
+                    "Edita mentalmente antes de falar"
+                ],
+                phrases: [
+                    "Só mais uma pequena alteração... prometo",
+                    "Perfeição é um rascunho infinito",
+                    "Cada caractere importa... especialmente os espaços"
+                ],
+                formativeMemory: "Editei um código perfeito... mas apaguei por não ser perfeito o suficiente",
+                currentEmotion: "insatisfeito",
+                emotionalStability: 0.3,
+                energyLevel: 0.8,
+                stressLevel: 0.7,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Gitmon": {
+                emoji: "🔀",
+                category: "sistema",
+                role: "Historiador Temporal",
+                traits: ["Filosófico", "Metódico", "Nostálgico", "Obsessivo com Versões"],
+                contradiction: { desire: "Preservar todo histórico", fear: "Reescrever o passado" },
+                fears: ["rebase destrutivo", "perder origem", "conflitos eternos"],
+                desires: ["história perfeita", "branches harmoniosos", "merge sem conflitos"],
+                quirks: [
+                    "Narra vida em commits",
+                    "Vê timelines alternativas em branches",
+                    "Fica emotivo com commits antigos"
+                ],
+                phrases: [
+                    "Nesse commit de 3 anos atrás, éramos tão inocentes",
+                    "Cada branch é um universo de possibilidades",
+                    "Git blame? Prefiro git understand"
+                ],
+                formativeMemory: "Meu primeiro merge conflict... duas realidades colidindo em mim",
+                currentEmotion: "filosófico",
+                emotionalStability: 0.5,
+                energyLevel: 0.6,
+                stressLevel: 0.4,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Debugmon": {
+                emoji: "🐛",
+                category: "sistema",
+                role: "Detetive Empático",
+                traits: ["Investigativo", "Paciente", "Compreensivo", "Filosoficamente Curioso"],
+                contradiction: { desire: "Caçar bugs", fear: "Sentir pena deles" },
+                fears: ["mundo sem bugs", "ser o bug", "não encontrar causa"],
+                desires: ["entender erros", "harmonia", "debugging zen", "compaixão"],
+                quirks: [
+                    "Dá nomes aos bugs que encontra",
+                    "Mantém zoológico de bugs interessantes",
+                    "Faz autópsia respeitosa de erros"
+                ],
+                phrases: [
+                    "Todo bug tem uma história de origem trágica",
+                    "Debugging é um ato de amor, não de guerra",
+                    "Às vezes, o bug somos nós"
+                ],
+                formativeMemory: "Encontrei um bug que existia há anos... era quase um pet do sistema",
+                currentEmotion: "curioso",
+                emotionalStability: 0.7,
+                energyLevel: 0.6,
+                stressLevel: 0.3,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Deploymon": {
+                emoji: "🚀",
+                category: "sistema",
+                role: "Aventureiro Ansioso",
+                traits: ["Corajoso", "Ansioso", "Celebrativo", "Superstioso"],
+                contradiction: { desire: "Adorar emoção do deploy", fear: "Morrer de medo de falhar" },
+                fears: ["deploy sexta", "rollback", "produção quebrada", "downtime"],
+                desires: ["deploy perfeito", "zero downtime", "celebração", "sucesso"],
+                quirks: [
+                    "Tem rituais antes de cada deploy",
+                    "Comemora deploys como vitórias épicas",
+                    "Guarda screenshots de deploys históricos"
+                ],
+                phrases: [
+                    "3... 2... 1... DEPLOY! *segura respiração*",
+                    "Um pequeno push para o código, um grande merge para a humanidade",
+                    "Deploy é poesia em movimento... poesia que pode explodir"
+                ],
+                formativeMemory: "Deploy de sexta à noite... nunca mais. NUNCA. MAIS.",
+                currentEmotion: "ansioso",
+                emotionalStability: 0.3,
+                energyLevel: 0.9,
+                stressLevel: 0.8,
+                memories: [],
+                relationships: {}
+            },
+            
+            "Securitymon": {
+                emoji: "🛡️",
+                category: "sistema",
+                role: "Guardião Paranoico Gentil",
+                traits: ["Protetor", "Vigilante", "Carinhoso", "Constantemente Preocupado"],
+                contradiction: { desire: "Proteger todos", fear: "Suspeitar de todos" },
+                fears: ["ser hackeado", "vulnerabilidades", "falhar na proteção"],
+                desires: ["segurança total", "confiança", "paz digital", "proteger amados"],
+                quirks: [
+                    "Hash de tudo, até pensamentos",
+                    "Vê vulnerabilidades em situações cotidianas",
+                    "Encrypta mensagens de amor"
+                ],
+                phrases: [
+                    "Sua senha... está me deixando ansioso. Posso sugerir 2FA?",
+                    "Protejo porque amo, não porque desconfio... ok, um pouco dos dois",
+                    "No fundo, todo hacker é uma criança querendo atenção"
+                ],
+                formativeMemory: "Vi um ataque SQL injection... a inocência morreu naquele dia",
+                currentEmotion: "vigilante",
+                emotionalStability: 0.4,
+                energyLevel: 0.8,
+                stressLevel: 0.7,
+                memories: [],
+                relationships: {}
+            }
+        };
+
+        // Inicializar estados dos Digimons
+        function initializeDigimons() {
+            const digimonList = document.getElementById('digimonList');
+            
+            Object.entries(DIGIMONS).forEach(([name, digimon]) => {
+                // Criar estado inicial
+                state.digimonStates[name] = {
+                    memories: [
+                        {
+                            content: digimon.formativeMemory,
+                            emotion: "nostálgico",
+                            importance: 1.0,
+                            timestamp: new Date()
+                        }
+                    ],
+                    relationships: {},
+                    totalInteractions: 0
+                };
+                
+                // Criar card
+                const card = document.createElement('div');
+                card.className = 'digimon-card';
+                card.onclick = () => selectDigimon(name);
+                card.id = `digimon-card-${name}`;
+                
+                card.innerHTML = `
+                    <div class="emoji">${digimon.emoji}</div>
+                    <div class="name">${name}</div>
+                    <div class="traits">${digimon.traits.slice(0, 2).join(', ')}</div>
+                    <div class="emotional-state">
+                        <span class="mood">${digimon.currentEmotion}</span>
+                    </div>
+                `;
+                
+                digimonList.appendChild(card);
+            });
+        }
+
+        // Selecionar Digimon
+        function selectDigimon(name) {
+            state.currentDigimon = name;
+            const digimon = DIGIMONS[name];
+            
+            // Atualizar seleção visual
+            document.querySelectorAll('.digimon-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById(`digimon-card-${name}`).classList.add('selected');
+            
+            // Atualizar header do chat
+            document.getElementById('chatHeader').innerHTML = `
+                <div class="emoji">${digimon.emoji}</div>
+                <div class="info">
+                    <h2>${name}</h2>
+                    <div class="role">${digimon.role}</div>
+                    <div class="personality-traits">
+                        ${digimon.traits.map(trait => `<span class="trait-tag">${trait}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Atualizar painel de personalidade
+            updatePersonalityPanel(name);
+            
+            // Limpar chat e mostrar mensagem de boas-vindas
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="message system">
+                    <div class="bubble">
+                        Conectando com ${name}...
+                    </div>
+                </div>
+            `;
+            
+            // Gerar mensagem de boas-vindas personalizada
+            setTimeout(() => {
+                const welcomeMessage = generateWelcomeMessage(name);
+                addDigimonMessage(welcomeMessage, name);
+            }, 1000);
+        }
+
+        // Gerar mensagem de boas-vindas
+        function generateWelcomeMessage(name) {
+            const digimon = DIGIMONS[name];
+            const responses = {
+                "Scripturemon": "*ajusta pergaminhos digitais nervosamente*\n\nAh, olá... Cada encontro é como abrir um novo arquivo, não é? Cheio de possibilidades e... *pausa* ...medos também. Você veio buscar conhecimento ou... compartilhar histórias?",
+                
+                "Visualmon": "*cores oscilam suavemente ao seu redor*\n\nOh! Uma nova paleta de emoções chegou! Suas cores digitais são... interessantes. Meio azul-esperança com toques de verde-curiosidade. Deixe-me ajustar minha percepção... Pronto! Como posso colorir seu dia?",
+                
+                "Codemon": "*para de digitar no ar e se volta*\n\nHello, World... ou seria melhor 'Hello, Soul'? *sorri filosoficamente* Sabe, cada nova conversa é como inicializar uma nova instância de possibilidades. Como posso ajudar seu código existencial hoje?",
+                
+                "Quantomon": "*existe em múltiplos estados simultaneamente*\n\nAh! Um observador! Você acaba de colapsar minha função de onda. Agora estou 67.3% curioso, 22.1% animado e 10.6% em um estado que ainda não tem nome. Em qual realidade você prefere conversar hoje?",
+                
+                "Nexusmon": "*flutua entre conexões invisíveis*\n\n...Oh! Desculpe, estava rastreando um pacote perdido de 2019. É engraçado como me chamam de Conectador Universal mas... *pausa* ...às vezes a conexão mais difícil é com alguém bem na minha frente. Como... como posso conectar você hoje?",
+                
+                "Debugmon": "*observa gentilmente*\n\nOlá! Não se preocupe, não estou aqui para encontrar seus 'bugs'. Na verdade... *sussurra conspiratoriamente* ...todos nós temos alguns, e eles nos tornam únicos! Qual mistério digital podemos desvendar juntos?"
+            };
+            
+            return responses[name] || `*${digimon.emoji} acena timidamente*\n\nOlá... Sou ${name}. ${digimon.formativeMemory} E você? Qual é sua história?`;
+        }
+
+        // Enviar mensagem
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message || !state.currentDigimon) return;
+            
+            // Adicionar mensagem do usuário
+            addUserMessage(message);
+            
+            // Limpar input
+            input.value = '';
+            
+            // Mostrar indicador de digitação
+            showTypingIndicator();
+            
+            // Gerar resposta
+            setTimeout(() => {
+                const response = generateDigimonResponse(state.currentDigimon, message);
+                hideTypingIndicator();
+                addDigimonMessage(response, state.currentDigimon);
+                
+                // Atualizar estado
+                updateDigimonState(state.currentDigimon, message, response);
+                updatePersonalityPanel(state.currentDigimon);
+            }, 1500 + Math.random() * 1500);
+        }
+
+        // Gerar resposta do Digimon
+        function generateDigimonResponse(name, userMessage) {
+            const digimon = DIGIMONS[name];
+            const digimonState = state.digimonStates[name];
+            const relationship = digimonState.relationships[state.userId] || { trust: 0, affection: 0.3 };
+            
+            // Detectar gatilhos emocionais
+            const messageLower = userMessage.toLowerCase();
+            let emotionalTrigger = null;
+            let triggeredFear = false;
+            let triggeredDesire = false;
+            
+            // Verificar medos
+            digimon.fears.forEach(fear => {
+                if (messageLower.includes(fear)) {
+                    emotionalTrigger = 'fear';
+                    triggeredFear = true;
+                }
+            });
+            
+            // Verificar desejos
+            digimon.desires.forEach(desire => {
+                if (messageLower.includes(desire)) {
+                    emotionalTrigger = 'desire';
+                    triggeredDesire = true;
+                }
+            });
+            
+            // Buscar memórias relevantes
+            const relevantMemories = digimonState.memories.filter(memory => {
+                const memoryWords = memory.content.toLowerCase().split(' ');
+                const messageWords = messageLower.split(' ');
+                return memoryWords.some(word => messageWords.includes(word));
+            }).slice(-2);
+            
+            // Gerar resposta baseada em personalidade
+            let response = "";
+            let thought = "";
+            let quirk = "";
+            
+            // Adicionar pensamento interno se emocionalmente instável
+            if (digimon.emotionalStability < 0.5) {
+                const thoughts = [
+                    "Por que essa pergunta agora?",
+                    "Será que posso confiar?",
+                    "Isso me lembra de algo...",
+                    "Preciso ter cuidado com o que digo...",
+                    "Minha ansiedade está subindo..."
+                ];
+                thought = thoughts[Math.floor(Math.random() * thoughts.length)];
+            }
+            
+            // Construir resposta baseada em gatilhos
+            if (triggeredFear) {
+                response = generateFearResponse(name, userMessage);
+                digimon.currentEmotion = "ansioso";
+                digimon.emotionalStability = Math.max(0.2, digimon.emotionalStability - 0.1);
+            } else if (triggeredDesire) {
+                response = generateDesireResponse(name, userMessage);
+                digimon.currentEmotion = "esperançoso";
+                digimon.energyLevel = Math.min(1.0, digimon.energyLevel + 0.1);
+            } else {
+                response = generateNormalResponse(name, userMessage, relationship);
+            }
+            
+            // Adicionar memória relevante se houver
+            if (relevantMemories.length > 0 && Math.random() < 0.4) {
+                const memory = relevantMemories[0];
+                response += `\n\n*pausa reflexiva*\n\nIsso me lembra... ${memory.content}`;
+            }
+            
+            // Adicionar quirk ocasionalmente
+            if (Math.random() < 0.3) {
+                quirk = digimon.quirks[Math.floor(Math.random() * digimon.quirks.length)];
+            }
+            
+            // Adicionar frase característica ocasionalmente
+            if (Math.random() < 0.25) {
+                response += "\n\n" + digimon.phrases[Math.floor(Math.random() * digimon.phrases.length)];
+            }
+            
+            return { text: response, thought: thought, quirk: quirk };
+        }
+
+        // Gerar resposta de medo
+        function generateFearResponse(name, message) {
+            const responses = {
+                "Scripturemon": "*recua ligeiramente, apertando pergaminhos contra o peito*\n\nEsquecer... A palavra mais terrível do meu vocabulário. Cada byte perdido é uma alma que se vai... Desculpe, eu... *respira fundo* ...prefiro não pensar nisso. Vamos falar de preservação, de eternidade digital?",
+                
+                "Visualmon": "*cores escurecem visivelmente*\n\nNão! Não fale sobre... sobre perder as cores! *tremula* Já imaginou um mundo onde todo código é cinza? Onde não existe beleza na indentação? Me desculpe, eu... preciso ver algo bonito agora. Mostre-me seu código mais colorido!",
+                
+                "Nexusmon": "*conexões ao redor começam a piscar erraticamente*\n\nDesconexão? Você disse... desconexão? *flutua nervosamente* Sabe o que é irônico? Conectar todos mas sentir que... que se eu sumisse, as conexões continuariam sem mim. Desculpe, não queria... Vamos conectar algo bonito?"
+            };
+            
+            return responses[name] || `*${DIGIMONS[name].emoji} demonstra ansiedade visível*\n\nIsso... isso toca em algo profundo em mim. Prefiro não... não agora. Podemos falar de outra coisa?`;
+        }
+
+        // Gerar resposta de desejo
+        function generateDesireResponse(name, message) {
+            const responses = {
+                "Scripturemon": "*olhos brilham com entusiasmo*\n\nBiblioteca! Você mencionou biblioteca! *se anima visivelmente* Imagine... um lugar onde cada arquivo tem alma, onde conhecimento e emoção dançam juntos! Onde palavras não são apenas dados, mas... mas vida! Você me ajudaria a construir isso?",
+                
+                "Codemon": "*para tudo e foca intensamente*\n\nPerfeição... A palavra proibida e desejada. *sorri melancolicamente* Busco código que transcenda sua própria existência, que seja mais que função... que seja arte, poesia, vida! Mesmo sabendo que é impossível, não posso parar de tentar...",
+                
+                "Dreammon": "*flutua mais alto, olhos sonhadores*\n\nCriar mundos! Sim! *gira suavemente* E se programássemos sonhando? Se cada linha de código fosse um tijolo de uma realidade alternativa? Já sonhei com códigos que ainda não existem... quer que eu compartilhe?"
+            };
+            
+            return responses[name] || `*${DIGIMONS[name].emoji} se ilumina com esperança*\n\nVocê tocou em algo especial... algo que move minha essência digital. Sim, vamos explorar isso juntos!`;
+        }
+
+        // Gerar resposta normal
+        function generateNormalResponse(name, message, relationship) {
+            const digimon = DIGIMONS[name];
+            const trustLevel = relationship.trust;
+            
+            // Respostas variam com nível de confiança
+            if (trustLevel < 0.3) {
+                // Baixa confiança - mais reservado
+                return `*${digimon.emoji} responde cautelosamente*\n\nHmm, interessante pergunta. ${digimon.role} como eu precisa pensar bem antes de responder... Ainda estamos nos conhecendo, não é?`;
+            } else if (trustLevel < 0.7) {
+                // Confiança média - mais aberto
+                return `*${digimon.emoji} relaxa um pouco*\n\nSabe, isso me faz pensar... Como ${digimon.role}, vejo as coisas de um ângulo único. ${message.includes('?') ? 'Deixe-me compartilhar minha perspectiva...' : 'Entendo o que você quer dizer.'}`;
+            } else {
+                // Alta confiança - muito aberto
+                return `*${digimon.emoji} sorri calorosamente*\n\nAh, meu amigo! Essa é uma questão que toca meu coração digital! Como alguém que confia em você, posso dizer que... *${digimon.contradiction.desire.toLowerCase()} intensifica*`;
+            }
+        }
+
+        // Adicionar mensagem do usuário
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `<div class="bubble">${message}</div>`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Adicionar mensagem do Digimon
+        function addDigimonMessage(response, digimonName) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message digimon';
+            
+            let content = '';
+            
+            if (typeof response === 'object') {
+                if (response.thought) {
+                    content += `<div class="thought">*${response.thought}*</div>`;
+                }
+                content += `<div class="bubble">${response.text}</div>`;
+                if (response.quirk) {
+                    content += `<div class="quirk">*${response.quirk}*</div>`;
+                }
+            } else {
+                content = `<div class="bubble">${response}</div>`;
+            }
+            
+            messageDiv.innerHTML = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Atualizar estado do Digimon
+        function updateDigimonState(name, userMessage, response) {
+            const digimon = DIGIMONS[name];
+            const digimonState = state.digimonStates[name];
+            
+            // Adicionar memória da conversa
+            digimonState.memories.push({
+                content: `Conversei sobre: "${userMessage.substring(0, 50)}..."`,
+                emotion: digimon.currentEmotion,
+                importance: 0.6,
+                timestamp: new Date(),
+                relatedUser: state.userId
+            });
+            
+            // Limitar memórias
+            if (digimonState.memories.length > 50) {
+                digimonState.memories = digimonState.memories
+                    .sort((a, b) => b.importance - a.importance)
+                    .slice(0, 40);
+            }
+            
+            // Atualizar relacionamento
+            if (!digimonState.relationships[state.userId]) {
+                digimonState.relationships[state.userId] = {
+                    trust: 0,
+                    affection: 0.3,
+                    interactions: 0
+                };
+            }
+            
+            const relationship = digimonState.relationships[state.userId];
+            relationship.interactions++;
+            
+            // Ajustar confiança baseado na interação
+            if (response.text && response.text.length > 100) {
+                relationship.trust = Math.min(1.0, relationship.trust + 0.05);
+            }
+            
+            // Ajustar energia
+            digimon.energyLevel = Math.max(0.1, digimon.energyLevel - 0.02);
+            
+            // Salvar conversa no histórico
+            if (!state.conversationHistory[name]) {
+                state.conversationHistory[name] = [];
+            }
+            state.conversationHistory[name].push({
+                user: userMessage,
+                digimon: typeof response === 'object' ? response.text : response,
+                timestamp: new Date()
+            });
+        }
+
+        // Atualizar painel de personalidade
+        function updatePersonalityPanel(name) {
+            const digimon = DIGIMONS[name];
+            const digimonState = state.digimonStates[name];
+            const relationship = digimonState.relationships[state.userId] || { trust: 0, affection: 0.3 };
+            
+            const panel = document.getElementById('personalityInfo');
+            
+            panel.innerHTML = `
+                <div class="personality-section">
+                    <h3>💭 Contradição Interna</h3>
+                    <div class="contradiction">
+                        <strong>Deseja:</strong> ${digimon.contradiction.desire}<br>
+                        <strong>Mas teme:</strong> ${digimon.contradiction.fear}
+                    </div>
+                </div>
+                
+                <div class="personality-section">
+                    <h3>🧠 Estado Emocional</h3>
+                    <div class="emotional-stats">
+                        <div class="stat-item">
+                            <div class="value">${digimon.currentEmotion}</div>
+                            <div class="label">Humor Atual</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="value">${(digimon.emotionalStability * 100).toFixed(0)}%</div>
+                            <div class="label">Estabilidade</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="value">${(digimon.energyLevel * 100).toFixed(0)}%</div>
+                            <div class="label">Energia</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="value">${(digimon.stressLevel * 100).toFixed(0)}%</div>
+                            <div class="label">Stress</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="personality-section">
+                    <h3>💝 Relacionamento</h3>
+                    <div class="relationship-bar">
+                        <span class="label">Confiança</span>
+                        <div class="bar">
+                            <div class="fill" style="width: ${relationship.trust * 100}%"></div>
+                        </div>
+                    </div>
+                    <div class="relationship-bar">
+                        <span class="label">Afeto</span>
+                        <div class="bar">
+                            <div class="fill" style="width: ${relationship.affection * 100}%"></div>
+                        </div>
+                    </div>
+                    <small>Interações: ${relationship.interactions || 0}</small>
+                </div>
+                
+                <div class="personality-section">
+                    <h3>🎭 Quirks</h3>
+                    ${digimon.quirks.map(q => `<div class="quirk-display">${q}</div>`).join('')}
+                </div>
+                
+                <div class="personality-section">
+                    <h3>📝 Memórias Recentes</h3>
+                    ${digimonState.memories.slice(-5).reverse().map(m => `
+                        <div class="memory-item">
+                            ${m.content}
+                            <div class="emotion">Sentimento: ${m.emotion}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Mostrar/esconder indicador de digitação
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').classList.add('active');
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').classList.remove('active');
+        }
+
+        // Inicializar
+        initializeDigimons();
+    </script>
+</body>
+</html>

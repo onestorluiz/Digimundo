@@ -1,0 +1,81 @@
+🔍 RELATÓRIO DE ANÁLISE DE DUPLICATAS
+============================================================
+📊 Total de arquivos analisados: 60
+
+✅ Nenhuma duplicata exata encontrada
+
+✅ Nenhuma duplicata potencial encontrada
+
+📝 DRAFTS vs SCREENPLAYS (versões diferentes):
+  Apocalypse:
+    - Apocalypse_Now_-_Draft.txt
+    - Apocalypse_Now_-_Screenplay.txt
+  The:
+    - The_Shawshank_Redemption_-_Screenplay.txt
+    - The_Godfather_Part_II_-_Draft.txt
+  The:
+    - The_Godfather_Part_II_-_Draft.txt
+    - The_Two_Towers_-_Screenplay.txt
+  The:
+    - The_Godfather_Part_II_-_Draft.txt
+    - The_Godfather_-_Screenplay.txt
+  The:
+    - The_Godfather_Part_II_-_Draft.txt
+    - The_Dark_Knight_Rises_-_Screenplay.txt
+  The:
+    - The_Godfather_Part_II_-_Draft.txt
+    - The_Shining_-_Screenplay.txt
+  The:
+    - The_Godfather_Part_II_-_Draft.txt
+    - The_Matrix_-_Screenplay.txt
+  Interstellar:
+    - Interstellar_-_Draft.txt
+    - Interstellar_-_Screenplay.txt
+  Psycho:
+    - Psycho_-_Screenplay.txt
+    - Psycho_-_Draft_-_Dec_1_1959.txt
+  Gladiator:
+    - Gladiator_-_Screenplay.txt
+    - Gladiator_-_Draft.txt
+
+🔤 NOMES SIMILARES (possíveis versões):
+  Palavras comuns: Apocalypse, Now, -
+    - Apocalypse_Now_-_Draft.txt
+    - Apocalypse_Now_-_Screenplay.txt
+  Palavras comuns: The, -
+    - The_Matrix_-_Release.txt
+    - The_Godfather_-_Screenplay.txt
+  Palavras comuns: The, -
+    - The_Matrix_-_Release.txt
+    - The_Shining_-_Screenplay.txt
+  Palavras comuns: Matrix, The, -
+    - The_Matrix_-_Release.txt
+    - The_Matrix_-_Screenplay.txt
+  Palavras comuns: The, -
+    - The_Matrix_-_Release.txt
+    - The_Departed_-_Scriptment.txt
+  Palavras comuns: Screenplay, -
+    - Chinatown_-_Screenplay.txt
+    - Memento_-_Screenplay.txt
+  Palavras comuns: Screenplay, -
+    - Chinatown_-_Screenplay.txt
+    - Interstellar_-_Screenplay.txt
+  Palavras comuns: Screenplay, -
+    - Chinatown_-_Screenplay.txt
+    - Inception_-_Screenplay.txt
+  Palavras comuns: Screenplay, -
+    - Chinatown_-_Screenplay.txt
+    - Psycho_-_Screenplay.txt
+  Palavras comuns: Screenplay, -
+    - Chinatown_-_Screenplay.txt
+    - Gladiator_-_Screenplay.txt
+
+📋 RESUMO PARA TRADUÇÃO:
+  📁 Arquivos únicos recomendados: 60
+  🗑️ Duplicatas exatas removidas: 0
+  📏 Tamanho médio: 256,027 bytes
+  📏 Maior arquivo: 1,108,235 bytes
+  📏 Menor arquivo: 875 bytes
+
+✅ CONCLUSÃO:
+  Todos os arquivos são únicos - nenhuma duplicata encontrada!

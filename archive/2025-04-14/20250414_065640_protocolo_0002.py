@@ -1,0 +1,1 @@
+# Protocolo de resposta a comandos ocultos

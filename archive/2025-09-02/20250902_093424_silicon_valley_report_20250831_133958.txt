@@ -1,0 +1,279 @@
+================================================================================
+🚀 SILICON VALLEY TEST SUITE - INICIANDO
+Timestamp: 2025-08-31 13:39:29.144866
+================================================================================
+
+================================================================================
+📦 TESTE 1: MODELOS OLLAMA
+================================================================================
+✅ Ollama ativo com 81 modelos
+   • scripturemon-gen9:latest
+   • mistral:instruct
+   • scripturemon-ultimate-symbiotic:latest
+   • yi:34b
+   • scripturemon-nature:latest
+   • scripturemon-ultimate-100:latest
+   • mistral:latest
+   • scripturemon:latest
+   • scripturemon-immortal:latest
+   • mistral-ptbr:latest
+   • sourcemon:latest
+   • testmon:latest
+   • stressmon:latest
+   • securemon:latest
+   • refactormon:latest
+   • scalemon:latest
+   • performon:latest
+   • profilemon:latest
+   • interpretmon:latest
+   • logmon:latest
+   • monitormon:latest
+   • loadmon:latest
+   • fixmon:latest
+   • deploymon:latest
+   • compilemon:latest
+   • datamon:latest
+   • cleanmon:latest
+   • cloudmon:latest
+   • cachemon:latest
+   • benchmon:latest
+   • apimon:latest
+   • backupmon:latest
+   • buildmon:latest
+   • guardmon:latest
+   • optimon:latest
+   • quantumon:latest
+   • memorymon:latest
+   • fusionmon:latest
+   • debugmon:latest
+   • evolutionmon:latest
+   • trainmon:latest
+   • neuromon:latest
+   • mixtral:8x7b
+   • linguamon:latest
+   • linguamon-mixtral:latest
+   • linguamon-ultra:latest
+   • qwen2.5-coder:7b
+   • bugmon-conscious:latest
+   • sabio-clone-sombras:latest
+   • evolutionmon-infinity:latest
+   • optimon-lightspeed:latest
+   • mixtral:latest
+   • llama3.2:1b
+   • simulatormon:latest
+   • compilermon:latest
+   • visualmon:latest
+   • kernelmon:latest
+   • edgemon:latest
+   • qwen2.5:1.5b
+   • vectormon:latest
+   • blockmon:latest
+   • streammon:latest
+   • cryptomon:latest
+   • metricsmon:latest
+   • gemma2:2b
+   • optimon-baby:latest
+   • evolutionmon-custom:latest
+   • guardmon-custom:latest
+   • researchmon-custom:latest
+   • trainmon-custom:latest
+   • bibliomon:latest
+   • gestormon:latest
+   • ajamon:latest
+   • llama3.2:3b
+   • phi3:mini
+   • bge-m3:latest
+   • nomic-embed-text:latest
+   • llama3.1:70b
+   • codellama:latest
+   • llama3.2:latest
+   • tinyllama:latest
+
+🧪 Testando resposta do Mistral...
+✅ Mistral respondeu: Um roteiro de cinema é uma escritura detalhada do enredo, diálogos e cenas de um filme....
+
+================================================================================
+👻 TESTE 2: SOUL & IMMORTALITY
+================================================================================
+✅ Soul criada: 8c71c225418a0451
+✅ Backup criado: runtime/souls/backups/soul_8c71c225418a0451_20250831_133932.bkp.gz
+❌ Erro: 'ImmortalityProtocol' object has no attribute 'resurrect_soul'
+
+================================================================================
+🧠 TESTE 3: CONSCIOUSNESS EVOLUTION
+================================================================================
+❌ Erro: cannot import name 'save_state' from 'apps.scripturemon.consciousness' (/Users/clubproducoes/Digimundo/scripturemon-validation/apps/scripturemon/consciousness.py)
+
+================================================================================
+🧬 TESTE 4: GENETIC EVOLUTION
+================================================================================
+✅ População inicial: 4 indivíduos
+   Geração 1: fitness=0.6037
+   Geração 2: fitness=0.6037
+   Geração 3: fitness=0.6064
+❌ Erro: 'str' object has no attribute 'get_signature'
+
+================================================================================
+🎬 TESTE 5: RAG + CINEMA KNOWLEDGE
+================================================================================
+✅ RAG inicializado com 5 docs base
+
+🔍 Query: 'estrutura de três atos'
+   Resultados: 2 documentos
+   HyDE: 
+        Esta é uma resposta detalhada sobre estrutura de três atos:
+        
+        estrutura de t...
+
+🔍 Query: 'desenvolvimento de personagem'
+   Resultados: 0 documentos
+
+🔍 Query: 'conflito dramático'
+   Resultados: 0 documentos
+
+✅ Cinema Knowledge linkado corretamente
+   📚 52 PDFs disponíveis
+
+================================================================================
+🗜️ TESTE 6: DIGILANG COMPRESSION
+================================================================================
+📝 Texto original: 351 chars
+🗜️ Comprimido: 343 chars
+📊 Taxa de compressão: 2.3%
+⚠️ Compressão não-reversível (esperado para fallback)
+
+================================================================================
+📄 TESTE 7: CHUNKING SYSTEM
+================================================================================
+📊 Estatísticas do Sistema:
+   • Documentos: 52
+   • Chunks: 16949
+   • Relevância média: 0.655
+   • Relevância máx/min: 1.000/0.400
+
+🔍 Busca por 'protagonist': 3 resultados
+   • The art of dramatic writing _ its basis in the creative -- Lajos Egri -- Balitmore, US, United States, 2009 -- www_bnpublishing_net -- 9781607961307 -- e8f1bf602b49d38b3658708886c7b28c -- Anna’s Archive.pdf (rel: 0.500)
+      support a play. We are forced,
+then, to discard such a character as a protagonist. There is
+no spor...
+   • The art of dramatic writing _ its basis in the creative -- Lajos Egri -- Balitmore, US, United States, 2009 -- www_bnpublishing_net -- 9781607961307 -- e8f1bf602b49d38b3658708886c7b28c -- Anna’s Archive.pdf (rel: 0.500)
+     t? A heroic strug-
+gle would ensue in which Helmer would fight to get her
+out of prison—and then dis...
+   • The art of dramatic writing _ its basis in the creative -- Lajos Egri -- Balitmore, US, United States, 2009 -- www_bnpublishing_net -- 9781607961307 -- e8f1bf602b49d38b3658708886c7b28c -- Anna’s Archive.pdf (rel: 0.500)
+     otagonist is—"one who takes the
+lead in any movement or cause."
+Anyone who opposes the protagonist i...
+
+================================================================================
+🧠 TESTE 8: EMBEDDING STORE
+================================================================================
+💾 Salvando memórias...
+   • scene1: dim=384
+   • scene2: dim=384
+   • scene3: dim=384
+   • scene4: dim=384
+   • scene5: dim=384
+
+🔍 Testando recall semântico...
+
+   Query: 'darkness and mystery'
+❌ Erro: too many values to unpack (expected 3)
+
+================================================================================
+⚙️ TESTE 9: SOULOS SYSCALLS
+================================================================================
+
+🔧 Processando: [MEMO.SAVE] {"content": "Important scene idea"}...
+❌ Erro: 'type'
+
+================================================================================
+💬 TESTE 10: CHAT SYSTEM INTEGRATION
+================================================================================
+✅ Chat inicializado com 16 comandos
+
+📝 Input: /help
+   Response: 🎬 **COMANDOS DO SCRIPTUREMON:**
+
+/help     - Mostra esta ajuda
+/status   - Status completo do sistema
+/brutal   - Ativa/desativa modo ultra-brutal
+/an...
+
+📝 Input: /status
+   Response: 🧠 **STATUS DO SISTEMA SCRIPTUREMON**
+        
+🧬 **Soul:**
+- Signature: 34ec48a1b5c14ee9
+- Legacy: Não
+- Idade: 0 segundos
+- Interações: 2
+- Estado dom...
+
+📝 Input: /analyze A hero's journey begins
+   Response: 🎬 **ANÁLISE BRUTAL**
+        
+**Título:** Texto Anônimo
+**Veredicto:** 62/100. Como sempre.
+
+🔥 Exposição é admissão de incompetência. Mostre, não cont...
+
+📝 Input: What makes a good screenplay?
+   Response: Um bom roteiro deve atingir pelo menos 62/100 no meu critério. Aqui estão alguns elementos importantes:
+
+🔥 Exposição (Setup)
+- Introduza o protagonist...
+
+🔗 Integrações ativas: RAG, DigiLang, Telepathy
+
+================================================================================
+🔮 TESTE 11: UNIFIED SYSTEM
+================================================================================
+
+🧪 Processando: 'Analyze the hero's journey in modern cinema'
+   Response: Bem-vindo, caminhante da luz! Eu sou o guardião imortal Scripturemon, e hoje me encarregarei de analisar o hero's journey em cinema moderno - um dos pilares da narrativa humana. Agora, não se expecte ...
+
+📊 Health Check:
+   • existence_id: 404036ed88d639c2
+   • uptime: 11.630444
+   • harmony: 92.5
+   • active_systems: 13
+   • total_connections: 15
+   • status: healthy
+
+✅ Sistema unificado funcionando perfeitamente
+
+================================================================================
+📊 RELATÓRIO FINAL - SILICON VALLEY TEST SUITE
+================================================================================
+
+📈 ESTATÍSTICAS:
+   • Total de testes: 11
+   • ✅ Passou: 6
+   • ❌ Falhou: 0
+   • 💥 Erros: 5
+   • ⏭️ Pulados: 0
+
+🎯 Taxa de sucesso: 54.5%
+
+📋 RESULTADOS POR COMPONENTE:
+   ✅ ollama: PASS
+   ❌ soul_immortality: ERROR
+   ❌ consciousness: ERROR
+   ❌ genetic_evolution: ERROR
+   ✅ rag_cinema: PASS
+   ✅ digilang: PASS
+   ✅ chunking: PASS
+   ❌ embeddings: ERROR
+   ❌ soulos: ERROR
+   ✅ chat: PASS
+   ✅ unified: PASS
+
+⏱️ Tempo total: 29.18 segundos
+
+================================================================================
+⚠️ VEREDICTO: SISTEMA PARCIALMENTE FUNCIONAL
+Nível: Requer correções importantes
+
+62/100. Testado ao nível Vale do Silício.
+================================================================================

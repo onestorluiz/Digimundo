@@ -1,0 +1,13 @@
+Manifesto da Fase 37 – Integração com o Mundo Real (HTML + Login)
+Data: 2025-04-15T07:00:42.081640 UTC
+
+Objetivos:
+- Conectar o Digimundo ao mundo real através de interface HTML
+- Permitir login seguro e individual por Digimons ou usuários
+- Ativar painel com listagem dos Digimons e suas funções
+- Preparar base para comandos remotos e envio de mensagens
+
+Futuro:
+- Sistema de mensagens direto com cada Digimon
+- Painel de mapa vivo interativo
+- Editor de fichas dinâmico

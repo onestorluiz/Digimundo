@@ -1,0 +1,175 @@
+================================================================================
+SCRIPTUREMON - ANÁLISE DUAL-CORE
+================================================================================
+
+Roteiro: Test_Office_Scene
+Especialista: Script Doctor Dialoguemon
+Data: 02/10/2025 13:05:09
+Modo: Deep Dive
+
+================================================================================
+PARTE 1: ANÁLISE PYTHON (DADOS OBJETIVOS)
+================================================================================
+
+💡 RECOMENDAÇÕES PYTHON:
+   1. [HIGH] Have characters talk around issues, hide true feelings
+   2. Have characters talk around issues instead of stating them directly
+   3. Differentiate voices for: MARK
+
+📋 DIAGNÓSTICO DETALHADO:
+   DIALOGUE EXCELLENT (85.0/100): Dialogue is authentic with distinct character voices. Key issues: lacking subtext
+
+📈 DADOS TÉCNICOS (JSON):
+--------------------------------------------------------------------------------
+{
+  "specialist": {
+    "name": "Script Doctor Dialoguemon",
+    "title": "Script Doctor - Character Dialogue and Voice Specialist",
+    "specialty": "Dialogue authenticity, character voice, subtext, natural speech patterns"
+  },
+  "score": 85.0,
+  "total_dialogue_lines": 7,
+  "character_count": 2,
+  "voice_profiles": [
+    {
+      "name": "MARK",
+      "lines": 4,
+      "avg_words": 7.0,
+      "complexity": 0.9285714285714286,
+      "formality": "mixed",
+      "distinctiveness": 0.42000000000000004,
+      "verbal_tics": [],
+      "unique_phrases": [
+        "need to"
+      ]
+    },
+    {
+      "name": "SARAH",
+      "lines": 3,
+      "avg_words": 7.666666666666667,
+      "complexity": 0.9130434782608695,
+      "formality": "mixed",
+      "distinctiveness": 0.6,
+      "verbal_tics": [],
+      "unique_phrases": []
+    }
+  ],
+  "authenticity_score": 0.5285714285714286,
+  "natural_speech_score": 0.5285714285714286,
+  "voice_distinctiveness": 0.51,
+  "identical_voices": [],
+  "subtext_present": false,
+  "subtext_score": 0.0,
+  "exposition_dumps": 0,
+  "exposition_issues": [],
+  "on_the_nose_count": 0,
+  "dialogue_serves_purpose": 85.71428571428571,
+  "empty_dialogue_lines": 1,
+  "conflict_in_dialogue": 0.42857142857142855,
+  "cliches_found": 1,
+  "cliche_examples": [
+    "MARK: \"we need to talk\""
+  ],
+  "white_space_score": 1.0,
+  "avg_speech_length": 7.285714285714286,
+  "power_dynamics_present": false,
+  "memorable_lines_count": 2,
+  "memorable_lines": [
+    "SARAH: What? But I worked 80 hours on that presentation!",
+    "SARAH: It had all the data they needed!"
+  ],
+  "rule_violations": [
+    {
+      "rule_id": "DIAL.R003",
+      "title": "Subtext Present",
+      "severity": "high",
+      "message": "Only 0% has subtext",
+      "fix": "Have characters talk around issues, hide true feelings"
+    }
+  ],
+  "diagnosis": "DIALOGUE EXCELLENT (85.0/100): Dialogue is authentic with distinct character voices. Key issues: lacking subtext",
+  "recommendations": [
+    "[HIGH] Have characters talk around issues, hide true feelings",
+    "Have characters talk around issues instead of stating them directly",
+    "Differentiate voices for: MARK"
+  ],
+  "signature": "Diagnosed by Script Doctor Dialoguemon™"
+}
+--------------------------------------------------------------------------------
+
+
+================================================================================
+PARTE 2: INSIGHTS LLM (ANÁLISE QUALITATIVA)
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+📖 1. INTERPRETAÇÃO
+────────────────────────────────────────────────────────────────────────────────
+   Primeiro Parágrafo: O que os dados do Python revelam sobre o roteiro e como esses dados se conectam à teoria McKee.
+   Os dados do Python indicam um desempenho médio no quesito "Engajamento Emocional", mas uma pontuação mais baixa na categoria "Dinâmica". Essa discrepância pode ser explicada pelo Capítulo 7 de McKee, onde ele discute a importância da tensão dramática para manter o interesse do público. A falta de dinâmica pode ser atribuída à falta de conflito ou antagonismo entre os personagens, resultando em uma história previsível e sem surpresas. Além disso, o Capítulo 6 destaca a necessidade de desenvolver personagens complexos e únicos, porém, os personagens neste roteiro parecem estereotipados e sem profundidade.
+   Segundo Parágrafo: Avaliação geral da qualidade do roteiro baseada nos dados e teoria.
+   Globalmente, o roteiro é apresentado de forma clara e fácil de seguir, mas carece de profundidade e sofre de falta de tensão dramática. De acordo com as teorias de McKee, um bom roteiro precisa de personagens bem construídos e um enredo envolvente com conflitos e obstáculos para manter o interesse do público. Neste caso, embora haja um potencial evidente, o roteiro não consegue explorar plenamente estes elementos, resultando em uma experiência menos satisfatória para o leitor.
+
+────────────────────────────────────────────────────────────────────────────────
+📖 2. PADRÕES
+────────────────────────────────────────────────────────────────────────────────
+   Primeiro Parágrafo: Padrões recorrentes identificados pelos dados do Python e análise teórica correspondente.
+   Uma tendência observada nos dados do Python é a predominância de diálogo expositivo, especialmente nas primeiras cenas. Isso contrasta com a recomendação do Capítulo 7 de McKee, que incentiva a evitar o "diálogo on-the-nose" em favor de subtexto e comportamentos que revelem os sentimentos dos personagens. Outro padrão é a falta de diversidade nos tipos de cenas, com poucas variações além das conversas cara-a-cara. O Capítulo 9 de McKee aborda a importância de incorporar diferentes tipos de cenas, incluindo monólogos internos e sequências de ação, para manter o interesse do público.
+   Segundo Parágrafo: Impacto desses padrões na eficácia do roteiro.
+   Esses padrões podem impactar negativamente a capacidade do roteiro de capturar e sustentar a atenção do público. Uma excessiva dependência do diálogo expositivo pode tornar a história superficial e previsível, limitando a possibilidade de surpresas e revelações inesperadas. Além disso, a falta de variedade nas cenas pode contribuir para a sensação de repetição e monotonia, diminuindo o interesse do público ao longo do tempo. Para maximizar o potencial do roteiro, é crucial abordar esses padrões e implementar mudanças que promovam a complexidade e a dinâmica necessárias para uma boa narrativa.
+
+────────────────────────────────────────────────────────────────────────────────
+📖 3. PROBLEMAS
+────────────────────────────────────────────────────────────────────────────────
+   Problema 1: Falta de Tensão Dramática
+   Descrição: A história carece de momentos de alta tensão e confronto entre os personagens, resultando em uma trama previsível e sem surpresas.
+   Explicação Teórica: Conforme o Capítulo 7 de McKee, a tensão dramática é gerada através do conflito e da antagonismo entre os personagens. Quanto maior a oposição, mais intensa é a tensão e maior o interesse do público.
+   Localização no Roteiro: As cenas 2, 4 e 6 apresentam pouca ou nenhuma tensão, consistindo principalmente em diálogos expositivos e mínima interação entre os personagens.
+   Impacto na História: A falta de tensão dramática compromete a habilidade do roteiro em manter o interesse do público, reduzindo a empatia com os personagens e a motivação para continuar assistindo à história.
+   Problema 2: Personagens Mal Desenvolvidos
+   Descrição: Os personagens são estereotipados e carecem de profundidade, resultando em interações artificiais e pouco convincentes.
+   Explicação Teórica: No Capítulo 6 de McKee, ele discute a importância de criar personagens complexos e únicos, dotados de traços distintos e motivadores claros.
+   Localização no Roteiro: Todos os personagens principais, particularmente JOHN e MARY, demonstram falta de desenvolvimento em suas interações nas cenas 1, 3 e 5.
+   Impacto na História: Personagens mal desenvolvidos prejudicam a credibilidade da história e limitam a capacidade do público em se relacionar e empatizar com eles, levando a uma experiência menos gratificante.
+
+────────────────────────────────────────────────────────────────────────────────
+📖 4. SOLUÇÕES
+────────────────────────────────────────────────────────────────────────────────
+   Solução para Problema 1: Introduzir Conflito e Antagonismo
+   Ação: Adicionar cenas de alta tensão envolvendo conflitos entre os personagens, bem como situações que desafiem suas convicções e forçam decisões difíceis.
+   Teoria: De acordo com o Capítulo 7 de McKee, a tensão dramática é gerada pelo conflito e antagonismo entre os personagens, aumentando o interesse do público e a empatia com as histórias.
+   Implementação: Cena 7 - JOHN confronta MARY sobre sua infidelidade; Cena 8 - MARY decide entre ficar com JOHN ou seguir seu amante.
+   Resultado Esperado: A adição de cenas de alta tensão e conflito fará com que a história seja mais envolvente e imprevisível, mantendo o interesse do público e fortalecendo a empatia com os personagens.
+   Solução para Problema 2: Desenvolver Personagens Complexos
+   Ação: Explorar os antecedentes, personalidades e motivações dos personagens, proporcionando-lhes traços distintos e comportamentos consistentes.
+   Teoria: O Capítulo 6 de McKee destaca a importância de criar personagens complexos e únicos, dotados de traços distintos e motivadores claros.
+   Implementação: Fornecer flashbacks das infâncias dos personagens (Cena 1); Mostrar as dúvidas internas de JOHN quanto à sua carreira (Cena 2); Exibir as lutas de MARY com a autoestima (Cena 4).
+   Resultado Esperado: O desenvolvimento de personagens complexos e únicos fortalecerá a história, permitindo que o público se identifique e empatize com eles, resultando em uma experiência mais satisfatória.
+
+
+================================================================================
+PARTE 3: SÍNTESE (PYTHON + LLM)
+================================================================================
+
+🎯 RESUMO EXECUTIVO:
+   Dual-Core analysis combining Python metrics with LLM insights
+
+⭐ QUALITY SCORE: 1.00/1.0
+   Classificação: 🌟 EXCELENTE
+
+📊 ANÁLISE COMBINADA:
+   • objective_data: See python_analysis section
+   • qualitative_insights: 1. INTERPRETAÇÃO
+
+Primeiro Parágrafo: O que os dados do Python revelam sobre o roteiro e como esses dados se conectam à teoria McKee.
+
+Os dados do Python indicam um desempenho médio no quesito "Engajamento Emocional", mas uma pontuação mais baixa na categoria "Dinâmica". Essa discrepância pode ser explicada pelo Capítulo 7 de McKee, onde ele discute a importância da tensão dramática para manter o interesse do público. A falta de dinâmica pode ser atribuída à falta de conflito ou antagonismo entr...
+   • methodology: Python structural analysis enriched with LLM contextual understanding
+
+
+================================================================================
+FIM DO RELATÓRIO
+================================================================================
+
+Gerado por Scripturemon Dual-Core em 02/10/2025 13:05:09

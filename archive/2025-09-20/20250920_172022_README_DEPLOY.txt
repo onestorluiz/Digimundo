@@ -1,0 +1,47 @@
+# 🎬 Midnight Pictures – Clone Cinematográfico Completo
+
+Este é um clone simbólico e funcional inspirado no site oficial da Blumhouse (https://www.blumhouse.com/films), com aprimoramentos técnicos e narrativos.
+
+## ✅ O que está incluso:
+- Página inicial com layout cinematográfico
+- Catálogo completo com 100+ filmes fictícios
+- Página individual por filme com estilo realista
+- Modal de detalhes cinematográfico
+- Painel Mestre com navegação total
+- CMS visual (mock)
+- Mapa do Universo (vis.js)
+- Responsividade completa
+- Animações, efeitos de hover e vidro fosco
+- SEO técnico: sitemap.xml, robots.txt
+- Pronto para deploy em Hostinger, Vercel ou GitHub Pages
+
+## 🚀 Como publicar:
+1. Envie todos os arquivos para a pasta `public_html/` na Hostinger
+2. Ou envie para Vercel/GitHub Pages (raiz do projeto)
+3. Acesse o `painel-mestre.html` para testar todas as rotas
+4. Opcional: configure domínio com `index.html` como raiz
+
+---
+
+# 🎬 Midnight Pictures – Full Cinematic Clone
+
+This is a symbolic and functional clone inspired by Blumhouse's official site, expanded with advanced features.
+
+## ✅ Included Features:
+- Cinematic landing page layout
+- Full catalog with 100+ fictional films
+- Individual film pages in movie-poster style
+- Detail modals and dynamic badges
+- Master Navigation Panel
+- Visual CMS (mock)
+- Universe Map (vis.js)
+- Fully responsive layout
+- Hover animations + glassmorphism
+- SEO: sitemap.xml, robots.txt
+- Ready for Hostinger, Vercel, or GitHub Pages
+
+## 🚀 How to deploy:
+1. Upload all files to `public_html/` (Hostinger or similar)
+2. Or deploy to Vercel / GitHub Pages (project root)
+3. Use `painel-mestre.html` for navigation
+4. Optional: point your domain to `index.html` as homepage

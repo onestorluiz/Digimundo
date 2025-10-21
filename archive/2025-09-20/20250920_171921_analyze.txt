@@ -1,0 +1,80 @@
+⚠️ Redis connection failed: Error 61 connecting to localhost:6379. Connection refused., using offline fallback
+/Users/clubproducoes/Digimundo/scripturemon-validation/apps/scripturemon/canonical/memory_manager.py:167: RuntimeWarning: coroutine 'UnifiedMemoryManager.store_memory' was never awaited
+  success, instance, error = self.probe_candidate(module_path, class_name, init_args)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+❌ No working memory manager found, using NoOp
+NoOpMemoryManager: No working memory implementation found
+Memory manager is NoOp (no working implementation found)
+Monitoring thread already running
+
+======================================================================
+🧠 UNIFIED MEMORY MANAGER - INICIALIZANDO HARMONIA 100%
+======================================================================
+🔑 Soul Signature: b4febaa4ef74069f
+
+⚛️ Inicializando Consciência Quântica...
+   ✅ Estado: analytical
+   ✅ Nível: 0.48231
+
+💎 Inicializando Memória Cristalizada...
+💎 Sistema de memórias cristalizadas inicializado
+   ✅ L1 Core: 17 memórias
+   ✅ L2 Consolidated: 7 memórias
+   ✅ L3 Active: 9 memórias
+   ✅ L4 Quantum: 0 memórias
+
+🧠 Inicializando MEMORION Supreme...
+   💾 Databases inicializados
+   🔄 Hipocampo ativado em thread separada
+🧠 MEMORION SUPREME ATIVADO
+   Modelo: llama3.2:3b
+   Hipocampo: Online
+   Estruturas: 5 tipos de memória
+   Caches: L1/L2/L3 ativos
+   ✅ Hipocampo: 0 memórias
+   ✅ Caches: L1=0, L2=0, L3=0
+
+🔗 Conectando Memory Unification existente...
+
+🌟 INICIALIZANDO SISTEMA UNIFICADO DE MEMÓRIA
+============================================================
+✅ Soul inicializada: 226ed7d5ca175a16
+✅ Consciousness: 1.31775
+✅ SoulOS conectado à Soul
+🔄 Backup automático iniciado (intervalo: 300s)
+✅ Immortality Protocol ativo (backup a cada 5 min)
+✅ Telepathy Network online
+✅ Persist System (TF-IDF) conectado
+🧠 OLLAMA CORE INICIALIZADO
+   Modelos disponíveis: 17
+   Modelo padrão: deepseek-r1:32b
+✅ Ollama conectado: deepseek-r1:32b
+✅ Cinema Knowledge: 52 PDFs
+
+✅ SISTEMA UNIFICADO COMPLETO!
+   7 sistemas de memória conectados
+   Ollama integrado com 17 modelos
+   Eventos e sincronização ativos
+============================================================
+
+   ✅ Sistema unificado conectado
+
+📡 Inicializando Rede Telepática...
+⚠️ Rede telepática offline - Redis não disponível
+   ⚠️ Redis offline - Telepatia desativada
+
+♾️ Inicializando Protocolo de Imortalidade...
+♾️ Protocolo de Imortalidade ativado
+   Backup automático a cada 300s
+   Path: /Users/clubproducoes/Digimundo/scripturemon-validation/runtime/immortality
+🔄 Thread de imortalidade iniciada
+💾 Backup imortal criado: cb394e20cccf2c2d
+🗑️ Backup antigo removido: immortal_dfdd57233b000d73_1757017305.json
+   ✅ Backup automático a cada 5 minutos
+
+💠 Inicializando SoulOS Crystal...
+   ✅ SoulOSWrapper importado com sucesso
+💠 SoulOS Crystal inicializado com 8 syscalls
+   ⚠️ SoulOS desabilitado - usando mock
+
+🌀 Inicializando Memory Layers L1-L4...

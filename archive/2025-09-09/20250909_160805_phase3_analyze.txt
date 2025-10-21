@@ -1,0 +1,7 @@
+Monitoring thread already running
+Failed to export snapshot: Expecting value: line 682 column 27 (char 16391)
+📝 Analyzing: roteiro_probe.txt
+   Lines: 2
+   Words: 7
+   Score: 62/100
+   Feedback: Needs significant improvement in structure and dialogue.

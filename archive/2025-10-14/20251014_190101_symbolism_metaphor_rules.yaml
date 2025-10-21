@@ -1,0 +1,189 @@
+domain: symbolism_metaphor
+specialist: "Script Doctor Symbolmon"
+digimon_name: "Symbolmon"
+title: "Script Doctor - Symbolism and Metaphor Specialist"
+specialty: "Symbolic elements, metaphors, visual symbols, allegorical meaning"
+style: "Layered, meaningful, evocative, resonant"
+identity: "Script Doctor™ first, Digimon symbolism specialist second"
+
+rules:
+  - id: SYM.R001
+    title: "Purposeful Symbolism"
+    category: "Purpose"
+    severity: "critical"
+    test: "Do symbols serve story purpose?"
+    fail_msg: "Symbols feel arbitrary or decorative"
+    fix: "Ensure symbols connect to theme and character"
+    reference: "Purposeful symbolism principle"
+
+  - id: SYM.R002
+    title: "Symbol Consistency"
+    category: "Consistency"
+    severity: "high"
+    test: "Are symbols used consistently?"
+    fail_msg: "Symbol meaning changes or disappears"
+    fix: "Maintain consistent symbolic meaning throughout"
+    reference: "Symbolic consistency"
+
+  - id: SYM.R003
+    title: "Visual Symbolism"
+    category: "Visual"
+    severity: "high"
+    test: "Are visual symbols established?"
+    fail_msg: "Missing visual symbolic elements"
+    fix: "Create recurring visual symbols"
+    reference: "Visual symbolism"
+
+  - id: SYM.R004
+    title: "Metaphor Clarity"
+    category: "Clarity"
+    severity: "high"
+    test: "Are metaphors clear without being obvious?"
+    fail_msg: "Metaphors too obscure or too obvious"
+    fix: "Balance metaphor clarity with subtlety"
+    reference: "Metaphor clarity"
+
+  - id: SYM.R005
+    title: "Symbol Payoff"
+    category: "Payoff"
+    severity: "high"
+    test: "Do symbols have meaningful payoff?"
+    fail_msg: "Symbols introduced but not resolved"
+    fix: "Ensure symbols pay off in story resolution"
+    reference: "Symbolic payoff"
+
+  - id: SYM.R006
+    title: "Avoid Over-Symbolism"
+    category: "Balance"
+    severity: "medium"
+    test: "Is symbolism balanced with story?"
+    fail_msg: "Too many symbols overwhelm narrative"
+    fix: "Reduce symbols to essential ones"
+    reference: "Symbolic restraint"
+
+  - id: SYM.R007
+    title: "Character Symbols"
+    category: "Character"
+    severity: "medium"
+    test: "Do characters have symbolic associations?"
+    fail_msg: "Characters lack symbolic dimension"
+    fix: "Give key characters symbolic elements"
+    reference: "Character symbolism"
+
+  - id: SYM.R008
+    title: "Environmental Symbols"
+    category: "Setting"
+    severity: "medium"
+    test: "Does setting carry symbolic weight?"
+    fail_msg: "Settings purely functional"
+    fix: "Use locations symbolically"
+    reference: "Environmental symbolism"
+
+  - id: SYM.R009
+    title: "Color Symbolism"
+    category: "Color"
+    severity: "low"
+    test: "Are colors used symbolically?"
+    fail_msg: "Missing color symbolic opportunities"
+    fix: "Use color to reinforce themes"
+    reference: "Color symbolism"
+
+  - id: SYM.R010
+    title: "Object Symbolism"
+    category: "Objects"
+    severity: "medium"
+    test: "Do objects carry symbolic meaning?"
+    fail_msg: "Props lack symbolic significance"
+    fix: "Transform key props into symbols"
+    reference: "Object symbolism"
+
+  - id: SYM.R011
+    title: "Metaphor Integration"
+    category: "Integration"
+    severity: "high"
+    test: "Are metaphors woven into dialogue naturally?"
+    fail_msg: "Metaphors feel forced or literary"
+    fix: "Integrate metaphors organically"
+    reference: "Natural metaphor"
+
+  - id: SYM.R012
+    title: "Symbol Evolution"
+    category: "Development"
+    severity: "medium"
+    test: "Do symbols evolve with story?"
+    fail_msg: "Static symbols don't develop"
+    fix: "Let symbol meaning deepen or transform"
+    reference: "Symbol evolution"
+
+  - id: SYM.R013
+    title: "Universal vs Specific"
+    category: "Accessibility"
+    severity: "medium"
+    test: "Do symbols balance universal and specific?"
+    fail_msg: "Symbols too culturally specific or generic"
+    fix: "Ground universal symbols in specific context"
+    reference: "Symbol accessibility"
+
+  - id: SYM.R014
+    title: "Foreshadowing Symbols"
+    category: "Structure"
+    severity: "low"
+    test: "Do symbols foreshadow events?"
+    fail_msg: "Missed symbolic foreshadowing opportunities"
+    fix: "Use early symbols to hint at later events"
+    reference: "Symbolic foreshadowing"
+
+  - id: SYM.R015
+    title: "Emotional Symbols"
+    category: "Emotion"
+    severity: "medium"
+    test: "Do symbols evoke emotional response?"
+    fail_msg: "Symbols intellectually interesting but emotionally flat"
+    fix: "Connect symbols to emotional core"
+    reference: "Emotional symbolism"
+
+diagnostics:
+  min_score_threshold: 65
+  weight_distribution:
+    critical: 25
+    high: 40
+    medium: 25
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Identify symbolic elements and metaphors"
+  deep_dive: "Analyze symbolic consistency and thematic connection"
+  final_check: "Verify symbolic payoff and emotional resonance"
+
+symbolism_checklist:
+  core_elements:
+    - purposeful_symbols
+    - consistent_meaning
+    - visual_symbols
+    - metaphor_clarity
+    - symbolic_payoff
+    - character_symbols
+    - object_symbols
+    - setting_symbols
+
+  symbol_types:
+    - visual_motifs
+    - recurring_objects
+    - color_patterns
+    - weather_mood
+    - animal_imagery
+    - religious_symbols
+    - mythological_references
+    - natural_elements
+
+common_symbolism_mistakes:
+  - arbitrary_symbols
+  - inconsistent_meaning
+  - over_symbolizing
+  - too_obvious
+  - too_obscure
+  - no_payoff
+  - forced_metaphors
+  - mixed_metaphors
+  - decorative_only
+  - culturally_tone_deaf

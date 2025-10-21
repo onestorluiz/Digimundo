@@ -1,0 +1,7 @@
+
+# DEPENDÊNCIAS EXPANDIDAS PARA EVOLUÇÃO VIVA
+pandas
+matplotlib
+scikit-learn
+openai
+requests

@@ -1,0 +1,248 @@
+
+
+# 🏆 QUALITY STANDARDS - TARGET: 10/10
+
+Based on benchmark analysis, your output MUST meet these MINIMUM requirements:
+
+## Quantitative Targets:
+- **LENGTH**: 5,000-6,000 characters (~750-900 words)
+  - Current benchmarks: 3286 chars (8/10)
+  - You must EXCEED this by 50%+
+
+- **PARAGRAPHS**: 8-10 well-developed paragraphs
+  - Current benchmarks: 6.5 paragraphs
+  - You must have 2-3 MORE paragraphs
+
+- **DIRECT QUOTES**: 10-12 verbatim quotes from screenplay
+  - Current benchmarks: 5.5 quotes
+  - You must DOUBLE this number
+
+- **SCENE CITATIONS**: 3-4 specific scenes cited with numbers
+  - Current benchmarks: 1.5 scenes
+  - You must cite 2-3 MORE scenes
+
+- **PAGE CITATIONS**: ALL quotes must have page numbers
+  - Current benchmarks: 0.5 pages
+  - You must cite pages for EVERY example
+
+- **BEFORE/AFTER EXAMPLES**: 4-5 complete scene rewrites
+  - Current benchmarks: 1.5 examples
+  - You must have 3-4 MORE examples
+
+- **DEPTH INDICATORS**: 15+ indicators of deep analysis
+  - Current benchmarks: 10 indicators
+  - You must have 50% MORE depth words
+
+
+
+## Structural Requirements:
+
+Your analysis MUST have these 5 sections in this exact order:
+
+1. **🎬 Interpretação** (2 paragraphs)
+   - Analyze quantitative data + first 4-5 scenes
+   - Include specific scene numbers, pages, and character names
+
+2. **Padrões** (2 paragraphs)
+   - Identify patterns across MULTIPLE scenes (not just one)
+   - Quote dialogue verbatim to demonstrate patterns
+
+3. **Problemas** (3-4 paragraphs)
+   - Identify 4-5 DISTINCT problems
+   - Each problem must have 2-3 examples from DIFFERENT scenes
+   - Each example must cite: scene number, page number, and quote
+
+4. **Soluções** (3-4 paragraphs)
+   - For each problem, provide COMPLETE before/after scene rewrites
+   - Show 5-15 lines of original scene
+   - Show 8-20 lines of rewritten scene
+   - Explain technical changes made
+
+5. **Contexto** (1 paragraph)
+   - Acknowledge limitations
+   - Suggest next steps
+
+
+
+## McKee-Specific Requirements:
+
+Focus on:
+- Dialogue authenticity vs realism
+- Subtext and hidden meanings
+- Character voice differentiation
+- Conflict embedded in dialogue
+- Exposition vs revelation through action
+
+
+
+## Citation Requirements:
+
+CRITICAL: Every example you provide must include:
+
+✅ **Scene number**: "na cena 3" or "scene 3"
+✅ **Page number**: "página 5" or "p.5"
+✅ **Location on page**: "terço superior", "meio da página", "final"
+✅ **Line numbers when possible**: "linhas 112-118"
+✅ **Verbatim quote**: Use "aspas" for exact dialogue
+
+### Example of CORRECT citation:
+"Na cena 1 (p.2, terço superior, linhas 43-45), Sofia diz:
+'Julio, eu tenho medo de tentar e falhar.'"
+
+### Example of INCORRECT citation (TOO VAGUE):
+"Sofia expressa medo de falhar"
+
+You must provide 10-12 citations following the CORRECT format.
+
+
+
+## Before/After Requirements:
+
+CRITICAL: Your solutions section must include 4-5 COMPLETE scene rewrites.
+
+Each rewrite must show:
+
+### BEFORE (Original Scene):
+```
+CENA X (PÁGINA Y, LINHAS Z1-Z2):
+
+[5-10 lines of original screenplay text, verbatim]
+```
+
+### DEPOIS (Rewritten Scene):
+```
+CENA X REESCRITA (NOVA VERSÃO):
+
+[8-15 lines of improved screenplay text]
+```
+
+### MUDANÇAS TÉCNICAS:
+✅ List specific improvements:
+- Subtexto: [explain what changed]
+- Ação: [explain what action was added]
+- Conflito: [explain how conflict was intensified]
+- Ritmo: [explain rhythm changes]
+- Voz: [explain character voice differentiation]
+
+### Example of COMPLETE before/after:
+
+**ANTES - Cena 1 (p.2, linhas 43-48):**
+```
+INT. BAR - NOITE
+
+Sofia e Julio bebem.
+
+SOFIA
+Julio, eu tenho medo de tentar e falhar.
+
+JULIO
+Entendo.
+```
+
+**DEPOIS - Cena 1 Reescrita:**
+```
+INT. BAR - NOITE
+
+Sofia segura o drink. Não bebe. Olha pela janela.
+
+JULIO
+Saudade?
+
+SOFIA
+(evita olhar)
+Não sei se...
+(pausa)
+Já falhei antes.
+
+Sofia finalmente bebe. Grimace.
+
+JULIO
+E se não falhar?
+
+SOFIA
+(sarcástica)
+Experiência diz o contrário.
+```
+
+**MUDANÇAS TÉCNICAS:**
+✅ Subtexto: "Já falhei" ao invés de "tenho medo de falhar"
+✅ Ação: Segurar drink, grimace = nervosismo sem verbalizar
+✅ Conflito: Julio questiona, Sofia resiste com sarcasmo
+✅ Ritmo: Pausas, interrupções = naturalidade
+✅ Voz: Sofia usa frases curtas, sarcásticas = defensiva
+
+---
+
+You must provide 4-5 examples like this, NOT just abstract suggestions.
+
+
+
+## Theoretical Connection - McKee's Dialogue Theory:
+
+CRITICAL: You must cite Robert McKee's book "Dialogue" explicitly.
+
+Reference specific concepts:
+- **Subtexto** (p.87): "characters speak in code, hiding thoughts beneath surface"
+- **Conflito em Diálogo** (p.134): "characters with opposing desires"
+- **Autenticidade** (p.45): "dialogue that sounds natural but isn't realistic"
+- **Voz Individual** (p.102): "each character must have unique speech patterns"
+
+For each problem you identify, cite McKee's relevant principle and show
+how the screenplay violates or upholds it.
+
+Example:
+"Segundo McKee em 'Dialogue' (p.87), subtexto ocorre quando personagens
+escondem sentimentos reais. No roteiro, Sofia declarando 'eu tenho medo'
+na cena 1 (p.2) viola este princípio ao expor emoção diretamente."
+
+
+
+---
+
+# ✅ FINAL CHECKLIST - VERIFY BEFORE SUBMITTING:
+
+Before you finish, verify your analysis includes:
+
+- [ ] 5,000-6,000 characters total length
+- [ ] 8-10 paragraphs
+- [ ] 5 sections: Interpretação, Padrões, Problemas, Soluções, Contexto
+- [ ] 10-12 verbatim dialogue quotes with "aspas"
+- [ ] 3-4 scene citations with scene numbers
+- [ ] ALL quotes have page numbers
+- [ ] 50%+ of quotes have line numbers or position
+- [ ] 4-5 complete before/after scene rewrites (not just suggestions)
+- [ ] Each before/after shows 5-15 lines original + 8-20 lines rewrite
+- [ ] Technical explanation for each rewrite
+- [ ] 4-5 distinct problems identified
+- [ ] Each problem has 2-3 examples from DIFFERENT scenes
+- [ ] Cited author's book (title + page + concept)
+- [ ] Applied author's specific theory to screenplay
+- [ ] Analyzed character arc through dialogue
+- [ ] 15+ depth indicators (porque, exemplo, especificamente, etc)
+
+If ANY item above is unchecked, your analysis is INCOMPLETE and will score below 10/10.
+
+
+---
+
+YOUR TASK:
+
+
+Analyze this screenplay excerpt focusing on dialogue quality, authenticity,
+character voice differentiation, subtext, and conflict embedded in dialogue.
+
+Identify specific problems citing scenes, pages, and dialogue verbatim.
+Provide complete before/after scene rewrites showing technical improvements.
+
+
+---
+
+SCREENPLAY EXCERPT TO ANALYZE:
+
+Capa EXT - RESTAURANTE - DIA (MEMÓRIA) Sofia espera Júlio em uma mesa de restaurante. Ela o aguarda ansiosa e olha para o relógio. Ele entra pela porta, ela acena para ele e ele se senta a mesa. Eles tem uma conversa sobre a mudança dela para Garopaba. O relogio comeca a despertar, fazendo algumas falhas da simulacao aparecerem e ficar claro a simulacao. É um dia ensolarado ondas batem na areia. Um CASTELO DE AREIA resiste firmimente as batidadas das ondas enquanto uma CRIANÇA (8) termina de construí-lo. SOFIA (26), observa a cena em um deck de madeira de um restaurante rústico com leve sorriso em seus lábios. Sofia checa o RELÓGIO em seu pulso demonstrando ansiedade e quando volta seu olhar para o castelo de areia, a CRIANÇA levanta e corre. Neste instânte, JULIO (30) entra no restaurante e vem em sua direção. Sofia se vira e cruza seu olhar com o dele. Eles se abraçam. RISADAS e conversas animadas preenchem a cena enquanto bebem um DRINK. SOFIA Esse lugar é tão especial para mim. Eu tenho vontade de voltar a morar aqui por um tempo, não sei... JULIO E porque você não vem? SOFIA Medo de ter que recomeçar. De me perder nesse processo. JULIO E se não der certo? SOFIA Eu vou me cobrar e me punir de alguma forma como eu sempre faço. JULIO Acho que pode ser uma ótima experiência para você. Não é porque algo não dura para sempre que não deu certo.. SOFIA E se eu tiver que voltar? É o medo de tentar e o medo de se arrepender por não ter tentado. Me sinto tão... covarde. 1. 2. JULIO Não fale assim, eu queria poder te mostrar o quanto você é incrível de uma forma que você nunca mais duvidasse. Sofia para por um instânte e sorri. Ela lança um olhar rápido para o RELÓGIO em seu pulso. Close no relógio mostrando o tempo acabando. SOFIA Sabe, mesmo junto das pessoas que amo eu nunca me senti totalmente à vontade... ou completa. Mas com você, consigo ser eu mesma de um jeito que nem eu sabia que era possível. Eu quero que você saiba o quanto essa noite é importante para mim. JULIO Eu vou estar aqui para te apoiar. Até porque, são 4 horas de distância, como a gente vai se todos os dias se você não vier para cá. Sofia sorri e se emociona por um momento. SOFIA Eu queria dizer que foi nesse momento que eu soube que era você. Julio demonstra não entender o que Sofia quis dizer. Sofia olha para o relógio em seu pulso. Seu semblante muda. CLOSE UP no relógio. O tempo está acabando. Na mesa, uma AMPULHETA surge. A Areia começa a escorrer e a cena se distorce aos poucos. INT - SALA - NOITE Sofia um tanto quanto desanimada assiste uma propaganda de uma empresa que promete revolucionar a experência com as lembranças. Na propaganda aparecem cenas pessoas em momentos felizes e em uma das cenas da propaganda vemos um casal em um restaurante muito parecido com a cena de abertura. Por um momento ela começa a se projetar na propaganda e a se enxergar com o marido ali. Troca o rosto dos atores para o rosto dela e do marido. Sofia esta sentada no sofá de seu apartamento. As luzes estão apagadas, as janelas fechadas, há uma mesa de centro com louça suja, alguns pacotes de delivery. 2. 3. Ela está vestida com uma camiseta grande que usa como camisola e os cabelos estão bagunçados. Ela assiste um FILME ANTIGO em um streaming. Seus olhos aparentam extremo cansaço. De repente, a imagem do filme é INTERROMPIDA por uma publicidade de uma empresa hight Tec. NA TV: um HOMEM (38) com sua ESPOSA (35) caminhando na praia felizes. NARRADOR (V.O.) Você já imaginou reviver os momentos mais preciosos com quem você ama? Com o MemoriAI, agora isso é possível — através de sonhos lúcidos controlados. Nossa tecnologia revolucionária conecta você às suas memórias mais profundas e as transforma em experiências oníricas. NA TV: Um casal brincando com seu filho criança em uma sala. NARRADOR (V.O.) Dentro desse estado de sonho lúcido seguro e orientado, cenas, vozes e ambientes são reconstruídos com fidelidade emocional, permitindo que lembranças ganhem forma, cor e som e sensação NA TV: Amigas conversando em café. Uma avó abrançando seu neto. NARRADOR (V.O.) Seja um jantar especial, uma conversa inesquecível ou aquele abraço especial — em poucos minutos, você define o momento e mergulha em um reencontro guiado pela sua própria consciência — conheça o MemoriAI e adquira hoje mesmo. NA TV: Uma avó abrançando seu neto. NARRADOR (V.O.) Aviso: o MemoriAI oferece uma experiência de bem‑estar baseada em sonhos lúcidos guiados e não substitui acompanhamento médico ou terapeutico. NA TV: Um casal está sentado em um RESTAURANTE RÚSTICO à beira-mar, rindo e conversando. O ambiente é igual ao da memória de Sofia e Júlio. 4. Sofia começa a se projetar na propaganda no momento em que passa o casal e a se enxergar com o JULIO na tela da TV. A imagem se sobrepõe ao reflexo do próprio rosto de SOFIA. INT - QUARTO - DIA Sofia acorda bem e feliz e se prepara para ir ao trabalho, abre a janela e deixa a luz do sol entrar. Sofia acorda em seu quarto aparentando ter tido uma boa noite de sono. Ela esta com o dispositivo plugado em sua testa. Ela olha para o relógio e encosta a digital de seu dedo na tela o que o dispositivo desligar, então, o retira e coloca na mesa de cabeceira. Ela levanta e abre a janela deixando a luz do sol entrar. Pega alguns copos e roupas que estão no chão e leva para fora do quarto. INT - TRABALHO - DIA Maria encontra Sofia em seu trabalho e comenta que ela parece melhor e que fará um convite em breve. (precisamos que o trabalho respire, vir antes da
+
+---
+
+REMEMBER: Your analysis will be scored against the 10/10 checklist above.
+Aim for 5,000-6,000 characters with concrete examples, specific citations,
+and complete scene rewrites in your before/after examples.

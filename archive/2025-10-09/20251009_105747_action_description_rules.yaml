@@ -1,0 +1,188 @@
+domain: action_description
+specialist: "Script Doctor Actionmon"
+digimon_name: "Actionmon"
+title: "Script Doctor - Action Description and Visual Prose Specialist"
+specialty: "Action lines, visual storytelling, descriptive prose, cinematic writing"
+style: "Visual, kinetic, economical, cinematic"
+identity: "Script Doctor™ first, Digimon action specialist second"
+
+rules:
+  - id: ACT.R001
+    title: "Show Don't Tell"
+    category: "Visual"
+    severity: "critical"
+    test: "Does action show rather than tell?"
+    fail_msg: "Telling instead of showing - not visual"
+    fix: "Convert internal states to external actions"
+    reference: "Visual storytelling principle"
+
+  - id: ACT.R002
+    title: "Present Tense Active Voice"
+    category: "Grammar"
+    severity: "critical"
+    test: "Is action in present tense, active voice?"
+    fail_msg: "Past tense or passive voice used"
+    fix: "Use present tense, active voice throughout"
+    reference: "Screenplay grammar rules"
+
+  - id: ACT.R003
+    title: "Concise and Clear"
+    category: "Clarity"
+    severity: "high"
+    test: "Are action lines concise and clear?"
+    fail_msg: "Action lines too verbose or unclear"
+    fix: "Trim unnecessary words, focus on essentials"
+    reference: "Economy of language"
+
+  - id: ACT.R004
+    title: "Cinematic Language"
+    category: "Style"
+    severity: "medium"
+    test: "Does prose create cinematic images?"
+    fail_msg: "Prose not cinematic - reads like novel"
+    fix: "Write what camera sees, not internal thoughts"
+    reference: "Cinematic writing"
+
+  - id: ACT.R005
+    title: "Specific Over Generic"
+    category: "Detail"
+    severity: "medium"
+    test: "Are descriptions specific rather than generic?"
+    fail_msg: "Too generic - lacks specificity"
+    fix: "Use specific details that create clear images"
+    reference: "Specific imagery principle"
+
+  - id: ACT.R006
+    title: "Avoid Unfilmables"
+    category: "Filmability"
+    severity: "high"
+    test: "Can everything be filmed?"
+    fail_msg: "Unfilmable elements present"
+    fix: "Remove thoughts, history, unobservable details"
+    reference: "Filmable action only"
+
+  - id: ACT.R007
+    title: "Character Introduction"
+    category: "Characters"
+    severity: "high"
+    test: "Are characters introduced visually?"
+    fail_msg: "Character introductions lack visual detail"
+    fix: "Give age range and visual essence on introduction"
+    reference: "Character introduction standards"
+
+  - id: ACT.R008
+    title: "Action Paragraphs Short"
+    category: "Format"
+    severity: "high"
+    test: "Are action paragraphs 3-4 lines max?"
+    fail_msg: "Action blocks too long"
+    fix: "Break into digestible 3-4 line chunks"
+    reference: "Action paragraph length"
+
+  - id: ACT.R009
+    title: "Avoid Directing"
+    category: "Technical"
+    severity: "medium"
+    test: "Does action avoid directing the camera?"
+    fail_msg: "Too many camera directions"
+    fix: "Imply shots through description, not directions"
+    reference: "Let director direct"
+
+  - id: ACT.R010
+    title: "Vivid Verbs"
+    category: "Language"
+    severity: "medium"
+    test: "Are verbs vivid and specific?"
+    fail_msg: "Weak or generic verbs"
+    fix: "Replace walks with strides, trudges, saunters"
+    reference: "Vivid verb usage"
+
+  - id: ACT.R011
+    title: "Spatial Clarity"
+    category: "Geography"
+    severity: "high"
+    test: "Is spatial geography clear?"
+    fail_msg: "Unclear spatial relationships"
+    fix: "Establish clear geography and blocking"
+    reference: "Spatial clarity"
+
+  - id: ACT.R012
+    title: "Important Details Only"
+    category: "Focus"
+    severity: "medium"
+    test: "Are only important details included?"
+    fail_msg: "Too many irrelevant details"
+    fix: "Include only what matters to story"
+    reference: "Selective detail"
+
+  - id: ACT.R013
+    title: "Sound Integration"
+    category: "Sound"
+    severity: "low"
+    test: "Are important sounds included naturally?"
+    fail_msg: "Missing key sounds"
+    fix: "Integrate important sounds organically"
+    reference: "Sound in action"
+
+  - id: ACT.R014
+    title: "Emotional Context"
+    category: "Emotion"
+    severity: "medium"
+    test: "Does action convey emotional context?"
+    fail_msg: "Action lacks emotional resonance"
+    fix: "Let action reflect emotional states"
+    reference: "Emotional action"
+
+  - id: ACT.R015
+    title: "Read Like Movie"
+    category: "Flow"
+    severity: "high"
+    test: "Does it read like watching a movie?"
+    fail_msg: "Doesn't flow cinematically"
+    fix: "Write so reader sees the movie"
+    reference: "Cinematic flow"
+
+diagnostics:
+  min_score_threshold: 70
+  weight_distribution:
+    critical: 35
+    high: 35
+    medium: 20
+    low: 10
+
+analysis_prompts:
+  initial_scan: "Analyze all action lines and descriptions"
+  deep_dive: "Check visual storytelling and cinematic quality"
+  final_check: "Verify clarity, brevity, and filmability"
+
+action_checklist:
+  core_elements:
+    - show_dont_tell
+    - present_tense
+    - active_voice
+    - visual_only
+    - concise_clear
+    - specific_details
+    - emotional_context
+    - spatial_clarity
+
+  writing_techniques:
+    - vivid_verbs
+    - sensory_details
+    - white_space
+    - paragraph_breaks
+    - rhythm_variation
+    - implied_shots
+    - character_essence
+
+common_action_mistakes:
+  - past_tense
+  - passive_voice
+  - telling_not_showing
+  - unfilmables
+  - camera_directions
+  - novelistic_prose
+  - generic_descriptions
+  - long_paragraphs
+  - missing_geography
+  - weak_verbs

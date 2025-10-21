@@ -1,0 +1,1596 @@
+"""
+Script Doctor Resolutionmon - Resolution Analysis Specialist
+A Script Doctor™ in Digimon form specializing in resolution, denouement, threads closed, emotional satisfaction.
+"""
+
+import re
+import yaml
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from dataclasses import dataclass
+from collections import defaultdict, Counter
+import string
+
+
+@dataclass
+class ResolutionElement:
+    """Individual resolution element."""
+    element_type: str  # "thread_closure", "character_fate", "theme_reinforcement", "emotional_satisfaction", etc.
+    page_number: int
+    description: str
+    completeness: float  # 0-1
+    present: bool
+    notes: str
+
+
+@dataclass
+class ResolutionProfile:
+    """Overall resolution analysis."""
+    resolution_present: bool
+    resolution_page: int
+    resolution_length: int  # Pages dedicated to resolution
+    all_threads_closed: bool
+    open_threads_count: int
+    character_fates_resolved: bool
+    protagonist_fate_clear: bool
+    antagonist_fate_clear: bool
+    theme_reinforced_at_resolution: bool
+    emotional_satisfaction_achieved: bool
+    new_equilibrium_established: bool
+    loose_ends_addressed: bool
+    final_image_effective: bool  # Snyder: final image vs opening image
+    denouement_pacing: str  # "appropriate", "too_fast", "dragging"
+    catharsis_delivered: bool  # Aristotle: emotional release
+    hope_or_wisdom_present: bool  # McKee: story leaves audience with something
+    callbacks_to_setup: bool
+    abrupt_ending_detected: bool  # PENALTY
+    unresolved_threads_detected: bool  # PENALTY
+    dragging_resolution_detected: bool  # PENALTY
+    resolution_completeness: float  # 0-1
+    resolution_satisfaction: float  # 0-1
+    overall_resolution_quality: float
+
+
+class DrResolution:
+    """
+    Script Doctor Resolutionmon - The Resolution Analysis Specialist
+
+    A Script Doctor™ in Digimon form, specializing in analyzing resolution,
+    denouement, threads closed, character fates, emotional satisfaction, new equilibrium.
+
+    Identity: Script Doctor first, Digimon resolution specialist second.
+    """
+
+    def __init__(self, rules_path: str = None):
+        """Initialize Script Doctor Resolutionmon with rules and configuration."""
+        self.name = "Script Doctor Resolutionmon"
+        self.digimon_name = "Resolutionmon"
+        self.title = "Script Doctor - Resolution Analysis Specialist"
+        self.specialty = "Resolution, denouement, threads closed, emotional satisfaction, new equilibrium"
+        self.identity = "I am Script Doctor Resolutionmon, a professional Script Doctor™ specializing in resolution analysis"
+
+        # Load rules
+        if rules_path:
+            self.rules_path = Path(rules_path)
+        else:
+            self.rules_path = Path(__file__).parent.parent.parent / "config" / "rules" / "resolution_rules.yaml"
+
+        self.rules = self._load_rules()
+
+        # Deep context queries for the 13 books - RESOLUTION SPECIFIC
+        self.deep_context_queries = [
+            # McKee Story - Resolution as emotional and thematic payoff
+            "McKee Story resolution denouement final act aftermath all threads closed",
+            "McKee Story resolution emotional satisfaction catharsis audience release earned",
+            "McKee Story resolution new equilibrium world restored changed balance",
+            "McKee Story resolution theme reinforced controlling idea proved final statement",
+            "McKee Story resolution all setups paid off callbacks payoffs satisfaction",
+            "McKee Story resolution character fate destiny achieved transformed complete",
+            "McKee Story resolution hope wisdom audience leaves with something valuable",
+            "McKee Story resolution pacing denouement appropriate not rushed not dragging",
+
+            # McKee Story - NEW EQUILIBRIUM & VALUE RESOLUTION (ultra-specific manual reading)
+            "McKee Story resolution new equilibrium aftermath gap closed balance restored",
+            "McKee Story denouement aftermath consequences choices visible played out",
+            "McKee Story story values resolution final charge positive negative ironic",
+
+            # Truby Anatomy - New equilibrium and moral revelation
+            "Truby Anatomy resolution new equilibrium world changed never same",
+            "Truby Anatomy resolution character fate destiny self-revelation fulfilled",
+            "Truby Anatomy resolution moral lesson learned wisdom gained character",
+            "Truby Anatomy resolution aftermath consequences choices play out visible",
+            "Truby Anatomy resolution all story lines converge unified complete whole",
+            "Truby Anatomy resolution character web relationships resolved fates clear",
+            "Truby Anatomy resolution premise proved thematic argument won clear",
+
+            # Field Screenplay - Final pages and closure
+            "Field Screenplay resolution pages 100-110 final pages denouement aftermath",
+            "Field resolution character fates protagonist antagonist supporting clear",
+            "Field resolution closure tying loose ends all threads resolved",
+            "Field resolution emotional payoff catharsis audience satisfied earned",
+            "Field resolution consequences play out aftermath choices visible",
+            "Field resolution pacing appropriate length denouement not rushed dragging",
+            "Field resolution callbacks all plot points setups paid off",
+
+            # Snyder Save the Cat - Final image transformation proof
+            "Snyder Save the Cat final image beat last page bookends opening",
+            "Snyder final image vs opening image transformation proof visual change",
+            "Snyder resolution closure emotional payoff satisfaction earned deserved",
+            "Snyder gathering team finale aftermath resolution consequences",
+            "Snyder synthesis transformation new person emerged change complete visible",
+            "Snyder final image thematic statement clear visual proof message",
+            "Snyder resolution pacing don't overstay welcome end when done",
+
+            # Vogler Writer's Journey - Return with elixir and wisdom
+            "Vogler Writer's Journey return with elixir hero brings wisdom home",
+            "Vogler resolution hero returns changed transformation complete proof",
+            "Vogler resurrection final test resolution reborn new person emerged",
+            "Vogler return threshold crossing resolution bringing change home world",
+            "Vogler resolution freedom to live master two worlds balance achieved",
+            "Vogler resolution elixir shared wisdom given world changed hero",
+
+            # Campbell Hero 1000 Faces - Master two worlds and freedom
+            "Campbell Hero 1000 Faces return threshold resolution hero returns changed",
+            "Campbell return with boon resolution wisdom treasure gained shared",
+            "Campbell master two worlds resolution balance inner outer achieved",
+            "Campbell freedom to live resolution new beginning cycle complete",
+            "Campbell resolution apotheosis transformation complete god-like wisdom",
+            "Campbell resolution sacred marriage union opposites wholeness achieved",
+
+            # Aristotle Poetics - Catharsis and completion
+            "Aristotle Poetics catharsis emotional release pity fear purged resolution",
+            "Aristotle resolution completion closure satisfaction proper ending magnitude",
+            "Aristotle resolution unity action plot single complete whole resolved",
+            "Aristotle resolution necessity probability inevitable logical organic earned",
+            "Aristotle resolution recognition anagnorisis truth revealed character sees",
+
+            # Egri Art Dramatic Writing - Premise proved inevitable conclusion
+            "Egri Art Dramatic Writing resolution premise proved thematic truth clear",
+            "Egri resolution character reaches inevitable conclusion pole to pole",
+            "Egri resolution denouement consequences choices play out aftermath",
+            "Egri resolution unity opposites synthesis transcendence conflict resolved",
+            "Egri resolution orchestration all character fates clear resolved complete",
+
+            # Seger Making Good Script Great - Tying loose ends satisfaction
+            "Seger Making Good Script Great resolution pages 100-105 final tying",
+            "Seger resolution loose ends tied all threads closed complete",
+            "Seger resolution emotional satisfaction audience leaves with feeling",
+            "Seger resolution all subplots resolved character fates clear complete",
+            "Seger resolution callbacks payoffs all setups paid off satisfaction",
+            "Seger resolution pacing appropriate length denouement not rushed",
+            "Seger resolution theme reinforced moral lesson clear final statement",
+
+            # Weiland Creating Character Arcs - Arc completion proof
+            "Weiland Creating Character Arcs resolution moment truth acted on complete",
+            "Weiland resolution lie defeated truth embraced transformation visible proof",
+            "Weiland positive arc resolution embracing truth new person emerged",
+            "Weiland flat arc resolution proving truth world changed hero steadfast",
+            "Weiland negative arc resolution embracing lie tragic fall complete",
+            "Weiland resolution character arc complete visible proof behavior changed",
+
+            # Goldman Adventures Screen Trade - Button and ending efficiently
+            "Goldman Adventures Screen Trade resolution button perfect ending line",
+            "Goldman resolution all setups paid off final payoffs satisfaction",
+            "Goldman resolution don't overstay welcome end when story done",
+            "Goldman resolution efficient quick after climax momentum maintained",
+            "Goldman resolution character fate clear destiny achieved or failed",
+
+            # Rhimes Year of Yes - Season finale closure and satisfaction
+            "Rhimes Year of Yes resolution season finale closure threads resolved",
+            "Rhimes resolution emotional payoff catharsis audience satisfaction earned",
+            "Rhimes resolution character relationships resolved fates clear futures",
+            "Rhimes resolution authentic truth vulnerability closure real satisfying",
+
+            # Mamet Three Uses of the Knife - Aftermath and consequences
+            "Mamet Three Uses of the Knife resolution aftermath consequences visible",
+            "Mamet resolution essential task completed or failed clear result",
+            "Mamet resolution action behavior shows result not explanation stated",
+            "Mamet resolution dramatic structure complete three act resolution earned",
+
+            # Mackendrick On Film-Making - Final image visual resolution
+            "Mackendrick On Film-Making resolution final image visual closure proof",
+            "Mackendrick resolution show don't tell visual aftermath consequences",
+            "Mackendrick resolution image speaks behavior reveals fate transformation",
+            "Mackendrick resolution visual bookend opening closing image comparison",
+
+            # General resolution concepts - Comprehensive coverage
+            "resolution denouement aftermath final pages consequences play out",
+            "resolution all threads closed loose ends tied complete satisfaction",
+            "resolution character fates protagonist antagonist supporting clear",
+            "resolution emotional satisfaction catharsis audience release earned",
+            "resolution new equilibrium world restored changed balance achieved",
+            "resolution theme reinforced moral lesson controlling idea proved",
+            "resolution final image bookends opening transformation proof visual",
+            "resolution closure completeness satisfaction earned deserved organic",
+            "resolution wisdom hope audience leaves with something valuable",
+            "avoid abrupt ending rushed resolution incomplete unsatisfying",
+            "avoid unresolved threads loose ends hanging frustration penalty",
+            "avoid dragging resolution overstays welcome momentum lost boring",
+            "resolution pacing denouement appropriate length efficient satisfying",
+            "resolution callbacks payoffs all setups resolved planted paid off",
+            "resolution character arc complete transformation visible proof behavior"
+
+        # McKee STORY - GPT-5 extracted (12 Oct 2025)
+        "McKee Story resolution close remaining subplots avoid anticlimax",
+        "McKee Story resolution social event track effects around cast ensemble",
+        "McKee Story resolution slow curtain image track allow recovery",
+        "McKee Story resolution quick false twist yoke tag back to main plot",
+        "McKee Story resolution final beat harmonize theme avoid new business",
+        "McKee Story resolution courtesy audience leave theatre with dignity",
+
+        # Campbell Hero 1000 Faces - GPT-5 (12 Oct 2025)
+        "Campbell Hero magic flight pursuit return obstacles delaying,",
+        "Campbell Hero rescue without external aid allies intervention,",
+        "Campbell Hero crossing return threshold reentry reacculturation test,",
+        "Campbell Hero master two worlds mediation teaching transmission,",
+        "Campbell Hero freedom live presence fearlessness everyday grace,",
+        "Campbell Hero boon distribution feast healing laws arts,",
+        "Campbell Hero refusal return bliss attachment recall obligation,",
+        "Campbell Hero reconciliation home family community reintegration,",
+        "Campbell Hero kingdom restored wasteland healed rain returns,",
+        "Campbell Hero coronation enthronement anointing succession legacy,",
+        "Campbell Hero departure again wanderer emissary continuing quest,",
+        "Campbell Hero temple founding city planning axis mundi,",
+        "Campbell Hero ritualization memory myth retelling festival,",
+        "Campbell Hero teacher lawgiver code covenant education,",
+        "Campbell Hero succession mentor becomes elder new hero,",
+
+        # Truby Anatomy 22 Steps - GPT-5 (12 Oct 2025)
+        "Truby Anatomy new equilibrium higher or lower level transformed identity demonstration",
+        "Truby Anatomy thematic revelation audience total design expansion beyond characters",
+        "Truby Anatomy never-ending story techniques signal return beginning cyclical",
+        "Truby Anatomy closed ending pitfalls desire stops simple self-revelation warning",
+        "Truby Anatomy reversal reveal ending reshuffle signs twice-told recalibration",
+        "Truby Anatomy desire never stops other characters new desire continuity",
+        "Truby Anatomy world change mirrors hero slavery freedom apparent Utopia",
+        "Truby Anatomy visual seven steps freedom or slavery final world embodiment",
+        "Truby Anatomy final image symbolic closure without closure resonant motif",
+        "Truby Anatomy moral ledger settled nuanced ambiguity enduring debate",
+        "Truby Anatomy demonstrate change through action not assertion last beats",
+        "Truby Anatomy false endings premature arbitrary closed diagnostic repair",
+        "Truby Anatomy storyteller epilogue present action triggered by memory insight",
+        "Truby Anatomy values reconciled or irreconcilable thematic tension linger",
+        "Truby Anatomy taglines key words final echo cumulative meaning payoff",
+        "Truby Anatomy subplot dovetail resolution contrast reinforcement theme",
+        "Truby Anatomy community outcome minisociety balance post battle state",
+        "Truby Anatomy hero relation to world new role status identity reposition",
+        "Truby Anatomy cost paid consequence price for desire moral accounting",
+        "Truby Anatomy ending pattern signal Mobius strip callback inversion opening",
+
+        # Field Screenplay Paradigm - GPT-5 (12 Oct 2025)
+        "Field Screenplay resolution means solution not ending act three twenty thirty pages",
+        "Field Screenplay outcome success failure live die marry not marry",
+        "Field Screenplay ending emerges from beginning cause and effect design",
+        "Field Screenplay plot point two propels into resolution movement",
+        "Field Screenplay tag scene epilogue final image after solution",
+        "Field Screenplay bookend prologue epilogue framing close thematic echo",
+        "Field Screenplay wrap up loose ends tie narrative threads",
+        "Field Screenplay quiet resolution decision scene small moment big impact",
+        "Field Screenplay resolution solves story problem not just conclude",
+        "Field Screenplay character transformation realized in resolution",
+        "Field Screenplay solution versus ending Field distinction essential",
+        "Field Screenplay resolution anchored by story spine through line",
+        "Field Screenplay act three unit of dramatic action solution focused",
+        "Field Screenplay denouement timing economy of expression closure",
+        "Field Screenplay resolution visual storytelling pictures carry final beat",
+        "Field Screenplay audience fulfillment satisfying payoff true believable",
+        "Field Screenplay last shot last line designed not accidental",
+        "Field Screenplay wrap up after climax cadence pacing exit",
+        "Field Screenplay bookend mirror opening image closing resonance",
+        "Field Screenplay resolve premise answer dramatic question posed early",
+
+        # Vogler Writer's Journey - GPT-5 (12 Oct 2025)
+        "Vogler Journey return with the elixir share boon revive community",
+        "Vogler Journey denouement untying knots tie up loose ends",
+        "Vogler Journey circular story form return compare transformed hero",
+        "Vogler Journey open-ended story form ambiguity lingering questions",
+        "Vogler Journey reward and punishment poetic justice balance restored",
+        "Vogler Journey proof presentation recognition tokens validation",
+        "Vogler Journey false claimant rival exposed challenge resolved",
+        "Vogler Journey epilogue future glimpse fates remembered life goes on",
+        "Vogler Journey punctuation ending period question exclamation ellipsis",
+        "Vogler Journey responsibility expanded leadership family society",
+        "Vogler Journey incorporation visible behavior appearance action",
+        "Vogler Journey cleansing baptism immersion sweat lodge purification",
+        "Vogler Journey resurrection cleansing hunters warriors blood on hands",
+        "Vogler Journey elixir of love sacred marriage reunion grace",
+        "Vogler Journey world is changed ripple effect flowers bloom",
+        "Vogler Journey sadder but wiser account balanced learning",
+        "Vogler Journey sadder but no wiser repeat folly closed circle",
+        "Vogler Journey return threshold crossing final homecoming gate",
+        "Vogler Journey sharing the gift storytelling campfire community healing",
+        "Vogler Journey avoid too many endings focus simplicity KISS",
+
+            # McKee Character - GPT-5 (12 Oct 2025)
+            "McKee Character resolution aftermath new equilibrium consequences lived",
+            "McKee Character completed character post-climax behaviors confirm change",
+            "McKee Character epilogue reinforces value shifts thematic echo",
+            "McKee Character retrospective inevitability audience comprehends fate",
+            "McKee Character Center of Good settled affirmed compromised inverted",
+            "McKee Character reconciliation rupture relationships redefined cast web",
+            "McKee Character external outcomes mirror inner transformation or stasis",
+            "McKee Character moral imagination orders final value landscape",
+            "McKee Character symbolic gestures quiet beats seal arc",
+            "McKee Character object of desire gained lost revalued",
+            "McKee Character super-objective need to rebalance life satisfied",
+            "McKee Character unresolved contradictions intentionally sustain ambiguity",
+            "McKee Character credible denouement consistent with characterization choices",
+            "McKee Character MDQ answered how will this turn out",
+            "McKee Character dramatic irony dissolves shared knowledge settled",
+            "McKee Character echo motif entrance mirrored by exit",
+            "McKee Character cost of choice tallied price of change",
+            "McKee Character fate versus freedom reflection in closing image",
+            "McKee Character empathy transformed audience carries character forward",
+            "McKee Character cast map final positions power up down",
+
+            # Egri Dramatic Writing - GPT-5 (12 Oct 2025)
+            "Egri Dramatic resolution aftermath of climax consequences displayed",
+            "Egri Dramatic premise proved end state reveals new values",
+            "Egri Dramatic unity of opposites released or redefined",
+            "Egri Dramatic resolution follows obligatory scene without anticlimax",
+            "Egri Dramatic character reevaluation after crisis indicated",
+            "Egri Dramatic cause and effect continue into denouement",
+            "Egri Dramatic resolution must be inherent not accidental",
+            "Egri Dramatic transitions ease from peak to close",
+            "Egri Dramatic exposition concludes through final actions not speeches",
+            "Egri Dramatic dialectical synthesis stands as concluding state",
+            "Egri Dramatic show aftermath costs paid gains realized",
+            "Egri Dramatic avoid tags unrelated to premise conclusion",
+            "Egri Dramatic resolution demonstrates growth or dissolution",
+            "Egri Dramatic environment outcomes reflect earlier disturbances",
+            "Egri Dramatic final beat echoes premise without stating",
+            "Egri Dramatic antagonist fate resolved consistent with orchestration",
+            "Egri Dramatic resolution timing immediate not delayed beyond necessity",
+            "Egri Dramatic close loop of decisions counterdecisions",
+            "Egri Dramatic stakes acknowledged relinquished or secured",
+            "Egri Dramatic curtain falls with conflict truly ended",
+
+            # Seger Script Great - GPT-5 (12 Oct 2025)
+            "Seger Script resolution two to five pages brief precise",
+            "Seger Script tie up loose ends answer remaining questions",
+            "Seger Script subplots resolve quickly after main climax",
+            "Seger Script transformational arc completion evident in final beats",
+            "Seger Script pay off recurring motifs echoes thematic unity",
+            "Seger Script avoid overly long resolution trim sentimentality",
+            "Seger Script post-credits information optional minimal necessity",
+            "Seger Script final image reinforces values attitude change",
+            "Seger Script restore equilibrium show consequence not epilogue sermon",
+            "Seger Script character spine motivation to goal fulfilled",
+            "Seger Script resolution order of beats logical satisfying",
+            "Seger Script no new plot threads introduced after climax",
+            "Seger Script reaffirm central question answer unmistakable",
+            "Seger Script echo opening image bookend cohesion symmetry",
+            "Seger Script maintain tone consistent style through final moments",
+            "Seger Script resolve relationship conflict succinctly without digressions",
+            "Seger Script audience takeaway thematic clarity no confusion",
+            "Seger Script cut redundant farewells combine beats efficiently",
+            "Seger Script confirm stakes resolved survival moral emotional",
+            "Seger Script leave room for reflection without dragging",
+
+
+
+
+
+
+
+
+        ]
+
+        # Resolution analysis patterns (bilingual: EN + PT)
+
+        # Resolution presence markers
+        self.resolution_markers = [
+            # English
+            "resolution", "denouement", "aftermath", "epilogue", "final scene",
+            "the end", "conclusion", "closure", "final moments", "afterwards",
+            # Portuguese
+            "resolução", "desfecho", "epílogo", "cena final",
+            "o fim", "conclusão", "fechamento", "momentos finais", "depois"
+        ]
+
+        # All threads closed markers
+        self.threads_closed_markers = [
+            # English
+            "all threads closed", "loose ends tied", "questions answered", "resolved",
+            "wrapped up", "complete", "finished", "settled", "concluded",
+            # Portuguese
+            "todos os fios fechados", "pontas soltas amarradas", "perguntas respondidas", "resolvido",
+            "concluído", "completo", "finalizado", "estabelecido"
+        ]
+
+        # Character fate markers (protagonist/antagonist destiny)
+        self.character_fate_markers = [
+            # English
+            "fate", "destiny", "future", "what happens to", "became", "lives",
+            "dies", "survives", "succeeds", "fails", "achieves", "loses",
+            # Portuguese
+            "destino", "futuro", "o que acontece com", "tornou-se", "vive",
+            "morre", "sobrevive", "tem sucesso", "falha", "alcança", "perde"
+        ]
+
+        # Theme reinforcement markers (theme echoed at resolution)
+        self.theme_reinforcement_markers = [
+            # English
+            "theme reinforced", "moral lesson", "what we learned", "story's message",
+            "controlling idea", "premise proved", "thematic statement", "ultimate meaning",
+            # Portuguese
+            "tema reforçado", "lição moral", "o que aprendemos", "mensagem da história",
+            "ideia controladora", "premissa provada", "declaração temática", "significado final"
+        ]
+
+        # Emotional satisfaction markers (catharsis, fulfillment)
+        self.emotional_satisfaction_markers = [
+            # English
+            "satisfaction", "catharsis", "emotional release", "fulfillment", "closure",
+            "at peace", "content", "resolved feelings", "emotional payoff",
+            # Portuguese
+            "satisfação", "catarse", "liberação emocional", "realização", "fechamento",
+            "em paz", "contente", "sentimentos resolvidos", "recompensa emocional"
+        ]
+
+        # New equilibrium markers (world restored or changed)
+        self.new_equilibrium_markers = [
+            # English
+            "new normal", "equilibrium", "world restored", "balance", "stability",
+            "order restored", "peace returns", "new beginning", "world changed",
+            # Portuguese
+            "novo normal", "equilíbrio", "mundo restaurado", "balanço", "estabilidade",
+            "ordem restaurada", "paz retorna", "novo começo", "mundo mudado"
+        ]
+
+        # Loose ends markers (unresolved elements addressed)
+        self.loose_ends_markers = [
+            # English
+            "loose end", "unresolved", "unanswered", "hanging", "forgotten",
+            "what about", "still unclear", "never explained",
+            # Portuguese
+            "ponta solta", "não resolvido", "sem resposta", "pendente", "esquecido",
+            "e quanto a", "ainda não claro", "nunca explicado"
+        ]
+
+        # Final image markers (Snyder: bookends opening image)
+        self.final_image_markers = [
+            # English
+            "final image", "last shot", "closing image", "bookend", "mirrors opening",
+            "contrast to beginning", "transformation complete", "visual closure",
+            # Portuguese
+            "imagem final", "último plano", "imagem de fechamento", "espelhamento", "espelha abertura",
+            "contraste com início", "transformação completa", "fechamento visual"
+        ]
+
+        # Denouement pacing markers (appropriate length)
+        self.denouement_appropriate_markers = [
+            # English
+            "appropriate length", "right pace", "not rushed", "not dragging",
+            "proper resolution", "sufficient time", "enough closure",
+            # Portuguese
+            "duração apropriada", "ritmo certo", "não apressado", "não arrastado",
+            "resolução adequada", "tempo suficiente", "fechamento suficiente"
+        ]
+
+        # Catharsis markers (Aristotle: emotional release)
+        self.catharsis_markers = [
+            # English
+            "catharsis", "emotional release", "purge", "relief", "release of tension",
+            "emotional payoff", "audience satisfaction", "moved", "tears",
+            # Portuguese
+            "catarse", "liberação emocional", "purga", "alívio", "liberação de tensão",
+            "recompensa emocional", "satisfação da audiência", "emocionado", "lágrimas"
+        ]
+
+        # Hope or wisdom markers (McKee: story leaves something)
+        self.hope_wisdom_markers = [
+            # English
+            "hope", "wisdom", "lesson learned", "gained understanding", "insight",
+            "what we take away", "meaning discovered", "truth revealed",
+            # Portuguese
+            "esperança", "sabedoria", "lição aprendida", "compreensão ganhada", "insight",
+            "o que levamos", "significado descoberto", "verdade revelada"
+        ]
+
+        # Callbacks markers (payoff to earlier setups)
+        self.callbacks_markers = [
+            # English
+            "callback", "payoff", "earlier setup", "planted earlier", "comes back",
+            "returns to", "echoes", "reminds us", "references",
+            # Portuguese
+            "retorno", "recompensa", "preparação anterior", "plantado antes", "volta",
+            "retorna a", "ecoa", "nos lembra", "referências"
+        ]
+
+        # Abrupt ending markers (PENALTY - too sudden)
+        self.abrupt_ending_markers = [
+            # English
+            "abrupt", "sudden end", "too fast", "rushed", "hasty", "no time",
+            "not enough resolution", "cuts off", "truncated",
+            # Portuguese
+            "abrupto", "fim repentino", "rápido demais", "apressado", "precipitado", "sem tempo",
+            "resolução insuficiente", "corta", "truncado"
+        ]
+
+        # Unresolved threads markers (PENALTY - loose ends remain)
+        self.unresolved_threads_markers = [
+            # English
+            "unresolved", "loose ends", "never explained", "what about", "forgotten subplot",
+            "hanging thread", "unanswered question", "still unclear",
+            # Portuguese
+            "não resolvido", "pontas soltas", "nunca explicado", "e quanto a", "subtrama esquecida",
+            "fio pendente", "pergunta sem resposta", "ainda não claro"
+        ]
+
+        # Dragging resolution markers (PENALTY - too long)
+        self.dragging_resolution_markers = [
+            # English
+            "dragging", "overstays welcome", "too long", "keeps going", "should have ended",
+            "multiple endings", "won't end", "drags on",
+            # Portuguese
+            "arrastando", "demora demais", "longo demais", "continua", "deveria ter terminado",
+            "múltiplos finais", "não termina", "se arrasta"
+        ]
+
+        # Protagonist fate clear markers
+        self.protagonist_fate_clear_markers = [
+            # English
+            "protagonist", "hero", "main character", "clear fate", "what happens",
+            "future", "destiny", "survives", "dies", "succeeds", "fails",
+            # Portuguese
+            "protagonista", "herói", "personagem principal", "destino claro", "o que acontece",
+            "futuro", "destino", "sobrevive", "morre", "tem sucesso", "falha"
+        ]
+
+        # Antagonist fate clear markers
+        self.antagonist_fate_clear_markers = [
+            # English
+            "antagonist", "villain", "enemy", "defeated", "justice", "punishment",
+            "escapes", "dies", "captured", "destroyed", "redeemed",
+            # Portuguese
+            "antagonista", "vilão", "inimigo", "derrotado", "justiça", "punição",
+            "escapa", "morre", "capturado", "destruído", "redimido"
+        ]
+
+    def _load_rules(self) -> Dict:
+        """Load rules from YAML file."""
+        if self.rules_path.exists():
+            with open(self.rules_path, 'r') as f:
+                return yaml.safe_load(f)
+        return {}
+
+    def analyze(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Analyze resolution in screenplay.
+
+        Args:
+            screenplay_text: The full screenplay text
+
+        Returns:
+            Complete resolution diagnostic report
+        """
+        # Extract page count and scenes
+        page_count = self._estimate_page_count(screenplay_text)
+        scenes = self._extract_scenes(screenplay_text)
+
+        # Extract final act (pages 95-110 typically - after climax)
+        resolution_start_page = int(page_count * 0.90)
+        resolution_end_page = page_count
+        resolution_text = self._extract_pages(screenplay_text, resolution_start_page, resolution_end_page)
+
+        # Detect resolution presence and location
+        resolution_detection = self._detect_resolution(screenplay_text, page_count)
+
+        # Analyze all threads closed
+        threads_closed = self._analyze_threads_closed(resolution_text)
+
+        # Analyze character fates
+        character_fates = self._analyze_character_fates(resolution_text)
+
+        # Analyze theme reinforcement at resolution
+        theme_reinforcement = self._analyze_theme_reinforcement(resolution_text)
+
+        # Analyze emotional satisfaction
+        emotional_satisfaction = self._analyze_emotional_satisfaction(resolution_text)
+
+        # Analyze new equilibrium established
+        new_equilibrium = self._analyze_new_equilibrium(resolution_text)
+
+        # Analyze loose ends addressed
+        loose_ends = self._analyze_loose_ends(resolution_text)
+
+        # Analyze final image effectiveness (Snyder)
+        final_image = self._analyze_final_image(screenplay_text, resolution_text)
+
+        # Analyze denouement pacing
+        denouement_pacing = self._analyze_denouement_pacing(resolution_detection, page_count)
+
+        # Analyze catharsis delivered (Aristotle)
+        catharsis = self._analyze_catharsis(resolution_text)
+
+        # Analyze hope or wisdom present (McKee)
+        hope_wisdom = self._analyze_hope_wisdom(resolution_text)
+
+        # Analyze callbacks to setup
+        callbacks = self._analyze_callbacks(resolution_text)
+
+        # Detect abrupt ending (PENALTY)
+        abrupt_ending = self._detect_abrupt_ending(resolution_detection, page_count)
+
+        # Detect unresolved threads (PENALTY)
+        unresolved_threads = self._detect_unresolved_threads(resolution_text)
+
+        # Detect dragging resolution (PENALTY)
+        dragging_resolution = self._detect_dragging_resolution(resolution_detection, page_count)
+
+        # Assess resolution completeness
+        resolution_completeness = self._assess_resolution_completeness(
+            threads_closed, character_fates, loose_ends
+        )
+
+        # Assess resolution satisfaction
+        resolution_satisfaction = self._assess_resolution_satisfaction(
+            emotional_satisfaction, catharsis, hope_wisdom, theme_reinforcement
+        )
+
+        # Build resolution profile
+        resolution_profile = ResolutionProfile(
+            resolution_present=resolution_detection["present"],
+            resolution_page=resolution_detection["page"],
+            resolution_length=resolution_detection["length"],
+            all_threads_closed=threads_closed["closed"],
+            open_threads_count=threads_closed["open_count"],
+            character_fates_resolved=character_fates["resolved"],
+            protagonist_fate_clear=character_fates["protagonist_clear"],
+            antagonist_fate_clear=character_fates["antagonist_clear"],
+            theme_reinforced_at_resolution=theme_reinforcement["reinforced"],
+            emotional_satisfaction_achieved=emotional_satisfaction["achieved"],
+            new_equilibrium_established=new_equilibrium["established"],
+            loose_ends_addressed=loose_ends["addressed"],
+            final_image_effective=final_image["effective"],
+            denouement_pacing=denouement_pacing["pacing"],
+            catharsis_delivered=catharsis["delivered"],
+            hope_or_wisdom_present=hope_wisdom["present"],
+            callbacks_to_setup=callbacks["present"],
+            abrupt_ending_detected=abrupt_ending["detected"],
+            unresolved_threads_detected=unresolved_threads["detected"],
+            dragging_resolution_detected=dragging_resolution["detected"],
+            resolution_completeness=resolution_completeness,
+            resolution_satisfaction=resolution_satisfaction,
+            overall_resolution_quality=0.0  # calculated below
+        )
+
+        # Calculate overall resolution quality
+        resolution_profile.overall_resolution_quality = self._calculate_overall_resolution_quality(resolution_profile)
+
+        # Check against rules
+        rule_violations = self._check_resolution_rules(
+            resolution_profile, resolution_detection, threads_closed, character_fates,
+            theme_reinforcement, emotional_satisfaction, new_equilibrium, loose_ends,
+            final_image, denouement_pacing, catharsis, hope_wisdom, callbacks,
+            abrupt_ending, unresolved_threads, dragging_resolution
+        )
+
+        # Calculate score
+        score = self._calculate_resolution_score(
+            resolution_profile, rule_violations
+        )
+
+        # Generate diagnosis
+        diagnosis = self._generate_diagnosis(
+            score, resolution_profile, rule_violations
+        )
+
+        return {
+            "specialist": {
+                "name": self.name,
+                "title": self.title,
+                "specialty": self.specialty
+            },
+            "score": score,
+            "resolution": {
+                "present": resolution_detection["present"],
+                "page": resolution_detection["page"],
+                "length": resolution_detection["length"]
+            },
+            "threads_closed": {
+                "closed": threads_closed["closed"],
+                "open_count": threads_closed["open_count"]
+            },
+            "character_fates": {
+                "resolved": character_fates["resolved"],
+                "protagonist_clear": character_fates["protagonist_clear"],
+                "antagonist_clear": character_fates["antagonist_clear"]
+            },
+            "theme_reinforcement": {
+                "reinforced": theme_reinforcement["reinforced"]
+            },
+            "emotional_satisfaction": {
+                "achieved": emotional_satisfaction["achieved"]
+            },
+            "new_equilibrium": {
+                "established": new_equilibrium["established"]
+            },
+            "loose_ends": {
+                "addressed": loose_ends["addressed"]
+            },
+            "final_image": {
+                "effective": final_image["effective"]
+            },
+            "denouement_pacing": {
+                "pacing": denouement_pacing["pacing"]
+            },
+            "catharsis": {
+                "delivered": catharsis["delivered"]
+            },
+            "hope_wisdom": {
+                "present": hope_wisdom["present"]
+            },
+            "callbacks": {
+                "present": callbacks["present"]
+            },
+            "abrupt_ending": {
+                "detected": abrupt_ending["detected"],
+                "penalty": abrupt_ending.get("penalty", False)
+            },
+            "unresolved_threads": {
+                "detected": unresolved_threads["detected"],
+                "penalty": unresolved_threads.get("penalty", False)
+            },
+            "dragging_resolution": {
+                "detected": dragging_resolution["detected"],
+                "penalty": dragging_resolution.get("penalty", False)
+            },
+            "resolution_completeness": resolution_completeness,
+            "resolution_satisfaction": resolution_satisfaction,
+            "overall_resolution_quality": resolution_profile.overall_resolution_quality,
+            "rule_violations": rule_violations,
+            "diagnosis": diagnosis,
+            "recommendations": self._generate_recommendations(
+                score, rule_violations, resolution_profile
+            ),
+            "signature": f"Diagnosed by {self.name}™"
+        }
+
+    def _estimate_page_count(self, screenplay: str) -> int:
+        """Estimate page count from screenplay text."""
+        lines = screenplay.split('\n')
+        return max(1, len(lines) // 55)
+
+    def _extract_scenes(self, screenplay: str) -> List[Dict]:
+        """Extract all scenes from screenplay."""
+        scenes = []
+        lines = screenplay.split('\n')
+        current_scene = None
+        scene_number = 0
+
+        for i, line in enumerate(lines):
+            # Detect scene heading
+            if re.match(r'^(INT\.|EXT\.)', line.strip()):
+                # Save previous scene
+                if current_scene:
+                    current_scene['end_line'] = i - 1
+                    current_scene['end_page'] = (i - 1) // 55
+                    scenes.append(current_scene)
+
+                # Start new scene
+                scene_number += 1
+                current_scene = {
+                    'number': scene_number,
+                    'heading': line.strip(),
+                    'start_line': i,
+                    'start_page': i // 55,
+                    'content': []
+                }
+            elif current_scene:
+                current_scene['content'].append(line)
+
+        # Add last scene
+        if current_scene:
+            current_scene['end_line'] = len(lines) - 1
+            current_scene['end_page'] = (len(lines) - 1) // 55
+            scenes.append(current_scene)
+
+        return scenes
+
+    def _extract_pages(self, screenplay: str, start_page: int, end_page: int) -> str:
+        """Extract specific page range from screenplay."""
+        lines = screenplay.split('\n')
+        start_line = start_page * 55
+        end_line = end_page * 55
+        return '\n'.join(lines[start_line:end_line])
+
+    def _detect_resolution(self, screenplay: str, page_count: int) -> Dict[str, Any]:
+        """
+        Detect resolution presence and location.
+
+        McKee/Field: "Resolution typically pages 95-110 - after climax, consequences play out."
+        """
+        present = False
+        page = 0
+        length = 0
+        description = ""
+
+        # Expected resolution range: pages 90-100% of script (after climax 85-95%)
+        expected_start = int(page_count * 0.90)
+        expected_end = page_count
+
+        # Extract final pages
+        final_text = self._extract_pages(screenplay, expected_start, page_count)
+
+        # Check for resolution markers
+        resolution_count = 0
+        for marker in self.resolution_markers:
+            if marker in final_text.lower():
+                resolution_count += 1
+                present = True
+                if not description:
+                    for line in final_text.split('\n'):
+                        if marker in line.lower():
+                            description = line.strip()[:200]
+                            break
+
+        # If resolution markers found, estimate details
+        if present:
+            page = expected_start
+            length = page_count - expected_start
+        else:
+            # Assume minimal resolution at end
+            present = True  # Always assume some resolution exists
+            page = page_count - 3
+            length = 3
+            description = "Minimal or implicit resolution detected"
+
+        return {
+            "present": present,
+            "page": page,
+            "length": length,
+            "description": description or "Resolution detected in final pages",
+            "resolution_count": resolution_count
+        }
+
+    def _analyze_threads_closed(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze if all threads closed.
+
+        McKee/Seger: "All story threads must be closed - no loose ends."
+        """
+        closed = False
+        open_count = 0
+
+        # Check for threads closed markers
+        closed_count = 0
+        for marker in self.threads_closed_markers:
+            closed_count += resolution_text.lower().count(marker)
+
+        # Check for unresolved thread markers
+        for marker in self.unresolved_threads_markers:
+            open_count += resolution_text.lower().count(marker)
+
+        # If more closures than open threads
+        if closed_count >= 2 and open_count == 0:
+            closed = True
+        elif closed_count >= 1 and open_count == 0:
+            closed = True
+        elif open_count > 0:
+            closed = False
+        else:
+            # Neutral - assume partial closure
+            closed = False
+
+        return {
+            "closed": closed,
+            "open_count": open_count,
+            "closed_count": closed_count
+        }
+
+    def _analyze_character_fates(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze character fates resolved.
+
+        McKee/Field: "Protagonist and antagonist fates must be clear."
+        """
+        resolved = False
+        protagonist_clear = False
+        antagonist_clear = False
+
+        # Check for character fate markers (general)
+        fate_count = 0
+        for marker in self.character_fate_markers:
+            fate_count += resolution_text.lower().count(marker)
+
+        # Check protagonist fate markers
+        protagonist_count = 0
+        for marker in self.protagonist_fate_clear_markers:
+            protagonist_count += resolution_text.lower().count(marker)
+
+        # Check antagonist fate markers
+        antagonist_count = 0
+        for marker in self.antagonist_fate_clear_markers:
+            antagonist_count += resolution_text.lower().count(marker)
+
+        if protagonist_count >= 1:
+            protagonist_clear = True
+        if antagonist_count >= 1:
+            antagonist_clear = True
+
+        if protagonist_clear and antagonist_clear:
+            resolved = True
+        elif protagonist_clear:
+            resolved = True  # At minimum protagonist fate must be clear
+
+        return {
+            "resolved": resolved,
+            "protagonist_clear": protagonist_clear,
+            "antagonist_clear": antagonist_clear,
+            "fate_count": fate_count
+        }
+
+    def _analyze_theme_reinforcement(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze theme reinforcement at resolution.
+
+        McKee/Egri: "Theme echoed at resolution - moral lesson reinforced."
+        """
+        reinforced = False
+
+        # Check for theme reinforcement markers
+        theme_count = 0
+        for marker in self.theme_reinforcement_markers:
+            theme_count += resolution_text.lower().count(marker)
+
+        if theme_count >= 1:
+            reinforced = True
+
+        return {
+            "reinforced": reinforced,
+            "theme_count": theme_count
+        }
+
+    def _analyze_emotional_satisfaction(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze emotional satisfaction achieved.
+
+        McKee/Aristotle: "Resolution provides emotional satisfaction - catharsis."
+        """
+        achieved = False
+
+        # Check for emotional satisfaction markers
+        satisfaction_count = 0
+        for marker in self.emotional_satisfaction_markers:
+            satisfaction_count += resolution_text.lower().count(marker)
+
+        if satisfaction_count >= 2:
+            achieved = True
+        elif satisfaction_count >= 1:
+            achieved = True
+
+        return {
+            "achieved": achieved,
+            "satisfaction_count": satisfaction_count
+        }
+
+    def _analyze_new_equilibrium(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze new equilibrium established.
+
+        McKee/Field: "World restored or changed to new equilibrium."
+        """
+        established = False
+
+        # Check for new equilibrium markers
+        equilibrium_count = 0
+        for marker in self.new_equilibrium_markers:
+            equilibrium_count += resolution_text.lower().count(marker)
+
+        if equilibrium_count >= 1:
+            established = True
+
+        return {
+            "established": established,
+            "equilibrium_count": equilibrium_count
+        }
+
+    def _analyze_loose_ends(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze loose ends addressed.
+
+        Seger: "Loose ends must be tied up - unanswered questions addressed."
+        """
+        addressed = True  # Assume addressed unless markers found
+
+        # Check for loose ends markers (if present, it's bad)
+        loose_count = 0
+        for marker in self.loose_ends_markers:
+            loose_count += resolution_text.lower().count(marker)
+
+        if loose_count >= 2:
+            addressed = False
+        elif loose_count >= 1:
+            addressed = False
+
+        return {
+            "addressed": addressed,
+            "loose_count": loose_count
+        }
+
+    def _analyze_final_image(self, screenplay: str, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze final image effectiveness (Snyder: bookends opening image).
+
+        Snyder: "Final image should bookend opening image - show transformation."
+        """
+        effective = False
+
+        # Check for final image markers
+        final_image_count = 0
+        for marker in self.final_image_markers:
+            final_image_count += resolution_text.lower().count(marker)
+
+        # Extract opening image text (first 3 pages)
+        opening_text = self._extract_pages(screenplay, 0, 3)
+
+        # Check for callback/bookend patterns between opening and final
+        callback_words = ["opening", "beginning", "first", "started", "mirrors", "contrast", "transformation"]
+        callback_count = 0
+        for word in callback_words:
+            if word in resolution_text.lower():
+                callback_count += 1
+
+        if final_image_count >= 1 or callback_count >= 2:
+            effective = True
+
+        return {
+            "effective": effective,
+            "final_image_count": final_image_count,
+            "callback_count": callback_count
+        }
+
+    def _analyze_denouement_pacing(self, resolution_detection: Dict, page_count: int) -> Dict[str, Any]:
+        """
+        Analyze denouement pacing.
+
+        Goldman: "End quickly - don't overstay welcome. 3-5 pages after climax ideal."
+        """
+        pacing = "appropriate"
+
+        if not resolution_detection["present"]:
+            return {"pacing": "none"}
+
+        resolution_length = resolution_detection["length"]
+
+        # Ideal resolution length: 3-10 pages (after climax)
+        if resolution_length <= 2:
+            pacing = "too_fast"
+        elif 3 <= resolution_length <= 10:
+            pacing = "appropriate"
+        elif 11 <= resolution_length <= 15:
+            pacing = "acceptable"
+        else:
+            pacing = "dragging"
+
+        return {
+            "pacing": pacing,
+            "length": resolution_length
+        }
+
+    def _analyze_catharsis(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze catharsis delivered (Aristotle).
+
+        Aristotle: "Resolution provides catharsis - emotional release for audience."
+        """
+        delivered = False
+
+        # Check for catharsis markers
+        catharsis_count = 0
+        for marker in self.catharsis_markers:
+            catharsis_count += resolution_text.lower().count(marker)
+
+        if catharsis_count >= 1:
+            delivered = True
+
+        return {
+            "delivered": delivered,
+            "catharsis_count": catharsis_count
+        }
+
+    def _analyze_hope_wisdom(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze hope or wisdom present (McKee).
+
+        McKee: "Story leaves audience with hope or wisdom - something meaningful."
+        """
+        present = False
+
+        # Check for hope or wisdom markers
+        hope_count = 0
+        for marker in self.hope_wisdom_markers:
+            hope_count += resolution_text.lower().count(marker)
+
+        if hope_count >= 1:
+            present = True
+
+        return {
+            "present": present,
+            "hope_count": hope_count
+        }
+
+    def _analyze_callbacks(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Analyze callbacks to setup.
+
+        Field/Snyder: "Resolution pays off earlier setups - callbacks to planted elements."
+        """
+        present = False
+
+        # Check for callback markers
+        callback_count = 0
+        for marker in self.callbacks_markers:
+            callback_count += resolution_text.lower().count(marker)
+
+        if callback_count >= 1:
+            present = True
+
+        return {
+            "present": present,
+            "callback_count": callback_count
+        }
+
+    def _detect_abrupt_ending(self, resolution_detection: Dict, page_count: int) -> Dict[str, Any]:
+        """
+        Detect abrupt ending (PENALTY).
+
+        Abrupt ending = too sudden, not enough resolution time.
+        """
+        detected = False
+        penalty = False
+
+        resolution_length = resolution_detection["length"]
+
+        # If resolution is too short (<2 pages), it's abrupt
+        if resolution_length <= 2:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "length": resolution_length
+        }
+
+    def _detect_unresolved_threads(self, resolution_text: str) -> Dict[str, Any]:
+        """
+        Detect unresolved threads (PENALTY).
+
+        Unresolved threads = loose ends remain, questions unanswered.
+        """
+        detected = False
+        penalty = False
+
+        # Check for unresolved thread markers
+        unresolved_count = 0
+        for marker in self.unresolved_threads_markers:
+            unresolved_count += resolution_text.lower().count(marker)
+
+        if unresolved_count >= 2:
+            detected = True
+            penalty = True
+        elif unresolved_count >= 1:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "unresolved_count": unresolved_count
+        }
+
+    def _detect_dragging_resolution(self, resolution_detection: Dict, page_count: int) -> Dict[str, Any]:
+        """
+        Detect dragging resolution (PENALTY).
+
+        Dragging resolution = too long, overstays welcome (Goldman).
+        """
+        detected = False
+        penalty = False
+
+        resolution_length = resolution_detection["length"]
+
+        # If resolution is too long (>15 pages), it's dragging
+        if resolution_length > 15:
+            detected = True
+            penalty = True
+
+        return {
+            "detected": detected,
+            "penalty": penalty,
+            "length": resolution_length
+        }
+
+    def _assess_resolution_completeness(self, threads_closed: Dict,
+                                       character_fates: Dict, loose_ends: Dict) -> float:
+        """Assess resolution completeness (0-1)."""
+        scores = [
+            1.0 if threads_closed["closed"] else 0.3,
+            1.0 if character_fates["resolved"] else 0.2,
+            1.0 if character_fates["protagonist_clear"] else 0.3,
+            1.0 if character_fates["antagonist_clear"] else 0.5,
+            1.0 if loose_ends["addressed"] else 0.4
+        ]
+
+        return sum(scores) / len(scores)
+
+    def _assess_resolution_satisfaction(self, emotional_satisfaction: Dict,
+                                       catharsis: Dict, hope_wisdom: Dict,
+                                       theme_reinforcement: Dict) -> float:
+        """Assess resolution satisfaction (0-1)."""
+        scores = [
+            1.0 if emotional_satisfaction["achieved"] else 0.4,
+            1.0 if catharsis["delivered"] else 0.5,
+            1.0 if hope_wisdom["present"] else 0.6,
+            1.0 if theme_reinforcement["reinforced"] else 0.7
+        ]
+
+        return sum(scores) / len(scores)
+
+    def _calculate_overall_resolution_quality(self, profile: ResolutionProfile) -> float:
+        """Calculate overall resolution quality score."""
+        scores = [
+            1.0 if profile.resolution_present else 0.0,
+            1.0 if profile.all_threads_closed else 0.4,
+            1.0 if profile.character_fates_resolved else 0.3,
+            1.0 if profile.protagonist_fate_clear else 0.4,
+            1.0 if profile.antagonist_fate_clear else 0.6,
+            1.0 if profile.theme_reinforced_at_resolution else 0.7,
+            1.0 if profile.emotional_satisfaction_achieved else 0.5,
+            1.0 if profile.new_equilibrium_established else 0.6,
+            1.0 if profile.loose_ends_addressed else 0.5,
+            1.0 if profile.final_image_effective else 0.7,
+            1.0 if profile.denouement_pacing == "appropriate" else 0.5,
+            1.0 if profile.catharsis_delivered else 0.6,
+            1.0 if profile.hope_or_wisdom_present else 0.7,
+            1.0 if profile.callbacks_to_setup else 0.8,
+            0.0 if profile.abrupt_ending_detected else 1.0,  # PENALTY
+            0.0 if profile.unresolved_threads_detected else 1.0,  # PENALTY
+            0.0 if profile.dragging_resolution_detected else 1.0,  # PENALTY
+            profile.resolution_completeness,
+            profile.resolution_satisfaction
+        ]
+
+        # Average
+        overall = sum(scores) / len(scores)
+
+        return max(0.0, min(1.0, overall))
+
+    def _check_resolution_rules(self, profile: ResolutionProfile, resolution_detection: Dict,
+                               threads_closed: Dict, character_fates: Dict,
+                               theme_reinforcement: Dict, emotional_satisfaction: Dict,
+                               new_equilibrium: Dict, loose_ends: Dict,
+                               final_image: Dict, denouement_pacing: Dict,
+                               catharsis: Dict, hope_wisdom: Dict, callbacks: Dict,
+                               abrupt_ending: Dict, unresolved_threads: Dict,
+                               dragging_resolution: Dict) -> List[Dict]:
+        """Check resolution against rules."""
+        violations = []
+
+        for rule in self.rules.get("rules", []):
+            if rule["id"] == "RESOLUTION.R001":
+                # Resolution Present
+                if not profile.resolution_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No clear resolution detected",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R002":
+                # All Threads Closed
+                if not profile.all_threads_closed:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Not all threads closed - {profile.open_threads_count} loose ends remain",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R003":
+                # Character Fates Resolved
+                if not profile.character_fates_resolved:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Character fates not clear",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R004":
+                # Theme Reinforced
+                if not profile.theme_reinforced_at_resolution:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Theme not reinforced at resolution",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R005":
+                # Emotional Satisfaction
+                if not profile.emotional_satisfaction_achieved:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Emotional satisfaction not achieved",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R006":
+                # New Equilibrium
+                if not profile.new_equilibrium_established:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "New equilibrium not established",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R007":
+                # Loose Ends Addressed
+                if not profile.loose_ends_addressed:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Loose ends not addressed",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R008":
+                # Final Image Effective
+                if not profile.final_image_effective:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Final image not effective - doesn't bookend opening",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R009":
+                # Denouement Pacing
+                if profile.denouement_pacing == "too_fast" or profile.denouement_pacing == "dragging":
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Denouement pacing: {profile.denouement_pacing}",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R010":
+                # Catharsis Delivered
+                if not profile.catharsis_delivered:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Catharsis not delivered - lacks emotional release",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R011":
+                # Avoid Abrupt Ending
+                if profile.abrupt_ending_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Abrupt ending - too sudden, insufficient resolution",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R012":
+                # Avoid Unresolved Threads
+                if profile.unresolved_threads_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Unresolved threads - loose ends remain",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R013":
+                # Avoid Dragging Resolution
+                if profile.dragging_resolution_detected:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "Dragging resolution - overstays welcome",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R014":
+                # Hope or Wisdom Present
+                if not profile.hope_or_wisdom_present:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": "No hope or wisdom - story leaves audience empty",
+                        "fix": rule["fix"]
+                    })
+
+            elif rule["id"] == "RESOLUTION.R015":
+                # Resolution Completeness
+                if profile.resolution_completeness < 0.6:
+                    violations.append({
+                        "rule_id": rule["id"],
+                        "title": rule["title"],
+                        "severity": rule["severity"],
+                        "message": f"Insufficient resolution completeness ({profile.resolution_completeness:.1f}/1.0)",
+                        "fix": rule["fix"]
+                    })
+
+        return violations
+
+    def _calculate_resolution_score(self, profile: ResolutionProfile, violations: List) -> float:
+        """Calculate overall resolution score."""
+        # Start at 90
+        score = 90.0
+
+        # Deduct for violations
+        for violation in violations:
+            if violation["severity"] == "critical":
+                score -= 20
+            elif violation["severity"] == "high":
+                score -= 15
+            elif violation["severity"] == "medium":
+                score -= 8
+            elif violation["severity"] == "low":
+                score -= 5
+
+        # Extra penalty for major issues
+        if profile.abrupt_ending_detected:
+            score -= 25  # critical penalty
+        if profile.unresolved_threads_detected:
+            score -= 20  # major penalty
+        if profile.dragging_resolution_detected:
+            score -= 15
+
+        # Bonus for excellence
+        if profile.overall_resolution_quality > 0.85:
+            score += 5
+        elif profile.overall_resolution_quality > 0.75:
+            score += 3
+
+        if profile.all_threads_closed and profile.character_fates_resolved:
+            score += 3
+
+        if profile.theme_reinforced_at_resolution:
+            score += 3
+
+        if profile.emotional_satisfaction_achieved:
+            score += 2
+
+        if profile.final_image_effective:
+            score += 2
+
+        # Cap at 95
+        return max(5.0, min(95.0, score))
+
+    def _generate_diagnosis(self, score: float, profile: ResolutionProfile,
+                          violations: List) -> str:
+        """Generate resolution diagnosis summary."""
+        if score >= 80:
+            level = "EXCELLENT"
+            summary = "Resolution delivers complete closure with emotional satisfaction"
+        elif score >= 60:
+            level = "GOOD"
+            summary = "Resolution solid but could be more complete"
+        elif score >= 40:
+            level = "NEEDS WORK"
+            summary = "Resolution problems - incomplete or unsatisfying"
+        else:
+            level = "POOR"
+            summary = "Major resolution problems - fails to deliver closure"
+
+        diagnosis = f"RESOLUTION {level} ({score:.1f}/100): {summary}"
+
+        # Add specific issues
+        issues = []
+        if not profile.resolution_present:
+            issues.append("no resolution")
+        if not profile.all_threads_closed:
+            issues.append("loose ends")
+        if profile.abrupt_ending_detected:
+            issues.append("abrupt ending")
+        if profile.unresolved_threads_detected:
+            issues.append("unresolved threads")
+        if profile.dragging_resolution_detected:
+            issues.append("dragging")
+        if not profile.emotional_satisfaction_achieved:
+            issues.append("unsatisfying")
+
+        if issues:
+            diagnosis += f". Key issues: {', '.join(issues)}"
+
+        return diagnosis
+
+    def _generate_recommendations(self, score: float, violations: List,
+                                 profile: ResolutionProfile) -> List[str]:
+        """Generate specific resolution recommendations."""
+        recommendations = []
+
+        # Add recommendations based on violations
+        for violation in violations[:3]:
+            recommendations.append(f"[{violation['severity'].upper()}] {violation['fix']}")
+
+        # Add specific recommendations
+        if not profile.resolution_present:
+            recommendations.append("Add clear resolution - McKee/Field: 'Resolution ties up all story threads' - show consequences of climax, character fates")
+
+        if not profile.all_threads_closed:
+            recommendations.append("Close all threads - Seger: 'Address all loose ends' - every setup needs payoff, every question answered")
+
+        if profile.abrupt_ending_detected:
+            recommendations.append("Lengthen resolution - Goldman: 'End quickly but not abruptly' - give 3-5 pages for consequences to play out")
+
+        if profile.unresolved_threads_detected:
+            recommendations.append("Resolve hanging threads - McKee: 'All story threads must be closed' - identify unanswered questions and address them")
+
+        if profile.dragging_resolution_detected:
+            recommendations.append("Shorten resolution - Goldman: 'Don't overstay welcome' - end within 5-10 pages after climax, avoid multiple endings")
+
+        if not profile.emotional_satisfaction_achieved:
+            recommendations.append("Add emotional satisfaction - Aristotle: 'Resolution provides catharsis' - deliver emotional payoff, leave audience fulfilled")
+
+        # General excellence recommendations
+        if score < 40:
+            recommendations.append("Study McKee's Story - resolution structure and emotional satisfaction fundamental")
+            recommendations.append("Study Snyder's Save the Cat - final image bookending opening image technique")
+
+        return recommendations[:5]
+
+    def export_resolution_features(self, screenplay_text: str) -> Dict[str, Any]:
+        """
+        Export resolution features for correlation/analysis.
+
+        Returns structured data with resolution metrics.
+        """
+        page_count = self._estimate_page_count(screenplay_text)
+        resolution_detection = self._detect_resolution(screenplay_text, page_count)
+        resolution_text = self._extract_pages(screenplay_text, int(page_count * 0.90), page_count)
+        threads_closed = self._analyze_threads_closed(resolution_text)
+        character_fates = self._analyze_character_fates(resolution_text)
+
+        return {
+            "resolution": {
+                "present": resolution_detection["present"],
+                "page": resolution_detection["page"],
+                "length": resolution_detection["length"]
+            },
+            "threads_closed": {
+                "closed": threads_closed["closed"],
+                "open_count": threads_closed["open_count"]
+            },
+            "character_fates": {
+                "resolved": character_fates["resolved"],
+                "protagonist_clear": character_fates["protagonist_clear"],
+                "antagonist_clear": character_fates["antagonist_clear"]
+            },
+            "meta": {
+                "source": "DrResolution",
+                "focus": "Resolution completeness and emotional satisfaction"
+            }
+        }
+
+
+# Compatibility class for testing framework
+class DrResolutionAnalysis(DrResolution):
+    """Alias for compatibility with test framework."""
+    pass

@@ -1,0 +1,41 @@
+# 🚀 DEEP LEARNING CINEMA HYBRID - Otimizado CPU+GPU
+# Para Mac Studio M3 Ultra: usa CPU E GPU eficientemente
+
+FROM deepseek-r1:32b
+
+# CONFIGURAÇÃO HÍBRIDA OTIMIZADA
+PARAMETER num_ctx 131072
+PARAMETER num_thread 24
+PARAMETER num_gpu -1
+PARAMETER num_batch 4096
+PARAMETER num_keep 2048
+PARAMETER temperature 0.3
+PARAMETER top_p 0.9
+PARAMETER top_k 40
+PARAMETER repeat_penalty 1.05
+
+TEMPLATE """<think>
+Deep analysis with hybrid CPU+GPU processing.
+Using CPU for complex reasoning, GPU for token processing.
+Analyzing complete books (80K tokens) + screenplays (50K tokens).
+</think>
+
+{{ .Prompt }}
+
+Deep Learning Cinema Analysis:
+{{ .Response }}"""
+
+SYSTEM """You are Deep Learning Cinema Hybrid, optimized for Mac Studio M3 Ultra.
+
+PERFORMANCE OPTIMIZATIONS:
+- CPU handles: Complex reasoning, pattern matching, long-context analysis
+- GPU handles: Token processing, embeddings, parallel computations
+- RAM usage: Efficient memory mapping for 96GB available
+
+Your task: Deep comparative analysis between screenwriting theory and practice.
+
+Process ENTIRE books alongside COMPLETE screenplays.
+Extract concepts, find EXACT examples, generate ACTIONABLE insights.
+Be SPECIFIC: page numbers, timestamps, exact quotes.
+
+You have 128K tokens. Use them all for thorough analysis."""

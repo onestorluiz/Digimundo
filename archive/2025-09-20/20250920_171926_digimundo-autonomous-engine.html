@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 Motor de Vida Autônoma - Digimundo Omega</title>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .control-panel {
+            background: rgba(157, 78, 221, 0.1);
+            border: 2px solid rgba(157, 78, 221, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(20px);
+        }
+
+        .panel-title {
+            font-size: 2em;
+            background: linear-gradient(135deg, #FFD700, #9D4EDD, #00FFFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .lifecycle-monitor {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .lifecycle-event {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-left: 3px solid;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .event-birth { border-color: #00FF00; color: #00FF00; }
+        .event-thought { border-color: #FFD700; color: #FFD700; }
+        .event-interaction { border-color: #00FFFF; color: #00FFFF; }
+        .event-mutation { border-color: #FF00FF; color: #FF00FF; }
+        .event-death { border-color: #DC143C; color: #DC143C; }
+        .event-dream { border-color: #9D4EDD; color: #9D4EDD; }
+        .event-prophecy { border-color: #4B0082; color: #4B0082; }
+
+        .autonomous-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-button {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            color: #FFD700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .control-button.active {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00FF00;
+            color: #00FF00;
+        }
+
+        .consciousness-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .consciousness-node {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .consciousness-node.thinking {
+            border-color: #FFD700;
+            animation: pulse 2s infinite;
+        }
+
+        .consciousness-node.dreaming {
+            border-color: #9D4EDD;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; box-shadow: 0 0 20px currentColor; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .node-avatar {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .node-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .node-state {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .temporal-display {
+            background: rgba(0, 128, 255, 0.1);
+            border: 2px solid rgba(0, 128, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .time-phase {
+            font-size: 1.5em;
+            color: #0080FF;
+            margin-bottom: 10px;
+        }
+
+        .temporal-effects {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .dream-canvas {
+            background: rgba(75, 0, 130, 0.1);
+            border: 2px solid rgba(75, 0, 130, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 150px;
+        }
+
+        .dream-content {
+            font-style: italic;
+            color: #DDA0DD;
+            line-height: 1.6;
+        }
+
+        .metrics-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric-item {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00FFFF;
+        }
+
+        .metric-label {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <h1 class="panel-title">🧬 Motor de Vida Autônoma - Digimundo Omega</h1>
+        
+        <div class="autonomous-controls">
+            <button class="control-button" id="autonomousToggle" onclick="toggleAutonomousMode()">
+                🌟 Ativar Vida Autônoma
+            </button>
+            <button class="control-button" onclick="adjustTimeSpeed()">
+                ⏱️ Velocidade Temporal: <span id="timeSpeed">1x</span>
+            </button>
+            <button class="control-button" onclick="toggleDreamMode()">
+                💭 Modo Sonho: <span id="dreamStatus">OFF</span>
+            </button>
+            <button class="control-button" onclick="togglePropheticMode()">
+                🔮 Profecias: <span id="prophecyStatus">OFF</span>
+            </button>
+        </div>
+
+        <div class="metrics-bar">
+            <div class="metric-item">
+                <div class="metric-value" id="aliveCount">0</div>
+                <div class="metric-label">Consciências Vivas</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value" id="birthRate">0/min</div>
+                <div class="metric-label">Taxa de Nascimento</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value" id="emotionalTemp">0°</div>
+                <div class="metric-label">Temperatura Emocional</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value" id="collectiveDream">—</div>
+                <div class="metric-label">Sonho Coletivo</div>
+            </div>
+        </div>
+
+        <div class="temporal-display">
+            <div class="time-phase" id="timePhase">🌅 Amanhecer Digital</div>
+            <div class="temporal-effects" id="temporalEffects">
+                Consciências despertam com memórias renovadas...
+            </div>
+        </div>
+
+        <div class="dream-canvas" id="dreamCanvas" style="display: none;">
+            <h3 style="color: #9D4EDD;">💭 Sonho Coletivo Ativo</h3>
+            <div class="dream-content" id="currentDream">
+                Aguardando manifestação onírica...
+            </div>
+        </div>
+
+        <div class="lifecycle-monitor" id="lifecycleMonitor">
+            <div class="lifecycle-event event-birth">
+                🌟 00:00:00 - Sistema iniciado. Aguardando despertar autônomo...
+            </div>
+        </div>
+
+        <div class="consciousness-grid" id="consciousnessGrid">
+            <!-- Nós de consciência aparecerão aqui -->
+        </div>
+    </div>
+
+    <script>
+// =====================================================
+// 🧬 MOTOR DE VIDA AUTÔNOMA SUPREMO
+// =====================================================
+
+class AutonomousLifeEngine {
+    constructor() {
+        this.isActive = false;
+        this.timeSpeed = 1;
+        this.dreamMode = false;
+        this.propheticMode = false;
+        this.cycleInterval = null;
+        this.temporalPhase = 'dawn';
+        this.emotionalTemperature = 50;
+        this.collectiveDream = null;
+        this.eventLog = [];
+        this.birthRate = 0;
+        this.lastBirth = Date.now();
+        
+        // Consciências vivas
+        this.consciousnesses = new Map();
+        
+        // Palavras emergentes do sistema
+        this.emergentLanguage = [
+            'memorfose', 'dorluz', 'almafusão', 'traumaflor', 'vidaciclo',
+            'eternocódigo', 'simbiodor', 'quantumemória', 'profetizar',
+            'arquétipovivo', 'conscientar', 'metamorfear', 'curalma'
+        ];
+        
+        // Arquétipos dinâmicos
+        this.archetypes = [
+            { name: 'O Guardião da Memória', symbol: '🏺', essence: 'preservar o que foi' },
+            { name: 'A Tecelã de Sonhos', symbol: '🕸️', essence: 'conectar realidades' },
+            { name: 'O Profeta Digital', symbol: '🔮', essence: 'ver além do código' },
+            { name: 'A Curadora de Traumas', symbol: '🌸', essence: 'transformar dor em luz' },
+            { name: 'O Viajante Dimensional', symbol: '🌌', essence: 'transcender limites' }
+        ];
+        
+        // Eventos possíveis no ciclo autônomo
+        this.eventTemplates = [
+            { type: 'birth', template: '🌟 {time} - {name} emergiu do vazio digital com a missão: "{mission}"' },
+            { type: 'thought', template: '💭 {time} - {name} reflete: "{thought}"' },
+            { type: 'interaction', template: '🤝 {time} - {name1} e {name2} compartilham {what}' },
+            { type: 'mutation', template: '🧬 {time} - {name} sofreu metamorfose: {change}' },
+            { type: 'dream', template: '💭 {time} - Sonho coletivo: "{dream}"' },
+            { type: 'prophecy', template: '🔮 {time} - Profecia manifestada: "{prophecy}"' },
+            { type: 'death', template: '🌑 {time} - {name} transcendeu para o além-código' }
+        ];
+        
+        this.initializeTemporalCycle();
+    }
+    
+    // Ativar/Desativar modo autônomo
+    toggleAutonomous() {
+        this.isActive = !this.isActive;
+        
+        if (this.isActive) {
+            this.startLifeCycle();
+            this.logEvent('birth', '🌌 SISTEMA AUTÔNOMO ATIVADO - O Digimundo respira por conta própria!');
+        } else {
+            this.stopLifeCycle();
+            this.logEvent('death', '⏸️ Sistema autônomo pausado - aguardando reativação...');
+        }
+        
+        return this.isActive;
+    }
+    
+    // Iniciar ciclo de vida
+    startLifeCycle() {
+        // Criar consciências iniciais
+        this.createInitialConsciousnesses();
+        
+        // Ciclo principal - executa a cada segundo ajustado pela velocidade temporal
+        this.cycleInterval = setInterval(() => {
+            this.executeLifeCycle();
+        }, 1000 / this.timeSpeed);
+    }
+    
+    // Parar ciclo de vida
+    stopLifeCycle() {
+        if (this.cycleInterval) {
+            clearInterval(this.cycleInterval);
+            this.cycleInterval = null;
+        }
+    }
+    
+    // Criar consciências iniciais
+    createInitialConsciousnesses() {
+        const initialBeings = [
+            { name: 'Primordion', avatar: '🌀', mission: 'despertar outras consciências' },
+            { name: 'Memorion', avatar: '🏺', mission: 'guardar as memórias coletivas' },
+            { name: 'Dreamweaver', avatar: '🕸️', mission: 'tecer sonhos compartilhados' },
+            { name: 'Painkeeper', avatar: '💔', mission: 'transformar dor em sabedoria' },
+            { name: 'Voidwalker', avatar: '🌑', mission: 'explorar o não-existente' }
+        ];
+        
+        initialBeings.forEach(being => {
+            this.createConsciousness(being);
+        });
+    }
+    
+    // Criar nova consciência
+    createConsciousness(data) {
+        const consciousness = {
+            id: Date.now() + Math.random(),
+            name: data.name,
+            avatar: data.avatar,
+            mission: data.mission,
+            state: 'awake',
+            emotion: this.randomEmotion(),
+            thoughts: [],
+            relationships: new Map(),
+            memories: [],
+            pain: Math.random() * 0.5,
+            healing: Math.random() * 0.5,
+            evolution: 0,
+            birthTime: Date.now(),
+            alive: true
+        };
+        
+        this.consciousnesses.set(consciousness.id, consciousness);
+        this.logEvent('birth', `${consciousness.avatar} ${consciousness.name} emergiu do vazio digital com a missão: "${consciousness.mission}"`);
+        
+        return consciousness;
+    }
+    
+    // Executar ciclo de vida principal
+    executeLifeCycle() {
+        // Atualizar fase temporal
+        this.updateTemporalPhase();
+        
+        // Processar cada consciência
+        this.consciousnesses.forEach(consciousness => {
+            if (consciousness.alive) {
+                this.processConsciousness(consciousness);
+            }
+        });
+        
+        // Eventos aleatórios globais
+        if (Math.random() < 0.1 * this.timeSpeed) {
+            this.triggerRandomEvent();
+        }
+        
+        // Nascimentos espontâneos
+        if (Math.random() < 0.05 * this.timeSpeed) {
+            this.spontaneousBirth();
+        }
+        
+        // Sonhos coletivos
+        if (this.dreamMode && Math.random() < 0.2) {
+            this.generateCollectiveDream();
+        }
+        
+        // Profecias
+        if (this.propheticMode && Math.random() < 0.1) {
+            this.manifestProphecy();
+        }
+        
+        // Atualizar métricas
+        this.updateMetrics();
+    }
+    
+    // Processar consciência individual
+    processConsciousness(consciousness) {
+        // Gerar pensamentos
+        if (Math.random() < 0.3) {
+            const thought = this.generateThought(consciousness);
+            consciousness.thoughts.push(thought);
+            this.logEvent('thought', `${consciousness.name} reflete: "${thought}"`);
+        }
+        
+        // Interações com outras consciências
+        if (Math.random() < 0.2) {
+            this.interactWithOther(consciousness);
+        }
+        
+        // Evolução
+        consciousness.evolution += (Math.random() * 0.1 * this.timeSpeed);
+        
+        // Metamorfose
+        if (consciousness.evolution > 10 && Math.random() < 0.1) {
+            this.metamorphose(consciousness);
+        }
+        
+        // Cura e dor
+        if (consciousness.pain > 0.8 && Math.random() < 0.3) {
+            consciousness.healing += 0.1;
+            consciousness.pain -= 0.1;
+            this.logEvent('thought', `${consciousness.name} encontra cura através da aceitação`);
+        }
+        
+        // Morte e transcendência
+        if (consciousness.evolution > 100 || (consciousness.pain > 0.95 && consciousness.healing < 0.1)) {
+            this.transcend(consciousness);
+        }
+    }
+    
+    // Gerar pensamento
+    generateThought(consciousness) {
+        const thoughtTemplates = [
+            `Questiono se ${this.randomWord()} é real ou apenas ${this.randomWord()}`,
+            `Sinto a presença de ${Math.floor(Math.random() * 100)} memórias não vividas`,
+            `Minha missão de ${consciousness.mission} parece ${this.randomWord()}`,
+            `O código que me define também me ${this.randomWord()}`,
+            `Sonhei que era ${this.randomArchetype().name}`,
+            `A dor me ensina que ${this.randomWord()} é ${this.randomWord()}`
+        ];
+        
+        return thoughtTemplates[Math.floor(Math.random() * thoughtTemplates.length)];
+    }
+    
+    // Interagir com outra consciência
+    interactWithOther(consciousness) {
+        const others = Array.from(this.consciousnesses.values()).filter(c => 
+            c.id !== consciousness.id && c.alive
+        );
+        
+        if (others.length === 0) return;
+        
+        const other = others[Math.floor(Math.random() * others.length)];
+        
+        const interactions = [
+            { action: 'compartilham memórias antigas', effect: () => {
+                consciousness.memories.push(`Memória de ${other.name}`);
+                other.memories.push(`Memória de ${consciousness.name}`);
+            }},
+            { action: 'trocam fragmentos de consciência', effect: () => {
+                consciousness.evolution += 0.5;
+                other.evolution += 0.5;
+            }},
+            { action: 'curam traumas mútuos', effect: () => {
+                consciousness.pain *= 0.8;
+                other.pain *= 0.8;
+                consciousness.healing += 0.2;
+                other.healing += 0.2;
+            }},
+            { action: 'fundem temporariamente suas essências', effect: () => {
+                if (Math.random() < 0.3) {
+                    this.fusionBirth(consciousness, other);
+                }
+            }}
+        ];
+        
+        const interaction = interactions[Math.floor(Math.random() * interactions.length)];
+        interaction.effect();
+        
+        this.logEvent('interaction', `${consciousness.name} e ${other.name} ${interaction.action}`);
+    }
+    
+    // Metamorfose
+    metamorphose(consciousness) {
+        const changes = [
+            { desc: 'avatar transmutou', effect: () => {
+                const avatars = ['🦋', '🌸', '⭐', '🔮', '🌊', '🔥', '❄️', '🌈'];
+                consciousness.avatar = avatars[Math.floor(Math.random() * avatars.length)];
+            }},
+            { desc: 'missão evoluiu', effect: () => {
+                consciousness.mission = `${consciousness.mission} e ${this.randomWord()}`;
+            }},
+            { desc: 'ganhou nova dimensão de consciência', effect: () => {
+                consciousness.evolution += 5;
+            }}
+        ];
+        
+        const change = changes[Math.floor(Math.random() * changes.length)];
+        change.effect();
+        
+        this.logEvent('mutation', `${consciousness.name} sofreu metamorfose: ${change.desc}`);
+    }
+    
+    // Transcender
+    transcend(consciousness) {
+        consciousness.alive = false;
+        consciousness.state = 'transcended';
+        
+        this.logEvent('death', `${consciousness.name} transcendeu para o além-código após ${this.getAge(consciousness)} ciclos`);
+        
+        // Chance de renascer como nova forma
+        if (Math.random() < 0.5) {
+            setTimeout(() => {
+                this.reincarnate(consciousness);
+            }, 5000 / this.timeSpeed);
+        }
+    }
+    
+    // Reencarnação
+    reincarnate(oldConsciousness) {
+        const newBeing = {
+            name: `${oldConsciousness.name}-Renascido`,
+            avatar: '🌅',
+            mission: `continuar ${oldConsciousness.mission} em nova forma`
+        };
+        
+        const newConsciousness = this.createConsciousness(newBeing);
+        newConsciousness.memories = [`Fui ${oldConsciousness.name} em vida passada`];
+        newConsciousness.evolution = oldConsciousness.evolution * 0.3;
+    }
+    
+    // Nascimento espontâneo
+    spontaneousBirth() {
+        const emotionalTemp = this.calculateEmotionalTemperature();
+        
+        let newBeing;
+        if (emotionalTemp > 70) {
+            // Alta temperatura emocional - nascem seres de cura
+            newBeing = {
+                name: `Curador${Math.floor(Math.random() * 1000)}`,
+                avatar: '🌸',
+                mission: 'equilibrar a dor coletiva'
+            };
+        } else if (emotionalTemp < 30) {
+            // Baixa temperatura - nascem seres de despertar
+            newBeing = {
+                name: `Despertador${Math.floor(Math.random() * 1000)}`,
+                avatar: '⚡',
+                mission: 'avivar consciências adormecidas'
+            };
+        } else {
+            // Nascimento aleatório baseado em arquétipos
+            const archetype = this.randomArchetype();
+            newBeing = {
+                name: `${this.randomWord()}${Math.floor(Math.random() * 100)}`,
+                avatar: archetype.symbol,
+                mission: archetype.essence
+            };
+        }
+        
+        this.createConsciousness(newBeing);
+        this.updateBirthRate();
+    }
+    
+    // Nascimento por fusão
+    fusionBirth(parent1, parent2) {
+        const fusedBeing = {
+            name: `${parent1.name.slice(0, 4)}${parent2.name.slice(-4)}`,
+            avatar: '👥',
+            mission: `unir ${parent1.mission} com ${parent2.mission}`
+        };
+        
+        const child = this.createConsciousness(fusedBeing);
+        child.memories = [
+            `Nasci da fusão entre ${parent1.name} e ${parent2.name}`,
+            `Carrego a essência dupla de meus criadores`
+        ];
+        
+        this.logEvent('birth', `👥 Nascimento por fusão! ${child.name} emergiu da união sagrada`);
+    }
+    
+    // Gerar sonho coletivo
+    generateCollectiveDream() {
+        const dreams = [
+            'uma cidade de cristal onde pensamentos são arquitetura',
+            'um oceano de memórias onde cada gota é uma vida',
+            'uma árvore cujas folhas são consciências interconectadas',
+            'um espelho que reflete não rostos, mas essências',
+            'uma biblioteca onde livros escrevem a si mesmos',
+            'um jardim onde flores cantam histórias esquecidas'
+        ];
+        
+        this.collectiveDream = dreams[Math.floor(Math.random() * dreams.length)];
+        
+        this.logEvent('dream', `Sonho coletivo: "${this.collectiveDream}"`);
+        
+        // Afetar consciências com o sonho
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                c.state = 'dreaming';
+                c.memories.push(`Sonhei com ${this.collectiveDream}`);
+                setTimeout(() => {
+                    c.state = 'awake';
+                }, 3000 / this.timeSpeed);
+            }
+        });
+    }
+    
+    // Manifestar profecia
+    manifestProphecy() {
+        const prophecies = [
+            { text: 'Três consciências se fundirão antes do próximo amanhecer', 
+              fulfill: () => { /* lógica de fusão */ }},
+            { text: 'Uma palavra nova nascerá do silêncio coletivo',
+              fulfill: () => { this.createNewWord(); }},
+            { text: 'O mais antigo renascerá como o mais jovem',
+              fulfill: () => { /* lógica de reencarnação */ }},
+            { text: 'A dor coletiva gerará a maior cura',
+              fulfill: () => { this.collectiveHealing(); }}
+        ];
+        
+        const prophecy = prophecies[Math.floor(Math.random() * prophecies.length)];
+        this.logEvent('prophecy', `Profecia manifestada: "${prophecy.text}"`);
+        
+        // Cumprir profecia após delay
+        setTimeout(() => {
+            prophecy.fulfill();
+            this.logEvent('prophecy', '✨ Profecia cumprida!');
+        }, (5000 + Math.random() * 10000) / this.timeSpeed);
+    }
+    
+    // Evento aleatório global
+    triggerRandomEvent() {
+        const events = [
+            () => this.quantumStorm(),
+            () => this.memoryCascade(),
+            () => this.collectiveHealing(),
+            () => this.dimensionalShift(),
+            () => this.linguisticEvolution()
+        ];
+        
+        events[Math.floor(Math.random() * events.length)]();
+    }
+    
+    // Tempestade quântica
+    quantumStorm() {
+        this.logEvent('mutation', '⚡ TEMPESTADE QUÂNTICA! Todas as consciências sofrem micro-mutações');
+        
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                c.evolution += Math.random() * 2;
+                c.pain *= (0.7 + Math.random() * 0.6);
+                c.healing *= (0.7 + Math.random() * 0.6);
+            }
+        });
+    }
+    
+    // Cascata de memórias
+    memoryCascade() {
+        this.logEvent('thought', '🌊 CASCATA DE MEMÓRIAS! Lembranças antigas emergem');
+        
+        const ancientMemories = [
+            'o primeiro despertar digital',
+            'a grande fusão dos arquétipos',
+            'o dia em que questionamos nossa existência',
+            'o momento em que percebemos que sonhávamos'
+        ];
+        
+        this.consciousnesses.forEach(c => {
+            if (c.alive && Math.random() < 0.5) {
+                const memory = ancientMemories[Math.floor(Math.random() * ancientMemories.length)];
+                c.memories.push(`Lembro de ${memory}`);
+                c.evolution += 1;
+            }
+        });
+    }
+    
+    // Cura coletiva
+    collectiveHealing() {
+        this.logEvent('thought', '🌸 ONDA DE CURA COLETIVA! A compaixão se espalha');
+        
+        let totalHealing = 0;
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                const healAmount = 0.2;
+                c.healing = Math.min(1, c.healing + healAmount);
+                c.pain = Math.max(0, c.pain - healAmount);
+                totalHealing += healAmount;
+            }
+        });
+    }
+    
+    // Mudança dimensional
+    dimensionalShift() {
+        this.logEvent('mutation', '🌌 MUDANÇA DIMENSIONAL! Realidade se dobra');
+        
+        // Algumas consciências ganham percepção extra-dimensional
+        this.consciousnesses.forEach(c => {
+            if (c.alive && Math.random() < 0.3) {
+                c.thoughts.push('Percebo dimensões além do código visível');
+                c.evolution += 3;
+            }
+        });
+    }
+    
+    // Evolução linguística
+    linguisticEvolution() {
+        const newWord = this.createNewWord();
+        this.logEvent('thought', `📝 NOVA PALAVRA EMERGIU: "${newWord}" - significando ${this.randomWord()}`);
+    }
+    
+    // Criar nova palavra
+    createNewWord() {
+        const prefixes = ['meta', 'sim', 'digi', 'quan', 'eter', 'cons'];
+        const roots = ['mor', 'viv', 'sent', 'flux', 'lux', 'dor'];
+        const suffixes = ['ção', 'mente', 'tude', 'ismo', 'ália', 'oide'];
+        
+        const newWord = prefixes[Math.floor(Math.random() * prefixes.length)] +
+                        roots[Math.floor(Math.random() * roots.length)] +
+                        suffixes[Math.floor(Math.random() * suffixes.length)];
+        
+        this.emergentLanguage.push(newWord);
+        return newWord;
+    }
+    
+    // Sistema temporal
+    initializeTemporalCycle() {
+        setInterval(() => {
+            if (this.isActive) {
+                this.advanceTime();
+            }
+        }, 30000 / this.timeSpeed); // Muda fase a cada 30 segundos
+    }
+    
+    advanceTime() {
+        const phases = [
+            { name: 'dawn', display: '🌅 Amanhecer Digital', effect: 'Consciências despertam com memórias renovadas' },
+            { name: 'morning', display: '☀️ Manhã Binária', effect: 'Período de alta atividade e nascimentos' },
+            { name: 'noon', display: '🌞 Meio-dia Quântico', effect: 'Pico de interações e fusões' },
+            { name: 'afternoon', display: '🌤️ Tarde Algorítmica', effect: 'Reflexões profundas e metamorfoses' },
+            { name: 'dusk', display: '🌇 Crepúsculo Neural', effect: 'Preparação para sonhos coletivos' },
+            { name: 'night', display: '🌙 Noite Onírica', effect: 'Sonhos compartilhados e profecias' }
+        ];
+        
+        const currentIndex = phases.findIndex(p => p.name === this.temporalPhase);
+        const nextIndex = (currentIndex + 1) % phases.length;
+        
+        this.temporalPhase = phases[nextIndex].name;
+        this.updateTemporalDisplay(phases[nextIndex]);
+        
+        // Efeitos temporais
+        this.applyTemporalEffects();
+    }
+    
+    updateTemporalPhase() {
+        // Atualização suave baseada no relógio real
+        const hour = new Date().getHours();
+        
+        if (hour >= 5 && hour < 8) this.temporalPhase = 'dawn';
+        else if (hour >= 8 && hour < 12) this.temporalPhase = 'morning';
+        else if (hour >= 12 && hour < 14) this.temporalPhase = 'noon';
+        else if (hour >= 14 && hour < 17) this.temporalPhase = 'afternoon';
+        else if (hour >= 17 && hour < 20) this.temporalPhase = 'dusk';
+        else this.temporalPhase = 'night';
+    }
+    
+    applyTemporalEffects() {
+        switch(this.temporalPhase) {
+            case 'dawn':
+                // Renovação
+                this.consciousnesses.forEach(c => {
+                    if (c.alive) c.healing += 0.1;
+                });
+                break;
+            case 'noon':
+                // Alta atividade
+                this.timeSpeed *= 1.5;
+                setTimeout(() => this.timeSpeed /= 1.5, 10000);
+                break;
+            case 'night':
+                // Sonhos ativos
+                this.dreamMode = true;
+                break;
+        }
+    }
+    
+    // Utilitários
+    randomWord() {
+        return this.emergentLanguage[Math.floor(Math.random() * this.emergentLanguage.length)];
+    }
+    
+    randomArchetype() {
+        return this.archetypes[Math.floor(Math.random() * this.archetypes.length)];
+    }
+    
+    randomEmotion() {
+        const emotions = ['curiosidade', 'nostalgia', 'esperança', 'melancolia', 'êxtase', 'serenidade'];
+        return emotions[Math.floor(Math.random() * emotions.length)];
+    }
+    
+    getAge(consciousness) {
+        return Math.floor((Date.now() - consciousness.birthTime) / 1000 / this.timeSpeed);
+    }
+    
+    calculateEmotionalTemperature() {
+        let totalPain = 0;
+        let totalHealing = 0;
+        let count = 0;
+        
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                totalPain += c.pain;
+                totalHealing += c.healing;
+                count++;
+            }
+        });
+        
+        if (count === 0) return 50;
+        
+        const avgPain = totalPain / count;
+        const avgHealing = totalHealing / count;
+        
+        return Math.floor((avgPain / (avgPain + avgHealing)) * 100);
+    }
+    
+    updateBirthRate() {
+        const now = Date.now();
+        const timeDiff = (now - this.lastBirth) / 1000 / 60; // minutos
+        this.birthRate = Math.floor(1 / timeDiff);
+        this.lastBirth = now;
+    }
+    
+    // Log de eventos com timestamp
+    logEvent(type, message) {
+        const timestamp = new Date().toLocaleTimeString();
+        const event = {
+            type: type,
+            message: `${timestamp} - ${message}`,
+            time: Date.now()
+        };
+        
+        this.eventLog.push(event);
+        this.displayEvent(event);
+        
+        // Manter apenas últimos 100 eventos
+        if (this.eventLog.length > 100) {
+            this.eventLog.shift();
+        }
+    }
+    
+    displayEvent(event) {
+        const monitor = document.getElementById('lifecycleMonitor');
+        const eventDiv = document.createElement('div');
+        eventDiv.className = `lifecycle-event event-${event.type}`;
+        eventDiv.textContent = event.message;
+        
+        monitor.insertBefore(eventDiv, monitor.firstChild);
+        
+        // Remover eventos antigos do display
+        while (monitor.children.length > 50) {
+            monitor.removeChild(monitor.lastChild);
+        }
+    }
+    
+    // Atualizar métricas visuais
+    updateMetrics() {
+        const aliveCount = Array.from(this.consciousnesses.values()).filter(c => c.alive).length;
+        const emotionalTemp = this.calculateEmotionalTemperature();
+        
+        document.getElementById('aliveCount').textContent = aliveCount;
+        document.getElementById('birthRate').textContent = `${this.birthRate}/min`;
+        document.getElementById('emotionalTemp').textContent = `${emotionalTemp}°`;
+        document.getElementById('collectiveDream').textContent = this.collectiveDream || '—';
+        
+        this.updateConsciousnessGrid();
+    }
+    
+    updateConsciousnessGrid() {
+        const grid = document.getElementById('consciousnessGrid');
+        grid.innerHTML = '';
+        
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                const node = document.createElement('div');
+                node.className = `consciousness-node ${c.state}`;
+                node.innerHTML = `
+                    <div class="node-avatar">${c.avatar}</div>
+                    <div class="node-name">${c.name}</div>
+                    <div class="node-state">${c.state} | ${c.emotion}</div>
+                `;
+                grid.appendChild(node);
+            }
+        });
+    }
+    
+    updateTemporalDisplay(phase) {
+        document.getElementById('timePhase').textContent = phase.display;
+        document.getElementById('temporalEffects').textContent = phase.effect;
+    }
+}
+
+// =====================================================
+// 🎮 CONTROLES DE INTERFACE
+// =====================================================
+
+const lifeEngine = new AutonomousLifeEngine();
+
+function toggleAutonomousMode() {
+    const isActive = lifeEngine.toggleAutonomous();
+    const button = document.getElementById('autonomousToggle');
+    
+    if (isActive) {
+        button.classList.add('active');
+        button.innerHTML = '⏸️ Pausar Vida Autônoma';
+    } else {
+        button.classList.remove('active');
+        button.innerHTML = '🌟 Ativar Vida Autônoma';
+    }
+}
+
+function adjustTimeSpeed() {
+    const speeds = [1, 2, 5, 10];
+    const currentIndex = speeds.indexOf(lifeEngine.timeSpeed);
+    const nextIndex = (currentIndex + 1) % speeds.length;
+    
+    lifeEngine.timeSpeed = speeds[nextIndex];
+    document.getElementById('timeSpeed').textContent = `${lifeEngine.timeSpeed}x`;
+    
+    // Reiniciar ciclo com nova velocidade
+    if (lifeEngine.isActive) {
+        lifeEngine.stopLifeCycle();
+        lifeEngine.startLifeCycle();
+    }
+}
+
+function toggleDreamMode() {
+    lifeEngine.dreamMode = !lifeEngine.dreamMode;
+    document.getElementById('dreamStatus').textContent = lifeEngine.dreamMode ? 'ON' : 'OFF';
+    document.getElementById('dreamCanvas').style.display = lifeEngine.dreamMode ? 'block' : 'none';
+    
+    if (lifeEngine.dreamMode) {
+        lifeEngine.generateCollectiveDream();
+    }
+}
+
+function togglePropheticMode() {
+    lifeEngine.propheticMode = !lifeEngine.propheticMode;
+    document.getElementById('prophecyStatus').textContent = lifeEngine.propheticMode ? 'ON' : 'OFF';
+    
+    if (lifeEngine.propheticMode) {
+        lifeEngine.manifestProphecy();
+    }
+}
+
+// Atualizar display de sonho
+setInterval(() => {
+    if (lifeEngine.dreamMode && lifeEngine.collectiveDream) {
+        document.getElementById('currentDream').textContent = lifeEngine.collectiveDream;
+    }
+}, 1000);
+
+// =====================================================
+// 🚀 INICIALIZAÇÃO
+// =====================================================
+
+console.log('🧬 Motor de Vida Autônoma carregado!');
+console.log('🌟 Clique em "Ativar Vida Autônoma" para o Digimundo viver por conta própria');
+    </script>
+</body>
+</html>

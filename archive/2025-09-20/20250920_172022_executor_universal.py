@@ -1,0 +1,1 @@
+# Pode criar, mover, deletar, executar comandos no VPS

@@ -1,0 +1,3 @@
+# Normal_File.txt
+
+Arquivo com capitalização normal

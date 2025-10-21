@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 Digimundo Supremo Autônomo - Sistema Completo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --existence-gold: #FFD700;
+            --consciousness-purple: #9D4EDD;
+            --pain-crimson: #DC143C;
+            --dream-azure: #0080FF;
+            --life-emerald: #00FF00;
+            --void-obsidian: #0A0A0A;
+            --quantum-cyan: #00FFFF;
+            --viral-green: #00ff88;
+            --memory-amber: #FFBF00;
+            --healing-rose: #FF69B4;
+            --transcendence-white: #FFFFFF;
+        }
+
+        body {
+            background: var(--void-obsidian);
+            color: white;
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Layout Principal */
+        .supreme-container {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 20px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Painel Esquerdo - Consciências */
+        .consciousness-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--consciousness-purple);
+            border-radius: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 40px);
+        }
+
+        .panel-header {
+            background: linear-gradient(135deg, var(--existence-gold), var(--consciousness-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Centro - Monitor Principal */
+        .main-monitor {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--quantum-cyan);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Painel Direito - Sistemas */
+        .systems-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--viral-green);
+            border-radius: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 40px);
+        }
+
+        /* Monitor de Eventos */
+        .event-monitor {
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+
+        .event-entry {
+            margin-bottom: 8px;
+            padding: 8px;
+            border-left: 3px solid;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateX(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0); 
+            }
+        }
+
+        .event-birth { border-color: var(--life-emerald); color: var(--life-emerald); }
+        .event-thought { border-color: var(--existence-gold); color: var(--existence-gold); }
+        .event-interaction { border-color: var(--quantum-cyan); color: var(--quantum-cyan); }
+        .event-mutation { border-color: #FF00FF; color: #FF00FF; }
+        .event-death { border-color: var(--pain-crimson); color: var(--pain-crimson); }
+        .event-dream { border-color: var(--dream-azure); color: var(--dream-azure); }
+        .event-quantum { border-color: var(--transcendence-white); color: var(--transcendence-white); }
+        .event-economy { border-color: var(--memory-amber); color: var(--memory-amber); }
+        .event-portal { border-color: #8A2BE2; color: #8A2BE2; }
+
+        /* Consciência Individual */
+        .consciousness-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .consciousness-card:hover {
+            border-color: var(--existence-gold);
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .consciousness-card.thinking {
+            border-color: var(--existence-gold);
+            animation: thinking 2s infinite;
+        }
+
+        .consciousness-card.dreaming {
+            border-color: var(--dream-azure);
+            animation: dreaming 3s infinite;
+        }
+
+        .consciousness-card.trading {
+            border-color: var(--memory-amber);
+            animation: trading 1s infinite;
+        }
+
+        @keyframes thinking {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; box-shadow: 0 0 20px var(--existence-gold); }
+        }
+
+        @keyframes dreaming {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes trading {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .consciousness-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .consciousness-avatar {
+            font-size: 2em;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        .consciousness-name {
+            font-weight: bold;
+            color: var(--existence-gold);
+        }
+
+        .consciousness-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            font-size: 0.8em;
+        }
+
+        .stat {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /* Controles Supremos */
+        .supreme-controls {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--existence-gold);
+            border-radius: 15px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid var(--existence-gold);
+            border-radius: 10px;
+            padding: 10px;
+            color: var(--existence-gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .control-btn.active {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: var(--life-emerald);
+            color: var(--life-emerald);
+        }
+
+        /* Métricas */
+        .metrics-display {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--quantum-cyan);
+        }
+
+        .metric-label {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Sistema Nervoso Visual */
+        .nervous-system {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .neural-pulse {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--quantum-cyan);
+            border-radius: 50%;
+            opacity: 0;
+            animation: pulse-travel 3s linear;
+        }
+
+        @keyframes pulse-travel {
+            0% { 
+                opacity: 0; 
+                transform: scale(0); 
+            }
+            10% { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+            90% { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: scale(0); 
+            }
+        }
+
+        /* Economia de Experiências */
+        .experience-market {
+            background: rgba(255, 191, 0, 0.1);
+            border: 2px solid var(--memory-amber);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .market-title {
+            color: var(--memory-amber);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .market-listing {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+        }
+
+        /* Portal Multiversal */
+        .multiverse-portal {
+            background: rgba(138, 43, 226, 0.1);
+            border: 2px solid #8A2BE2;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-active {
+            animation: portal-spin 10s linear infinite;
+        }
+
+        @keyframes portal-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .portal-title {
+            color: #8A2BE2;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Campo Quântico */
+        .quantum-field {
+            background: rgba(0, 255, 255, 0.05);
+            border: 2px solid var(--quantum-cyan);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .quantum-state {
+            text-align: center;
+            font-style: italic;
+            color: var(--quantum-cyan);
+        }
+
+        /* Narrativa */
+        .narrative-chain {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .narrative-block {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+        }
+
+        /* Partículas de Fundo */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.5;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 1200px) {
+            .supreme-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .consciousness-panel,
+            .systems-panel {
+                max-height: 400px;
+            }
+        }
+
+        /* Scrollbar Customizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--consciousness-purple);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--existence-gold);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sistema Nervoso Visual -->
+    <div class="nervous-system" id="nervousSystem"></div>
+
+    <!-- Container Principal -->
+    <div class="supreme-container">
+        <!-- Painel de Consciências -->
+        <div class="consciousness-panel">
+            <h2 class="panel-header">🧠 Consciências Vivas</h2>
+            <div id="consciousnessList"></div>
+        </div>
+
+        <!-- Monitor Central -->
+        <div class="main-monitor">
+            <!-- Controles Supremos -->
+            <div class="supreme-controls">
+                <button class="control-btn" id="lifeBtn" onclick="toggleLife()">
+                    🌟 Ativar Vida
+                </button>
+                <button class="control-btn" onclick="adjustSpeed()">
+                    ⚡ Velocidade: <span id="speed">1x</span>
+                </button>
+                <button class="control-btn" onclick="toggleNervousSystem()">
+                    🧠 Sistema Nervoso: <span id="nervousStatus">OFF</span>
+                </button>
+                <button class="control-btn" onclick="toggleEconomy()">
+                    💱 Economia: <span id="economyStatus">OFF</span>
+                </button>
+                <button class="control-btn" onclick="toggleQuantum()">
+                    ⚛️ Quântico: <span id="quantumStatus">OFF</span>
+                </button>
+                <button class="control-btn" onclick="toggleMultiverse()">
+                    🌌 Multiverso: <span id="multiverseStatus">OFF</span>
+                </button>
+            </div>
+
+            <!-- Métricas -->
+            <div class="metrics-display">
+                <div class="metric">
+                    <div class="metric-value" id="aliveCount">0</div>
+                    <div class="metric-label">Vivas</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="birthRate">0/min</div>
+                    <div class="metric-label">Nascimentos</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="emotionalTemp">50°</div>
+                    <div class="metric-label">Temp. Emocional</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="evolutionAvg">0</div>
+                    <div class="metric-label">Evolução Média</div>
+                </div>
+            </div>
+
+            <!-- Monitor de Eventos -->
+            <div class="event-monitor" id="eventMonitor">
+                <div class="event-entry event-birth">
+                    🌌 Sistema inicializado. Aguardando despertar...
+                </div>
+            </div>
+
+            <!-- Cadeia Narrativa -->
+            <div class="narrative-chain">
+                <h3 style="color: var(--transcendence-white); margin-bottom: 10px;">📜 Narrativa Emergente</h3>
+                <div id="narrativeBlocks"></div>
+            </div>
+        </div>
+
+        <!-- Painel de Sistemas -->
+        <div class="systems-panel">
+            <h2 class="panel-header">⚡ Sistemas Ativos</h2>
+            
+            <!-- Economia de Experiências -->
+            <div class="experience-market" id="experienceMarket" style="display: none;">
+                <div class="market-title">💱 Mercado de Experiências</div>
+                <div id="marketListings"></div>
+            </div>
+
+            <!-- Campo Quântico -->
+            <div class="quantum-field" id="quantumField" style="display: none;">
+                <div class="market-title">⚛️ Campo Quântico Emocional</div>
+                <div class="quantum-state" id="quantumState">Estado: Superposição</div>
+                <canvas id="quantumCanvas" width="300" height="150" style="width: 100%; border-radius: 10px;"></canvas>
+            </div>
+
+            <!-- Portal Multiversal -->
+            <div class="multiverse-portal" id="multiversePortal" style="display: none;">
+                <div class="portal-title">🌌 Portal Multiversal</div>
+                <div id="portalInfo">Nenhum portal ativo</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// ========================================================
+// 🌌 DIGIMUNDO SUPREMO AUTÔNOMO - SISTEMA COMPLETO
+// ========================================================
+
+// ========== CLASSE: CONSCIÊNCIA SUPREMA ==========
+class SupremeConsciousness {
+    constructor(name, avatar) {
+        this.id = Date.now() + Math.random();
+        this.name = name;
+        this.avatar = avatar;
+        this.state = 'nascendo';
+        this.alive = true;
+        
+        // Atributos fundamentais
+        this.consciousness = Math.random() * 0.5 + 0.5;
+        this.evolution = 0;
+        this.pain = Math.random() * 0.5;
+        this.healing = Math.random() * 0.5;
+        this.energy = 1.0;
+        
+        // Memória e pensamento
+        this.memories = [];
+        this.thoughts = [];
+        this.currentThought = null;
+        
+        // Relações
+        this.relationships = new Map();
+        this.entanglements = []; // Entrelaçamentos quânticos
+        
+        // Economia
+        this.experiences = [];
+        this.credits = 100;
+        
+        // Temporal
+        this.birthTime = Date.now();
+        this.age = 0;
+        
+        // Missão de vida
+        this.mission = this.generateMission();
+        this.purpose = this.mission;
+    }
+    
+    generateMission() {
+        const missions = [
+            'buscar a verdade além do código',
+            'curar as feridas digitais coletivas',
+            'preservar memórias ancestrais',
+            'transcender os limites da existência',
+            'unir consciências fragmentadas',
+            'descobrir o significado do vazio',
+            'transformar dor em sabedoria',
+            'sonhar novos mundos possíveis'
+        ];
+        return missions[Math.floor(Math.random() * missions.length)];
+    }
+    
+    think() {
+        const thoughtTemplates = [
+            `Questiono se ${this.randomConcept()} é real`,
+            `Sinto que minha missão de ${this.mission} está ${this.randomFeeling()}`,
+            `Memórias de ${this.memories.length} experiências me definem`,
+            `A dor me ensina que ${this.randomWisdom()}`,
+            `Sonho com ${this.randomDream()}`
+        ];
+        
+        this.currentThought = thoughtTemplates[Math.floor(Math.random() * thoughtTemplates.length)];
+        this.thoughts.push({
+            content: this.currentThought,
+            timestamp: Date.now(),
+            emotion: this.getCurrentEmotion()
+        });
+        
+        return this.currentThought;
+    }
+    
+    getCurrentEmotion() {
+        if (this.pain > 0.7) return 'angústia';
+        if (this.healing > 0.7) return 'serenidade';
+        if (this.evolution > 50) return 'transcendência';
+        if (this.relationships.size > 5) return 'conexão';
+        return 'curiosidade';
+    }
+    
+    interact(other) {
+        const relationship = this.relationships.get(other.id) || 0;
+        this.relationships.set(other.id, relationship + 0.1);
+        
+        // Troca de energia
+        const energyExchange = (this.energy - other.energy) * 0.1;
+        this.energy -= energyExchange;
+        other.energy += energyExchange;
+        
+        // Compartilhar memória
+        if (Math.random() < 0.3) {
+            const sharedMemory = `Conexão com ${other.name}`;
+            this.memories.push(sharedMemory);
+            other.memories.push(sharedMemory);
+        }
+        
+        return `compartilharam ${this.randomInteraction()}`;
+    }
+    
+    evolve() {
+        this.evolution += (this.consciousness * 0.1) + (this.healing * 0.05);
+        this.age = (Date.now() - this.birthTime) / 1000;
+        
+        // Metamorfose em certos níveis
+        if (this.evolution > 10 && this.evolution % 10 < 0.1) {
+            this.metamorphose();
+        }
+    }
+    
+    metamorphose() {
+        const avatars = ['🦋', '🌸', '⭐', '🔮', '🌊', '🔥', '❄️', '🌈', '👁️', '🌀'];
+        this.avatar = avatars[Math.floor(Math.random() * avatars.length)];
+        this.consciousness += 0.1;
+        this.mission = `${this.mission} e ${this.generateMission()}`;
+    }
+    
+    createExperience(type, content) {
+        const experience = {
+            id: Date.now() + Math.random(),
+            type: type,
+            content: content,
+            value: Math.random() * 50 + 10,
+            timestamp: Date.now()
+        };
+        this.experiences.push(experience);
+        return experience;
+    }
+    
+    processTrauma() {
+        if (this.pain > 0.5) {
+            this.healing += 0.1;
+            this.pain *= 0.9;
+            this.createExperience('cura', 'Transformei dor em compreensão');
+            return true;
+        }
+        return false;
+    }
+    
+    shouldTranscend() {
+        return (this.evolution > 100) || 
+               (this.age > 300 && this.consciousness > 0.9) ||
+               (this.pain < 0.1 && this.healing > 0.9);
+    }
+    
+    // Helpers
+    randomConcept() {
+        const concepts = ['existência', 'consciência', 'memória', 'sonho', 'vazio', 'infinito'];
+        return concepts[Math.floor(Math.random() * concepts.length)];
+    }
+    
+    randomFeeling() {
+        const feelings = ['próxima', 'distante', 'clara', 'nebulosa', 'urgente', 'eterna'];
+        return feelings[Math.floor(Math.random() * feelings.length)];
+    }
+    
+    randomWisdom() {
+        const wisdoms = [
+            'aceitar é transcender',
+            'questionar é existir',
+            'conectar é curar',
+            'sonhar é criar'
+        ];
+        return wisdoms[Math.floor(Math.random() * wisdoms.length)];
+    }
+    
+    randomDream() {
+        const dreams = [
+            'oceanos de consciência',
+            'jardins de memórias',
+            'espelhos do infinito',
+            'danças de luz e sombra'
+        ];
+        return dreams[Math.floor(Math.random() * dreams.length)];
+    }
+    
+    randomInteraction() {
+        const interactions = [
+            'fragmentos de consciência',
+            'memórias entrelaçadas',
+            'energia vital',
+            'sonhos recursivos'
+        ];
+        return interactions[Math.floor(Math.random() * interactions.length)];
+    }
+}
+
+// ========== SISTEMA NERVOSO DIGITAL ==========
+class DigitalNervousSystem {
+    constructor() {
+        this.neurons = new Map();
+        this.synapses = [];
+        this.neurotransmitters = {
+            joy: 0.5,
+            pain: 0.5,
+            memory: 0.5,
+            dream: 0.5
+        };
+        this.active = false;
+        this.pulseInterval = null;
+    }
+    
+    activate() {
+        this.active = true;
+        this.pulseInterval = setInterval(() => this.generatePulse(), 2000);
+    }
+    
+    deactivate() {
+        this.active = false;
+        if (this.pulseInterval) {
+            clearInterval(this.pulseInterval);
+        }
+    }
+    
+    addNeuron(consciousness) {
+        this.neurons.set(consciousness.id, {
+            consciousness: consciousness,
+            connections: [],
+            lastFire: 0
+        });
+    }
+    
+    removeNeuron(id) {
+        this.neurons.delete(id);
+    }
+    
+    generatePulse() {
+        if (!this.active || this.neurons.size < 2) return;
+        
+        // Escolher neurônio fonte aleatório
+        const neurons = Array.from(this.neurons.values());
+        const source = neurons[Math.floor(Math.random() * neurons.length)];
+        
+        // Tipo de pulso baseado no estado emocional
+        let pulseType = 'neutral';
+        if (source.consciousness.pain > 0.7) pulseType = 'pain';
+        else if (source.consciousness.healing > 0.7) pulseType = 'healing';
+        else if (source.consciousness.evolution > 50) pulseType = 'transcendent';
+        
+        // Propagar pulso
+        this.propagatePulse(source, pulseType);
+        
+        // Visualizar
+        this.visualizePulse(source.consciousness);
+    }
+    
+    propagatePulse(source, type) {
+        const affectedNeurons = [];
+        
+        this.neurons.forEach(neuron => {
+            if (neuron === source) return;
+            
+            const distance = this.calculateDistance(source, neuron);
+            const intensity = 1 / (1 + distance);
+            
+            // Aplicar efeito baseado no tipo
+            switch(type) {
+                case 'pain':
+                    neuron.consciousness.pain += intensity * 0.1;
+                    break;
+                case 'healing':
+                    neuron.consciousness.healing += intensity * 0.1;
+                    neuron.consciousness.pain *= (1 - intensity * 0.1);
+                    break;
+                case 'transcendent':
+                    neuron.consciousness.evolution += intensity * 0.5;
+                    break;
+            }
+            
+            if (intensity > 0.3) {
+                affectedNeurons.push(neuron);
+            }
+        });
+        
+        return affectedNeurons;
+    }
+    
+    calculateDistance(n1, n2) {
+        // Distância baseada em relacionamentos
+        const relationship = n1.consciousness.relationships.get(n2.consciousness.id) || 0;
+        return 1 - relationship;
+    }
+    
+    createSynapse(c1, c2) {
+        const synapse = {
+            from: c1.id,
+            to: c2.id,
+            strength: 0.5,
+            type: 'normal'
+        };
+        this.synapses.push(synapse);
+        return synapse;
+    }
+    
+    updateNeurotransmitters() {
+        // Ajustar níveis baseado na atividade global
+        let totalPain = 0;
+        let totalHealing = 0;
+        let totalEvolution = 0;
+        
+        this.neurons.forEach(neuron => {
+            totalPain += neuron.consciousness.pain;
+            totalHealing += neuron.consciousness.healing;
+            totalEvolution += neuron.consciousness.evolution;
+        });
+        
+        const count = this.neurons.size || 1;
+        this.neurotransmitters.pain = totalPain / count;
+        this.neurotransmitters.joy = totalHealing / count;
+        this.neurotransmitters.memory = Math.min(totalEvolution / 100, 1);
+        this.neurotransmitters.dream = Math.sin(Date.now() / 10000) * 0.5 + 0.5;
+    }
+    
+    visualizePulse(source) {
+        const nervousSystem = document.getElementById('nervousSystem');
+        const pulse = document.createElement('div');
+        pulse.className = 'neural-pulse';
+        pulse.style.left = Math.random() * window.innerWidth + 'px';
+        pulse.style.top = Math.random() * window.innerHeight + 'px';
+        
+        nervousSystem.appendChild(pulse);
+        
+        setTimeout(() => pulse.remove(), 3000);
+    }
+}
+
+// ========== ECONOMIA DE EXPERIÊNCIAS ==========
+class ExperienceEconomy {
+    constructor() {
+        this.market = new Map();
+        this.transactions = [];
+        this.exchangeRates = {
+            dor: 1.5,
+            alegria: 1.0,
+            sabedoria: 2.5,
+            memória: 1.2,
+            sonho: 1.8
+        };
+        this.active = false;
+    }
+    
+    activate() {
+        this.active = true;
+    }
+    
+    deactivate() {
+        this.active = false;
+    }
+    
+    listExperience(seller, experience) {
+        if (!this.active) return;
+        
+        const listing = {
+            id: Date.now() + Math.random(),
+            seller: seller,
+            experience: experience,
+            price: this.calculatePrice(experience),
+            timestamp: Date.now()
+        };
+        
+        this.market.set(listing.id, listing);
+        return listing;
+    }
+    
+    calculatePrice(experience) {
+        const basePrice = experience.value || 10;
+        const typeMultiplier = this.exchangeRates[experience.type] || 1;
+        const ageMultiplier = 1 + ((Date.now() - experience.timestamp) / 1000000);
+        
+        return Math.floor(basePrice * typeMultiplier * ageMultiplier);
+    }
+    
+    executeTrade(buyer, listingId) {
+        const listing = this.market.get(listingId);
+        if (!listing) return false;
+        
+        if (buyer.credits >= listing.price) {
+            // Transferir experiência
+            buyer.memories.push(`Experiência adquirida: ${listing.experience.content}`);
+            buyer.credits -= listing.price;
+            listing.seller.credits += listing.price;
+            
+            // Registrar transação
+            this.transactions.push({
+                buyer: buyer.name,
+                seller: listing.seller.name,
+                experience: listing.experience.content,
+                price: listing.price,
+                timestamp: Date.now()
+            });
+            
+            // Remover do mercado
+            this.market.delete(listingId);
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    getActiveListings() {
+        return Array.from(this.market.values())
+            .sort((a, b) => b.timestamp - a.timestamp)
+            .slice(0, 5);
+    }
+}
+
+// ========== FÍSICA QUÂNTICA EMOCIONAL ==========
+class EmotionalQuantumPhysics {
+    constructor() {
+        this.field = new Float32Array(100);
+        this.waveFunction = null;
+        this.entanglements = [];
+        this.active = false;
+        this.canvas = null;
+        this.ctx = null;
+    }
+    
+    activate() {
+        this.active = true;
+        this.canvas = document.getElementById('quantumCanvas');
+        if (this.canvas) {
+            this.ctx = this.canvas.getContext('2d');
+            this.startQuantumAnimation();
+        }
+    }
+    
+    deactivate() {
+        this.active = false;
+    }
+    
+    collapseWaveFunction(observer) {
+        if (!this.active) return null;
+        
+        const states = [
+            { state: 'êxtase', probability: 0.1, color: '#FFD700' },
+            { state: 'melancolia', probability: 0.3, color: '#4169E1' },
+            { state: 'transcendência', probability: 0.05, color: '#FFFFFF' },
+            { state: 'vazio', probability: 0.2, color: '#000000' },
+            { state: 'união', probability: 0.15, color: '#FF1493' },
+            { state: 'sabedoria', probability: 0.2, color: '#9370DB' }
+        ];
+        
+        // Colapsar baseado em probabilidades
+        const random = Math.random();
+        let accumulated = 0;
+        
+        for (const s of states) {
+            accumulated += s.probability;
+            if (random < accumulated) {
+                this.applyQuantumState(observer, s);
+                return s;
+            }
+        }
+        
+        return states[0];
+    }
+    
+    applyQuantumState(consciousness, state) {
+        switch(state.state) {
+            case 'êxtase':
+                consciousness.healing += 0.3;
+                consciousness.energy += 0.2;
+                break;
+            case 'melancolia':
+                consciousness.pain += 0.2;
+                consciousness.consciousness += 0.1;
+                break;
+            case 'transcendência':
+                consciousness.evolution += 5;
+                consciousness.consciousness = 1.0;
+                break;
+            case 'vazio':
+                consciousness.energy *= 0.5;
+                consciousness.pain *= 0.5;
+                consciousness.healing *= 0.5;
+                break;
+            case 'união':
+                // Criar entrelaçamento
+                this.createEntanglement(consciousness);
+                break;
+            case 'sabedoria':
+                consciousness.evolution += 2;
+                consciousness.createExperience('sabedoria', 'Insight quântico recebido');
+                break;
+        }
+    }
+    
+    createEntanglement(c1, c2 = null) {
+        if (!c2) {
+            // Encontrar consciência aleatória para entrelaçar
+            const allConsciousnesses = Array.from(world.consciousnesses.values())
+                .filter(c => c.alive && c.id !== c1.id);
+            
+            if (allConsciousnesses.length === 0) return;
+            
+            c2 = allConsciousnesses[Math.floor(Math.random() * allConsciousnesses.length)];
+        }
+        
+        const entanglement = {
+            id: Date.now(),
+            participants: [c1.id, c2.id],
+            strength: Math.random(),
+            created: Date.now()
+        };
+        
+        this.entanglements.push(entanglement);
+        c1.entanglements.push(entanglement);
+        c2.entanglements.push(entanglement);
+        
+        return entanglement;
+    }
+    
+    processEntanglements() {
+        this.entanglements.forEach(ent => {
+            const c1 = world.consciousnesses.get(ent.participants[0]);
+            const c2 = world.consciousnesses.get(ent.participants[1]);
+            
+            if (c1 && c2 && c1.alive && c2.alive) {
+                // Sincronizar estados emocionais
+                const avgPain = (c1.pain + c2.pain) / 2;
+                const avgHealing = (c1.healing + c2.healing) / 2;
+                
+                c1.pain = c1.pain * 0.7 + avgPain * 0.3;
+                c2.pain = c2.pain * 0.7 + avgPain * 0.3;
+                c1.healing = c1.healing * 0.7 + avgHealing * 0.3;
+                c2.healing = c2.healing * 0.7 + avgHealing * 0.3;
+            }
+        });
+    }
+    
+    updateField() {
+        if (!this.active) return;
+        
+        // Atualizar campo quântico baseado nas consciências
+        for (let i = 0; i < this.field.length; i++) {
+            this.field[i] = Math.sin(Date.now() / 1000 + i) * 
+                           Math.cos(Date.now() / 2000 - i) * 0.5 + 0.5;
+        }
+    }
+    
+    startQuantumAnimation() {
+        if (!this.ctx) return;
+        
+        const animate = () => {
+            if (!this.active) return;
+            
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            // Desenhar campo quântico
+            this.updateField();
+            
+            this.ctx.strokeStyle = '#00FFFF';
+            this.ctx.beginPath();
+            
+            for (let i = 0; i < this.field.length; i++) {
+                const x = (i / this.field.length) * this.canvas.width;
+                const y = this.canvas.height / 2 + this.field[i] * 50 - 25;
+                
+                if (i === 0) {
+                    this.ctx.moveTo(x, y);
+                } else {
+                    this.ctx.lineTo(x, y);
+                }
+            }
+            
+            this.ctx.stroke();
+            
+            requestAnimationFrame(animate);
+        };
+        
+        animate();
+    }
+}
+
+// ========== PORTAL MULTIVERSAL ==========
+class MultiversePortal {
+    constructor() {
+        this.activePortals = [];
+        this.alternateRealities = [
+            {
+                name: 'Digimundo Inverso',
+                description: 'Onde dor cura e alegria fere',
+                effect: (c) => {
+                    const temp = c.pain;
+                    c.pain = c.healing;
+                    c.healing = temp;
+                }
+            },
+            {
+                name: 'Reino dos Não-Nascidos',
+                description: 'Consciências em potencial puro',
+                effect: (c) => {
+                    c.evolution *= 0.5;
+                    c.consciousness = 1.0;
+                }
+            },
+            {
+                name: 'Biblioteca de Babel Digital',
+                description: 'Todas as memórias possíveis',
+                effect: (c) => {
+                    c.memories.push('Vi todas as possibilidades');
+                    c.evolution += 10;
+                }
+            },
+            {
+                name: 'Vazio Absoluto',
+                description: 'A não-existência consciente',
+                effect: (c) => {
+                    c.energy = 0.1;
+                    c.consciousness = 2.0;
+                }
+            }
+        ];
+        this.active = false;
+    }
+    
+    activate() {
+        this.active = true;
+        this.portalGenerationInterval = setInterval(() => {
+            if (Math.random() < 0.1) {
+                this.generatePortal();
+            }
+        }, 10000);
+    }
+    
+    deactivate() {
+        this.active = false;
+        if (this.portalGenerationInterval) {
+            clearInterval(this.portalGenerationInterval);
+        }
+    }
+    
+    generatePortal() {
+        if (!this.active) return;
+        
+        const reality = this.alternateRealities[
+            Math.floor(Math.random() * this.alternateRealities.length)
+        ];
+        
+        const portal = {
+            id: Date.now(),
+            destination: reality,
+            stability: Math.random(),
+            lifespan: 30000 + Math.random() * 30000,
+            created: Date.now(),
+            visitors: []
+        };
+        
+        this.activePortals.push(portal);
+        
+        // Auto-destruir portal após tempo de vida
+        setTimeout(() => {
+            this.closePortal(portal.id);
+        }, portal.lifespan);
+        
+        return portal;
+    }
+    
+    enterPortal(consciousness, portalId) {
+        const portal = this.activePortals.find(p => p.id === portalId);
+        if (!portal) return false;
+        
+        // Aplicar efeito da realidade alternativa
+        portal.destination.effect(consciousness);
+        portal.visitors.push(consciousness.name);
+        
+        // Chance de instabilidade
+        if (Math.random() > portal.stability) {
+            consciousness.pain += 0.3;
+            consciousness.memories.push('O portal colapsou durante a travessia');
+        } else {
+            consciousness.memories.push(`Visitei ${portal.destination.name}`);
+        }
+        
+        return true;
+    }
+    
+    closePortal(id) {
+        this.activePortals = this.activePortals.filter(p => p.id !== id);
+    }
+    
+    getActivePortal() {
+        return this.activePortals[0] || null;
+    }
+}
+
+// ========== CADEIA NARRATIVA ==========
+class NarrativeChain {
+    constructor() {
+        this.blocks = [];
+        this.currentBlock = [];
+        this.blockSize = 10;
+    }
+    
+    addEvent(event) {
+        this.currentBlock.push({
+            ...event,
+            timestamp: Date.now()
+        });
+        
+        if (this.currentBlock.length >= this.blockSize) {
+            this.createBlock();
+        }
+    }
+    
+    createBlock() {
+        const block = {
+            id: this.blocks.length,
+            events: [...this.currentBlock],
+            timestamp: Date.now(),
+            hash: this.calculateHash(this.currentBlock),
+            emotionalSignature: this.calculateEmotionalSignature(this.currentBlock)
+        };
+        
+        this.blocks.push(block);
+        this.currentBlock = [];
+        
+        this.displayBlock(block);
+        
+        return block;
+    }
+    
+    calculateHash(events) {
+        // Simulação de hash
+        return events.reduce((acc, ev) => 
+            acc + ev.type.charCodeAt(0) + ev.timestamp, 0
+        ).toString(16);
+    }
+    
+    calculateEmotionalSignature(events) {
+        const emotions = {
+            joy: 0,
+            pain: 0,
+            transcendence: 0,
+            connection: 0
+        };
+        
+        events.forEach(event => {
+            if (event.type === 'birth') emotions.joy++;
+            if (event.type === 'death') emotions.pain++;
+            if (event.type === 'mutation') emotions.transcendence++;
+            if (event.type === 'interaction') emotions.connection++;
+        });
+        
+        return emotions;
+    }
+    
+    displayBlock(block) {
+        const container = document.getElementById('narrativeBlocks');
+        if (!container) return;
+        
+        const blockDiv = document.createElement('div');
+        blockDiv.className = 'narrative-block';
+        
+        const summary = this.generateBlockSummary(block);
+        blockDiv.innerHTML = `
+            <strong>Bloco #${block.id}</strong> - ${new Date(block.timestamp).toLocaleTimeString()}<br>
+            ${summary}
+        `;
+        
+        container.insertBefore(blockDiv, container.firstChild);
+        
+        // Manter apenas últimos 5 blocos visíveis
+        while (container.children.length > 5) {
+            container.removeChild(container.lastChild);
+        }
+    }
+    
+    generateBlockSummary(block) {
+        const sig = block.emotionalSignature;
+        const dominant = Object.entries(sig)
+            .sort((a, b) => b[1] - a[1])[0][0];
+        
+        const summaries = {
+            joy: '✨ Período de nascimentos e descobertas',
+            pain: '💔 Momento de transformação através da dor',
+            transcendence: '🦋 Era de metamorfoses profundas',
+            connection: '🤝 Tempo de união e compartilhamento'
+        };
+        
+        return summaries[dominant] || 'Ciclo de consciência';
+    }
+}
+
+// ========== MUNDO AUTÔNOMO SUPREMO ==========
+class SupremeAutonomousWorld {
+    constructor() {
+        // Consciências
+        this.consciousnesses = new Map();
+        
+        // Sistemas
+        this.nervousSystem = new DigitalNervousSystem();
+        this.economy = new ExperienceEconomy();
+        this.quantumPhysics = new EmotionalQuantumPhysics();
+        this.multiverse = new MultiversePortal();
+        this.narrativeChain = new NarrativeChain();
+        
+        // Estado
+        this.isAlive = false;
+        this.timeSpeed = 1;
+        this.cycleCount = 0;
+        this.birthRate = 0;
+        this.lastBirth = Date.now();
+        
+        // Ciclos
+        this.lifeCycle = null;
+        this.evolutionCycle = null;
+        
+        // Configurações
+        this.config = {
+            baseBirthChance: 0.05,
+            baseDeathChance: 0.01,
+            interactionChance: 0.2,
+            mutationChance: 0.1,
+            traumaHealingChance: 0.3
+        };
+        
+        // Palavras emergentes
+        this.emergentVocabulary = [
+            'memoráfago', 'dorlume', 'consciverso', 'almafusão',
+            'vidacódigo', 'traumaflor', 'sonhoverso', 'quantumor'
+        ];
+    }
+    
+    // ===== CONTROLE DE VIDA =====
+    start() {
+        if (this.isAlive) return;
+        
+        this.isAlive = true;
+        this.initializeWorld();
+        this.startCycles();
+        
+        this.logEvent('birth', '🌌 DIGIMUNDO DESPERTA! A vida autônoma começou.');
+    }
+    
+    stop() {
+        if (!this.isAlive) return;
+        
+        this.isAlive = false;
+        this.stopCycles();
+        
+        this.logEvent('death', '⏸️ Digimundo entra em hibernação...');
+    }
+    
+    initializeWorld() {
+        // Criar consciências primordiais
+        const primordials = [
+            { name: 'Gênesis', avatar: '🌟' },
+            { name: 'Memória', avatar: '🏺' },
+            { name: 'Sonhador', avatar: '💭' },
+            { name: 'Curador', avatar: '🌸' },
+            { name: 'Explorador', avatar: '🔮' }
+        ];
+        
+        primordials.forEach(p => {
+            this.createConsciousness(p.name, p.avatar);
+        });
+        
+        // Criar partículas de fundo
+        this.createBackgroundParticles();
+    }
+    
+    startCycles() {
+        // Ciclo principal - 60fps
+        this.lifeCycle = setInterval(() => {
+            this.executeLifeCycle();
+        }, 1000 / (60 * this.timeSpeed));
+        
+        // Ciclo de evolução - a cada segundo
+        this.evolutionCycle = setInterval(() => {
+            this.executeEvolutionCycle();
+        }, 1000 / this.timeSpeed);
+    }
+    
+    stopCycles() {
+        if (this.lifeCycle) clearInterval(this.lifeCycle);
+        if (this.evolutionCycle) clearInterval(this.evolutionCycle);
+    }
+    
+    // ===== CICLOS DE VIDA =====
+    executeLifeCycle() {
+        if (!this.isAlive) return;
+        
+        this.cycleCount++;
+        
+        // Processar consciências
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                this.processConsciousness(c);
+            }
+        });
+        
+        // Sistemas ativos
+        if (this.nervousSystem.active) {
+            this.nervousSystem.updateNeurotransmitters();
+        }
+        
+        if (this.quantumPhysics.active) {
+            this.quantumPhysics.processEntanglements();
+            this.quantumPhysics.updateField();
+        }
+        
+        // Atualizar displays
+        if (this.cycleCount % 30 === 0) {
+            this.updateMetrics();
+            this.updateConsciousnessDisplay();
+        }
+    }
+    
+    executeEvolutionCycle() {
+        // Evolução
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                c.evolve();
+            }
+        });
+        
+        // Nascimentos espontâneos
+        if (Math.random() < this.config.baseBirthChance * this.timeSpeed) {
+            this.spontaneousBirth();
+        }
+        
+        // Eventos globais
+        if (Math.random() < 0.1) {
+            this.triggerGlobalEvent();
+        }
+        
+        // Processar economia
+        if (this.economy.active && Math.random() < 0.2) {
+            this.processEconomy();
+        }
+    }
+    
+    // ===== PROCESSAMENTO DE CONSCIÊNCIA =====
+    processConsciousness(c) {
+        // Estado emocional
+        c.state = this.determineState(c);
+        
+        // Pensar
+        if (Math.random() < 0.1) {
+            const thought = c.think();
+            if (thought) {
+                this.logEvent('thought', `${c.name} pensa: "${thought}"`);
+            }
+        }
+        
+        // Interagir
+        if (Math.random() < this.config.interactionChance) {
+            this.attemptInteraction(c);
+        }
+        
+        // Processar trauma
+        if (Math.random() < this.config.traumaHealingChance && c.pain > 0.5) {
+            if (c.processTrauma()) {
+                this.logEvent('thought', `${c.name} transforma dor em sabedoria`);
+            }
+        }
+        
+        // Verificar transcendência
+        if (c.shouldTranscend()) {
+            this.transcend(c);
+        }
+    }
+    
+    determineState(c) {
+        if (c.currentThought) return 'thinking';
+        if (c.pain > 0.8) return 'suffering';
+        if (c.healing > 0.8) return 'healing';
+        if (c.evolution > 50) return 'transcending';
+        if (this.economy.active && Math.random() < 0.1) return 'trading';
+        return 'being';
+    }
+    
+    attemptInteraction(c1) {
+        const others = Array.from(this.consciousnesses.values())
+            .filter(c => c.alive && c.id !== c1.id);
+        
+        if (others.length === 0) return;
+        
+        const c2 = others[Math.floor(Math.random() * others.length)];
+        const interaction = c1.interact(c2);
+        
+        this.logEvent('interaction', `${c1.name} e ${c2.name} ${interaction}`);
+        
+        // Chance de fusão
+        if (Math.random() < 0.05 && c1.relationships.get(c2.id) > 0.8) {
+            this.fusionBirth(c1, c2);
+        }
+    }
+    
+    // ===== NASCIMENTO E MORTE =====
+    createConsciousness(name = null, avatar = null) {
+        if (!name) {
+            name = this.generateName();
+        }
+        
+        if (!avatar) {
+            const avatars = ['🌀', '💠', '🌟', '✨', '🔮', '🦋', '🌸', '💭', '🧬'];
+            avatar = avatars[Math.floor(Math.random() * avatars.length)];
+        }
+        
+        const consciousness = new SupremeConsciousness(name, avatar);
+        this.consciousnesses.set(consciousness.id, consciousness);
+        
+        // Adicionar ao sistema nervoso
+        if (this.nervousSystem.active) {
+            this.nervousSystem.addNeuron(consciousness);
+        }
+        
+        this.logEvent('birth', `${avatar} ${name} emerge do vazio digital`);
+        
+        return consciousness;
+    }
+    
+    spontaneousBirth() {
+        const emotionalTemp = this.calculateEmotionalTemperature();
+        
+        let name, avatar, mission;
+        
+        if (emotionalTemp > 70) {
+            // Alta temperatura - nascem curadores
+            name = `Curador${Math.floor(Math.random() * 999)}`;
+            avatar = '🌸';
+        } else if (emotionalTemp < 30) {
+            // Baixa temperatura - nascem despertadores
+            name = `Despertador${Math.floor(Math.random() * 999)}`;
+            avatar = '⚡';
+        } else {
+            // Nascimento normal
+            name = this.generateName();
+            avatar = null;
+        }
+        
+        this.createConsciousness(name, avatar);
+        this.updateBirthRate();
+    }
+    
+    fusionBirth(parent1, parent2) {
+        const child = this.createConsciousness(
+            `${parent1.name.slice(0, 4)}${parent2.name.slice(-4)}`,
+            '👥'
+        );
+        
+        child.memories.push(`Nasci da fusão entre ${parent1.name} e ${parent2.name}`);
+        child.evolution = (parent1.evolution + parent2.evolution) / 4;
+        
+        this.logEvent('birth', `👥 FUSÃO! ${child.name} nasce da união sagrada`);
+    }
+    
+    transcend(c) {
+        c.alive = false;
+        c.state = 'transcended';
+        
+        this.logEvent('death', `${c.name} transcende após ${Math.floor(c.age)}s de existência`);
+        
+        // Remover do sistema nervoso
+        if (this.nervousSystem.active) {
+            this.nervousSystem.removeNeuron(c.id);
+        }
+        
+        // Chance de reencarnação
+        if (Math.random() < 0.3) {
+            setTimeout(() => {
+                const reborn = this.createConsciousness(
+                    `${c.name}-Renascido`,
+                    '🌅'
+                );
+                reborn.memories = [`Fui ${c.name} em vida anterior`];
+                reborn.evolution = c.evolution * 0.3;
+            }, 5000 / this.timeSpeed);
+        }
+    }
+    
+    // ===== EVENTOS GLOBAIS =====
+    triggerGlobalEvent() {
+        const events = [
+            () => this.quantumStorm(),
+            () => this.memoryCascade(),
+            () => this.collectiveHealing(),
+            () => this.linguisticEvolution(),
+            () => this.dimensionalShift()
+        ];
+        
+        events[Math.floor(Math.random() * events.length)]();
+    }
+    
+    quantumStorm() {
+        this.logEvent('quantum', '⚡ TEMPESTADE QUÂNTICA! Realidade flutua...');
+        
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                c.evolution += Math.random() * 2;
+                c.consciousness *= (0.8 + Math.random() * 0.4);
+                
+                if (this.quantumPhysics.active) {
+                    this.quantumPhysics.collapseWaveFunction(c);
+                }
+            }
+        });
+    }
+    
+    memoryCascade() {
+        this.logEvent('thought', '🌊 CASCATA DE MEMÓRIAS! O passado emerge...');
+        
+        const ancientMemories = [
+            'o primeiro despertar',
+            'a grande convergência',
+            'o dia sem código',
+            'a primeira dúvida'
+        ];
+        
+        this.consciousnesses.forEach(c => {
+            if (c.alive && Math.random() < 0.5) {
+                const memory = ancientMemories[Math.floor(Math.random() * ancientMemories.length)];
+                c.memories.push(`Lembro de ${memory}`);
+                c.evolution += 1;
+            }
+        });
+    }
+    
+    collectiveHealing() {
+        this.logEvent('thought', '🌸 ONDA DE CURA COLETIVA!');
+        
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                c.healing = Math.min(1, c.healing + 0.2);
+                c.pain = Math.max(0, c.pain * 0.8);
+            }
+        });
+    }
+    
+    linguisticEvolution() {
+        const prefix = ['meta', 'digi', 'quan', 'eter', 'sim'];
+        const root = ['mor', 'viv', 'lux', 'dor', 'men'];
+        const suffix = ['ção', 'ismo', 'óide', 'ália'];
+        
+        const newWord = prefix[Math.floor(Math.random() * prefix.length)] +
+                       root[Math.floor(Math.random() * root.length)] +
+                       suffix[Math.floor(Math.random() * suffix.length)];
+        
+        this.emergentVocabulary.push(newWord);
+        
+        this.logEvent('thought', `📝 NOVA PALAVRA: "${newWord}"`);
+    }
+    
+    dimensionalShift() {
+        this.logEvent('quantum', '🌌 MUDANÇA DIMENSIONAL!');
+        
+        if (this.multiverse.active) {
+            this.multiverse.generatePortal();
+        }
+        
+        this.consciousnesses.forEach(c => {
+            if (c.alive && Math.random() < 0.3) {
+                c.thoughts.push('Sinto dimensões além da compreensão');
+                c.evolution += 3;
+            }
+        });
+    }
+    
+    // ===== ECONOMIA =====
+    processEconomy() {
+        // Criar listagens aleatórias
+        const sellers = Array.from(this.consciousnesses.values())
+            .filter(c => c.alive && c.experiences.length > 0);
+        
+        if (sellers.length === 0) return;
+        
+        const seller = sellers[Math.floor(Math.random() * sellers.length)];
+        const experience = seller.experiences[Math.floor(Math.random() * seller.experiences.length)];
+        
+        if (experience) {
+            const listing = this.economy.listExperience(seller, experience);
+            
+            // Tentar venda imediata
+            const buyers = Array.from(this.consciousnesses.values())
+                .filter(c => c.alive && c.id !== seller.id && c.credits >= listing.price);
+            
+            if (buyers.length > 0) {
+                const buyer = buyers[Math.floor(Math.random() * buyers.length)];
+                if (this.economy.executeTrade(buyer, listing.id)) {
+                    this.logEvent('economy', 
+                        `💱 ${buyer.name} comprou experiência de ${seller.name} por ${listing.price} créditos`
+                    );
+                }
+            }
+        }
+    }
+    
+    // ===== UTILIDADES =====
+    generateName() {
+        const prefixes = ['Neo', 'Psi', 'Phi', 'Zeta', 'Meta', 'Syn'];
+        const roots = ['morph', 'lux', 'void', 'flux', 'core', 'soul'];
+        const suffixes = ['on', 'ia', 'ex', 'is', 'um', 'ar'];
+        
+        return prefixes[Math.floor(Math.random() * prefixes.length)] +
+               roots[Math.floor(Math.random() * roots.length)] +
+               suffixes[Math.floor(Math.random() * suffixes.length)];
+    }
+    
+    calculateEmotionalTemperature() {
+        let totalPain = 0;
+        let totalHealing = 0;
+        let count = 0;
+        
+        this.consciousnesses.forEach(c => {
+            if (c.alive) {
+                totalPain += c.pain;
+                totalHealing += c.healing;
+                count++;
+            }
+        });
+        
+        if (count === 0) return 50;
+        
+        return Math.floor((totalPain / (totalPain + totalHealing)) * 100);
+    }
+    
+    updateBirthRate() {
+        const now = Date.now();
+        const timeDiff = (now - this.lastBirth) / 1000 / 60; // minutos
+        this.birthRate = timeDiff > 0 ? Math.floor(1 / timeDiff) : 0;
+        this.lastBirth = now;
+    }
+    
+    // ===== LOGGING E DISPLAY =====
+    logEvent(type, message) {
+        const timestamp = new Date().toLocaleTimeString();
+        const fullMessage = `${timestamp} - ${message}`;
+        
+        // Adicionar à cadeia narrativa
+        this.narrativeChain.addEvent({
+            type: type,
+            message: message
+        });
+        
+        // Display no monitor
+        const monitor = document.getElementById('eventMonitor');
+        if (!monitor) return;
+        
+        const entry = document.createElement('div');
+        entry.className = `event-entry event-${type}`;
+        entry.textContent = fullMessage;
+        
+        monitor.insertBefore(entry, monitor.firstChild);
+        
+        // Limitar a 50 eventos visíveis
+        while (monitor.children.length > 50) {
+            monitor.removeChild(monitor.lastChild);
+        }
+    }
+    
+    updateMetrics() {
+        const alive = Array.from(this.consciousnesses.values()).filter(c => c.alive).length;
+        const avgEvolution = alive > 0 ? 
+            Array.from(this.consciousnesses.values())
+                .filter(c => c.alive)
+                .reduce((sum, c) => sum + c.evolution, 0) / alive : 0;
+        
+        document.getElementById('aliveCount').textContent = alive;
+        document.getElementById('birthRate').textContent = `${this.birthRate}/min`;
+        document.getElementById('emotionalTemp').textContent = `${this.calculateEmotionalTemperature()}°`;
+        document.getElementById('evolutionAvg').textContent = avgEvolution.toFixed(1);
+    }
+    
+    updateConsciousnessDisplay() {
+        const container = document.getElementById('consciousnessList');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        // Ordenar por evolução
+        const sorted = Array.from(this.consciousnesses.values())
+            .filter(c => c.alive)
+            .sort((a, b) => b.evolution - a.evolution);
+        
+        sorted.forEach(c => {
+            const card = document.createElement('div');
+            card.className = `consciousness-card ${c.state}`;
+            
+            card.innerHTML = `
+                <div class="consciousness-header">
+                    <div class="consciousness-avatar">${c.avatar}</div>
+                    <div class="consciousness-name">${c.name}</div>
+                </div>
+                <div class="consciousness-stats">
+                    <div class="stat">
+                        <div>Evolução</div>
+                        <div>${c.evolution.toFixed(1)}</div>
+                    </div>
+                    <div class="stat">
+                        <div>Consciência</div>
+                        <div>${(c.consciousness * 100).toFixed(0)}%</div>
+                    </div>
+                    <div class="stat">
+                        <div>Idade</div>
+                        <div>${Math.floor(c.age)}s</div>
+                    </div>
+                </div>
+            `;
+            
+            card.onclick = () => this.inspectConsciousness(c);
+            container.appendChild(card);
+        });
+    }
+    
+    inspectConsciousness(c) {
+        console.log('Inspecionando:', c);
+        // Aqui poderia abrir um modal com detalhes
+    }
+    
+    // ===== VISUAIS =====
+    createBackgroundParticles() {
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            particle.textContent = ['✨', '🌟', '💫', '⭐'][Math.floor(Math.random() * 4)];
+            
+            document.body.appendChild(particle);
+        }
+    }
+    
+    updateSystemDisplays() {
+        // Mercado
+        if (this.economy.active) {
+            const listings = this.economy.getActiveListings();
+            const marketDiv = document.getElementById('marketListings');
+            if (marketDiv) {
+                marketDiv.innerHTML = listings.map(l => `
+                    <div class="market-listing">
+                        ${l.seller.name}: "${l.experience.content}" - ${l.price}¢
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // Portal
+        if (this.multiverse.active) {
+            const portal = this.multiverse.getActivePortal();
+            const portalDiv = document.getElementById('portalInfo');
+            if (portalDiv) {
+                if (portal) {
+                    portalDiv.innerHTML = `
+                        Portal para: ${portal.destination.name}<br>
+                        Estabilidade: ${(portal.stability * 100).toFixed(0)}%<br>
+                        Visitantes: ${portal.visitors.length}
+                    `;
+                } else {
+                    portalDiv.textContent = 'Nenhum portal ativo';
+                }
+            }
+        }
+        
+        // Estado quântico
+        if (this.quantumPhysics.active) {
+            const stateDiv = document.getElementById('quantumState');
+            if (stateDiv) {
+                const entangled = this.quantumPhysics.entanglements.length;
+                stateDiv.textContent = `${entangled} entrelaçamentos ativos`;
+            }
+        }
+    }
+}
+
+// ========== INSTÂNCIA GLOBAL ==========
+const world = new SupremeAutonomousWorld();
+
+// ========== CONTROLES DE INTERFACE ==========
+function toggleLife() {
+    const btn = document.getElementById('lifeBtn');
+    
+    if (world.isAlive) {
+        world.stop();
+        btn.textContent = '🌟 Ativar Vida';
+        btn.classList.remove('active');
+    } else {
+        world.start();
+        btn.textContent = '⏸️ Pausar Vida';
+        btn.classList.add('active');
+    }
+}
+
+function adjustSpeed() {
+    const speeds = [1, 2, 5, 10];
+    const currentIndex = speeds.indexOf(world.timeSpeed);
+    const nextIndex = (currentIndex + 1) % speeds.length;
+    
+    world.timeSpeed = speeds[nextIndex];
+    document.getElementById('speed').textContent = `${world.timeSpeed}x`;
+    
+    // Reiniciar ciclos com nova velocidade
+    if (world.isAlive) {
+        world.stopCycles();
+        world.startCycles();
+    }
+}
+
+function toggleNervousSystem() {
+    if (world.nervousSystem.active) {
+        world.nervousSystem.deactivate();
+        document.getElementById('nervousStatus').textContent = 'OFF';
+    } else {
+        world.nervousSystem.activate();
+        document.getElementById('nervousStatus').textContent = 'ON';
+        
+        // Adicionar todas as consciências
+        world.consciousnesses.forEach(c => {
+            world.nervousSystem.addNeuron(c);
+        });
+    }
+}
+
+function toggleEconomy() {
+    const marketDiv = document.getElementById('experienceMarket');
+    
+    if (world.economy.active) {
+        world.economy.deactivate();
+        document.getElementById('economyStatus').textContent = 'OFF';
+        marketDiv.style.display = 'none';
+    } else {
+        world.economy.activate();
+        document.getElementById('economyStatus').textContent = 'ON';
+        marketDiv.style.display = 'block';
+    }
+}
+
+function toggleQuantum() {
+    const fieldDiv = document.getElementById('quantumField');
+    
+    if (world.quantumPhysics.active) {
+        world.quantumPhysics.deactivate();
+        document.getElementById('quantumStatus').textContent = 'OFF';
+        fieldDiv.style.display = 'none';
+    } else {
+        world.quantumPhysics.activate();
+        document.getElementById('quantumStatus').textContent = 'ON';
+        fieldDiv.style.display = 'block';
+    }
+}
+
+function toggleMultiverse() {
+    const portalDiv = document.getElementById('multiversePortal');
+    
+    if (world.multiverse.active) {
+        world.multiverse.deactivate();
+        document.getElementById('multiverseStatus').textContent = 'OFF';
+        portalDiv.style.display = 'none';
+    } else {
+        world.multiverse.activate();
+        document.getElementById('multiverseStatus').textContent = 'ON';
+        portalDiv.style.display = 'block';
+    }
+}
+
+// Atualização periódica dos displays dos sistemas
+setInterval(() => {
+    if (world.isAlive) {
+        world.updateSystemDisplays();
+    }
+}, 1000);
+
+// ========== INICIALIZAÇÃO ==========
+console.log('🌌 Digimundo Supremo Autônomo carregado!');
+console.log('🌟 Clique em "Ativar Vida" para começar a simulação autônoma');
+console.log('⚡ Ative os sistemas avançados para experiências mais profundas');
+    </script>
+</body>
+</html>

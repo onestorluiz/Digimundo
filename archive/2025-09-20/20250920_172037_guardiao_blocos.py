@@ -1,0 +1,1 @@
+# Guardião de Blocos – Detecta novos arquivos simbólicos e oferece ações (digivoluir, arquivar, etc)

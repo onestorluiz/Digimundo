@@ -1,0 +1,203 @@
+# Foreshadowing Rules - DrForeshadowing
+# Foreshadowing and setup/payoff analysis rules
+# Focus: Setup/payoff, Chekhov's gun, dramatic irony, plant/reveal, avoid unfired guns and deus ex machina
+
+rules:
+  - id: FORESHADOWING.R001
+    title: Foreshadowing Present
+    severity: medium
+    description: >
+      Screenplay should have foreshadowing - hints/setup for future events.
+      McKee: "Foreshadowing creates anticipation - plant hints that pay off later."
+      Field: "Setup early, payoff later - essential structural principle."
+    fix: >
+      Add foreshadowing - plant hints early that pay off later. Use dialogue, visuals,
+      or actions to hint at future events without being too obvious.
+
+  - id: FORESHADOWING.R002
+    title: Setup/Payoff Present (Chekhov's Gun)
+    severity: critical
+    description: >
+      Screenplay must have setup/payoff - plants have payoffs (Chekhov's gun principle).
+      Chekhov: "If gun on wall in Act 1, must fire by Act 3 - every element must be used."
+      McKee: "Setup/payoff - everything planted must pay off, no unfired guns."
+    fix: >
+      Strengthen setup/payoff - ensure every planted element (gun, clue, object, character trait)
+      pays off later. Follow Chekhov's gun: setup in Act 1, payoff by Act 3.
+
+  - id: FORESHADOWING.R003
+    title: Plant Timing
+    severity: high
+    description: >
+      Setup should be early enough for later payoff (Field's structural principle).
+      Field: "Plant in Act 1, pay off in Act 3 - structural principle of setup/payoff distance."
+      McKee: "Setup must be early enough that payoff feels earned not convenient."
+    fix: >
+      Improve plant timing - move setup earlier (Act 1) to create distance from payoff (Act 3).
+      Early planting makes payoff feel earned, not convenient or contrived.
+
+  - id: FORESHADOWING.R004
+    title: Payoff Effectiveness
+    severity: high
+    description: >
+      Payoffs should be satisfying and earned through proper setup.
+      McKee: "Payoff must be earned - setup creates anticipation, payoff delivers satisfaction."
+      Truby: "Revelation sequence - each reveal builds to ultimate payoff at climax."
+    fix: >
+      Strengthen payoffs - ensure reveals/resolutions are satisfying and earned. Build revelation
+      sequence where each payoff creates anticipation for next, culminating at climax.
+
+  - id: FORESHADOWING.R005
+    title: Dramatic Irony Present
+    severity: medium
+    description: >
+      Screenplay should use dramatic irony - audience knows more than characters.
+      McKee: "Dramatic irony - audience knows what character doesn't, creates tension."
+      Aristotle: "Irony heightens tragic effect - audience sees disaster approaching."
+    fix: >
+      Add dramatic irony - let audience know crucial information characters don't. Show audience
+      the danger/truth while character remains unaware, creating tension and engagement.
+
+  - id: FORESHADOWING.R006
+    title: Visual Foreshadowing
+    severity: medium
+    description: >
+      Screenplay should use visual foreshadowing - symbolic hints through imagery.
+      McKee: "Visual foreshadowing - symbols, motifs, imagery that hint at future events."
+      Mackendrick: "Visual storytelling - images foreshadow through symbolic meaning."
+    fix: >
+      Add visual foreshadowing - use symbols, motifs, recurring imagery to hint at future events.
+      Show gun on wall, photograph, object that will matter later. Visual plant/payoff powerful.
+
+  - id: FORESHADOWING.R007
+    title: Dialogue Foreshadowing
+    severity: medium
+    description: >
+      Screenplay should use dialogue foreshadowing - verbal clues/hints.
+      McKee: "Dialogue can foreshadow - cryptic remarks, warnings, predictions hint at future."
+      Truby: "Dialogue foreshadows through double meaning, ambiguity, prophetic statements."
+    fix: >
+      Add dialogue foreshadowing - character warnings, predictions, cryptic remarks that hint
+      at future events. Use double meaning, ambiguity, prophetic statements strategically.
+
+  - id: FORESHADOWING.R008
+    title: Misdirection Used
+    severity: low
+    description: >
+      Screenplay should use misdirection - hide clues in plain sight, use red herrings.
+      McKee: "Misdirection - plant clues audience misses, hide truth in plain sight."
+      Truby: "Misdirection creates surprise - red herrings and false leads heighten revelation."
+    fix: >
+      Add misdirection - plant clues that audience overlooks, use red herrings to mislead.
+      Hide truth in plain sight so revelation surprises yet feels inevitable in hindsight.
+
+  - id: FORESHADOWING.R009
+    title: Setup Distance
+    severity: medium
+    description: >
+      Adequate pages should separate setup and payoff for maximum impact.
+      Field: "Setup/payoff distance - enough space between plant and reveal for impact."
+      McKee: "Setup too close to payoff feels forced - need adequate dramatic distance."
+    fix: >
+      Increase setup distance - move setup earlier or payoff later to create dramatic space.
+      Distance makes payoff feel earned and impactful, not convenient or obvious.
+
+  - id: FORESHADOWING.R010
+    title: Inevitability Balance
+    severity: medium
+    description: >
+      Foreshadowing should balance surprise and inevitability (Aristotle's principle).
+      Aristotle: "Best plots - surprise audience yet feel inevitable in hindsight."
+      McKee: "Inevitability vs surprise - foreshadow enough to feel earned, not predictable."
+    fix: >
+      Balance inevitability - foreshadow enough that payoff feels earned and logical, but not
+      so much it's predictable. Aim for Aristotle's ideal: surprise yet inevitable.
+
+  - id: FORESHADOWING.R011
+    title: Avoid Unfired Gun
+    severity: critical
+    description: >
+      Screenplay must not have unfired guns - setup without payoff (Chekhov violation).
+      Chekhov: "If gun on wall in Act 1, must fire by Act 3 - everything planted must pay off."
+      McKee: "Unfired gun - setup without payoff frustrates audience, violates contract."
+    fix: >
+      Fix unfired guns - every setup must have payoff. Remove unused plants or add payoffs for
+      established elements. Chekhov's gun is iron law: if planted, must fire.
+
+  - id: FORESHADOWING.R012
+    title: Avoid Deus Ex Machina
+    severity: critical
+    description: >
+      Screenplay must not have deus ex machina - payoff without setup, unearned resolution.
+      Aristotle: "Deus ex machina - unearned resolution, god from machine, contrived ending."
+      McKee: "Deus ex machina violation - payoff must be earned through setup, not magic."
+    fix: >
+      Eliminate deus ex machina - every payoff must be earned through prior setup. Plant solutions
+      early (Act 1), never magic endings. If saves day, must be established beforehand.
+
+  - id: FORESHADOWING.R013
+    title: Avoid Telegraphed Twist
+    severity: high
+    description: >
+      Screenplay must not telegraph twists - foreshadowing too obvious, predictable.
+      McKee: "Telegraphed twist - foreshadowing too obvious, audience ahead of story."
+      Truby: "Balance foreshadowing - enough to feel earned, not so much it's predictable."
+    fix: >
+      Reduce telegraphing - make foreshadowing more subtle, add misdirection, hide clues better.
+      Audience should not be ahead of story. Balance earned with surprising.
+
+  - id: FORESHADOWING.R014
+    title: Multiple Foreshadowing Techniques
+    severity: low
+    description: >
+      Screenplay should use multiple foreshadowing techniques - visual, dialogue, symbolic, ironic.
+      McKee: "Foreshadowing layers - visual, verbal, structural all work together."
+      Field: "Multiple setup types - action, dialogue, object, character trait."
+    fix: >
+      Diversify foreshadowing - use visual hints, dialogue clues, symbolic imagery, dramatic irony.
+      Multiple techniques create richer, more sophisticated foreshadowing network.
+
+  - id: FORESHADOWING.R015
+    title: Revelation Sequence
+    severity: medium
+    description: >
+      Screenplay should build revelation sequence - each payoff leads to next, climax ultimate.
+      Truby: "Revelation sequence - each reveal builds to ultimate payoff at climax."
+      McKee: "Revelation rhythm - payoffs escalate, final revelation at climax resolves all."
+    fix: >
+      Build revelation sequence - structure payoffs to escalate. Small reveals lead to medium
+      reveals lead to climactic revelation that resolves all threads. Create rhythm of discovery.
+
+# Analysis prompts for deep context
+analysis_prompts:
+  foreshadowing_present: >
+    Analyze foreshadowing in screenplay. McKee: "Foreshadowing creates anticipation - plant hints
+    that pay off later." Does screenplay plant hints for future events?
+
+  setup_payoff: >
+    Analyze setup/payoff structure. Chekhov: "If gun on wall in Act 1, must fire by Act 3."
+    Does every planted element pay off? Any unfired guns?
+
+  plant_timing: >
+    Analyze plant timing. Field: "Plant in Act 1, pay off in Act 3 - structural principle."
+    Are setups early enough for later payoffs to feel earned?
+
+  dramatic_irony: >
+    Analyze dramatic irony. McKee: "Audience knows what character doesn't, creates tension."
+    Does screenplay use dramatic irony effectively?
+
+  inevitability: >
+    Analyze inevitability balance. Aristotle: "Best plots surprise audience yet feel inevitable
+    in hindsight." Does screenplay balance surprise and inevitability?
+
+  unfired_guns: >
+    Detect unfired guns - setup without payoff. Chekhov principle: everything planted must be
+    used. Any elements established but never paid off?
+
+  deus_ex_machina: >
+    Detect deus ex machina - payoff without setup. Aristotle: "Unearned resolution, god from
+    machine." Any solutions that appear without prior establishment?
+
+  telegraphed_twist: >
+    Detect telegraphed twists - foreshadowing too obvious. McKee: "Audience ahead of story."
+    Is foreshadowing too heavy-handed or predictable?

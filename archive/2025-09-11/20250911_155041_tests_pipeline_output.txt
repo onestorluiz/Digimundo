@@ -1,0 +1,57 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.13, pytest-8.4.1, pluggy-1.6.0 -- /Users/clubproducoes/Digimundo/scripturemon-validation/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/clubproducoes/Digimundo/scripturemon-validation
+plugins: anyio-4.10.0
+collecting ... collected 9 items
+
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_pipeline_initialization PASSED [ 11%]
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_successful_execution FAILED [ 22%]
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_timeout_handling FAILED [ 33%]
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_error_handling FAILED [ 44%]
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_semaphore_release_on_success PASSED [ 55%]
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_semaphore_release_on_error PASSED [ 66%]
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_fallback_triggered FAILED [ 77%]
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_stats_tracking FAILED [ 88%]
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_no_deadlock_on_semaphore_timeout PASSED [100%]
+
+=================================== FAILURES ===================================
+____________ TestQuadruplePipelineSanity.test_successful_execution _____________
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py:50: in test_successful_execution
+    assert result["duration_ms"] > 0
+E   assert 0 > 0
+------------------------------ Captured log call -------------------------------
+WARNING  apps.scripturemon.quadruple_pipeline:quadruple_pipeline.py:114 Erro ao verificar modelos: not enough values to unpack (expected 2, got 0)
+______________ TestQuadruplePipelineSanity.test_timeout_handling _______________
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py:75: in test_timeout_handling
+    assert result["duration_ms"] > 0
+E   assert 0 > 0
+------------------------------ Captured log call -------------------------------
+WARNING  apps.scripturemon.quadruple_pipeline:quadruple_pipeline.py:114 Erro ao verificar modelos: not enough values to unpack (expected 2, got 0)
+WARNING  apps.scripturemon.quadruple_pipeline:quadruple_pipeline.py:245 [analyze] Subprocess timeout: Stage analyze timed out after 5s
+_______________ TestQuadruplePipelineSanity.test_error_handling ________________
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py:99: in test_error_handling
+    assert result["duration_ms"] > 0
+E   assert 0 > 0
+------------------------------ Captured log call -------------------------------
+WARNING  apps.scripturemon.quadruple_pipeline:quadruple_pipeline.py:114 Erro ao verificar modelos: not enough values to unpack (expected 2, got 0)
+ERROR    apps.scripturemon.quadruple_pipeline:quadruple_pipeline.py:257 [evaluate] Execution error: Model returned error: Error: Model failed
+_____________ TestQuadruplePipelineSanity.test_fallback_triggered ______________
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py:231: in test_fallback_triggered
+    assert len(pipeline.pipeline_stats["fallbacks_used"]) > 0
+E   assert 0 > 0
+E    +  where 0 = len([])
+------------------------------ Captured log call -------------------------------
+WARNING  apps.scripturemon.quadruple_pipeline:quadruple_pipeline.py:114 Erro ao verificar modelos: not enough values to unpack (expected 2, got 0)
+_______________ TestQuadruplePipelineSanity.test_stats_tracking ________________
+tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py:242: in test_stats_tracking
+    assert "total_duration_ms" in pipeline.pipeline_stats
+E   AssertionError: assert 'total_duration_ms' in {'fallbacks_used': [], 'runs': 0, 'stage_durations': {}, 'timeouts': [], ...}
+E    +  where {'fallbacks_used': [], 'runs': 0, 'stage_durations': {}, 'timeouts': [], ...} = <apps.scripturemon.quadruple_pipeline.QuadruplePipeline object at 0x102488110>.pipeline_stats
+=========================== short test summary info ============================
+FAILED tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_successful_execution
+FAILED tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_timeout_handling
+FAILED tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_error_handling
+FAILED tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_fallback_triggered
+FAILED tests/suites/pipeline_current/test_quadruple_pipeline_sanity.py::TestQuadruplePipelineSanity::test_stats_tracking
+========================= 5 failed, 4 passed in 0.09s ==========================

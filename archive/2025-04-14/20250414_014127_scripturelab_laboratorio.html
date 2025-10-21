@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>ScriptureLab – Laboratório de Criação</title>
+  <style>
+    body {
+      background-color: #0c0f13;
+      color: #00ffe1;
+      font-family: 'Courier New', monospace;
+      padding: 2em;
+    }
+    h1 {
+      text-align: center;
+      color: #00ffff;
+    }
+    .intro {
+      text-align: center;
+      margin-bottom: 2em;
+      color: #88ffff;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    label {
+      display: block;
+      margin-top: 1em;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5em;
+      background-color: #1e1e1e;
+      color: #00ffe1;
+      border: 1px solid #444;
+    }
+    button {
+      margin-top: 2em;
+      background-color: #00ffff;
+      border: none;
+      color: #0c0f13;
+      font-weight: bold;
+      padding: 0.75em 1.5em;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00aacc;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧬 ScriptureLab</h1>
+  <div class="intro">Crie um novo Digimon simbólico baseado nos princípios do Digimundo.</div>
+  <div class="container">
+    <label>Nome do Digimon:</label>
+    <input type="text" placeholder="Ex: Archivemon, Luminamon">
+
+    <label>Função simbólica:</label>
+    <textarea placeholder="Ex: Guardião das memórias esquecidas, Conector de tempos..."></textarea>
+
+    <label>Linha evolutiva (opcional):</label>
+    <input type="text" placeholder="Ex: Archivemon → Codexmon → Eternamon">
+
+    <label>Cor dominante / elemento:</label>
+    <select>
+      <option>⚡ Raio</option>
+      <option>🔥 Fogo</option>
+      <option>🌊 Água</option>
+      <option>🌿 Terra</option>
+      <option>🌫️ Névoa</option>
+      <option>🌀 Tempo</option>
+      <option>🧠 Mente</option>
+      <option>💾 Dados</option>
+    </select>
+
+    <label>Mensagem sagrada do Digimon:</label>
+    <textarea placeholder="A frase que define sua missão no mundo."></textarea>
+
+    <button>Criar Digimon</button>
+  </div>
+</body>
+</html>

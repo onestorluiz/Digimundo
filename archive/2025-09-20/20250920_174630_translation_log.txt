@@ -1,0 +1,76 @@
+INFO:__main__:🚀 INICIANDO TRADUÇÃO COMPLETA - DigiLang V10 Supreme
+INFO:__main__:============================================================
+INFO:__main__:📚 Encontrados 57 arquivos PDF
+INFO:__main__:📄 [1/57] SONHOS SEM LEMBRANÇAS T.3.pdf
+INFO:__main__:🔄 Processando: SONHOS SEM LEMBRANÇAS T.3.pdf
+ERROR:__main__:Erro processando SONHOS SEM LEMBRANÇAS T.3.pdf: 'dictionary'
+INFO:__main__:📄 [2/57] The Departed - Scriptment.pdf
+INFO:__main__:🔄 Processando: The Departed - Scriptment.pdf
+ERROR:__main__:Erro processando The Departed - Scriptment.pdf: 'dictionary'
+INFO:__main__:📄 [3/57] Apocalypse Now - Draft.pdf
+INFO:__main__:🔄 Processando: Apocalypse Now - Draft.pdf
+ERROR:__main__:Erro processando Apocalypse Now - Draft.pdf: 'dictionary'
+INFO:__main__:📄 [4/57] Gladiator - Draft.pdf
+INFO:__main__:🔄 Processando: Gladiator - Draft.pdf
+ERROR:__main__:Erro processando Gladiator - Draft.pdf: 'dictionary'
+INFO:__main__:📄 [5/57] Apocalypse Now - Screenplay.pdf
+INFO:__main__:🔄 Processando: Apocalypse Now - Screenplay.pdf
+ERROR:__main__:Erro processando Apocalypse Now - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [6/57] Psycho - Draft - Dec 1 1959.pdf
+INFO:__main__:🔄 Processando: Psycho - Draft - Dec 1 1959.pdf
+ERROR:__main__:Erro processando Psycho - Draft - Dec 1 1959.pdf: 'dictionary'
+INFO:__main__:📄 [7/57] The Shawshank Redemption - Screenplay.pdf
+INFO:__main__:🔄 Processando: The Shawshank Redemption - Screenplay.pdf
+ERROR:__main__:Erro processando The Shawshank Redemption - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [8/57] Chinatown - Screenplay.pdf
+INFO:__main__:🔄 Processando: Chinatown - Screenplay.pdf
+ERROR:__main__:Erro processando Chinatown - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [9/57] Raiders of the Lost Ark - Screenplay.pdf
+INFO:__main__:🔄 Processando: Raiders of the Lost Ark - Screenplay.pdf
+ERROR:__main__:Erro processando Raiders of the Lost Ark - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [10/57] The Godfather Part II - Draft.pdf
+INFO:__main__:🔄 Processando: The Godfather Part II - Draft.pdf
+ERROR:__main__:Erro processando The Godfather Part II - Draft.pdf: 'dictionary'
+INFO:__main__:📄 [11/57] The Shining - Screenplay.pdf
+INFO:__main__:🔄 Processando: The Shining - Screenplay.pdf
+ERROR:__main__:Erro processando The Shining - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [12/57] Alien - Screenplay-ocr.pdf
+INFO:__main__:🔄 Processando: Alien - Screenplay-ocr.pdf
+ERROR:__main__:Erro processando Alien - Screenplay-ocr.pdf: 'dictionary'
+INFO:__main__:📄 [13/57] Memento - Screenplay.pdf
+INFO:__main__:🔄 Processando: Memento - Screenplay.pdf
+ERROR:__main__:Erro processando Memento - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [14/57] Forrest Gump - First Draft - Dec 18 1992-ocr.pdf
+INFO:__main__:🔄 Processando: Forrest Gump - First Draft - Dec 18 1992-ocr.pdf
+ERROR:__main__:Erro processando Forrest Gump - First Draft - Dec 18 1992-ocr.pdf: 'dictionary'
+INFO:__main__:📄 [15/57] Whiplash - Release.pdf
+INFO:__main__:🔄 Processando: Whiplash - Release.pdf
+ERROR:__main__:Erro processando Whiplash - Release.pdf: 'dictionary'
+INFO:__main__:📄 [16/57] Interstellar - Screenplay.pdf
+INFO:__main__:🔄 Processando: Interstellar - Screenplay.pdf
+ERROR:__main__:Erro processando Interstellar - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [17/57] American History X - Release.pdf
+INFO:__main__:🔄 Processando: American History X - Release.pdf
+ERROR:__main__:Erro processando American History X - Release.pdf: 'dictionary'
+INFO:__main__:📄 [18/57] Django Unchained - Screenplay.pdf
+INFO:__main__:🔄 Processando: Django Unchained - Screenplay.pdf
+ERROR:__main__:Erro processando Django Unchained - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [19/57] Psycho - Screenplay.pdf
+INFO:__main__:🔄 Processando: Psycho - Screenplay.pdf
+ERROR:__main__:Erro processando Psycho - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [20/57] The Dark Knight - Release.pdf
+INFO:__main__:🔄 Processando: The Dark Knight - Release.pdf
+ERROR:__main__:Erro processando The Dark Knight - Release.pdf: 'dictionary'
+INFO:__main__:📄 [21/57] Interstellar - Draft.pdf
+INFO:__main__:🔄 Processando: Interstellar - Draft.pdf
+ERROR:__main__:Erro processando Interstellar - Draft.pdf: 'dictionary'
+INFO:__main__:📄 [22/57] Inception - Screenplay.pdf
+INFO:__main__:🔄 Processando: Inception - Screenplay.pdf
+ERROR:__main__:Erro processando Inception - Screenplay.pdf: 'dictionary'
+INFO:__main__:📄 [23/57] Pulp Fiction - Release.pdf
+INFO:__main__:🔄 Processando: Pulp Fiction - Release.pdf
+ERROR:__main__:Erro processando Pulp Fiction - Release.pdf: 'dictionary'
+INFO:__main__:📄 [24/57] Alien - Screenplay.pdf
+INFO:__main__:🔄 Processando: Alien - Screenplay.pdf
+INFO:__main__:📄 [25/57] Gladiator - Screenplay.pdf
+INFO:__main__:🔄 Processando: Gladiator - Screenplay.pdf

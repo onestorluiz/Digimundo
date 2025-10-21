@@ -1,0 +1,618 @@
+{
+  "version": "1.0",
+  "created_at": "2025-10-12T19:46:33.386174",
+  "last_update": "2025-10-12T21:21:28.455836",
+  "total_analyses": 43,
+  "total_time_seconds": 3595.762697458267,
+  "total_successes": 43,
+  "total_failures": 0,
+  "by_specialist": {
+    "character": {
+      "count": 17,
+      "total_time": 3585.3705263137817,
+      "successes": 17,
+      "failures": 0,
+      "avg_quality": 5.117647058823529,
+      "quality_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        7.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    "structure": {
+      "count": 13,
+      "total_time": 1.2838749885559082,
+      "successes": 13,
+      "failures": 0,
+      "avg_quality": 0.0,
+      "quality_scores": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "theme": {
+      "count": 13,
+      "total_time": 9.108296155929565,
+      "successes": 13,
+      "failures": 0,
+      "avg_quality": 0.0,
+      "quality_scores": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "by_author": {
+    "mckee": {
+      "count": 5,
+      "total_time": 376.6409568786621,
+      "successes": 5,
+      "failures": 0
+    },
+    "field": {
+      "count": 5,
+      "total_time": 373.34153985977173,
+      "successes": 5,
+      "failures": 0
+    },
+    "truby": {
+      "count": 3,
+      "total_time": 131.73165202140808,
+      "successes": 3,
+      "failures": 0
+    },
+    "campbell": {
+      "count": 3,
+      "total_time": 109.86504364013672,
+      "successes": 3,
+      "failures": 0
+    },
+    "vogler": {
+      "count": 3,
+      "total_time": 160.64629077911377,
+      "successes": 3,
+      "failures": 0
+    },
+    "seger": {
+      "count": 3,
+      "total_time": 250.54546189308167,
+      "successes": 3,
+      "failures": 0
+    },
+    "snyder": {
+      "count": 3,
+      "total_time": 238.39271426200867,
+      "successes": 3,
+      "failures": 0
+    },
+    "egri": {
+      "count": 3,
+      "total_time": 323.41380405426025,
+      "successes": 3,
+      "failures": 0
+    },
+    "weiland": {
+      "count": 3,
+      "total_time": 339.9583103656769,
+      "successes": 3,
+      "failures": 0
+    },
+    "aristotle": {
+      "count": 3,
+      "total_time": 349.51646542549133,
+      "successes": 3,
+      "failures": 0
+    },
+    "cowgill": {
+      "count": 3,
+      "total_time": 322.5631890296936,
+      "successes": 3,
+      "failures": 0
+    },
+    "mckee_character": {
+      "count": 3,
+      "total_time": 313.2381684780121,
+      "successes": 3,
+      "failures": 0
+    },
+    "mckee_dialogue": {
+      "count": 3,
+      "total_time": 305.9091007709503,
+      "successes": 3,
+      "failures": 0
+    }
+  },
+  "by_model": {
+    "scripturemon-optimized": {
+      "count": 43,
+      "total_time": 3595.762697458267,
+      "total_cost": 0.0
+    }
+  },
+  "screenplays_analyzed": [
+    "Te Encontro em Mim "
+  ],
+  "analysis_history": [
+    {
+      "timestamp": "2025-10-12T19:48:44.026788",
+      "specialist": "character",
+      "author": "mckee",
+      "model": "scripturemon-optimized",
+      "time_seconds": 130.50535106658936,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T19:50:35.584219",
+      "specialist": "character",
+      "author": "field",
+      "model": "scripturemon-optimized",
+      "time_seconds": 111.5558488368988,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T19:57:26.868874",
+      "specialist": "character",
+      "author": "mckee",
+      "model": "scripturemon-optimized",
+      "time_seconds": 110.78747987747192,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T19:59:25.469957",
+      "specialist": "character",
+      "author": "field",
+      "model": "scripturemon-optimized",
+      "time_seconds": 118.59980511665344,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T20:31:38.673318",
+      "specialist": "character",
+      "author": "mckee",
+      "model": "scripturemon-optimized",
+      "time_seconds": 135.00227308273315,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T20:34:01.673167",
+      "specialist": "character",
+      "author": "field",
+      "model": "scripturemon-optimized",
+      "time_seconds": 142.99816393852234,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T20:36:13.239405",
+      "specialist": "character",
+      "author": "truby",
+      "model": "scripturemon-optimized",
+      "time_seconds": 131.56441617012024,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T20:38:02.931581",
+      "specialist": "character",
+      "author": "campbell",
+      "model": "scripturemon-optimized",
+      "time_seconds": 109.69023108482361,
+      "success": true,
+      "quality_score": 7.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T20:40:43.412060",
+      "specialist": "character",
+      "author": "vogler",
+      "model": "scripturemon-optimized",
+      "time_seconds": 160.47829604148865,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T20:44:53.787328",
+      "specialist": "character",
+      "author": "seger",
+      "model": "scripturemon-optimized",
+      "time_seconds": 250.37308073043823,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T20:48:52.015697",
+      "specialist": "character",
+      "author": "snyder",
+      "model": "scripturemon-optimized",
+      "time_seconds": 238.22556900978088,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T20:54:15.258423",
+      "specialist": "character",
+      "author": "egri",
+      "model": "scripturemon-optimized",
+      "time_seconds": 323.2395751476288,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T20:59:55.051783",
+      "specialist": "character",
+      "author": "weiland",
+      "model": "scripturemon-optimized",
+      "time_seconds": 339.79008316993713,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:05:42.300644",
+      "specialist": "character",
+      "author": "aristotle",
+      "model": "scripturemon-optimized",
+      "time_seconds": 347.2455770969391,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:11:02.593986",
+      "specialist": "character",
+      "author": "cowgill",
+      "model": "scripturemon-optimized",
+      "time_seconds": 320.28968715667725,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:16:14.166356",
+      "specialist": "character",
+      "author": "mckee_character",
+      "model": "scripturemon-optimized",
+      "time_seconds": 311.5704848766327,
+      "success": true,
+      "quality_score": 5.0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:17.660505",
+      "specialist": "character",
+      "author": "mckee_dialogue",
+      "model": "scripturemon-optimized",
+      "time_seconds": 303.45460391044617,
+      "success": true,
+      "quality_score": 5.0,,
+      "author": "egri",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 181.7018620967865,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:17.835930",
+      "specialist": "character",
+      "author": "weiland",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.1748180389404297,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:17.916459",
+      "specialist": "character",
+      "author": "aristotle",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.07950210571289062,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:18.000507",
+      "specialist": "character",
+      "author": "cowgill",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08294510841369629,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:18.288811",
+      "specialist": "character",
+      "author": "mckee_character",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.28684520721435547,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:18.374292",
+      "specialist": "character",
+      "author": "mckee_dialogue",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08439922332763672,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:18.556398",
+      "specialist": "structure",
+      "author": "mckee",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.0879061222076416,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:18.642194",
+      "specialist": "structure",
+      "author": "field",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08476471900939941,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:18.727862",
+      "specialist": "structure",
+      "author": "truby",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08467316627502441,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:18.816221",
+      "specialist": "structure",
+      "author": "campbell",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08737301826477051,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:18.899817",
+      "specialist": "structure",
+      "author": "vogler",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.0826101303100586,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:18.984786",
+      "specialist": "structure",
+      "author": "seger",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08393406867980957,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.068276",
+      "specialist": "structure",
+      "author": "snyder",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08260798454284668,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.154795",
+      "specialist": "structure",
+      "author": "egri",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.0856630802154541,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.239142",
+      "specialist": "structure",
+      "author": "weiland",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08332586288452148,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.322919",
+      "specialist": "structure",
+      "author": "aristotle",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08281612396240234,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.407436",
+      "specialist": "structure",
+      "author": "cowgill",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08352899551391602,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.492063",
+      "specialist": "structure",
+      "author": "mckee_character",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.0835881233215332,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.576353",
+      "specialist": "structure",
+      "author": "mckee_dialogue",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08324503898620605,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.755860",
+      "specialist": "theme",
+      "author": "mckee",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.09312605857849121,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.847286",
+      "specialist": "theme",
+      "author": "field",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.09032225608825684,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:19.935368",
+      "specialist": "theme",
+      "author": "truby",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08706188201904297,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:20.025637",
+      "specialist": "theme",
+      "author": "campbell",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08930778503417969,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:20.112895",
+      "specialist": "theme",
+      "author": "vogler",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 0.08619189262390137,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:22.301326",
+      "specialist": "theme",
+      "author": "seger",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 2.1873390674591064,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:24.492941",
+      "specialist": "theme",
+      "author": "snyder",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 2.1903538703918457,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:26.079214",
+      "specialist": "theme",
+      "author": "egri",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 1.5821571350097656,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    },
+    {
+      "timestamp": "2025-10-12T21:21:28.455694",
+      "specialist": "theme",
+      "author": "weiland",
+      "model": "scripturemon-no-hallucination",
+      "time_seconds": 2.3709769248962402,
+      "success": true,
+      "quality_score": 0,
+      "screenplay": "Te Encontro em Mim "
+    }
+  ]
+}

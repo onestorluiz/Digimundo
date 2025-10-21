@@ -1,0 +1,1 @@
+# Código para inserir saberes no núcleo

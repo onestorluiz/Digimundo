@@ -1,0 +1,1 @@
+# Todas as chaves API unificadas

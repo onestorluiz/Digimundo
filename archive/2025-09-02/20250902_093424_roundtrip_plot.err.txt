@@ -1,0 +1,2 @@
+/Users/clubproducoes/Digimundo/scripturemon-validation/scripts/plot_roundtrip.py:47: MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9; support for the old name will be dropped in 3.11.
+  ax.boxplot(data, labels=[str(g) for g in order], showmeans=True)
