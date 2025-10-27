@@ -119,14 +119,16 @@
     }
   ],
   "system_state": {
-    "last_sync": "2025-10-09T06:30:00Z",
+    "last_sync": "2025-10-27T14:00:00Z",
     "harmony_score": 95,
-    "genjutsu_active": true,
+    "genjutsu_active": false,
     "behavioral_compliance": 100,
     "memory_integrity": "verified",
-    "git_status": "synchronized",
+    "git_status": "ready_to_commit",
     "systems_versioned": true,
-    "knowledge_count": 26,
-    "memories_count": 18
+    "knowledge_count": 27,
+    "memories_count": 19,
+    "cineprod_integrated": true,
+    "integration_plan": "3_systems_becoming_1"
   }
 }
