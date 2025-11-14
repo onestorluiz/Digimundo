@@ -1,0 +1,4053 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineProd v1.0 - Sistema de Gestão Cinematográfica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <!-- Bibliotecas Externas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        /* ==================== DIGIMON WORLD 3 THEME ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Digimon Colors */
+            --bg-dark: #0a1428;
+            --bg-darker: #05070f;
+            --neon-blue: #4a9fff;
+            --neon-blue-dark: #3a7fcf;
+            --text-yellow: #ffdd00;
+            --text-cyan: #00ddff;
+            --text-white: #e8f4ff;
+            --text-gray: #7a9cc6;
+            --window-bg: rgba(10, 30, 60, 0.85);
+            --window-border: #3a7fcf;
+            --stat-red: #ff4757;
+            --stat-blue: #3742fa;
+            --stat-gold: #ffa502;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+
+            /* Grid */
+            --grid-color: rgba(74, 159, 255, 0.15);
+            --grid-size: 30px;
+        }
+
+        @keyframes grid-scroll {
+            0% { background-position: 0 0; }
+            100% { background-position: var(--grid-size) var(--grid-size); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 1.5px var(--neon-blue)); }
+            50% { filter: drop-shadow(0 0 4px var(--neon-blue)); }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: var(--bg-dark);
+            color: var(--text-white);
+            line-height: 1.8;
+            font-size: 8px;
+            overflow-x: hidden;
+        }
+
+        /* Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(0deg, transparent 24%, var(--grid-color) 25%, var(--grid-color) 26%, transparent 27%, transparent 74%, var(--grid-color) 75%, var(--grid-color) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, var(--grid-color) 25%, var(--grid-color) 26%, transparent 27%, transparent 74%, var(--grid-color) 75%, var(--grid-color) 76%, transparent 77%, transparent);
+            background-size: var(--grid-size) var(--grid-size);
+            animation: grid-scroll 8s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Scanlines */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 2px,
+                rgba(0, 0, 0, 0.1) 4px
+            );
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ==================== WINDOW COMPONENT ==================== */
+        .window {
+            background: var(--window-bg);
+            border: 3px solid var(--window-border);
+            border-radius: 8px;
+            position: relative;
+            backdrop-filter: blur(5px);
+            box-shadow:
+                0 0 10px rgba(74, 159, 255, 0.3),
+                inset 0 0 10px rgba(74, 159, 255, 0.1);
+        }
+
+        .window::before,
+        .window::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid var(--neon-blue);
+        }
+
+        .window::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .window::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .window-title {
+            font-size: 10px;
+            color: var(--text-yellow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 2px rgba(255, 221, 0, 0.5);
+        }
+
+        /* ==================== LOGIN PAGE ==================== */
+        #loginPage {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .login-window {
+            padding: 30px;
+        }
+
+        .logo-retro {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--neon-blue) 0%, var(--text-cyan) 100%);
+            border: 3px solid var(--text-yellow);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .system-title {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-cyan);
+            margin-bottom: 8px;
+            text-shadow: 0 0 2px rgba(0, 221, 255, 0.5);
+        }
+
+        .system-subtitle {
+            text-align: center;
+            font-size: 7px;
+            color: var(--text-gray);
+            margin-bottom: 30px;
+        }
+
+        /* ==================== FORMS ==================== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 8px;
+            color: var(--text-cyan);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 20, 40, 0.6);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+            color: var(--text-white);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 7.5px rgba(74, 159, 255, 0.5);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.6;
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .btn {
+            padding: 12px 20px;
+            background: var(--neon-blue);
+            color: var(--text-white);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 var(--neon-blue-dark);
+            position: relative;
+            top: 0;
+        }
+
+        .btn:hover {
+            background: var(--text-cyan);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px var(--text-cyan);
+            top: 2px;
+        }
+
+        .btn:active {
+            top: 4px;
+            box-shadow: 0 0 5px var(--text-cyan);
+        }
+
+        .btn-success {
+            background: var(--success);
+            border-color: #059669;
+            box-shadow: 0 4px 0 #059669;
+        }
+
+        .btn-success:hover {
+            background: #10b981;
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            border-color: #dc2626;
+            box-shadow: 0 4px 0 #dc2626;
+        }
+
+        .btn-danger:hover {
+            background: #ef4444;
+            box-shadow: 0 0 10px var(--danger);
+        }
+
+        .btn-secondary {
+            background: var(--text-gray);
+            border-color: #5a7c9e;
+            box-shadow: 0 4px 0 #5a7c9e;
+        }
+
+        .btn-secondary:hover {
+            background: #8aacce;
+            box-shadow: 0 0 10px var(--text-gray);
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 7px;
+            box-shadow: 0 2px 0 var(--neon-blue-dark);
+        }
+
+        .w-full { width: 100%; }
+
+        /* ==================== MAIN APP ==================== */
+        #mainApp {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            width: 280px;
+            background: rgba(5, 15, 30, 0.95);
+            border-right: 3px solid var(--window-border);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            overflow-y: auto;
+            box-shadow: 0 0 15px rgba(74, 159, 255, 0.3);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 2px solid var(--window-border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sidebar-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--neon-blue) 0%, var(--text-cyan) 100%);
+            border: 2px solid var(--text-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .sidebar-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: var(--text-cyan);
+            text-shadow: 0 0 2px rgba(0, 221, 255, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .menu-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            margin: 5px 0;
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .menu-item:hover {
+            background: rgba(74, 159, 255, 0.1);
+            border-color: var(--neon-blue);
+            color: var(--text-cyan);
+            box-shadow: 0 0 7.5px rgba(74, 159, 255, 0.3);
+        }
+
+        .menu-item.active {
+            background: rgba(74, 159, 255, 0.2);
+            border-color: var(--neon-blue);
+            color: var(--text-yellow);
+            box-shadow: 0 0 10px rgba(74, 159, 255, 0.5);
+        }
+
+        .menu-icon {
+            font-size: 16px;
+            filter: drop-shadow(0 0 1.5px currentColor);
+        }
+
+        /* ==================== HEADER ==================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            height: 80px;
+            background: rgba(5, 15, 30, 0.95);
+            border-bottom: 3px solid var(--window-border);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 999;
+            box-shadow: 0 0 15px rgba(74, 159, 255, 0.3);
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .search-container input {
+            width: 100%;
+            background: rgba(0, 20, 40, 0.6);
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-content {
+            margin-left: 280px;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+            padding: 30px;
+        }
+
+        /* ==================== CARDS ==================== */
+        .card {
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--neon-blue-dark);
+        }
+
+        .card-title {
+            font-size: 12px;
+            color: var(--text-yellow);
+            text-transform: uppercase;
+            text-shadow: 0 0 2px rgba(255, 221, 0, 0.5);
+        }
+
+        /* ==================== STATS ==================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 7px;
+            color: var(--text-cyan);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            text-shadow: 0 0 1px rgba(0, 221, 255, 0.3);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            color: var(--text-yellow);
+            text-shadow: 0 0 3px rgba(255, 221, 0, 0.6);
+        }
+
+        /* ==================== TABLE ==================== */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: rgba(74, 159, 255, 0.1);
+            padding: 15px;
+            text-align: left;
+            font-size: 7px;
+            color: var(--text-cyan);
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--neon-blue);
+        }
+
+        tbody td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(74, 159, 255, 0.2);
+            font-size: 7px;
+            color: var(--text-white);
+        }
+
+        tbody tr:hover {
+            background: rgba(74, 159, 255, 0.1);
+        }
+
+        /* ==================== MODAL ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid var(--neon-blue-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 10px;
+            color: var(--text-yellow);
+            text-shadow: 0 0 2px rgba(255, 221, 0, 0.5);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-cyan);
+            font-size: 24px;
+            cursor: pointer;
+            font-family: 'Press Start 2P', cursive;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-yellow);
+            text-shadow: 0 0 3px rgba(255, 221, 0, 0.6);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 2px solid var(--neon-blue-dark);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        /* ==================== BADGES ==================== */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 7px;
+            font-weight: normal;
+            border: 2px solid;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+            border-color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .badge-info {
+            background: rgba(0, 221, 255, 0.2);
+            color: var(--text-cyan);
+            border-color: var(--text-cyan);
+        }
+
+        /* ==================== ACTIONS ==================== */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* ==================== GRID ==================== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-item {
+            padding: 20px;
+        }
+
+        .grid-item-title {
+            font-size: 9px;
+            color: var(--text-cyan);
+            margin-bottom: 15px;
+            text-shadow: 0 0 1px rgba(0, 221, 255, 0.3);
+        }
+
+        .grid-item-content {
+            font-size: 7px;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* ==================== SEARCH BAR ==================== */
+        .search-bar {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-cyan);
+            font-size: 12px;
+        }
+
+        .search-bar input {
+            padding-left: 40px;
+        }
+
+        /* ==================== INFO BOX ==================== */
+        .info-box {
+            background: rgba(74, 159, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .info-box small {
+            font-size: 7px;
+            color: var(--text-gray);
+        }
+
+        /* ==================== PROJECT LIST ==================== */
+        .project-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(74, 159, 255, 0.2);
+        }
+
+        .project-item:last-child {
+            border-bottom: none;
+        }
+
+        .project-name {
+            font-size: 8px;
+            color: var(--text-cyan);
+            margin-bottom: 5px;
+            text-shadow: 0 0 1px rgba(0, 221, 255, 0.3);
+        }
+
+        .project-meta {
+            font-size: 6px;
+            color: var(--text-gray);
+        }
+
+        /* ==================== SCROLLBAR ==================== */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-blue-dark);
+            border: 2px solid var(--bg-darker);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-blue);
+        }
+
+        /* ==================== UPLOAD AREA ==================== */
+        .upload-area {
+            border: 3px dashed var(--neon-blue-dark);
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: rgba(0, 20, 40, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--neon-blue);
+            background: rgba(74, 159, 255, 0.1);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--text-cyan);
+            background: rgba(0, 221, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0, 20, 40, 0.3);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .file-item:hover {
+            border-color: var(--neon-blue);
+            background: rgba(74, 159, 255, 0.1);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon {
+            font-size: 24px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ==================== CALENDAR ==================== */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 20, 40, 0.3);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+        }
+
+        .calendar-month {
+            font-size: 12px;
+            color: var(--text-yellow);
+            text-transform: uppercase;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day-header {
+            padding: 10px;
+            text-align: center;
+            font-size: 7px;
+            color: var(--text-cyan);
+            text-transform: uppercase;
+            background: rgba(0, 20, 40, 0.3);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+        }
+
+        .calendar-day {
+            padding: 10px;
+            min-height: 60px;
+            text-align: center;
+            font-size: 8px;
+            background: rgba(0, 20, 40, 0.2);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            border-color: var(--neon-blue);
+            background: rgba(74, 159, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+            border-color: transparent;
+            cursor: default;
+        }
+
+        .calendar-day.empty:hover {
+            transform: none;
+        }
+
+        .calendar-day.today {
+            border-color: var(--text-yellow);
+            background: rgba(255, 221, 0, 0.1);
+        }
+
+        .calendar-day-number {
+            color: var(--text-white);
+            margin-bottom: 5px;
+        }
+
+        .calendar-day.today .calendar-day-number {
+            color: var(--text-yellow);
+            font-weight: bold;
+        }
+
+        .event-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .event-list {
+            margin-top: 20px;
+        }
+
+        .event-item {
+            padding: 15px;
+            background: rgba(0, 20, 40, 0.3);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .event-item:hover {
+            border-color: var(--neon-blue);
+            background: rgba(74, 159, 255, 0.1);
+        }
+
+        .event-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .event-title {
+            font-size: 9px;
+            color: var(--text-cyan);
+        }
+
+        .event-meta {
+            font-size: 6px;
+            color: var(--text-gray);
+        }
+
+        /* ==================== REPORTS & TABS ==================== */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--neon-blue-dark);
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 10px 15px;
+            background: rgba(0, 20, 40, 0.3);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px 4px 0 0;
+            color: var(--text-cyan);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 7px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            border-color: var(--neon-blue);
+            background: rgba(74, 159, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tab.active {
+            background: var(--neon-blue);
+            color: var(--bg-dark);
+            border-color: var(--neon-blue);
+        }
+
+        .report-section {
+            padding: 20px;
+        }
+
+        .report-section h3 {
+            color: var(--text-yellow);
+            font-size: 12px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 2px rgba(255, 221, 0, 0.5);
+        }
+
+        .report-section h4 {
+            color: var(--text-cyan);
+            font-size: 9px;
+            margin: 20px 0 10px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            padding: 15px;
+            background: rgba(0, 20, 40, 0.3);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-box-value {
+            font-size: 16px;
+            color: var(--text-yellow);
+            margin-bottom: 8px;
+            text-shadow: 0 0 2px rgba(255, 221, 0, 0.5);
+        }
+
+        .stat-box-label {
+            font-size: 6px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+        }
+
+        .chart-container {
+            background: rgba(0, 20, 40, 0.3);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .report-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .report-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(74, 159, 255, 0.2);
+            font-size: 8px;
+            color: var(--text-white);
+        }
+
+        .report-list li strong {
+            color: var(--text-cyan);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .progress-bar-container {
+            background: rgba(0, 20, 40, 0.5);
+            border: 2px solid var(--neon-blue-dark);
+            border-radius: 4px;
+            height: 30px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--text-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: var(--bg-dark);
+            font-weight: bold;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(74, 159, 255, 0.5);
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            body {
+                font-size: 7px;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 3px solid var(--window-border);
+            }
+
+            .header {
+                left: 0;
+                height: auto;
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-top: 0;
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage">
+        <div class="login-container">
+            <div class="window login-window">
+                <div style="text-align: center;">
+                    <div class="logo-retro">🎬</div>
+                    <h1 class="system-title">CINEPROD v1.0</h1>
+                    <p class="system-subtitle">Sistema de Gestao Cinematografica</p>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" required value="admin@cinepro.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="password" id="loginPassword" required value="admin123">
+                    </div>
+                    <button type="submit" class="btn w-full">Entrar</button>
+                </form>
+
+                <div class="info-box">
+                    <small>DEMO: admin@cinepro.com / admin123</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">🎬</div>
+                <span class="sidebar-title">CINEPROD</span>
+            </div>
+
+            <nav style="padding: 15px;" id="sidebarMenu"></nav>
+        </aside>
+
+        <div class="main-content">
+            <header class="header">
+                <div class="search-container">
+                    <input type="text" placeholder="🔍 BUSCAR..." style="width: 100%;">
+                </div>
+
+                <div>
+                    <button onclick="logout()" class="btn btn-sm btn-secondary">SAIR</button>
+                </div>
+            </header>
+
+            <div id="contentArea"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="window modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Titulo</h3>
+                <button onclick="closeModal()" class="modal-close">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== ESTADO DA APLICAÇÃO ====================
+        let appState = {
+            currentUser: null,
+            activeModule: 'dashboard',
+
+            // Dados
+            projects: [],
+            crew: [],
+            equipment: [],
+            locations: [],
+            documents: [],
+            callSheets: [],
+            scripts: [],
+            budget: [],
+            schedule: [],
+
+            // Contadores para IDs
+            nextId: {
+                project: 1,
+                crew: 1,
+                equipment: 1,
+                location: 1,
+                document: 1,
+                callSheet: 1,
+                script: 1,
+                budget: 1,
+                schedule: 1
+            }
+        };
+
+        // ==================== MENU ITEMS ====================
+        const menuItems = [
+            { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
+            { id: 'projects', label: 'Projetos', icon: '🎬' },
+            { id: 'crew', label: 'Equipe', icon: '👥' },
+            { id: 'equipment', label: 'Equipamentos', icon: '📷' },
+            { id: 'locations', label: 'Locacoes', icon: '📍' },
+            { id: 'callSheets', label: 'Call Sheets', icon: '📋' },
+            { id: 'scripts', label: 'Roteiros', icon: '📄' },
+            { id: 'schedule', label: 'Cronograma', icon: '📅' },
+            { id: 'budget', label: 'Orcamento', icon: '💰' },
+            { id: 'documents', label: 'Documentos', icon: '📁' },
+            { id: 'reports', label: 'Relatorios', icon: '📊' }
+        ];
+
+        // ==================== INICIALIZAÇÃO ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFromLocalStorage();
+            setupEventListeners();
+            renderSidebarMenu();
+
+            // Dados de exemplo se não houver dados salvos
+            if (appState.projects.length === 0) {
+                initializeSampleData();
+            }
+        });
+
+        function setupEventListeners() {
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (email === 'admin@cinepro.com' && password === 'admin123') {
+                appState.currentUser = { name: 'Admin', email: email };
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                loadModule('dashboard');
+            } else {
+                alert('Credenciais inválidas!');
+            }
+        }
+
+        function logout() {
+            saveToLocalStorage();
+            location.reload();
+        }
+
+        // ==================== ARMAZENAMENTO LOCAL ====================
+        function saveToLocalStorage() {
+            localStorage.setItem('cineproData', JSON.stringify(appState));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('cineproData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.assign(appState, data);
+            }
+        }
+
+        // ==================== FUNÇÕES UTILITÁRIAS ====================
+        function generateId(prefix) {
+            return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        }
+
+        function formatCurrency(value) {
+            if (!value && value !== 0) return 'R$ 0,00';
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        function formatDate(date) {
+            if (!date) return '';
+            return new Date(date).toLocaleDateString('pt-BR');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function getFileIcon(type) {
+            if (!type) return '📎';
+            if (type.includes('pdf')) return '📄';
+            if (type.includes('image')) return '🖼️';
+            if (type.includes('video')) return '🎥';
+            if (type.includes('audio')) return '🎵';
+            if (type.includes('text')) return '📝';
+            if (type.includes('spreadsheet') || type.includes('excel')) return '📊';
+            if (type.includes('presentation') || type.includes('powerpoint')) return '📽️';
+            if (type.includes('word')) return '📃';
+            return '📎';
+        }
+
+        // ==================== SISTEMA DE NOTIFICAÇÕES ====================
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = 'notification window';
+
+            // Cores por tipo
+            const colors = {
+                success: { bg: 'rgba(16, 185, 129, 0.2)', border: '#10b981', icon: '✅' },
+                error: { bg: 'rgba(239, 68, 68, 0.2)', border: '#ef4444', icon: '❌' },
+                warning: { bg: 'rgba(245, 158, 11, 0.2)', border: '#f59e0b', icon: '⚠️' },
+                info: { bg: 'rgba(74, 159, 255, 0.2)', border: '#4a9fff', icon: 'ℹ️' }
+            };
+
+            const color = colors[type] || colors.info;
+
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: ${color.bg};
+                border-color: ${color.border};
+                padding: 15px 20px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                min-width: 250px;
+                max-width: 400px;
+            `;
+
+            notification.innerHTML = `
+                <span style="font-size: 16px;">${color.icon}</span>
+                <span style="font-size: 7px; color: var(--text-white); line-height: 1.4;">${message}</span>
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // ==================== DADOS DE EXEMPLO ====================
+        function initializeSampleData() {
+            appState.projects = [
+                {
+                    id: 'proj_1',
+                    name: 'Eclipse - O Filme',
+                    type: 'Longa-metragem',
+                    status: 'Em Produção',
+                    director: 'Sofia Luz',
+                    producer: 'Marcus Terra',
+                    budget: 5000000,
+                    startDate: '2024-01-10',
+                    endDate: '2024-04-15',
+                    description: 'Um épico de ficção científica'
+                },
+                {
+                    id: 'proj_2',
+                    name: 'Urban Shadows',
+                    type: 'Série TV',
+                    status: 'Pré-Produção',
+                    director: 'Alex Rivers',
+                    producer: 'Marcus Terra',
+                    budget: 8000000,
+                    startDate: '2024-02-01',
+                    endDate: '2024-06-30',
+                    description: 'Série dramática urbana'
+                }
+            ];
+
+            appState.crew = [
+                {
+                    id: 'crew_1',
+                    name: 'Sofia Luz',
+                    role: 'Diretora',
+                    department: 'Direção',
+                    email: 'sofia@cinepro.com',
+                    phone: '(11) 98765-4321',
+                    project: 'Eclipse - O Filme',
+                    dailyRate: 5000,
+                    status: 'Ativo'
+                },
+                {
+                    id: 'crew_2',
+                    name: 'Marcus Terra',
+                    role: 'Produtor',
+                    department: 'Produção',
+                    email: 'marcus@cinepro.com',
+                    phone: '(11) 98765-4322',
+                    project: 'Eclipse - O Filme',
+                    dailyRate: 4500,
+                    status: 'Ativo'
+                }
+            ];
+
+            appState.equipment = [
+                {
+                    id: 'eq_1',
+                    name: 'ARRI Alexa Mini LF',
+                    category: 'Câmera',
+                    brand: 'ARRI',
+                    model: 'Alexa Mini LF',
+                    serialNumber: 'AML-12345',
+                    status: 'Disponível',
+                    dailyRate: 2500,
+                    location: 'Armazém A'
+                }
+            ];
+
+            appState.locations = [
+                {
+                    id: 'loc_1',
+                    name: 'Estúdio CineProd A',
+                    type: 'Estúdio',
+                    address: 'Rua das Câmeras, 100, São Paulo',
+                    capacity: 200,
+                    dailyRate: 5000,
+                    status: 'Disponível',
+                    contact: 'João Silva - (11) 3456-7890'
+                }
+            ];
+
+            saveToLocalStorage();
+        }
+
+        // ==================== RENDERIZAÇÃO DO MENU ====================
+        function renderSidebarMenu() {
+            const menuContainer = document.getElementById('sidebarMenu');
+            menuContainer.innerHTML = '';
+
+            menuItems.forEach(item => {
+                const button = document.createElement('button');
+                button.className = `menu-item ${appState.activeModule === item.id ? 'active' : ''}`;
+                button.onclick = () => loadModule(item.id);
+                button.innerHTML = `
+                    <span class="menu-icon">${item.icon}</span>
+                    <span>${item.label}</span>
+                `;
+                menuContainer.appendChild(button);
+            });
+        }
+
+        // ==================== CARREGAMENTO DE MÓDULOS ====================
+        function loadModule(moduleId) {
+            appState.activeModule = moduleId;
+            renderSidebarMenu();
+
+            const contentArea = document.getElementById('contentArea');
+
+            switch(moduleId) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'projects':
+                    loadProjects();
+                    break;
+                case 'crew':
+                    loadCrew();
+                    break;
+                case 'equipment':
+                    loadEquipment();
+                    break;
+                case 'locations':
+                    loadLocations();
+                    break;
+                case 'callSheets':
+                    loadCallSheets();
+                    break;
+                case 'scripts':
+                    loadScripts();
+                    break;
+                case 'schedule':
+                    loadSchedule();
+                    break;
+                case 'budget':
+                    loadBudget();
+                    break;
+                case 'documents':
+                    loadDocuments();
+                    break;
+                case 'reports':
+                    loadReports();
+                    break;
+                default:
+                    contentArea.innerHTML = '<div class="card window"><h2>Módulo em desenvolvimento</h2></div>';
+            }
+        }
+
+        // ==================== DASHBOARD ====================
+        function loadDashboard() {
+            const content = document.getElementById('contentArea');
+
+            // Calcular total do orçamento
+            const totalBudget = appState.budget.reduce((sum, item) => {
+                const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                return sum + total;
+            }, 0);
+
+            content.innerHTML = `
+                <h1 class="window-title" style="font-size: 16px; margin-bottom: 30px;">DASHBOARD</h1>
+
+                <div class="stats-grid">
+                    <div class="window stat-card">
+                        <h3 class="stat-label">Projetos Ativos</h3>
+                        <p class="stat-value">${appState.projects.length}</p>
+                    </div>
+                    <div class="window stat-card">
+                        <h3 class="stat-label">Equipe Total</h3>
+                        <p class="stat-value">${appState.crew.length}</p>
+                    </div>
+                    <div class="window stat-card">
+                        <h3 class="stat-label">Equipamentos</h3>
+                        <p class="stat-value">${appState.equipment.length}</p>
+                    </div>
+                    <div class="window stat-card">
+                        <h3 class="stat-label">Locacoes</h3>
+                        <p class="stat-value">${appState.locations.length}</p>
+                    </div>
+                    <div class="window stat-card">
+                        <h3 class="stat-label">Roteiros</h3>
+                        <p class="stat-value">${appState.scripts.length}</p>
+                    </div>
+                    <div class="window stat-card">
+                        <h3 class="stat-label">Call Sheets</h3>
+                        <p class="stat-value">${appState.callSheets.length}</p>
+                    </div>
+                    <div class="window stat-card">
+                        <h3 class="stat-label">Documentos</h3>
+                        <p class="stat-value">${appState.documents.length}</p>
+                    </div>
+                    <div class="window stat-card">
+                        <h3 class="stat-label">Orcamento Total</h3>
+                        <p class="stat-value" style="font-size: 16px;">${formatCurrency(totalBudget)}</p>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="window grid-item">
+                        <h3 class="grid-item-title">Projetos Recentes</h3>
+                        ${appState.projects.length === 0 ? `
+                            <p style="font-size: 7px; color: var(--text-gray); padding: 10px;">Nenhum projeto cadastrado</p>
+                        ` : appState.projects.slice(0, 3).map(p => `
+                            <div class="project-item">
+                                <div class="project-name">${p.name}</div>
+                                <div class="project-meta">${p.type} • ${p.status}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="window grid-item">
+                        <h3 class="grid-item-title">Equipe Ativa</h3>
+                        ${appState.crew.length === 0 ? `
+                            <p style="font-size: 7px; color: var(--text-gray); padding: 10px;">Nenhum membro cadastrado</p>
+                        ` : appState.crew.slice(0, 3).map(c => `
+                            <div class="project-item">
+                                <div class="project-name">${c.name}</div>
+                                <div class="project-meta">${c.role} • ${c.department}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="window grid-item">
+                        <h3 class="grid-item-title">Proximas Call Sheets</h3>
+                        ${appState.callSheets.length === 0 ? `
+                            <p style="font-size: 7px; color: var(--text-gray); padding: 10px;">Nenhuma call sheet criada</p>
+                        ` : appState.callSheets.slice(0, 3).map(cs => `
+                            <div class="project-item">
+                                <div class="project-name">${cs.project}</div>
+                                <div class="project-meta">${formatDate(cs.date)} • ${cs.callTime}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="window grid-item">
+                        <h3 class="grid-item-title">Roteiros em Desenvolvimento</h3>
+                        ${appState.scripts.length === 0 ? `
+                            <p style="font-size: 7px; color: var(--text-gray); padding: 10px;">Nenhum roteiro cadastrado</p>
+                        ` : appState.scripts.slice(0, 3).map(s => `
+                            <div class="project-item">
+                                <div class="project-name">${s.title}</div>
+                                <div class="project-meta">${s.format || 'N/A'} • ${s.status || 'N/A'}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==================== PROJETOS ====================
+        function loadProjects() {
+            renderList('projects', 'Projetos', [
+                { key: 'name', label: 'Nome' },
+                { key: 'type', label: 'Tipo' },
+                { key: 'status', label: 'Status' },
+                { key: 'director', label: 'Diretor' },
+                { key: 'budget', label: 'Orcamento', format: 'currency' }
+            ]);
+        }
+
+        function editProject(id) {
+            const project = id ? appState.projects.find(p => p.id === id) : {};
+
+            openModal(`${id ? 'Editar' : 'Novo'} Projeto`, `
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label>Nome do Projeto *</label>
+                        <input type="text" name="name" value="${project.name || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select name="type">
+                            <option value="Longa-metragem" ${project.type === 'Longa-metragem' ? 'selected' : ''}>Longa-metragem</option>
+                            <option value="Curta-metragem" ${project.type === 'Curta-metragem' ? 'selected' : ''}>Curta-metragem</option>
+                            <option value="Série TV" ${project.type === 'Série TV' ? 'selected' : ''}>Série TV</option>
+                            <option value="Comercial" ${project.type === 'Comercial' ? 'selected' : ''}>Comercial</option>
+                            <option value="Documentário" ${project.type === 'Documentário' ? 'selected' : ''}>Documentário</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Desenvolvimento" ${project.status === 'Desenvolvimento' ? 'selected' : ''}>Desenvolvimento</option>
+                            <option value="Pré-Produção" ${project.status === 'Pré-Produção' ? 'selected' : ''}>Pré-Produção</option>
+                            <option value="Em Produção" ${project.status === 'Em Produção' ? 'selected' : ''}>Em Produção</option>
+                            <option value="Pós-Produção" ${project.status === 'Pós-Produção' ? 'selected' : ''}>Pós-Produção</option>
+                            <option value="Concluído" ${project.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Diretor</label>
+                        <input type="text" name="director" value="${project.director || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Produtor</label>
+                        <input type="text" name="producer" value="${project.producer || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Orcamento (R$)</label>
+                        <input type="number" name="budget" value="${project.budget || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Inicio</label>
+                        <input type="date" name="startDate" value="${project.startDate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Termino</label>
+                        <input type="date" name="endDate" value="${project.endDate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Descricao</label>
+                        <textarea name="description">${project.description || ''}</textarea>
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveProject('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveProject(id) {
+            // Validate required fields
+            if (!validateForm('projectForm', [
+                { name: 'name', label: 'Nome' },
+                { name: 'type', label: 'Tipo' },
+                { name: 'status', label: 'Status' }
+            ])) {
+                return;
+            }
+
+            const form = document.getElementById('projectForm');
+            const formData = new FormData(form);
+
+            const project = {
+                id: id || `proj_${Date.now()}`,
+                name: formData.get('name'),
+                type: formData.get('type'),
+                status: formData.get('status'),
+                director: formData.get('director'),
+                producer: formData.get('producer'),
+                budget: formData.get('budget'),
+                startDate: formData.get('startDate'),
+                endDate: formData.get('endDate'),
+                description: formData.get('description')
+            };
+
+            if (id) {
+                const index = appState.projects.findIndex(p => p.id === id);
+                appState.projects[index] = project;
+                showNotification('Projeto atualizado com sucesso!', 'success');
+            } else {
+                appState.projects.push(project);
+                showNotification('Projeto criado com sucesso!', 'success');
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadProjects();
+        }
+
+        function deleteProject(id) {
+            const project = appState.projects.find(p => p.id === id);
+            if (!project) return;
+
+            if (confirmDelete(project.name, 'o projeto')) {
+                appState.projects = appState.projects.filter(p => p.id !== id);
+                saveToLocalStorage();
+                loadProjects();
+                showNotification('Projeto excluido com sucesso!', 'success');
+            }
+        }
+
+        // ==================== EQUIPE ====================
+        function loadCrew() {
+            renderList('crew', 'Equipe', [
+                { key: 'name', label: 'Nome' },
+                { key: 'role', label: 'Funcao' },
+                { key: 'department', label: 'Departamento' },
+                { key: 'email', label: 'Email' },
+                { key: 'status', label: 'Status' }
+            ]);
+        }
+
+        function editCrew(id) {
+            const crew = id ? appState.crew.find(c => c.id === id) : {};
+
+            openModal(`${id ? 'Editar' : 'Novo'} Membro da Equipe`, `
+                <form id="crewForm">
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" name="name" value="${crew.name || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Funcao</label>
+                        <input type="text" name="role" value="${crew.role || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <select name="department">
+                            <option value="Direção" ${crew.department === 'Direção' ? 'selected' : ''}>Direcao</option>
+                            <option value="Produção" ${crew.department === 'Produção' ? 'selected' : ''}>Producao</option>
+                            <option value="Fotografia" ${crew.department === 'Fotografia' ? 'selected' : ''}>Fotografia</option>
+                            <option value="Arte" ${crew.department === 'Arte' ? 'selected' : ''}>Arte</option>
+                            <option value="Som" ${crew.department === 'Som' ? 'selected' : ''}>Som</option>
+                            <option value="Edição" ${crew.department === 'Edição' ? 'selected' : ''}>Edicao</option>
+                            <option value="Elenco" ${crew.department === 'Elenco' ? 'selected' : ''}>Elenco</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" value="${crew.email || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="tel" name="phone" value="${crew.phone || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Projeto</label>
+                        <select name="project">
+                            <option value="">Selecione um projeto</option>
+                            ${appState.projects.map(p => `
+                                <option value="${p.name}" ${crew.project === p.name ? 'selected' : ''}>${p.name}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Diaria (R$)</label>
+                        <input type="number" name="dailyRate" value="${crew.dailyRate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Ativo" ${crew.status === 'Ativo' ? 'selected' : ''}>Ativo</option>
+                            <option value="Inativo" ${crew.status === 'Inativo' ? 'selected' : ''}>Inativo</option>
+                            <option value="Férias" ${crew.status === 'Férias' ? 'selected' : ''}>Ferias</option>
+                        </select>
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveCrew('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveCrew(id) {
+            // Validate required fields
+            if (!validateForm('crewForm', [
+                { name: 'name', label: 'Nome' },
+                { name: 'role', label: 'Funcao' },
+                { name: 'department', label: 'Departamento' },
+                { name: 'email', label: 'Email', type: 'email' }
+            ])) {
+                return;
+            }
+
+            const form = document.getElementById('crewForm');
+            const formData = new FormData(form);
+
+            const crew = {
+                id: id || `crew_${Date.now()}`,
+                name: formData.get('name'),
+                role: formData.get('role'),
+                department: formData.get('department'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                project: formData.get('project'),
+                dailyRate: formData.get('dailyRate'),
+                status: formData.get('status')
+            };
+
+            if (id) {
+                const index = appState.crew.findIndex(c => c.id === id);
+                appState.crew[index] = crew;
+                showNotification('Membro atualizado com sucesso!', 'success');
+            } else {
+                appState.crew.push(crew);
+                showNotification('Membro adicionado com sucesso!', 'success');
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadCrew();
+        }
+
+        function deleteCrew(id) {
+            const crew = appState.crew.find(c => c.id === id);
+            if (!crew) return;
+
+            if (confirmDelete(crew.name, 'o membro')) {
+                appState.crew = appState.crew.filter(c => c.id !== id);
+                saveToLocalStorage();
+                loadCrew();
+                showNotification('Membro excluido com sucesso!', 'success');
+            }
+        }
+
+        // ==================== EQUIPAMENTOS ====================
+        function loadEquipment() {
+            renderList('equipment', 'Equipamentos', [
+                { key: 'name', label: 'Nome' },
+                { key: 'category', label: 'Categoria' },
+                { key: 'brand', label: 'Marca' },
+                { key: 'status', label: 'Status' },
+                { key: 'dailyRate', label: 'Diaria', format: 'currency' }
+            ]);
+        }
+
+        function editEquipment(id) {
+            const equipment = id ? appState.equipment.find(e => e.id === id) : {};
+
+            openModal(`${id ? 'Editar' : 'Novo'} Equipamento`, `
+                <form id="equipmentForm">
+                    <div class="form-group">
+                        <label>Nome do Equipamento *</label>
+                        <input type="text" name="name" value="${equipment.name || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select name="category">
+                            <option value="Câmera" ${equipment.category === 'Câmera' ? 'selected' : ''}>Camera</option>
+                            <option value="Lente" ${equipment.category === 'Lente' ? 'selected' : ''}>Lente</option>
+                            <option value="Iluminação" ${equipment.category === 'Iluminação' ? 'selected' : ''}>Iluminacao</option>
+                            <option value="Som" ${equipment.category === 'Som' ? 'selected' : ''}>Som</option>
+                            <option value="Grip" ${equipment.category === 'Grip' ? 'selected' : ''}>Grip</option>
+                            <option value="Outros" ${equipment.category === 'Outros' ? 'selected' : ''}>Outros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <input type="text" name="brand" value="${equipment.brand || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" name="model" value="${equipment.model || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Numero de Serie</label>
+                        <input type="text" name="serialNumber" value="${equipment.serialNumber || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Disponível" ${equipment.status === 'Disponível' ? 'selected' : ''}>Disponivel</option>
+                            <option value="Em Uso" ${equipment.status === 'Em Uso' ? 'selected' : ''}>Em Uso</option>
+                            <option value="Manutenção" ${equipment.status === 'Manutenção' ? 'selected' : ''}>Manutencao</option>
+                            <option value="Indisponível" ${equipment.status === 'Indisponível' ? 'selected' : ''}>Indisponivel</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Diaria (R$)</label>
+                        <input type="number" name="dailyRate" value="${equipment.dailyRate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Localizacao</label>
+                        <input type="text" name="location" value="${equipment.location || ''}">
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveEquipment('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveEquipment(id) {
+            const form = document.getElementById('equipmentForm');
+            const formData = new FormData(form);
+
+            const equipment = {
+                id: id || `eq_${Date.now()}`,
+                name: formData.get('name'),
+                category: formData.get('category'),
+                brand: formData.get('brand'),
+                model: formData.get('model'),
+                serialNumber: formData.get('serialNumber'),
+                status: formData.get('status'),
+                dailyRate: formData.get('dailyRate'),
+                location: formData.get('location')
+            };
+
+            if (id) {
+                const index = appState.equipment.findIndex(e => e.id === id);
+                appState.equipment[index] = equipment;
+            } else {
+                appState.equipment.push(equipment);
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadEquipment();
+        }
+
+        function deleteEquipment(id) {
+            if (confirm('Tem certeza que deseja excluir este equipamento?')) {
+                appState.equipment = appState.equipment.filter(e => e.id !== id);
+                saveToLocalStorage();
+                loadEquipment();
+            }
+        }
+
+        // ==================== LOCAÇÕES ====================
+        function loadLocations() {
+            renderList('locations', 'Locacoes', [
+                { key: 'name', label: 'Nome' },
+                { key: 'type', label: 'Tipo' },
+                { key: 'address', label: 'Endereco' },
+                { key: 'status', label: 'Status' },
+                { key: 'dailyRate', label: 'Diaria', format: 'currency' }
+            ]);
+        }
+
+        function editLocation(id) {
+            const location = id ? appState.locations.find(l => l.id === id) : {};
+
+            openModal(`${id ? 'Editar' : 'Nova'} Locacao`, `
+                <form id="locationForm">
+                    <div class="form-group">
+                        <label>Nome da Locacao *</label>
+                        <input type="text" name="name" value="${location.name || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select name="type">
+                            <option value="Estúdio" ${location.type === 'Estúdio' ? 'selected' : ''}>Estudio</option>
+                            <option value="Externa" ${location.type === 'Externa' ? 'selected' : ''}>Externa</option>
+                            <option value="Residência" ${location.type === 'Residência' ? 'selected' : ''}>Residencia</option>
+                            <option value="Comercial" ${location.type === 'Comercial' ? 'selected' : ''}>Comercial</option>
+                            <option value="Pública" ${location.type === 'Pública' ? 'selected' : ''}>Publica</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Endereco</label>
+                        <input type="text" name="address" value="${location.address || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Capacidade (pessoas)</label>
+                        <input type="number" name="capacity" value="${location.capacity || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Disponível" ${location.status === 'Disponível' ? 'selected' : ''}>Disponivel</option>
+                            <option value="Reservada" ${location.status === 'Reservada' ? 'selected' : ''}>Reservada</option>
+                            <option value="Em Uso" ${location.status === 'Em Uso' ? 'selected' : ''}>Em Uso</option>
+                            <option value="Indisponível" ${location.status === 'Indisponível' ? 'selected' : ''}>Indisponivel</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Diaria (R$)</label>
+                        <input type="number" name="dailyRate" value="${location.dailyRate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Contato</label>
+                        <input type="text" name="contact" value="${location.contact || ''}">
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveLocation('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveLocation(id) {
+            const form = document.getElementById('locationForm');
+            const formData = new FormData(form);
+
+            const location = {
+                id: id || `loc_${Date.now()}`,
+                name: formData.get('name'),
+                type: formData.get('type'),
+                address: formData.get('address'),
+                capacity: formData.get('capacity'),
+                status: formData.get('status'),
+                dailyRate: formData.get('dailyRate'),
+                contact: formData.get('contact')
+            };
+
+            if (id) {
+                const index = appState.locations.findIndex(l => l.id === id);
+                appState.locations[index] = location;
+            } else {
+                appState.locations.push(location);
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadLocations();
+        }
+
+        function deleteLocation(id) {
+            if (confirm('Tem certeza que deseja excluir esta locação?')) {
+                appState.locations = appState.locations.filter(l => l.id !== id);
+                saveToLocalStorage();
+                loadLocations();
+            }
+        }
+
+        // ==================== CALL SHEETS ====================
+        function loadCallSheets() {
+            const content = document.getElementById('contentArea');
+
+            content.innerHTML = `
+                <div class="window card">
+                    <div class="card-header">
+                        <h2 class="card-title">Call Sheets</h2>
+                        <button class="btn btn-success" onclick="editCallSheet()">
+                            + Nova Call Sheet
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Projeto</th>
+                                    <th>Data</th>
+                                    <th>Call Time</th>
+                                    <th>Wrap</th>
+                                    <th>Locacao</th>
+                                    <th>Status</th>
+                                    <th width="200">Acoes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${appState.callSheets.length === 0 ? `
+                                    <tr>
+                                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                            Nenhuma call sheet criada
+                                        </td>
+                                    </tr>
+                                ` : appState.callSheets.map(cs => `
+                                    <tr>
+                                        <td>${cs.project}</td>
+                                        <td>${formatDate(cs.date)}</td>
+                                        <td>${cs.callTime}</td>
+                                        <td>${cs.wrap || '-'}</td>
+                                        <td>${cs.location}</td>
+                                        <td><span class="badge badge-success">Ativa</span></td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm" onclick="viewCallSheet('${cs.id}')">👁️</button>
+                                                <button class="btn btn-sm" onclick="editCallSheet('${cs.id}')">✏️</button>
+                                                <button class="btn btn-sm btn-danger" onclick="deleteCallSheet('${cs.id}')">🗑️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function editCallSheet(id) {
+            const cs = id ? appState.callSheets.find(c => c.id === id) : {};
+
+            openModal(`${id ? 'Editar' : 'Nova'} Call Sheet`, `
+                <form id="callSheetForm">
+                    <div class="form-group">
+                        <label>Projeto *</label>
+                        <select name="project" required>
+                            <option value="">Selecione um projeto</option>
+                            ${appState.projects.map(p => `
+                                <option value="${p.name}" ${cs.project === p.name ? 'selected' : ''}>${p.name}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Data *</label>
+                            <input type="date" name="date" value="${cs.date || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Call Time *</label>
+                            <input type="time" name="callTime" value="${cs.callTime || ''}" required>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Wrap Time</label>
+                            <input type="time" name="wrap" value="${cs.wrap || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Clima</label>
+                            <input type="text" name="weather" value="${cs.weather || ''}" placeholder="Ex: Ensolarado - 25C">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Locacao *</label>
+                        <input type="text" name="location" value="${cs.location || ''}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cenas (separadas por virgula)</label>
+                        <input type="text" name="scenes" value="${cs.scenes ? cs.scenes.join(', ') : ''}" placeholder="Ex: 1, 2, 3A">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notas Importantes</label>
+                        <textarea name="notes" rows="3">${cs.notes || ''}</textarea>
+                    </div>
+
+                    <h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 9px; color: var(--text-cyan);">Equipe</h3>
+                    <div id="crewList" style="max-height: 200px; overflow-y: auto; padding: 10px; background: rgba(0, 20, 40, 0.3); border: 2px solid var(--neon-blue-dark); border-radius: 4px;">
+                        ${appState.crew.length === 0 ? `
+                            <p style="font-size: 7px; color: var(--text-gray);">Nenhum membro da equipe cadastrado</p>
+                        ` : appState.crew.map(member => `
+                            <label style="display: block; margin-bottom: 8px; font-size: 7px; color: var(--text-white); cursor: pointer;">
+                                <input type="checkbox" name="crew" value="${member.name}" ${cs.crew?.includes(member.name) ? 'checked' : ''} style="width: auto; margin-right: 8px;">
+                                ${member.name} - ${member.role}
+                            </label>
+                        `).join('')}
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveCallSheet('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveCallSheet(id) {
+            const form = document.getElementById('callSheetForm');
+            const formData = new FormData(form);
+
+            const crews = [];
+            form.querySelectorAll('input[name="crew"]:checked').forEach(cb => {
+                crews.push(cb.value);
+            });
+
+            const callSheet = {
+                id: id || generateId('cs'),
+                project: formData.get('project'),
+                date: formData.get('date'),
+                callTime: formData.get('callTime'),
+                wrap: formData.get('wrap'),
+                weather: formData.get('weather'),
+                location: formData.get('location'),
+                scenes: formData.get('scenes').split(',').map(s => s.trim()).filter(s => s),
+                notes: formData.get('notes'),
+                crew: crews
+            };
+
+            if (id) {
+                const index = appState.callSheets.findIndex(cs => cs.id === id);
+                appState.callSheets[index] = callSheet;
+                showNotification('Call Sheet atualizada com sucesso!', 'success');
+            } else {
+                appState.callSheets.push(callSheet);
+                showNotification('Call Sheet criada com sucesso!', 'success');
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadCallSheets();
+        }
+
+        function viewCallSheet(id) {
+            const cs = appState.callSheets.find(c => c.id === id);
+            if (!cs) return;
+
+            openModal(`Call Sheet - ${cs.project}`, `
+                <div style="font-size: 7px; line-height: 1.8;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <div>
+                            <strong style="color: var(--text-cyan);">Projeto:</strong><br>
+                            ${cs.project}
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-cyan);">Data:</strong><br>
+                            ${formatDate(cs.date)}
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-cyan);">Call Time:</strong><br>
+                            ${cs.callTime}
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-cyan);">Wrap Time:</strong><br>
+                            ${cs.wrap || '-'}
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-cyan);">Locacao:</strong><br>
+                            ${cs.location}
+                        </div>
+                        <div>
+                            <strong style="color: var(--text-cyan);">Clima:</strong><br>
+                            ${cs.weather || '-'}
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <strong style="color: var(--text-cyan);">Cenas:</strong><br>
+                        ${cs.scenes && cs.scenes.length > 0 ? cs.scenes.join(', ') : 'Nenhuma cena especificada'}
+                    </div>
+
+                    ${cs.notes ? `
+                        <div style="margin-bottom: 20px;">
+                            <strong style="color: var(--text-cyan);">Notas:</strong><br>
+                            ${cs.notes}
+                        </div>
+                    ` : ''}
+
+                    <div>
+                        <strong style="color: var(--text-cyan);">Equipe (${cs.crew?.length || 0}):</strong><br>
+                        ${cs.crew && cs.crew.length > 0 ? `
+                            <ul style="margin-top: 10px; padding-left: 20px;">
+                                ${cs.crew.map(c => `<li>${c}</li>`).join('')}
+                            </ul>
+                        ` : 'Nenhum membro selecionado'}
+                    </div>
+                </div>
+            `, [
+                { text: 'Fechar', onclick: 'closeModal()', class: 'btn-secondary' }
+            ]);
+        }
+
+        function deleteCallSheet(id) {
+            if (confirm('Tem certeza que deseja excluir esta call sheet?')) {
+                appState.callSheets = appState.callSheets.filter(cs => cs.id !== id);
+                saveToLocalStorage();
+                loadCallSheets();
+                showNotification('Call Sheet excluida', 'success');
+            }
+        }
+
+        function loadScripts() {
+            renderList('scripts', 'Roteiros', [
+                { key: 'title', label: 'Titulo' },
+                { key: 'author', label: 'Autor' },
+                { key: 'version', label: 'Versao' },
+                { key: 'format', label: 'Formato' },
+                { key: 'status', label: 'Status' },
+                { key: 'pages', label: 'Pags' }
+            ]);
+        }
+
+        function editScript(id) {
+            const script = id ? appState.scripts.find(s => s.id === id) : {};
+
+            openModal(`${id ? 'Editar' : 'Novo'} Roteiro`, `
+                <form id="scriptForm">
+                    <div class="form-group">
+                        <label>Titulo *</label>
+                        <input type="text" name="title" value="${script.title || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Autor</label>
+                        <input type="text" name="author" value="${script.author || ''}">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Versao</label>
+                            <input type="text" name="version" value="${script.version || 'v1.0'}">
+                        </div>
+                        <div class="form-group">
+                            <label>Data</label>
+                            <input type="date" name="date" value="${script.date || ''}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Formato</label>
+                        <select name="format">
+                            <option value="Feature" ${script.format === 'Feature' ? 'selected' : ''}>Feature (Longa)</option>
+                            <option value="Short" ${script.format === 'Short' ? 'selected' : ''}>Short (Curta)</option>
+                            <option value="Series" ${script.format === 'Series' ? 'selected' : ''}>Series (Serie)</option>
+                            <option value="Commercial" ${script.format === 'Commercial' ? 'selected' : ''}>Commercial (Comercial)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Development" ${script.status === 'Development' ? 'selected' : ''}>Development (Desenvolvimento)</option>
+                            <option value="Draft" ${script.status === 'Draft' ? 'selected' : ''}>Draft (Rascunho)</option>
+                            <option value="Revision" ${script.status === 'Revision' ? 'selected' : ''}>Revision (Revisao)</option>
+                            <option value="Final" ${script.status === 'Final' ? 'selected' : ''}>Final</option>
+                            <option value="Production" ${script.status === 'Production' ? 'selected' : ''}>Production (Producao)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Paginas</label>
+                        <input type="number" name="pages" value="${script.pages || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Sinopse</label>
+                        <textarea name="synopsis" rows="4">${script.synopsis || ''}</textarea>
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveScript('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveScript(id) {
+            // Validate required fields
+            if (!validateForm('scriptForm', [
+                { name: 'title', label: 'Titulo' },
+                { name: 'author', label: 'Autor' },
+                { name: 'format', label: 'Formato' },
+                { name: 'status', label: 'Status' }
+            ])) {
+                return;
+            }
+
+            const form = document.getElementById('scriptForm');
+            const formData = new FormData(form);
+
+            const script = {
+                id: id || generateId('script'),
+                title: formData.get('title'),
+                author: formData.get('author'),
+                version: formData.get('version'),
+                date: formData.get('date'),
+                format: formData.get('format'),
+                status: formData.get('status'),
+                pages: formData.get('pages'),
+                synopsis: formData.get('synopsis')
+            };
+
+            if (id) {
+                const index = appState.scripts.findIndex(s => s.id === id);
+                appState.scripts[index] = script;
+                showNotification('Roteiro atualizado com sucesso!', 'success');
+            } else {
+                appState.scripts.push(script);
+                showNotification('Roteiro criado com sucesso!', 'success');
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadScripts();
+        }
+
+        function deleteScript(id) {
+            if (confirm('Tem certeza que deseja excluir este roteiro?')) {
+                appState.scripts = appState.scripts.filter(s => s.id !== id);
+                saveToLocalStorage();
+                loadScripts();
+                showNotification('Roteiro excluido', 'success');
+            }
+        }
+
+        // ==================== CRONOGRAMA/CALENDÁRIO ====================
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        function loadSchedule() {
+            const content = document.getElementById('contentArea');
+            renderCalendar(content);
+        }
+
+        function renderCalendar(container) {
+            const monthNames = ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho',
+                               'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const dayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+
+            const days = generateCalendarDays(currentYear, currentMonth);
+            const upcomingEvents = appState.schedule
+                .filter(e => new Date(e.date) >= new Date())
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 5);
+
+            container.innerHTML = `
+                <div class="window card">
+                    <div class="card-header">
+                        <h2 class="card-title">Cronograma</h2>
+                        <button class="btn btn-success" onclick="addScheduleEvent()">
+                            + Novo Evento
+                        </button>
+                    </div>
+
+                    <div class="calendar-header">
+                        <div class="calendar-month">${monthNames[currentMonth]} ${currentYear}</div>
+                        <div class="calendar-nav">
+                            <button class="btn btn-sm" onclick="changeMonth(-1)">◀</button>
+                            <button class="btn btn-sm" onclick="changeMonth(1)">▶</button>
+                            <button class="btn btn-sm btn-secondary" onclick="currentMonth = new Date().getMonth(); currentYear = new Date().getFullYear(); renderCalendar(document.getElementById('contentArea'))">Hoje</button>
+                        </div>
+                    </div>
+
+                    <div class="calendar-grid">
+                        ${dayNames.map(day => `
+                            <div class="calendar-day-header">${day}</div>
+                        `).join('')}
+                        ${days.map(day => {
+                            if (day === null) {
+                                return '<div class="calendar-day empty"></div>';
+                            }
+
+                            const isToday = isDateToday(currentYear, currentMonth, day);
+                            const events = getEventsForDay(currentYear, currentMonth, day);
+
+                            return `
+                                <div class="calendar-day ${isToday ? 'today' : ''}" onclick="showDayEvents(${currentYear}, ${currentMonth}, ${day})">
+                                    <div class="calendar-day-number">${day}</div>
+                                    ${events.length > 0 ? `
+                                        <div>
+                                            ${events.slice(0, 3).map(() => '<span class="event-dot"></span>').join('')}
+                                            ${events.length > 3 ? '<div style="font-size: 6px; color: var(--text-cyan);">+' + (events.length - 3) + '</div>' : ''}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <div class="event-list">
+                        <h3 style="font-size: 10px; color: var(--text-yellow); margin-bottom: 15px;">Proximos Eventos</h3>
+                        ${upcomingEvents.length === 0 ? `
+                            <p style="font-size: 7px; color: var(--text-gray); text-align: center; padding: 20px;">Nenhum evento agendado</p>
+                        ` : upcomingEvents.map(event => `
+                            <div class="event-item">
+                                <div class="event-item-header">
+                                    <div class="event-title">${event.title}</div>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm" onclick="viewEvent('${event.id}')">👁️</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteEvent('${event.id}')">🗑️</button>
+                                    </div>
+                                </div>
+                                <div class="event-meta">
+                                    ${formatDate(event.date)} ${event.time ? '• ' + event.time : ''}
+                                    ${event.type ? '• ' + event.type : ''}
+                                    ${event.project ? '• ' + event.project : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function changeMonth(direction) {
+            currentMonth += direction;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar(document.getElementById('contentArea'));
+        }
+
+        function generateCalendarDays(year, month) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const days = [];
+
+            // Adiciona dias vazios antes do primeiro dia do mês
+            for (let i = 0; i < firstDay; i++) {
+                days.push(null);
+            }
+
+            // Adiciona os dias do mês
+            for (let day = 1; day <= daysInMonth; day++) {
+                days.push(day);
+            }
+
+            return days;
+        }
+
+        function isDateToday(year, month, day) {
+            const today = new Date();
+            return today.getFullYear() === year &&
+                   today.getMonth() === month &&
+                   today.getDate() === day;
+        }
+
+        function getEventsForDay(year, month, day) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            return appState.schedule.filter(event => event.date === dateStr);
+        }
+
+        function showDayEvents(year, month, day) {
+            const events = getEventsForDay(year, month, day);
+            const monthNames = ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho',
+                               'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+            if (events.length === 0) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                // Criar evento direto para este dia
+                addScheduleEvent(dateStr);
+            } else {
+                openModal(`Eventos - ${day} de ${monthNames[month]} ${year}`, `
+                    <div style="font-size: 7px;">
+                        ${events.map(event => `
+                            <div class="event-item">
+                                <div class="event-item-header">
+                                    <div class="event-title">${event.title}</div>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-danger" onclick="deleteEvent('${event.id}'); closeModal(); loadSchedule();">🗑️</button>
+                                    </div>
+                                </div>
+                                <div class="event-meta">
+                                    ${event.time || ''} ${event.type ? '• ' + event.type : ''}
+                                </div>
+                                ${event.description ? `<p style="margin-top: 10px;">${event.description}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `, [
+                    { text: 'Fechar', onclick: 'closeModal()', class: 'btn-secondary' }
+                ]);
+            }
+        }
+
+        function addScheduleEvent(presetDate = '') {
+            const today = new Date().toISOString().split('T')[0];
+
+            openModal('Novo Evento', `
+                <form id="scheduleForm">
+                    <div class="form-group">
+                        <label>Titulo *</label>
+                        <input type="text" name="title" required>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Data *</label>
+                            <input type="date" name="date" value="${presetDate || today}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Hora</label>
+                            <input type="time" name="time">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select name="type">
+                            <option value="Filmagem">Filmagem</option>
+                            <option value="Reuniao">Reuniao</option>
+                            <option value="Deadline">Deadline</option>
+                            <option value="Ensaio">Ensaio</option>
+                            <option value="Pos-Producao">Pos-Producao</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Projeto</label>
+                        <select name="project">
+                            <option value="">Selecione um projeto</option>
+                            ${appState.projects.map(p => `
+                                <option value="${p.name}">${p.name}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Descricao</label>
+                        <textarea name="description" rows="3"></textarea>
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: 'saveScheduleEvent()', class: 'btn-success' }
+            ]);
+        }
+
+        function saveScheduleEvent() {
+            const form = document.getElementById('scheduleForm');
+            const formData = new FormData(form);
+
+            const event = {
+                id: generateId('event'),
+                title: formData.get('title'),
+                date: formData.get('date'),
+                time: formData.get('time'),
+                type: formData.get('type'),
+                project: formData.get('project'),
+                description: formData.get('description')
+            };
+
+            appState.schedule.push(event);
+            saveToLocalStorage();
+            closeModal();
+            loadSchedule();
+            showNotification('Evento criado com sucesso!', 'success');
+        }
+
+        function viewEvent(id) {
+            const event = appState.schedule.find(e => e.id === id);
+            if (!event) return;
+
+            openModal(event.title, `
+                <div style="font-size: 7px; line-height: 1.8;">
+                    <div style="margin-bottom: 15px;">
+                        <strong style="color: var(--text-cyan);">Data:</strong><br>
+                        ${formatDate(event.date)} ${event.time ? '• ' + event.time : ''}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong style="color: var(--text-cyan);">Tipo:</strong><br>
+                        ${event.type || '-'}
+                    </div>
+                    ${event.project ? `
+                        <div style="margin-bottom: 15px;">
+                            <strong style="color: var(--text-cyan);">Projeto:</strong><br>
+                            ${event.project}
+                        </div>
+                    ` : ''}
+                    ${event.description ? `
+                        <div>
+                            <strong style="color: var(--text-cyan);">Descricao:</strong><br>
+                            ${event.description}
+                        </div>
+                    ` : ''}
+                </div>
+            `, [
+                { text: 'Fechar', onclick: 'closeModal()', class: 'btn-secondary' }
+            ]);
+        }
+
+        function deleteEvent(id) {
+            if (confirm('Tem certeza que deseja excluir este evento?')) {
+                appState.schedule = appState.schedule.filter(e => e.id !== id);
+                saveToLocalStorage();
+                loadSchedule();
+                showNotification('Evento excluido', 'success');
+            }
+        }
+
+        function loadBudget() {
+            const content = document.getElementById('contentArea');
+
+            // Calcular total
+            const totalBudget = appState.budget.reduce((sum, item) => {
+                const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                return sum + total;
+            }, 0);
+
+            content.innerHTML = `
+                <div class="window card">
+                    <div class="card-header">
+                        <h2 class="card-title">Orcamento</h2>
+                        <button class="btn btn-success" onclick="editBudgetItem()">
+                            + Novo Item
+                        </button>
+                    </div>
+
+                    <div class="window stat-card" style="margin-bottom: 20px; padding: 20px;">
+                        <h3 class="stat-label">Total Geral</h3>
+                        <p class="stat-value">${formatCurrency(totalBudget)}</p>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th>Item</th>
+                                    <th>Qtd</th>
+                                    <th>Valor Unit.</th>
+                                    <th>Total</th>
+                                    <th width="120">Acoes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${appState.budget.length === 0 ? `
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                            Nenhum item no orcamento
+                                        </td>
+                                    </tr>
+                                ` : appState.budget.map(item => {
+                                    const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                                    return `
+                                        <tr>
+                                            <td>${item.category}</td>
+                                            <td>${item.item}</td>
+                                            <td>${item.quantity}</td>
+                                            <td>${formatCurrency(item.unitPrice)}</td>
+                                            <td><strong>${formatCurrency(total)}</strong></td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <button class="btn btn-sm" onclick="editBudgetItem('${item.id}')">✏️</button>
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteBudgetItem('${item.id}')">🗑️</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function editBudgetItem(id) {
+            const item = id ? appState.budget.find(b => b.id === id) : {};
+
+            openModal(`${id ? 'Editar' : 'Novo'} Item de Orcamento`, `
+                <form id="budgetForm">
+                    <div class="form-group">
+                        <label>Categoria *</label>
+                        <select name="category" required>
+                            <option value="Pre-Production" ${item.category === 'Pre-Production' ? 'selected' : ''}>Pre-Production (Pre-Producao)</option>
+                            <option value="Production" ${item.category === 'Production' ? 'selected' : ''}>Production (Producao)</option>
+                            <option value="Post-Production" ${item.category === 'Post-Production' ? 'selected' : ''}>Post-Production (Pos-Producao)</option>
+                            <option value="Equipment" ${item.category === 'Equipment' ? 'selected' : ''}>Equipment (Equipamento)</option>
+                            <option value="Crew" ${item.category === 'Crew' ? 'selected' : ''}>Crew (Equipe)</option>
+                            <option value="Locations" ${item.category === 'Locations' ? 'selected' : ''}>Locations (Locacoes)</option>
+                            <option value="Misc" ${item.category === 'Misc' ? 'selected' : ''}>Misc (Outros)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Item *</label>
+                        <input type="text" name="item" value="${item.item || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descricao</label>
+                        <textarea name="description" rows="2">${item.description || ''}</textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Quantidade *</label>
+                            <input type="number" name="quantity" value="${item.quantity || '1'}" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor Unitario (R$) *</label>
+                            <input type="number" name="unitPrice" value="${item.unitPrice || ''}" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Projeto</label>
+                        <select name="project">
+                            <option value="">Selecione um projeto</option>
+                            ${appState.projects.map(p => `
+                                <option value="${p.name}" ${item.project === p.name ? 'selected' : ''}>${p.name}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveBudgetItem('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveBudgetItem(id) {
+            // Validate required fields
+            if (!validateForm('budgetForm', [
+                { name: 'category', label: 'Categoria' },
+                { name: 'item', label: 'Item' },
+                { name: 'quantity', label: 'Quantidade', type: 'number' },
+                { name: 'unitPrice', label: 'Valor Unitario', type: 'number' }
+            ])) {
+                return;
+            }
+
+            const form = document.getElementById('budgetForm');
+            const formData = new FormData(form);
+
+            const budgetItem = {
+                id: id || generateId('budget'),
+                category: formData.get('category'),
+                item: formData.get('item'),
+                description: formData.get('description'),
+                quantity: formData.get('quantity'),
+                unitPrice: formData.get('unitPrice'),
+                project: formData.get('project')
+            };
+
+            if (id) {
+                const index = appState.budget.findIndex(b => b.id === id);
+                appState.budget[index] = budgetItem;
+                showNotification('Item atualizado com sucesso!', 'success');
+            } else {
+                appState.budget.push(budgetItem);
+                showNotification('Item adicionado ao orcamento!', 'success');
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadBudget();
+        }
+
+        function deleteBudgetItem(id) {
+            if (confirm('Tem certeza que deseja excluir este item?')) {
+                appState.budget = appState.budget.filter(b => b.id !== id);
+                saveToLocalStorage();
+                loadBudget();
+                showNotification('Item excluido', 'success');
+            }
+        }
+
+        function loadDocuments() {
+            const content = document.getElementById('contentArea');
+
+            content.innerHTML = `
+                <div class="window card">
+                    <div class="card-header">
+                        <h2 class="card-title">Documentos</h2>
+                        <button class="btn btn-success" onclick="document.getElementById('fileInput').click()">
+                            📤 Upload
+                        </button>
+                    </div>
+
+                    <div class="upload-area" id="uploadArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('fileInput').click()">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📁</div>
+                        <p style="font-size: 9px; color: var(--text-cyan); margin-bottom: 8px;">Arraste arquivos aqui ou clique para fazer upload</p>
+                        <input type="file" id="fileInput" multiple style="display: none;" onchange="handleFileSelect(event)">
+                        <button class="btn btn-sm" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">
+                            Selecionar Arquivos
+                        </button>
+                    </div>
+
+                    <div class="file-list">
+                        ${appState.documents.length === 0 ? `
+                            <p style="text-align: center; padding: 20px; color: var(--text-gray); font-size: 8px;">
+                                Nenhum documento enviado
+                            </p>
+                        ` : appState.documents.map(doc => `
+                            <div class="file-item">
+                                <div class="file-info">
+                                    <div class="file-icon">${getFileIcon(doc.type)}</div>
+                                    <div>
+                                        <strong style="font-size: 8px; color: var(--text-cyan);">${doc.name}</strong><br>
+                                        <small style="font-size: 6px; color: var(--text-gray);">${doc.size} • ${formatDate(doc.uploadedAt)}</small>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm" onclick="downloadDocument('${doc.id}')">⬇️</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteDocument('${doc.id}')">🗑️</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.remove('dragover');
+
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const uploadArea = document.getElementById('uploadArea');
+            if (uploadArea && !uploadArea.contains(e.relatedTarget)) {
+                uploadArea.classList.remove('dragover');
+            }
+        }
+
+        function handleFileSelect(e) {
+            handleFiles(e.target.files);
+        }
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            for (let file of files) {
+                const doc = {
+                    id: generateId('doc'),
+                    name: file.name,
+                    type: file.type || 'application/octet-stream',
+                    size: formatFileSize(file.size),
+                    uploadedAt: new Date().toISOString(),
+                    data: null // Em produção, seria enviado para servidor
+                };
+
+                appState.documents.push(doc);
+            }
+
+            saveToLocalStorage();
+            loadDocuments();
+            showNotification(`${files.length} arquivo(s) enviado(s) com sucesso!`, 'success');
+        }
+
+        function downloadDocument(id) {
+            const doc = appState.documents.find(d => d.id === id);
+            if (doc) {
+                showNotification(`Download de "${doc.name}" iniciado!`, 'info');
+                // Em produção, faria download real do arquivo
+            }
+        }
+
+        function deleteDocument(id) {
+            if (confirm('Tem certeza que deseja excluir este documento?')) {
+                appState.documents = appState.documents.filter(d => d.id !== id);
+                saveToLocalStorage();
+                loadDocuments();
+                showNotification('Documento excluido', 'success');
+            }
+        }
+
+        // ==================== FUNÇÕES AUXILIARES ====================
+        function renderList(module, title, columns) {
+            const content = document.getElementById('contentArea');
+            const data = appState[module];
+
+            let html = `
+                <div class="window card">
+                    <div class="card-header">
+                        <h2 class="card-title">${title}</h2>
+                        <button class="btn btn-success" onclick="edit${module.charAt(0).toUpperCase() + module.slice(1).replace(/s$/, '')}()">
+                            + Novo
+                        </button>
+                    </div>
+
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" placeholder="Buscar..." onkeyup="filterTable('${module}', this.value)">
+                    </div>
+
+                    <div class="table-container">
+                        <table id="${module}Table">
+                            <thead>
+                                <tr>
+                                    ${columns.map(col => `<th>${col.label}</th>`).join('')}
+                                    <th width="140">Acoes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+            if (data.length === 0) {
+                html += `
+                    <tr>
+                        <td colspan="${columns.length + 1}" style="text-align: center; padding: 40px; color: var(--text-gray);">
+                            Nenhum registro encontrado
+                        </td>
+                    </tr>
+                `;
+            } else {
+                data.forEach(item => {
+                    html += '<tr>';
+                    columns.forEach(col => {
+                        let value = item[col.key] || '-';
+                        if (col.format === 'currency' && value !== '-') {
+                            value = `R$ ${parseFloat(value).toLocaleString('pt-BR')}`;
+                        }
+                        if (col.key === 'status') {
+                            const badgeClass = value === 'Ativo' || value === 'Disponível' || value === 'Em Produção' ? 'badge-success' :
+                                              value === 'Inativo' || value === 'Indisponível' || value === 'Concluído' ? 'badge-danger' :
+                                              'badge-warning';
+                            value = `<span class="badge ${badgeClass}">${value}</span>`;
+                        }
+                        html += `<td>${value}</td>`;
+                    });
+
+                    const editFunction = `edit${module.charAt(0).toUpperCase() + module.slice(1).replace(/s$/, '')}`;
+                    const deleteFunction = `delete${module.charAt(0).toUpperCase() + module.slice(1).replace(/s$/, '')}`;
+
+                    html += `
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm" onclick="${editFunction}('${item.id}')">✏️</button>
+                                <button class="btn btn-sm btn-danger" onclick="${deleteFunction}('${item.id}')">🗑️</button>
+                            </div>
+                        </td>
+                    `;
+                    html += '</tr>';
+                });
+            }
+
+            html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            content.innerHTML = html;
+        }
+
+        function filterTable(tableId, searchTerm) {
+            const table = document.getElementById(`${tableId}Table`);
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+            }
+        }
+
+        function openModal(title, body, buttons = []) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = body;
+
+            const footer = document.getElementById('modalFooter');
+            footer.innerHTML = '';
+
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = `btn ${btn.class || ''}`;
+                button.textContent = btn.text;
+                button.onclick = () => eval(btn.onclick);
+                footer.appendChild(button);
+            });
+
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // ==================== REPORTS MODULE ====================
+        function loadReports() {
+            const content = document.getElementById('contentArea');
+
+            content.innerHTML = `
+                <div class="window card">
+                    <div class="card-header">
+                        <h2 class="card-title">Relatorios</h2>
+                        <div class="btn-group">
+                            <button class="btn btn-success" onclick="exportAllToExcel()">
+                                📊 Exportar Excel
+                            </button>
+                            <button class="btn" onclick="exportCompletePDF()">
+                                📄 Exportar PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <button class="tab active" onclick="showReportTab('overview')">📊 Visao Geral</button>
+                        <button class="tab" onclick="showReportTab('financial')">💰 Financeiro</button>
+                        <button class="tab" onclick="showReportTab('production')">🎬 Producao</button>
+                        <button class="tab" onclick="showReportTab('crew')">👥 Equipe</button>
+                    </div>
+
+                    <div id="reportContent">
+                        ${generateOverviewReport()}
+                    </div>
+                </div>
+            `;
+
+            // Render charts after a short delay
+            setTimeout(() => {
+                renderOverviewCharts();
+            }, 100);
+        }
+
+        function showReportTab(tab) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const content = document.getElementById('reportContent');
+
+            switch(tab) {
+                case 'financial':
+                    content.innerHTML = generateFinancialReport();
+                    setTimeout(() => renderFinancialCharts(), 100);
+                    break;
+                case 'production':
+                    content.innerHTML = generateProductionReport();
+                    setTimeout(() => renderProductionCharts(), 100);
+                    break;
+                case 'crew':
+                    content.innerHTML = generateCrewReport();
+                    setTimeout(() => renderCrewCharts(), 100);
+                    break;
+                default:
+                    content.innerHTML = generateOverviewReport();
+                    setTimeout(() => renderOverviewCharts(), 100);
+            }
+        }
+
+        function generateOverviewReport() {
+            const totalBudget = appState.budget.reduce((sum, item) => {
+                const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                return sum + total;
+            }, 0);
+
+            const activeProjects = appState.projects.filter(p => p.status === 'Em Producao').length;
+            const completedProjects = appState.projects.filter(p => p.status === 'Concluido').length;
+            const planningProjects = appState.projects.filter(p => p.status === 'Planejamento').length;
+
+            const activeCrew = appState.crew.filter(c => c.status === 'Ativo').length;
+            const availableEquipment = appState.equipment.filter(e => e.status === 'Disponivel').length;
+
+            return `
+                <div class="report-section">
+                    <h3>Resumo Executivo</h3>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.projects.length}</div>
+                            <div class="stat-box-label">Total Projetos</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${activeProjects}</div>
+                            <div class="stat-box-label">Em Producao</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.crew.length}</div>
+                            <div class="stat-box-label">Equipe Total</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${activeCrew}</div>
+                            <div class="stat-box-label">Membros Ativos</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.equipment.length}</div>
+                            <div class="stat-box-label">Equipamentos</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${availableEquipment}</div>
+                            <div class="stat-box-label">Disponiveis</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.locations.length}</div>
+                            <div class="stat-box-label">Locacoes</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.scripts.length}</div>
+                            <div class="stat-box-label">Roteiros</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <h4>Status dos Projetos</h4>
+                            <div class="chart-container">
+                                <canvas id="projectStatusChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Recursos</h4>
+                            <ul class="report-list">
+                                <li>📋 <strong>Call Sheets:</strong> ${appState.callSheets.length}</li>
+                                <li>📁 <strong>Documentos:</strong> ${appState.documents.length}</li>
+                                <li>📅 <strong>Eventos Agendados:</strong> ${appState.schedule.length}</li>
+                                <li>💰 <strong>Orcamento Total:</strong> ${formatCurrency(totalBudget)}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateFinancialReport() {
+            const totalBudget = appState.budget.reduce((sum, item) => {
+                const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                return sum + total;
+            }, 0);
+
+            const budgetByCategory = {};
+            appState.budget.forEach(item => {
+                const category = item.category || 'Outros';
+                const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                budgetByCategory[category] = (budgetByCategory[category] || 0) + total;
+            });
+
+            const budgetByProject = {};
+            appState.budget.forEach(item => {
+                const project = item.project || 'Sem Projeto';
+                const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                budgetByProject[project] = (budgetByProject[project] || 0) + total;
+            });
+
+            return `
+                <div class="report-section">
+                    <h3>Relatorio Financeiro</h3>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-box-value">${formatCurrency(totalBudget)}</div>
+                            <div class="stat-box-label">Orcamento Total</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.budget.length}</div>
+                            <div class="stat-box-label">Itens de Orcamento</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${Object.keys(budgetByCategory).length}</div>
+                            <div class="stat-box-label">Categorias</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${Object.keys(budgetByProject).length}</div>
+                            <div class="stat-box-label">Projetos com Orcamento</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <h4>Orcamento por Categoria</h4>
+                            <div class="chart-container">
+                                <canvas id="budgetByCategoryChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Orcamento por Projeto</h4>
+                            <div class="chart-container">
+                                <canvas id="budgetByProjectChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>Detalhamento por Categoria</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th>Valor Total</th>
+                                    <th>% do Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${Object.entries(budgetByCategory).map(([category, value]) => `
+                                    <tr>
+                                        <td>${category}</td>
+                                        <td>${formatCurrency(value)}</td>
+                                        <td>${((value / totalBudget) * 100).toFixed(1)}%</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateProductionReport() {
+            const projectsByStatus = {};
+            appState.projects.forEach(p => {
+                const status = p.status || 'Sem Status';
+                projectsByStatus[status] = (projectsByStatus[status] || 0) + 1;
+            });
+
+            const upcomingCallSheets = appState.callSheets
+                .filter(cs => new Date(cs.date) >= new Date())
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 5);
+
+            const scriptsByStatus = {};
+            appState.scripts.forEach(s => {
+                const status = s.status || 'Sem Status';
+                scriptsByStatus[status] = (scriptsByStatus[status] || 0) + 1;
+            });
+
+            return `
+                <div class="report-section">
+                    <h3>Relatorio de Producao</h3>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.projects.length}</div>
+                            <div class="stat-box-label">Total de Projetos</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.callSheets.length}</div>
+                            <div class="stat-box-label">Call Sheets</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${upcomingCallSheets.length}</div>
+                            <div class="stat-box-label">Proximas Filmagens</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.scripts.length}</div>
+                            <div class="stat-box-label">Roteiros</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <h4>Projetos por Status</h4>
+                            <div class="chart-container">
+                                <canvas id="projectsStatusChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Proximas Filmagens</h4>
+                            <ul class="report-list">
+                                ${upcomingCallSheets.length === 0 ?
+                                    '<li style="color: var(--text-gray);">Nenhuma filmagem agendada</li>' :
+                                    upcomingCallSheets.map(cs => `
+                                        <li>
+                                            <strong>${cs.project}</strong><br>
+                                            📅 ${formatDate(cs.date)} • ⏰ ${cs.callTime}<br>
+                                            📍 ${cs.location || 'Sem locacao'}
+                                        </li>
+                                    `).join('')
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>Roteiros por Status</h4>
+                    <div class="chart-container">
+                        <canvas id="scriptsStatusChart"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateCrewReport() {
+            const crewByDepartment = {};
+            appState.crew.forEach(member => {
+                const dept = member.department || 'Sem Departamento';
+                if (!crewByDepartment[dept]) {
+                    crewByDepartment[dept] = [];
+                }
+                crewByDepartment[dept].push(member);
+            });
+
+            const activeCrew = appState.crew.filter(c => c.status === 'Ativo').length;
+            const totalDailyRates = appState.crew.reduce((sum, c) => sum + (parseFloat(c.dailyRate) || 0), 0);
+
+            return `
+                <div class="report-section">
+                    <h3>Relatorio de Equipe</h3>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-box-value">${appState.crew.length}</div>
+                            <div class="stat-box-label">Total de Membros</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${activeCrew}</div>
+                            <div class="stat-box-label">Membros Ativos</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${Object.keys(crewByDepartment).length}</div>
+                            <div class="stat-box-label">Departamentos</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box-value">${formatCurrency(totalDailyRates)}</div>
+                            <div class="stat-box-label">Diarias Totais</div>
+                        </div>
+                    </div>
+
+                    <h4>Equipe por Departamento</h4>
+                    <div class="chart-container">
+                        <canvas id="crewByDepartmentChart"></canvas>
+                    </div>
+
+                    ${Object.entries(crewByDepartment).map(([dept, members]) => `
+                        <div style="margin-top: 30px;">
+                            <h4>${dept} (${members.length} membros)</h4>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Funcao</th>
+                                            <th>Status</th>
+                                            <th>Diaria</th>
+                                            <th>Contato</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${members.map(m => `
+                                            <tr>
+                                                <td>${m.name}</td>
+                                                <td>${m.role}</td>
+                                                <td><span class="badge ${m.status === 'Ativo' ? 'badge-success' : 'badge-warning'}">${m.status}</span></td>
+                                                <td>${formatCurrency(m.dailyRate)}</td>
+                                                <td>${m.contact || '-'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // ==================== CHART RENDERING FUNCTIONS ====================
+        // Chart.js default config with Digimon World 3 theme
+        const retroChartDefaults = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            family: "'Press Start 2P', cursive",
+                            size: 8
+                        },
+                        color: '#e8f4ff',
+                        padding: 15
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        font: {
+                            family: "'Press Start 2P', cursive",
+                            size: 6
+                        },
+                        color: '#7a9cc6'
+                    },
+                    grid: {
+                        color: 'rgba(74, 159, 255, 0.1)'
+                    }
+                },
+                y: {
+                    ticks: {
+                        font: {
+                            family: "'Press Start 2P', cursive",
+                            size: 6
+                        },
+                        color: '#7a9cc6'
+                    },
+                    grid: {
+                        color: 'rgba(74, 159, 255, 0.1)'
+                    }
+                }
+            }
+        };
+
+        const retroColors = [
+            '#4a9fff', // Neon Blue
+            '#ffdd00', // Yellow
+            '#00ddff', // Cyan
+            '#ff4757', // Red
+            '#ffa502', // Gold
+            '#10b981', // Green
+            '#3742fa', // Dark Blue
+            '#f59e0b'  // Orange
+        ];
+
+        function renderOverviewCharts() {
+            const ctx = document.getElementById('projectStatusChart');
+            if (!ctx) return;
+
+            const projectsByStatus = {};
+            appState.projects.forEach(p => {
+                const status = p.status || 'Sem Status';
+                projectsByStatus[status] = (projectsByStatus[status] || 0) + 1;
+            });
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(projectsByStatus),
+                    datasets: [{
+                        data: Object.values(projectsByStatus),
+                        backgroundColor: retroColors,
+                        borderColor: '#0a1428',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    ...retroChartDefaults,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    family: "'Press Start 2P', cursive",
+                                    size: 7
+                                },
+                                color: '#e8f4ff',
+                                padding: 10
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderFinancialCharts() {
+            // Budget by Category Chart
+            const ctxCategory = document.getElementById('budgetByCategoryChart');
+            if (ctxCategory) {
+                const budgetByCategory = {};
+                appState.budget.forEach(item => {
+                    const category = item.category || 'Outros';
+                    const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                    budgetByCategory[category] = (budgetByCategory[category] || 0) + total;
+                });
+
+                new Chart(ctxCategory, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(budgetByCategory),
+                        datasets: [{
+                            label: 'Valor (R$)',
+                            data: Object.values(budgetByCategory),
+                            backgroundColor: retroColors[0],
+                            borderColor: retroColors[1],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: retroChartDefaults
+                });
+            }
+
+            // Budget by Project Chart
+            const ctxProject = document.getElementById('budgetByProjectChart');
+            if (ctxProject) {
+                const budgetByProject = {};
+                appState.budget.forEach(item => {
+                    const project = item.project || 'Sem Projeto';
+                    const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                    budgetByProject[project] = (budgetByProject[project] || 0) + total;
+                });
+
+                new Chart(ctxProject, {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(budgetByProject),
+                        datasets: [{
+                            data: Object.values(budgetByProject),
+                            backgroundColor: retroColors,
+                            borderColor: '#0a1428',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        ...retroChartDefaults,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    font: {
+                                        family: "'Press Start 2P', cursive",
+                                        size: 7
+                                    },
+                                    color: '#e8f4ff',
+                                    padding: 10
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function renderProductionCharts() {
+            // Projects by Status
+            const ctxProjects = document.getElementById('projectsStatusChart');
+            if (ctxProjects) {
+                const projectsByStatus = {};
+                appState.projects.forEach(p => {
+                    const status = p.status || 'Sem Status';
+                    projectsByStatus[status] = (projectsByStatus[status] || 0) + 1;
+                });
+
+                new Chart(ctxProjects, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(projectsByStatus),
+                        datasets: [{
+                            label: 'Numero de Projetos',
+                            data: Object.values(projectsByStatus),
+                            backgroundColor: retroColors[1],
+                            borderColor: retroColors[0],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: retroChartDefaults
+                });
+            }
+
+            // Scripts by Status
+            const ctxScripts = document.getElementById('scriptsStatusChart');
+            if (ctxScripts) {
+                const scriptsByStatus = {};
+                appState.scripts.forEach(s => {
+                    const status = s.status || 'Sem Status';
+                    scriptsByStatus[status] = (scriptsByStatus[status] || 0) + 1;
+                });
+
+                new Chart(ctxScripts, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(scriptsByStatus),
+                        datasets: [{
+                            data: Object.values(scriptsByStatus),
+                            backgroundColor: retroColors,
+                            borderColor: '#0a1428',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        ...retroChartDefaults,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    font: {
+                                        family: "'Press Start 2P', cursive",
+                                        size: 7
+                                    },
+                                    color: '#e8f4ff',
+                                    padding: 10
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function renderCrewCharts() {
+            const ctx = document.getElementById('crewByDepartmentChart');
+            if (!ctx) return;
+
+            const crewByDepartment = {};
+            appState.crew.forEach(member => {
+                const dept = member.department || 'Sem Departamento';
+                crewByDepartment[dept] = (crewByDepartment[dept] || 0) + 1;
+            });
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(crewByDepartment),
+                    datasets: [{
+                        label: 'Numero de Membros',
+                        data: Object.values(crewByDepartment),
+                        backgroundColor: retroColors[2],
+                        borderColor: retroColors[1],
+                        borderWidth: 2
+                    }]
+                },
+                options: retroChartDefaults
+            });
+        }
+
+        // ==================== VALIDATION & UTILITIES ====================
+        function validateForm(formId, requiredFields) {
+            const form = document.getElementById(formId);
+            if (!form) return false;
+
+            for (let field of requiredFields) {
+                const input = form.querySelector(`[name="${field.name}"]`);
+                if (!input || !input.value || input.value.trim() === '') {
+                    showNotification(`Campo "${field.label}" e obrigatorio!`, 'warning');
+                    input.focus();
+                    return false;
+                }
+
+                // Validate number fields
+                if (field.type === 'number' && input.value) {
+                    const num = parseFloat(input.value);
+                    if (isNaN(num) || num < 0) {
+                        showNotification(`Campo "${field.label}" deve ser um numero valido!`, 'warning');
+                        input.focus();
+                        return false;
+                    }
+                }
+
+                // Validate email fields
+                if (field.type === 'email' && input.value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(input.value)) {
+                        showNotification(`Campo "${field.label}" deve ser um email valido!`, 'warning');
+                        input.focus();
+                        return false;
+                    }
+                }
+
+                // Validate date fields
+                if (field.type === 'date' && input.value) {
+                    const date = new Date(input.value);
+                    if (isNaN(date.getTime())) {
+                        showNotification(`Campo "${field.label}" deve ser uma data valida!`, 'warning');
+                        input.focus();
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        function confirmDelete(itemName, itemType = 'item') {
+            return confirm(`Tem certeza que deseja excluir ${itemType} "${itemName}"?\n\nEsta acao nao pode ser desfeita.`);
+        }
+
+        // ==================== EXPORT FUNCTIONS ====================
+        function exportAllToExcel() {
+            if (typeof XLSX === 'undefined') {
+                showNotification('Biblioteca XLSX nao carregada', 'error');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+
+            // Projects Sheet
+            if (appState.projects.length > 0) {
+                const projectsData = appState.projects.map(p => ({
+                    'Nome': p.name || '',
+                    'Tipo': p.type || '',
+                    'Status': p.status || '',
+                    'Diretor': p.director || '',
+                    'Produtor': p.producer || '',
+                    'Inicio': p.startDate || '',
+                    'Termino': p.endDate || '',
+                    'Descricao': p.description || ''
+                }));
+                const ws1 = XLSX.utils.json_to_sheet(projectsData);
+                XLSX.utils.book_append_sheet(wb, ws1, "Projetos");
+            }
+
+            // Crew Sheet
+            if (appState.crew.length > 0) {
+                const crewData = appState.crew.map(c => ({
+                    'Nome': c.name || '',
+                    'Funcao': c.role || '',
+                    'Departamento': c.department || '',
+                    'Email': c.email || '',
+                    'Telefone': c.phone || '',
+                    'Diaria': c.dailyRate || '',
+                    'Status': c.status || '',
+                    'Contato': c.contact || ''
+                }));
+                const ws2 = XLSX.utils.json_to_sheet(crewData);
+                XLSX.utils.book_append_sheet(wb, ws2, "Equipe");
+            }
+
+            // Equipment Sheet
+            if (appState.equipment.length > 0) {
+                const equipmentData = appState.equipment.map(e => ({
+                    'Nome': e.name || '',
+                    'Categoria': e.category || '',
+                    'Marca': e.brand || '',
+                    'Modelo': e.model || '',
+                    'Numero Serie': e.serialNumber || '',
+                    'Status': e.status || '',
+                    'Diaria': e.dailyRate || '',
+                    'Localizacao': e.location || ''
+                }));
+                const ws3 = XLSX.utils.json_to_sheet(equipmentData);
+                XLSX.utils.book_append_sheet(wb, ws3, "Equipamentos");
+            }
+
+            // Locations Sheet
+            if (appState.locations.length > 0) {
+                const locationsData = appState.locations.map(l => ({
+                    'Nome': l.name || '',
+                    'Endereco': l.address || '',
+                    'Tipo': l.type || '',
+                    'Contato': l.contact || '',
+                    'Telefone': l.phone || '',
+                    'Taxa': l.fee || '',
+                    'Observacoes': l.notes || ''
+                }));
+                const ws4 = XLSX.utils.json_to_sheet(locationsData);
+                XLSX.utils.book_append_sheet(wb, ws4, "Locacoes");
+            }
+
+            // Scripts Sheet
+            if (appState.scripts.length > 0) {
+                const scriptsData = appState.scripts.map(s => ({
+                    'Titulo': s.title || '',
+                    'Autor': s.author || '',
+                    'Versao': s.version || '',
+                    'Data': s.date || '',
+                    'Formato': s.format || '',
+                    'Status': s.status || '',
+                    'Paginas': s.pages || '',
+                    'Sinopse': s.synopsis || ''
+                }));
+                const ws5 = XLSX.utils.json_to_sheet(scriptsData);
+                XLSX.utils.book_append_sheet(wb, ws5, "Roteiros");
+            }
+
+            // Budget Sheet
+            if (appState.budget.length > 0) {
+                const budgetData = appState.budget.map(b => {
+                    const total = (parseFloat(b.quantity) || 0) * (parseFloat(b.unitPrice) || 0);
+                    return {
+                        'Categoria': b.category || '',
+                        'Item': b.item || '',
+                        'Descricao': b.description || '',
+                        'Quantidade': b.quantity || '',
+                        'Valor Unitario': b.unitPrice || '',
+                        'Total': total,
+                        'Projeto': b.project || ''
+                    };
+                });
+                const ws6 = XLSX.utils.json_to_sheet(budgetData);
+                XLSX.utils.book_append_sheet(wb, ws6, "Orcamento");
+            }
+
+            // Call Sheets Sheet
+            if (appState.callSheets.length > 0) {
+                const callSheetsData = appState.callSheets.map(cs => ({
+                    'Projeto': cs.project || '',
+                    'Data': cs.date || '',
+                    'Call Time': cs.callTime || '',
+                    'Wrap Time': cs.wrapTime || '',
+                    'Clima': cs.weather || '',
+                    'Locacao': cs.location || '',
+                    'Cenas': cs.scenes || '',
+                    'Notas': cs.notes || ''
+                }));
+                const ws7 = XLSX.utils.json_to_sheet(callSheetsData);
+                XLSX.utils.book_append_sheet(wb, ws7, "Call Sheets");
+            }
+
+            // Schedule Sheet
+            if (appState.schedule.length > 0) {
+                const scheduleData = appState.schedule.map(s => ({
+                    'Titulo': s.title || '',
+                    'Data': s.date || '',
+                    'Hora': s.time || '',
+                    'Tipo': s.type || '',
+                    'Projeto': s.project || '',
+                    'Descricao': s.description || ''
+                }));
+                const ws8 = XLSX.utils.json_to_sheet(scheduleData);
+                XLSX.utils.book_append_sheet(wb, ws8, "Cronograma");
+            }
+
+            // Documents Sheet
+            if (appState.documents.length > 0) {
+                const documentsData = appState.documents.map(d => ({
+                    'Nome': d.name || '',
+                    'Tipo': d.type || '',
+                    'Tamanho': d.size || '',
+                    'Data Upload': formatDate(d.uploadedAt) || ''
+                }));
+                const ws9 = XLSX.utils.json_to_sheet(documentsData);
+                XLSX.utils.book_append_sheet(wb, ws9, "Documentos");
+            }
+
+            // Download file
+            const fileName = `CineProd_Completo_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+            showNotification('Relatorio Excel exportado com sucesso!', 'success');
+        }
+
+        function exportCompletePDF() {
+            if (typeof jspdf === 'undefined') {
+                showNotification('Biblioteca jsPDF nao carregada', 'error');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // ==================== COVER PAGE ====================
+            doc.setFontSize(24);
+            doc.setFont(undefined, 'bold');
+            doc.text('RELATORIO CINEPROD', 105, 40, { align: 'center' });
+
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'normal');
+            doc.text('Sistema de Gestao Cinematografica', 105, 55, { align: 'center' });
+            doc.text('Versao 1.0 - Digimon Style', 105, 65, { align: 'center' });
+
+            doc.setFontSize(12);
+            doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 105, 80, { align: 'center' });
+
+            // ==================== SUMMARY PAGE ====================
+            doc.addPage();
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.text('RESUMO EXECUTIVO', 20, 20);
+
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            let yPos = 35;
+
+            const totalBudget = appState.budget.reduce((sum, item) => {
+                const total = (parseFloat(item.quantity) || 0) * (parseFloat(item.unitPrice) || 0);
+                return sum + total;
+            }, 0);
+
+            const activeProjects = appState.projects.filter(p => p.status === 'Em Producao').length;
+            const activeCrew = appState.crew.filter(c => c.status === 'Ativo').length;
+
+            doc.text(`Total de Projetos: ${appState.projects.length}`, 30, yPos);
+            yPos += 8;
+            doc.text(`Projetos em Producao: ${activeProjects}`, 30, yPos);
+            yPos += 8;
+            doc.text(`Equipe Total: ${appState.crew.length} membros`, 30, yPos);
+            yPos += 8;
+            doc.text(`Membros Ativos: ${activeCrew}`, 30, yPos);
+            yPos += 8;
+            doc.text(`Equipamentos: ${appState.equipment.length} itens`, 30, yPos);
+            yPos += 8;
+            doc.text(`Locacoes: ${appState.locations.length} locais`, 30, yPos);
+            yPos += 8;
+            doc.text(`Roteiros: ${appState.scripts.length}`, 30, yPos);
+            yPos += 8;
+            doc.text(`Call Sheets: ${appState.callSheets.length}`, 30, yPos);
+            yPos += 8;
+            doc.text(`Eventos Agendados: ${appState.schedule.length}`, 30, yPos);
+            yPos += 8;
+            doc.text(`Documentos: ${appState.documents.length}`, 30, yPos);
+            yPos += 12;
+            doc.setFont(undefined, 'bold');
+            doc.text(`Orcamento Total: ${formatCurrency(totalBudget)}`, 30, yPos);
+
+            // ==================== PROJECTS TABLE ====================
+            if (appState.projects.length > 0) {
+                doc.addPage();
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.text('PROJETOS', 20, 20);
+
+                const projectsData = appState.projects.map(p => [
+                    p.name || '',
+                    p.type || '',
+                    p.status || '',
+                    p.director || '',
+                    formatDate(p.startDate) || ''
+                ]);
+
+                doc.autoTable({
+                    startY: 30,
+                    head: [['Nome', 'Tipo', 'Status', 'Diretor', 'Inicio']],
+                    body: projectsData,
+                    styles: { fontSize: 9 },
+                    headStyles: { fillColor: [74, 159, 255] }
+                });
+            }
+
+            // ==================== CREW TABLE ====================
+            if (appState.crew.length > 0) {
+                doc.addPage();
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.text('EQUIPE', 20, 20);
+
+                const crewData = appState.crew.map(c => [
+                    c.name || '',
+                    c.role || '',
+                    c.department || '',
+                    formatCurrency(c.dailyRate) || '',
+                    c.status || ''
+                ]);
+
+                doc.autoTable({
+                    startY: 30,
+                    head: [['Nome', 'Funcao', 'Departamento', 'Diaria', 'Status']],
+                    body: crewData,
+                    styles: { fontSize: 9 },
+                    headStyles: { fillColor: [74, 159, 255] }
+                });
+            }
+
+            // ==================== EQUIPMENT TABLE ====================
+            if (appState.equipment.length > 0) {
+                doc.addPage();
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.text('EQUIPAMENTOS', 20, 20);
+
+                const equipmentData = appState.equipment.map(e => [
+                    e.name || '',
+                    e.category || '',
+                    e.brand || '',
+                    e.model || '',
+                    e.status || ''
+                ]);
+
+                doc.autoTable({
+                    startY: 30,
+                    head: [['Nome', 'Categoria', 'Marca', 'Modelo', 'Status']],
+                    body: equipmentData,
+                    styles: { fontSize: 9 },
+                    headStyles: { fillColor: [74, 159, 255] }
+                });
+            }
+
+            // ==================== BUDGET TABLE ====================
+            if (appState.budget.length > 0) {
+                doc.addPage();
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.text('ORCAMENTO', 20, 20);
+
+                const budgetData = appState.budget.map(b => {
+                    const total = (parseFloat(b.quantity) || 0) * (parseFloat(b.unitPrice) || 0);
+                    return [
+                        b.category || '',
+                        b.item || '',
+                        b.quantity || '',
+                        formatCurrency(b.unitPrice) || '',
+                        formatCurrency(total) || ''
+                    ];
+                });
+
+                doc.autoTable({
+                    startY: 30,
+                    head: [['Categoria', 'Item', 'Qtd', 'Valor Unit.', 'Total']],
+                    body: budgetData,
+                    styles: { fontSize: 9 },
+                    headStyles: { fillColor: [74, 159, 255] }
+                });
+            }
+
+            // Save PDF
+            const fileName = `Relatorio_CineProd_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(fileName);
+            showNotification('Relatorio PDF exportado com sucesso!', 'success');
+        }
+    </script>
+</body>
+</html>

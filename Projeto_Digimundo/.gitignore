@@ -1,0 +1,25 @@
+
+# ==============================================================================
+# Project Organization - Added 2025-10-30
+# ==============================================================================
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Temporary folders
+tmp/
+tmp_*/
+temp/
+.temp/
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# Archive (keep structure but ignore in git)
+# archive/ is committed but large files inside can be gitignored if needed
+

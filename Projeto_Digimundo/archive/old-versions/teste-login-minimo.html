@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineProd - Teste Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 400px;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .btn:hover {
+            background: #5a67d8;
+        }
+        #message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #10b981;
+            color: white;
+        }
+        .error {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 CineProd</h1>
+        <h2>Teste de Login</h2>
+        
+        <button class="btn" onclick="testLogin('sofia@cinepro.com', 'demo123')">
+            Login como Sofia (deve funcionar)
+        </button>
+        
+        <button class="btn" onclick="testLogin('teste@teste.com', '123')">
+            Login com credenciais erradas (deve falhar)
+        </button>
+        
+        <div id="message"></div>
+    </div>
+
+    <script>
+        function testLogin(email, password) {
+            console.log('Testando login:', email);
+            
+            const users = [
+                { name: 'Sofia Luz', email: 'sofia@cinepro.com', password: 'demo123' },
+                { name: 'Marcus Terra', email: 'marcus@cinepro.com', password: 'demo123' }
+            ];
+            
+            const user = users.find(u => u.email === email && u.password === password);
+            const messageEl = document.getElementById('message');
+            
+            if (user) {
+                messageEl.className = 'success';
+                messageEl.textContent = '✅ Login bem-sucedido! Usuário: ' + user.name;
+                messageEl.style.display = 'block';
+            } else {
+                messageEl.className = 'error';
+                messageEl.textContent = '❌ Email ou senha inválidos';
+                messageEl.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

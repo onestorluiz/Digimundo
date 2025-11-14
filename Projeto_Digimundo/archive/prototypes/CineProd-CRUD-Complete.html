@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineProd - Sistema Completo de Gestão Cinematográfica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #5d78ff;
+            --primary-hover: #384ad7;
+            --accent: #FA1870;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1a202c;
+            --gray: #718096;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+            --radius: 8px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-column { flex-direction: column; }
+        .align-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-10 { gap: 10px; }
+        .gap-20 { gap: 20px; }
+        .w-full { width: 100%; }
+        
+        /* Login Page */
+        #loginPage {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 40px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(93, 120, 255, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+        }
+
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Main App */
+        #mainApp {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--dark);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: all 0.3s;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #2d3748;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius);
+            color: #a0aec0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+        }
+
+        .menu-item.active {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 260px;
+            right: 0;
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .sidebar.collapsed ~ .main-content .header {
+            left: 70px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+            transition: all 0.3s;
+        }
+
+        .sidebar.collapsed ~ .main-content {
+            margin-left: 70px;
+        }
+
+        .content-wrapper {
+            padding: 24px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: #f7fafc;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 13px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        tbody td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Status Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background: #fed7aa;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* Actions */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .grid-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            padding-left: 40px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage">
+        <div class="login-container">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div class="logo">🎬</div>
+                <h1>CineProd</h1>
+                <p style="color: #718096; font-size: 14px;">Sistema Completo de Gestão Cinematográfica</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required value="admin@cinepro.com">
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" required value="admin123">
+                </div>
+                <button type="submit" class="btn w-full">Entrar</button>
+            </form>
+
+            <div style="margin-top: 20px; padding: 15px; background: #f7fafc; border-radius: 8px; text-align: center;">
+                <small>Demo: admin@cinepro.com / admin123</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">🎬</div>
+                    <span style="color: white; font-size: 18px; font-weight: bold;">CineProd</span>
+                </div>
+            </div>
+            
+            <nav style="padding: 10px;" id="sidebarMenu"></nav>
+        </aside>
+
+        <div class="main-content">
+            <header class="header">
+                <div style="flex: 1; max-width: 500px;">
+                    <input type="text" placeholder="🔍 Buscar..." style="width: 100%; background: #f7fafc;">
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <button onclick="logout()" class="btn btn-sm btn-secondary">Sair</button>
+                </div>
+            </header>
+
+            <div class="content-wrapper" id="contentArea"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Título</h3>
+                <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== ESTADO DA APLICAÇÃO ====================
+        let appState = {
+            currentUser: null,
+            activeModule: 'dashboard',
+            
+            // Dados
+            projects: [],
+            crew: [],
+            equipment: [],
+            locations: [],
+            documents: [],
+            callSheets: [],
+            scripts: [],
+            budget: [],
+            schedule: [],
+            
+            // Contadores para IDs
+            nextId: {
+                project: 1,
+                crew: 1,
+                equipment: 1,
+                location: 1,
+                document: 1,
+                callSheet: 1,
+                script: 1,
+                budget: 1,
+                schedule: 1
+            }
+        };
+
+        // ==================== MENU ITEMS ====================
+        const menuItems = [
+            { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
+            { id: 'projects', label: 'Projetos', icon: '🎬' },
+            { id: 'crew', label: 'Equipe', icon: '👥' },
+            { id: 'equipment', label: 'Equipamentos', icon: '📷' },
+            { id: 'locations', label: 'Locações', icon: '📍' },
+            { id: 'callSheets', label: 'Call Sheets', icon: '📋' },
+            { id: 'scripts', label: 'Roteiros', icon: '📄' },
+            { id: 'schedule', label: 'Cronograma', icon: '📅' },
+            { id: 'budget', label: 'Orçamento', icon: '💰' },
+            { id: 'documents', label: 'Documentos', icon: '📁' }
+        ];
+
+        // ==================== INICIALIZAÇÃO ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFromLocalStorage();
+            setupEventListeners();
+            renderSidebarMenu();
+            
+            // Dados de exemplo se não houver dados salvos
+            if (appState.projects.length === 0) {
+                initializeSampleData();
+            }
+        });
+
+        function setupEventListeners() {
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (email === 'admin@cinepro.com' && password === 'admin123') {
+                appState.currentUser = { name: 'Admin', email: email };
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                loadModule('dashboard');
+            } else {
+                alert('Credenciais inválidas!');
+            }
+        }
+
+        function logout() {
+            saveToLocalStorage();
+            location.reload();
+        }
+
+        // ==================== ARMAZENAMENTO LOCAL ====================
+        function saveToLocalStorage() {
+            localStorage.setItem('cineproData', JSON.stringify(appState));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('cineproData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.assign(appState, data);
+            }
+        }
+
+        // ==================== DADOS DE EXEMPLO ====================
+        function initializeSampleData() {
+            appState.projects = [
+                {
+                    id: 'proj_1',
+                    name: 'Eclipse - O Filme',
+                    type: 'Longa-metragem',
+                    status: 'Em Produção',
+                    director: 'Sofia Luz',
+                    producer: 'Marcus Terra',
+                    budget: 5000000,
+                    startDate: '2024-01-10',
+                    endDate: '2024-04-15',
+                    description: 'Um épico de ficção científica'
+                },
+                {
+                    id: 'proj_2',
+                    name: 'Urban Shadows',
+                    type: 'Série TV',
+                    status: 'Pré-Produção',
+                    director: 'Alex Rivers',
+                    producer: 'Marcus Terra',
+                    budget: 8000000,
+                    startDate: '2024-02-01',
+                    endDate: '2024-06-30',
+                    description: 'Série dramática urbana'
+                }
+            ];
+
+            appState.crew = [
+                {
+                    id: 'crew_1',
+                    name: 'Sofia Luz',
+                    role: 'Diretora',
+                    department: 'Direção',
+                    email: 'sofia@cinepro.com',
+                    phone: '(11) 98765-4321',
+                    project: 'Eclipse - O Filme',
+                    dailyRate: 5000,
+                    status: 'Ativo'
+                },
+                {
+                    id: 'crew_2',
+                    name: 'Marcus Terra',
+                    role: 'Produtor',
+                    department: 'Produção',
+                    email: 'marcus@cinepro.com',
+                    phone: '(11) 98765-4322',
+                    project: 'Eclipse - O Filme',
+                    dailyRate: 4500,
+                    status: 'Ativo'
+                }
+            ];
+
+            appState.equipment = [
+                {
+                    id: 'eq_1',
+                    name: 'ARRI Alexa Mini LF',
+                    category: 'Câmera',
+                    brand: 'ARRI',
+                    model: 'Alexa Mini LF',
+                    serialNumber: 'AML-12345',
+                    status: 'Disponível',
+                    dailyRate: 2500,
+                    location: 'Armazém A'
+                }
+            ];
+
+            appState.locations = [
+                {
+                    id: 'loc_1',
+                    name: 'Estúdio CineProd A',
+                    type: 'Estúdio',
+                    address: 'Rua das Câmeras, 100, São Paulo',
+                    capacity: 200,
+                    dailyRate: 5000,
+                    status: 'Disponível',
+                    contact: 'João Silva - (11) 3456-7890'
+                }
+            ];
+
+            saveToLocalStorage();
+        }
+
+        // ==================== RENDERIZAÇÃO DO MENU ====================
+        function renderSidebarMenu() {
+            const menuContainer = document.getElementById('sidebarMenu');
+            menuContainer.innerHTML = '';
+            
+            menuItems.forEach(item => {
+                const button = document.createElement('button');
+                button.className = `menu-item ${appState.activeModule === item.id ? 'active' : ''}`;
+                button.onclick = () => loadModule(item.id);
+                button.innerHTML = `
+                    <span>${item.icon} ${item.label}</span>
+                `;
+                menuContainer.appendChild(button);
+            });
+        }
+
+        // ==================== CARREGAMENTO DE MÓDULOS ====================
+        function loadModule(moduleId) {
+            appState.activeModule = moduleId;
+            renderSidebarMenu();
+            
+            const contentArea = document.getElementById('contentArea');
+            
+            switch(moduleId) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'projects':
+                    loadProjects();
+                    break;
+                case 'crew':
+                    loadCrew();
+                    break;
+                case 'equipment':
+                    loadEquipment();
+                    break;
+                case 'locations':
+                    loadLocations();
+                    break;
+                case 'callSheets':
+                    loadCallSheets();
+                    break;
+                case 'scripts':
+                    loadScripts();
+                    break;
+                case 'schedule':
+                    loadSchedule();
+                    break;
+                case 'budget':
+                    loadBudget();
+                    break;
+                case 'documents':
+                    loadDocuments();
+                    break;
+                default:
+                    contentArea.innerHTML = '<div class="card"><h2>Módulo em desenvolvimento</h2></div>';
+            }
+        }
+
+        // ==================== DASHBOARD ====================
+        function loadDashboard() {
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <h1 style="margin-bottom: 30px;">Dashboard</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 style="color: var(--gray); font-size: 14px; margin-bottom: 8px;">Projetos Ativos</h3>
+                        <p style="font-size: 32px; font-weight: bold;">${appState.projects.length}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: var(--gray); font-size: 14px; margin-bottom: 8px;">Equipe Total</h3>
+                        <p style="font-size: 32px; font-weight: bold;">${appState.crew.length}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: var(--gray); font-size: 14px; margin-bottom: 8px;">Equipamentos</h3>
+                        <p style="font-size: 32px; font-weight: bold;">${appState.equipment.length}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: var(--gray); font-size: 14px; margin-bottom: 8px;">Locações</h3>
+                        <p style="font-size: 32px; font-weight: bold;">${appState.locations.length}</p>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px;">Projetos Recentes</h3>
+                        ${appState.projects.slice(0, 3).map(p => `
+                            <div style="padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>${p.name}</strong><br>
+                                <small style="color: var(--gray);">${p.type} • ${p.status}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px;">Equipe Ativa</h3>
+                        ${appState.crew.slice(0, 3).map(c => `
+                            <div style="padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                                <strong>${c.name}</strong><br>
+                                <small style="color: var(--gray);">${c.role} • ${c.department}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==================== PROJETOS ====================
+        function loadProjects() {
+            renderList('projects', 'Projetos', [
+                { key: 'name', label: 'Nome' },
+                { key: 'type', label: 'Tipo' },
+                { key: 'status', label: 'Status' },
+                { key: 'director', label: 'Diretor' },
+                { key: 'budget', label: 'Orçamento', format: 'currency' }
+            ]);
+        }
+
+        function editProject(id) {
+            const project = id ? appState.projects.find(p => p.id === id) : {};
+            
+            openModal(`${id ? 'Editar' : 'Novo'} Projeto`, `
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label>Nome do Projeto *</label>
+                        <input type="text" name="name" value="${project.name || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select name="type">
+                            <option value="Longa-metragem" ${project.type === 'Longa-metragem' ? 'selected' : ''}>Longa-metragem</option>
+                            <option value="Curta-metragem" ${project.type === 'Curta-metragem' ? 'selected' : ''}>Curta-metragem</option>
+                            <option value="Série TV" ${project.type === 'Série TV' ? 'selected' : ''}>Série TV</option>
+                            <option value="Comercial" ${project.type === 'Comercial' ? 'selected' : ''}>Comercial</option>
+                            <option value="Documentário" ${project.type === 'Documentário' ? 'selected' : ''}>Documentário</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Desenvolvimento" ${project.status === 'Desenvolvimento' ? 'selected' : ''}>Desenvolvimento</option>
+                            <option value="Pré-Produção" ${project.status === 'Pré-Produção' ? 'selected' : ''}>Pré-Produção</option>
+                            <option value="Em Produção" ${project.status === 'Em Produção' ? 'selected' : ''}>Em Produção</option>
+                            <option value="Pós-Produção" ${project.status === 'Pós-Produção' ? 'selected' : ''}>Pós-Produção</option>
+                            <option value="Concluído" ${project.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Diretor</label>
+                        <input type="text" name="director" value="${project.director || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Produtor</label>
+                        <input type="text" name="producer" value="${project.producer || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Orçamento (R$)</label>
+                        <input type="number" name="budget" value="${project.budget || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Início</label>
+                        <input type="date" name="startDate" value="${project.startDate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Término</label>
+                        <input type="date" name="endDate" value="${project.endDate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <textarea name="description">${project.description || ''}</textarea>
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveProject('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveProject(id) {
+            const form = document.getElementById('projectForm');
+            const formData = new FormData(form);
+            
+            const project = {
+                id: id || `proj_${Date.now()}`,
+                name: formData.get('name'),
+                type: formData.get('type'),
+                status: formData.get('status'),
+                director: formData.get('director'),
+                producer: formData.get('producer'),
+                budget: formData.get('budget'),
+                startDate: formData.get('startDate'),
+                endDate: formData.get('endDate'),
+                description: formData.get('description')
+            };
+
+            if (id) {
+                const index = appState.projects.findIndex(p => p.id === id);
+                appState.projects[index] = project;
+            } else {
+                appState.projects.push(project);
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadProjects();
+        }
+
+        function deleteProject(id) {
+            if (confirm('Tem certeza que deseja excluir este projeto?')) {
+                appState.projects = appState.projects.filter(p => p.id !== id);
+                saveToLocalStorage();
+                loadProjects();
+            }
+        }
+
+        // ==================== EQUIPE ====================
+        function loadCrew() {
+            renderList('crew', 'Equipe', [
+                { key: 'name', label: 'Nome' },
+                { key: 'role', label: 'Função' },
+                { key: 'department', label: 'Departamento' },
+                { key: 'email', label: 'Email' },
+                { key: 'status', label: 'Status' }
+            ]);
+        }
+
+        function editCrew(id) {
+            const crew = id ? appState.crew.find(c => c.id === id) : {};
+            
+            openModal(`${id ? 'Editar' : 'Novo'} Membro da Equipe`, `
+                <form id="crewForm">
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" name="name" value="${crew.name || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Função</label>
+                        <input type="text" name="role" value="${crew.role || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <select name="department">
+                            <option value="Direção" ${crew.department === 'Direção' ? 'selected' : ''}>Direção</option>
+                            <option value="Produção" ${crew.department === 'Produção' ? 'selected' : ''}>Produção</option>
+                            <option value="Fotografia" ${crew.department === 'Fotografia' ? 'selected' : ''}>Fotografia</option>
+                            <option value="Arte" ${crew.department === 'Arte' ? 'selected' : ''}>Arte</option>
+                            <option value="Som" ${crew.department === 'Som' ? 'selected' : ''}>Som</option>
+                            <option value="Edição" ${crew.department === 'Edição' ? 'selected' : ''}>Edição</option>
+                            <option value="Elenco" ${crew.department === 'Elenco' ? 'selected' : ''}>Elenco</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" value="${crew.email || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="tel" name="phone" value="${crew.phone || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Projeto</label>
+                        <select name="project">
+                            <option value="">Selecione um projeto</option>
+                            ${appState.projects.map(p => `
+                                <option value="${p.name}" ${crew.project === p.name ? 'selected' : ''}>${p.name}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Diária (R$)</label>
+                        <input type="number" name="dailyRate" value="${crew.dailyRate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Ativo" ${crew.status === 'Ativo' ? 'selected' : ''}>Ativo</option>
+                            <option value="Inativo" ${crew.status === 'Inativo' ? 'selected' : ''}>Inativo</option>
+                            <option value="Férias" ${crew.status === 'Férias' ? 'selected' : ''}>Férias</option>
+                        </select>
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveCrew('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveCrew(id) {
+            const form = document.getElementById('crewForm');
+            const formData = new FormData(form);
+            
+            const crew = {
+                id: id || `crew_${Date.now()}`,
+                name: formData.get('name'),
+                role: formData.get('role'),
+                department: formData.get('department'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                project: formData.get('project'),
+                dailyRate: formData.get('dailyRate'),
+                status: formData.get('status')
+            };
+
+            if (id) {
+                const index = appState.crew.findIndex(c => c.id === id);
+                appState.crew[index] = crew;
+            } else {
+                appState.crew.push(crew);
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadCrew();
+        }
+
+        function deleteCrew(id) {
+            if (confirm('Tem certeza que deseja excluir este membro da equipe?')) {
+                appState.crew = appState.crew.filter(c => c.id !== id);
+                saveToLocalStorage();
+                loadCrew();
+            }
+        }
+
+        // ==================== EQUIPAMENTOS ====================
+        function loadEquipment() {
+            renderList('equipment', 'Equipamentos', [
+                { key: 'name', label: 'Nome' },
+                { key: 'category', label: 'Categoria' },
+                { key: 'brand', label: 'Marca' },
+                { key: 'status', label: 'Status' },
+                { key: 'dailyRate', label: 'Diária', format: 'currency' }
+            ]);
+        }
+
+        function editEquipment(id) {
+            const equipment = id ? appState.equipment.find(e => e.id === id) : {};
+            
+            openModal(`${id ? 'Editar' : 'Novo'} Equipamento`, `
+                <form id="equipmentForm">
+                    <div class="form-group">
+                        <label>Nome do Equipamento *</label>
+                        <input type="text" name="name" value="${equipment.name || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select name="category">
+                            <option value="Câmera" ${equipment.category === 'Câmera' ? 'selected' : ''}>Câmera</option>
+                            <option value="Lente" ${equipment.category === 'Lente' ? 'selected' : ''}>Lente</option>
+                            <option value="Iluminação" ${equipment.category === 'Iluminação' ? 'selected' : ''}>Iluminação</option>
+                            <option value="Som" ${equipment.category === 'Som' ? 'selected' : ''}>Som</option>
+                            <option value="Grip" ${equipment.category === 'Grip' ? 'selected' : ''}>Grip</option>
+                            <option value="Outros" ${equipment.category === 'Outros' ? 'selected' : ''}>Outros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <input type="text" name="brand" value="${equipment.brand || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" name="model" value="${equipment.model || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Número de Série</label>
+                        <input type="text" name="serialNumber" value="${equipment.serialNumber || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Disponível" ${equipment.status === 'Disponível' ? 'selected' : ''}>Disponível</option>
+                            <option value="Em Uso" ${equipment.status === 'Em Uso' ? 'selected' : ''}>Em Uso</option>
+                            <option value="Manutenção" ${equipment.status === 'Manutenção' ? 'selected' : ''}>Manutenção</option>
+                            <option value="Indisponível" ${equipment.status === 'Indisponível' ? 'selected' : ''}>Indisponível</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Diária (R$)</label>
+                        <input type="number" name="dailyRate" value="${equipment.dailyRate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Localização</label>
+                        <input type="text" name="location" value="${equipment.location || ''}">
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveEquipment('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveEquipment(id) {
+            const form = document.getElementById('equipmentForm');
+            const formData = new FormData(form);
+            
+            const equipment = {
+                id: id || `eq_${Date.now()}`,
+                name: formData.get('name'),
+                category: formData.get('category'),
+                brand: formData.get('brand'),
+                model: formData.get('model'),
+                serialNumber: formData.get('serialNumber'),
+                status: formData.get('status'),
+                dailyRate: formData.get('dailyRate'),
+                location: formData.get('location')
+            };
+
+            if (id) {
+                const index = appState.equipment.findIndex(e => e.id === id);
+                appState.equipment[index] = equipment;
+            } else {
+                appState.equipment.push(equipment);
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadEquipment();
+        }
+
+        function deleteEquipment(id) {
+            if (confirm('Tem certeza que deseja excluir este equipamento?')) {
+                appState.equipment = appState.equipment.filter(e => e.id !== id);
+                saveToLocalStorage();
+                loadEquipment();
+            }
+        }
+
+        // ==================== LOCAÇÕES ====================
+        function loadLocations() {
+            renderList('locations', 'Locações', [
+                { key: 'name', label: 'Nome' },
+                { key: 'type', label: 'Tipo' },
+                { key: 'address', label: 'Endereço' },
+                { key: 'status', label: 'Status' },
+                { key: 'dailyRate', label: 'Diária', format: 'currency' }
+            ]);
+        }
+
+        function editLocation(id) {
+            const location = id ? appState.locations.find(l => l.id === id) : {};
+            
+            openModal(`${id ? 'Editar' : 'Nova'} Locação`, `
+                <form id="locationForm">
+                    <div class="form-group">
+                        <label>Nome da Locação *</label>
+                        <input type="text" name="name" value="${location.name || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select name="type">
+                            <option value="Estúdio" ${location.type === 'Estúdio' ? 'selected' : ''}>Estúdio</option>
+                            <option value="Externa" ${location.type === 'Externa' ? 'selected' : ''}>Externa</option>
+                            <option value="Residência" ${location.type === 'Residência' ? 'selected' : ''}>Residência</option>
+                            <option value="Comercial" ${location.type === 'Comercial' ? 'selected' : ''}>Comercial</option>
+                            <option value="Pública" ${location.type === 'Pública' ? 'selected' : ''}>Pública</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Endereço</label>
+                        <input type="text" name="address" value="${location.address || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Capacidade (pessoas)</label>
+                        <input type="number" name="capacity" value="${location.capacity || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Disponível" ${location.status === 'Disponível' ? 'selected' : ''}>Disponível</option>
+                            <option value="Reservada" ${location.status === 'Reservada' ? 'selected' : ''}>Reservada</option>
+                            <option value="Em Uso" ${location.status === 'Em Uso' ? 'selected' : ''}>Em Uso</option>
+                            <option value="Indisponível" ${location.status === 'Indisponível' ? 'selected' : ''}>Indisponível</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Diária (R$)</label>
+                        <input type="number" name="dailyRate" value="${location.dailyRate || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Contato</label>
+                        <input type="text" name="contact" value="${location.contact || ''}">
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveLocation('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveLocation(id) {
+            const form = document.getElementById('locationForm');
+            const formData = new FormData(form);
+            
+            const location = {
+                id: id || `loc_${Date.now()}`,
+                name: formData.get('name'),
+                type: formData.get('type'),
+                address: formData.get('address'),
+                capacity: formData.get('capacity'),
+                status: formData.get('status'),
+                dailyRate: formData.get('dailyRate'),
+                contact: formData.get('contact')
+            };
+
+            if (id) {
+                const index = appState.locations.findIndex(l => l.id === id);
+                appState.locations[index] = location;
+            } else {
+                appState.locations.push(location);
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadLocations();
+        }
+
+        function deleteLocation(id) {
+            if (confirm('Tem certeza que deseja excluir esta locação?')) {
+                appState.locations = appState.locations.filter(l => l.id !== id);
+                saveToLocalStorage();
+                loadLocations();
+            }
+        }
+
+        // ==================== OUTROS MÓDULOS ====================
+        function loadCallSheets() {
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Call Sheets</h2>
+                        <button class="btn btn-success" onclick="alert('Funcionalidade de adicionar Call Sheet em desenvolvimento')">
+                            + Nova Call Sheet
+                        </button>
+                    </div>
+                    <p>Módulo de Call Sheets em desenvolvimento...</p>
+                </div>
+            `;
+        }
+
+        function loadScripts() {
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Roteiros</h2>
+                        <button class="btn btn-success" onclick="alert('Funcionalidade de adicionar Roteiro em desenvolvimento')">
+                            + Novo Roteiro
+                        </button>
+                    </div>
+                    <p>Módulo de Roteiros em desenvolvimento...</p>
+                </div>
+            `;
+        }
+
+        function loadSchedule() {
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Cronograma</h2>
+                        <button class="btn btn-success" onclick="alert('Funcionalidade de adicionar Evento em desenvolvimento')">
+                            + Novo Evento
+                        </button>
+                    </div>
+                    <p>Módulo de Cronograma em desenvolvimento...</p>
+                </div>
+            `;
+        }
+
+        function loadBudget() {
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Orçamento</h2>
+                        <button class="btn btn-success" onclick="alert('Funcionalidade de adicionar Item em desenvolvimento')">
+                            + Novo Item
+                        </button>
+                    </div>
+                    <p>Módulo de Orçamento em desenvolvimento...</p>
+                </div>
+            `;
+        }
+
+        function loadDocuments() {
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Documentos</h2>
+                        <button class="btn btn-success" onclick="alert('Funcionalidade de upload em desenvolvimento')">
+                            + Upload Documento
+                        </button>
+                    </div>
+                    <p>Módulo de Documentos em desenvolvimento...</p>
+                </div>
+            `;
+        }
+
+        // ==================== FUNÇÕES AUXILIARES ====================
+        function renderList(module, title, columns) {
+            const content = document.getElementById('contentArea');
+            const data = appState[module];
+            
+            let html = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">${title}</h2>
+                        <button class="btn btn-success" onclick="edit${module.charAt(0).toUpperCase() + module.slice(1).replace(/s$/, '')}()">
+                            + Novo
+                        </button>
+                    </div>
+                    
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" placeholder="Buscar..." onkeyup="filterTable('${module}', this.value)">
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table id="${module}Table">
+                            <thead>
+                                <tr>
+                                    ${columns.map(col => `<th>${col.label}</th>`).join('')}
+                                    <th width="120">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+            
+            if (data.length === 0) {
+                html += `
+                    <tr>
+                        <td colspan="${columns.length + 1}" style="text-align: center; padding: 40px; color: var(--gray);">
+                            Nenhum registro encontrado
+                        </td>
+                    </tr>
+                `;
+            } else {
+                data.forEach(item => {
+                    html += '<tr>';
+                    columns.forEach(col => {
+                        let value = item[col.key] || '-';
+                        if (col.format === 'currency' && value !== '-') {
+                            value = `R$ ${parseFloat(value).toLocaleString('pt-BR')}`;
+                        }
+                        if (col.key === 'status') {
+                            const badgeClass = value === 'Ativo' || value === 'Disponível' || value === 'Em Produção' ? 'badge-success' :
+                                              value === 'Inativo' || value === 'Indisponível' || value === 'Concluído' ? 'badge-danger' :
+                                              'badge-warning';
+                            value = `<span class="badge ${badgeClass}">${value}</span>`;
+                        }
+                        html += `<td>${value}</td>`;
+                    });
+                    
+                    const editFunction = `edit${module.charAt(0).toUpperCase() + module.slice(1).replace(/s$/, '')}`;
+                    const deleteFunction = `delete${module.charAt(0).toUpperCase() + module.slice(1).replace(/s$/, '')}`;
+                    
+                    html += `
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm" onclick="${editFunction}('${item.id}')">✏️</button>
+                                <button class="btn btn-sm btn-danger" onclick="${deleteFunction}('${item.id}')">🗑️</button>
+                            </div>
+                        </td>
+                    `;
+                    html += '</tr>';
+                });
+            }
+            
+            html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+        }
+
+        function filterTable(tableId, searchTerm) {
+            const table = document.getElementById(`${tableId}Table`);
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+            }
+        }
+
+        function openModal(title, body, buttons = []) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = body;
+            
+            const footer = document.getElementById('modalFooter');
+            footer.innerHTML = '';
+            
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = `btn ${btn.class || ''}`;
+                button.textContent = btn.text;
+                button.onclick = () => eval(btn.onclick);
+                footer.appendChild(button);
+            });
+            
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+    </script>
+</body>
+</html>

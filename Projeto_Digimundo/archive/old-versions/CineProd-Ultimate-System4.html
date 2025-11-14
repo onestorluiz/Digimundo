@@ -1,0 +1,3225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineProd Ultimate - Sistema Profissional de Gestão Cinematográfica</title>
+    
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- XLSX para exportar Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- jsPDF para gerar PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    <style>
+        /* ==================== RESET E VARIÁVEIS ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Cores do design original TSX */
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #764ba2;
+            --accent: #FA1870;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            /* Cores neutras */
+            --dark: #1a202c;
+            --gray-900: #1a202c;
+            --gray-800: #2d3748;
+            --gray-700: #4a5568;
+            --gray-600: #718096;
+            --gray-500: #a0aec0;
+            --gray-400: #cbd5e0;
+            --gray-300: #e2e8f0;
+            --gray-200: #edf2f7;
+            --gray-100: #f7fafc;
+            --white: #ffffff;
+            
+            /* Gradientes */
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-dark: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            
+            /* Sombras */
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-2xl: 0 25px 50px rgba(0,0,0,0.12);
+            
+            /* Outros */
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-100);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* ==================== ANIMAÇÕES ==================== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from { 
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
+        .animate-slideIn { animation: slideIn 0.3s ease-out; }
+        .animate-slideUp { animation: slideUp 0.3s ease-out; }
+        .animate-scaleIn { animation: scaleIn 0.3s ease-out; }
+        .animate-spin { animation: spin 1s linear infinite; }
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+        /* ==================== UTILITIES ==================== */
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-column { flex-direction: column; }
+        .align-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-10 { gap: 10px; }
+        .gap-20 { gap: 20px; }
+        .w-full { width: 100%; }
+        .text-center { text-align: center; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .fixed { position: fixed; }
+
+        /* ==================== LOGIN PAGE ==================== */
+        #loginPage {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+            padding: 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            color: white;
+            font-size: 40px;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        /* ==================== QUICK ACCESS CARDS ==================== */
+        .user-card {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* ==================== FORMS ==================== */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: var(--transition);
+            outline: none;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .btn {
+            padding: 10px 20px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-secondary {
+            background: var(--gray-600);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .btn-info {
+            background: var(--info);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-icon {
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            width: 260px;
+            background: var(--gradient-dark);
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: var(--transition);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo-text {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .sidebar.collapsed .sidebar-logo-text {
+            display: none;
+        }
+
+        .menu-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius);
+            color: var(--gray-400);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: rgba(102, 126, 234, 0.2);
+            color: white;
+        }
+
+        .sidebar.collapsed .menu-item {
+            padding: 12px;
+            justify-content: center;
+        }
+
+        .menu-item-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar.collapsed .menu-item-text {
+            display: none;
+        }
+
+        .menu-badge {
+            background: var(--primary);
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .sidebar.collapsed .menu-badge {
+            display: none;
+        }
+
+        /* ==================== HEADER ==================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 260px;
+            right: 0;
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid var(--gray-300);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+            z-index: 999;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar.collapsed ~ .main-content .header {
+            left: 70px;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px 10px 40px;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-600);
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-content {
+            margin-left: 260px;
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+            transition: var(--transition);
+        }
+
+        .sidebar.collapsed ~ .main-content {
+            margin-left: 70px;
+        }
+
+        .content-wrapper {
+            padding: 24px;
+        }
+
+        /* ==================== CARDS ==================== */
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* ==================== STATS CARDS ==================== */
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .stat-trend {
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .stat-trend.positive {
+            color: var(--success);
+        }
+
+        .stat-trend.negative {
+            color: var(--danger);
+        }
+
+        /* ==================== TABLE ==================== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: var(--gray-100);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 13px;
+            border-bottom: 2px solid var(--gray-300);
+        }
+
+        tbody td {
+            padding: 12px;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 14px;
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        /* ==================== MODAL ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-300);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--gray-300);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* ==================== BADGE ==================== */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .badge-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* ==================== CALL SHEET ==================== */
+        .call-sheet {
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .call-sheet-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .call-sheet-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .call-sheet-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .call-sheet-section {
+            margin-bottom: 20px;
+        }
+
+        .call-sheet-section h3 {
+            background: var(--gray-100);
+            padding: 8px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        @media print {
+            .sidebar, .header, .btn, .no-print {
+                display: none !important;
+            }
+            
+            .main-content {
+                margin: 0 !important;
+            }
+            
+            .call-sheet {
+                border: none;
+                box-shadow: none;
+            }
+        }
+
+        /* ==================== FILE UPLOAD ==================== */
+        .upload-area {
+            border: 2px dashed var(--gray-400);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+            background: var(--gray-50);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-list {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--gray-50);
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* ==================== CALENDAR ==================== */
+        .calendar {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--gray-300);
+            border: 1px solid var(--gray-300);
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 10px;
+            min-height: 80px;
+            position: relative;
+        }
+
+        .calendar-day-header {
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            background: var(--gray-100);
+        }
+
+        .calendar-day-number {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .calendar-event {
+            font-size: 11px;
+            padding: 2px 4px;
+            background: var(--primary);
+            color: white;
+            border-radius: 2px;
+            margin-bottom: 2px;
+            cursor: pointer;
+        }
+
+        /* ==================== CHARTS ==================== */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .header {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .call-sheet-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ==================== LOADING ==================== */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--gray-300);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        /* ==================== NOTIFICATIONS ==================== */
+        .notification {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            background: white;
+            padding: 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            max-width: 300px;
+            z-index: 3000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        /* ==================== DROPDOWN ==================== */
+        .dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            z-index: 1001;
+            min-width: 200px;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .dropdown-item:hover {
+            background: var(--gray-100);
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid var(--gray-300);
+            margin: 8px 0;
+        }
+
+        /* ==================== GRID SYSTEM ==================== */
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media (max-width: 1024px) {
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid-cols-2,
+            .grid-cols-3,
+            .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ==================== TABS ==================== */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-300);
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--gray-600);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab:hover {
+            color: var(--dark);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* ==================== PROGRESS BAR ==================== */
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-300);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage">
+        <div class="login-container">
+            <div class="text-center" style="margin-bottom: 30px;">
+                <div class="logo">🎬</div>
+                <h1 style="font-size: 28px; margin-bottom: 8px;">CineProd Ultimate</h1>
+                <p style="color: var(--gray-600); font-size: 14px;">Sistema Profissional de Gestão Cinematográfica</p>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 12px; text-align: center;">
+                    Acesso rápido - Clique para entrar
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <div class="user-card" onclick="quickLogin('sofia@cinepro.com', 'demo123')">
+                        <div class="user-avatar">SL</div>
+                        <div>
+                            <div style="font-size: 13px; font-weight: 600;">Sofia Luz</div>
+                            <div style="font-size: 11px; color: var(--gray-600);">Diretora</div>
+                        </div>
+                    </div>
+                    <div class="user-card" onclick="quickLogin('marcus@cinepro.com', 'demo123')">
+                        <div class="user-avatar">MT</div>
+                        <div>
+                            <div style="font-size: 13px; font-weight: 600;">Marcus Terra</div>
+                            <div style="font-size: 11px; color: var(--gray-600);">Produtor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="position: relative; margin: 25px 0;">
+                <div style="position: absolute; inset: 0; display: flex; align-items: center;">
+                    <div style="width: 100%; border-top: 1px solid var(--gray-300);"></div>
+                </div>
+                <div style="position: relative; display: flex; justify-content: center;">
+                    <span style="padding: 0 10px; background: white; font-size: 12px; color: var(--gray-500);">
+                        ou entre com suas credenciais
+                    </span>
+                </div>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required placeholder="seu@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn w-full">
+                    Entrar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">🎬</div>
+                    <span class="sidebar-logo-text">CineProd</span>
+                </div>
+                <button onclick="toggleSidebar()" style="background: none; border: none; color: white; cursor: pointer; font-size: 20px;">
+                    ☰
+                </button>
+            </div>
+            
+            <nav style="padding: 10px;" id="sidebarMenu"></nav>
+        </aside>
+
+        <div class="main-content">
+            <header class="header">
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Buscar projetos, pessoas, documentos..." id="globalSearch">
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--gray-100); border-radius: var(--radius); font-size: 13px;">
+                        ☀️ São Paulo • 25°C
+                    </div>
+                    
+                    <div class="relative">
+                        <button onclick="toggleNotifications()" style="background: none; border: none; cursor: pointer; position: relative;">
+                            🔔
+                            <span id="notificationBadge" style="position: absolute; top: -4px; right: -4px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%;"></span>
+                        </button>
+                        <div id="notificationsDropdown" class="dropdown hidden">
+                            <!-- Notifications will be added here -->
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <button onclick="toggleUserMenu()" style="display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer;">
+                            <div class="user-avatar" id="userAvatar">US</div>
+                            <span id="userName" style="font-size: 14px;">User</span>
+                            <span style="font-size: 12px;">▼</span>
+                        </button>
+                        <div id="userDropdown" class="dropdown hidden">
+                            <div class="dropdown-item">👤 Meu Perfil</div>
+                            <div class="dropdown-item">⚙️ Configurações</div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="logout()">🚪 Sair</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper" id="contentArea"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Título</h3>
+                <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // ESTADO GLOBAL DA APLICAÇÃO
+        // ========================================
+        let appState = {
+            currentUser: null,
+            activeModule: 'dashboard',
+            sidebarOpen: true,
+            
+            // Dados
+            projects: [],
+            crew: [],
+            equipment: [],
+            locations: [],
+            documents: [],
+            callSheets: [],
+            scripts: [],
+            budget: [],
+            schedule: []
+        };
+
+        // ========================================
+        // CONFIGURAÇÃO DO MENU
+        // ========================================
+        const menuItems = [
+            { id: 'dashboard', label: 'Dashboard', icon: '🏠', badge: null },
+            { id: 'projects', label: 'Projetos', icon: '🎬', badge: null },
+            { id: 'callSheets', label: 'Call Sheets', icon: '📋', badge: null },
+            { id: 'crew', label: 'Equipe', icon: '👥', badge: null },
+            { id: 'equipment', label: 'Equipamentos', icon: '📷', badge: null },
+            { id: 'locations', label: 'Locações', icon: '📍', badge: null },
+            { id: 'documents', label: 'Documentos', icon: '📁', badge: null },
+            { id: 'schedule', label: 'Cronograma', icon: '📅', badge: null },
+            { id: 'budget', label: 'Orçamento', icon: '💰', badge: null },
+            { id: 'scripts', label: 'Roteiros', icon: '📄', badge: null },
+            { id: 'reports', label: 'Relatórios', icon: '📊', badge: null }
+        ];
+
+        // ========================================
+        // INICIALIZAÇÃO
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFromLocalStorage();
+            initializeSampleData();
+            setupEventListeners();
+            renderSidebarMenu();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Global search
+            document.getElementById('globalSearch')?.addEventListener('input', (e) => {
+                performGlobalSearch(e.target.value);
+            });
+            
+            // Click outside to close dropdowns
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.relative')) {
+                    document.querySelectorAll('.dropdown').forEach(d => d.classList.add('hidden'));
+                }
+            });
+        }
+
+        // ========================================
+        // AUTENTICAÇÃO
+        // ========================================
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simular autenticação
+            const users = [
+                { name: 'Sofia Luz', email: 'sofia@cinepro.com', password: 'demo123', avatar: 'SL', role: 'Diretora' },
+                { name: 'Marcus Terra', email: 'marcus@cinepro.com', password: 'demo123', avatar: 'MT', role: 'Produtor' }
+            ];
+            
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                appState.currentUser = user;
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                document.getElementById('userAvatar').textContent = user.avatar;
+                document.getElementById('userName').textContent = user.name;
+                loadModule('dashboard');
+                showNotification('Bem-vindo ao CineProd Ultimate!', 'success');
+            } else {
+                showNotification('Email ou senha inválidos', 'error');
+            }
+        }
+
+        function quickLogin(email, password) {
+            document.getElementById('loginEmail').value = email;
+            document.getElementById('loginPassword').value = password;
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        }
+
+        function logout() {
+            saveToLocalStorage();
+            location.reload();
+        }
+
+        // ========================================
+        // ARMAZENAMENTO LOCAL
+        // ========================================
+        function saveToLocalStorage() {
+            localStorage.setItem('cineproData', JSON.stringify(appState));
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('cineproData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.assign(appState, data);
+            }
+        }
+
+        // ========================================
+        // DADOS INICIAIS
+        // ========================================
+        function initializeSampleData() {
+            if (appState.projects.length === 0) {
+                appState.projects = [
+                    {
+                        id: 'proj_' + Date.now(),
+                        name: 'Eclipse - O Filme',
+                        type: 'Longa-metragem',
+                        status: 'Em Produção',
+                        director: 'Sofia Luz',
+                        producer: 'Marcus Terra',
+                        budget: 5000000,
+                        spent: 3225000,
+                        startDate: '2024-01-10',
+                        endDate: '2024-04-15',
+                        description: 'Um épico de ficção científica'
+                    }
+                ];
+                
+                appState.callSheets = [
+                    {
+                        id: 'cs_' + Date.now(),
+                        project: 'Eclipse - O Filme',
+                        date: '2024-01-15',
+                        callTime: '06:00',
+                        wrap: '18:00',
+                        location: 'Estúdio A - São Paulo',
+                        scenes: ['1', '2', '3A'],
+                        weather: 'Ensolarado - 25°C',
+                        crew: [],
+                        cast: [],
+                        notes: 'Café da manhã às 5:30. Reunião de segurança às 6:15.'
+                    }
+                ];
+            }
+        }
+
+        // ========================================
+        // SIDEBAR
+        // ========================================
+        function renderSidebarMenu() {
+            const menuContainer = document.getElementById('sidebarMenu');
+            menuContainer.innerHTML = '';
+            
+            menuItems.forEach(item => {
+                const button = document.createElement('button');
+                button.className = `menu-item ${appState.activeModule === item.id ? 'active' : ''}`;
+                button.onclick = () => loadModule(item.id);
+                
+                button.innerHTML = `
+                    <div class="menu-item-content">
+                        <span>${item.icon}</span>
+                        <span class="menu-item-text">${item.label}</span>
+                    </div>
+                    ${item.badge ? `<span class="menu-badge">${item.badge}</span>` : ''}
+                `;
+                
+                menuContainer.appendChild(button);
+            });
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        // ========================================
+        // MÓDULOS
+        // ========================================
+        function loadModule(moduleId) {
+            appState.activeModule = moduleId;
+            renderSidebarMenu();
+            
+            switch(moduleId) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'projects':
+                    loadProjects();
+                    break;
+                case 'callSheets':
+                    loadCallSheets();
+                    break;
+                case 'crew':
+                    loadCrew();
+                    break;
+                case 'equipment':
+                    loadEquipment();
+                    break;
+                case 'locations':
+                    loadLocations();
+                    break;
+                case 'documents':
+                    loadDocuments();
+                    break;
+                case 'schedule':
+                    loadSchedule();
+                    break;
+                case 'budget':
+                    loadBudget();
+                    break;
+                case 'reports':
+                    loadReports();
+                    break;
+                default:
+                    document.getElementById('contentArea').innerHTML = '<div class="card"><h2>Módulo em desenvolvimento</h2></div>';
+            }
+        }
+
+        // ========================================
+        // DASHBOARD
+        // ========================================
+        function loadDashboard() {
+            const content = document.getElementById('contentArea');
+            
+            const totalBudget = appState.projects.reduce((sum, p) => sum + (p.budget || 0), 0);
+            const totalSpent = appState.projects.reduce((sum, p) => sum + (p.spent || 0), 0);
+            
+            content.innerHTML = `
+                <h1 style="margin-bottom: 30px; font-size: 32px; color: var(--dark);">Dashboard</h1>
+                
+                <div class="grid grid-cols-4" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-label">Projetos Ativos</div>
+                        <div class="stat-value">${appState.projects.length}</div>
+                        <div class="stat-trend positive">+12% este mês</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Equipe Total</div>
+                        <div class="stat-value">${appState.crew.length}</div>
+                        <div class="stat-trend positive">+5% este mês</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Orçamento Total</div>
+                        <div class="stat-value">R$ ${(totalBudget / 1000000).toFixed(1)}M</div>
+                        <div class="stat-trend negative">-3% este mês</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Call Sheets</div>
+                        <div class="stat-value">${appState.callSheets.length}</div>
+                        <div class="stat-trend positive">+8% este mês</div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2" style="margin-bottom: 30px;">
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">Progresso do Orçamento</h3>
+                        <canvas id="budgetChart"></canvas>
+                    </div>
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">Projetos por Status</h3>
+                        <canvas id="projectsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2">
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px;">Projetos Recentes</h3>
+                        ${appState.projects.slice(0, 5).map(p => `
+                            <div style="padding: 10px 0; border-bottom: 1px solid var(--gray-200);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong>${p.name}</strong><br>
+                                        <small style="color: var(--gray-600);">${p.type} • ${p.status}</small>
+                                    </div>
+                                    <span class="badge badge-${p.status === 'Em Produção' ? 'success' : 'warning'}">${p.status}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="margin-bottom: 15px;">Próximas Call Sheets</h3>
+                        ${appState.callSheets.slice(0, 5).map(cs => `
+                            <div style="padding: 10px 0; border-bottom: 1px solid var(--gray-200);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong>${cs.project}</strong><br>
+                                        <small style="color: var(--gray-600);">📅 ${cs.date} • ⏰ ${cs.callTime}</small>
+                                    </div>
+                                    <button class="btn btn-sm" onclick="viewCallSheet('${cs.id}')">Ver</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Renderizar gráficos
+            setTimeout(() => {
+                // Gráfico de Orçamento
+                const budgetCtx = document.getElementById('budgetChart');
+                if (budgetCtx) {
+                    new Chart(budgetCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Gasto', 'Restante'],
+                            datasets: [{
+                                data: [totalSpent, totalBudget - totalSpent],
+                                backgroundColor: ['#667eea', '#e2e8f0']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                }
+                
+                // Gráfico de Projetos
+                const projectsCtx = document.getElementById('projectsChart');
+                if (projectsCtx) {
+                    const statusCounts = {};
+                    appState.projects.forEach(p => {
+                        statusCounts[p.status] = (statusCounts[p.status] || 0) + 1;
+                    });
+                    
+                    new Chart(projectsCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(statusCounts),
+                            datasets: [{
+                                label: 'Projetos',
+                                data: Object.values(statusCounts),
+                                backgroundColor: '#667eea'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        // ========================================
+        // CALL SHEETS
+        // ========================================
+        function loadCallSheets() {
+            const content = document.getElementById('contentArea');
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Call Sheets</h2>
+                        <button class="btn btn-success" onclick="editCallSheet()">
+                            + Nova Call Sheet
+                        </button>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Projeto</th>
+                                    <th>Data</th>
+                                    <th>Call Time</th>
+                                    <th>Wrap</th>
+                                    <th>Locação</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${appState.callSheets.map(cs => `
+                                    <tr>
+                                        <td>${cs.project}</td>
+                                        <td>${cs.date}</td>
+                                        <td>${cs.callTime}</td>
+                                        <td>${cs.wrap}</td>
+                                        <td>${cs.location}</td>
+                                        <td><span class="badge badge-success">Ativa</span></td>
+                                        <td>
+                                            <button class="btn btn-sm" onclick="viewCallSheet('${cs.id}')">👁️ Ver</button>
+                                            <button class="btn btn-sm" onclick="editCallSheet('${cs.id}')">✏️</button>
+                                            <button class="btn btn-sm btn-info" onclick="printCallSheet('${cs.id}')">🖨️</button>
+                                            <button class="btn btn-sm btn-warning" onclick="sendCallSheet('${cs.id}')">📧</button>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteCallSheet('${cs.id}')">🗑️</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function editCallSheet(id) {
+            const cs = id ? appState.callSheets.find(c => c.id === id) : {};
+            
+            openModal(`${id ? 'Editar' : 'Nova'} Call Sheet`, `
+                <form id="callSheetForm">
+                    <div class="form-group">
+                        <label>Projeto *</label>
+                        <select name="project" required>
+                            <option value="">Selecione um projeto</option>
+                            ${appState.projects.map(p => `
+                                <option value="${p.name}" ${cs.project === p.name ? 'selected' : ''}>${p.name}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Data *</label>
+                            <input type="date" name="date" value="${cs.date || ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Call Time *</label>
+                            <input type="time" name="callTime" value="${cs.callTime || ''}" required>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Wrap Time</label>
+                            <input type="time" name="wrap" value="${cs.wrap || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Clima</label>
+                            <input type="text" name="weather" value="${cs.weather || ''}" placeholder="Ex: Ensolarado - 25°C">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Locação *</label>
+                        <input type="text" name="location" value="${cs.location || ''}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Cenas</label>
+                        <input type="text" name="scenes" value="${cs.scenes ? cs.scenes.join(', ') : ''}" placeholder="Ex: 1, 2, 3A">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Notas Importantes</label>
+                        <textarea name="notes" rows="3">${cs.notes || ''}</textarea>
+                    </div>
+                    
+                    <h3 style="margin-top: 20px; margin-bottom: 10px;">Equipe</h3>
+                    <div id="crewList">
+                        ${appState.crew.map(member => `
+                            <label style="display: block; margin-bottom: 8px;">
+                                <input type="checkbox" name="crew" value="${member.name}" ${cs.crew?.includes(member.name) ? 'checked' : ''}>
+                                ${member.name} - ${member.role}
+                            </label>
+                        `).join('')}
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: `saveCallSheet('${id || ''}')`, class: 'btn-success' }
+            ]);
+        }
+
+        function saveCallSheet(id) {
+            const form = document.getElementById('callSheetForm');
+            const formData = new FormData(form);
+            
+            const crews = [];
+            form.querySelectorAll('input[name="crew"]:checked').forEach(cb => {
+                crews.push(cb.value);
+            });
+            
+            const callSheet = {
+                id: id || `cs_${Date.now()}`,
+                project: formData.get('project'),
+                date: formData.get('date'),
+                callTime: formData.get('callTime'),
+                wrap: formData.get('wrap'),
+                weather: formData.get('weather'),
+                location: formData.get('location'),
+                scenes: formData.get('scenes').split(',').map(s => s.trim()).filter(s => s),
+                notes: formData.get('notes'),
+                crew: crews
+            };
+
+            if (id) {
+                const index = appState.callSheets.findIndex(cs => cs.id === id);
+                appState.callSheets[index] = callSheet;
+            } else {
+                appState.callSheets.push(callSheet);
+            }
+
+            saveToLocalStorage();
+            closeModal();
+            loadCallSheets();
+            showNotification('Call Sheet salva com sucesso!', 'success');
+        }
+
+        function viewCallSheet(id) {
+            const cs = appState.callSheets.find(c => c.id === id);
+            if (!cs) return;
+            
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="call-sheet">
+                    <div class="call-sheet-header">
+                        <h1 class="call-sheet-title">CALL SHEET</h1>
+                        <h2>${cs.project}</h2>
+                        <p>Data: ${cs.date}</p>
+                    </div>
+                    
+                    <div class="call-sheet-info">
+                        <div>
+                            <strong>Call Time:</strong> ${cs.callTime}
+                        </div>
+                        <div>
+                            <strong>Wrap:</strong> ${cs.wrap || 'TBD'}
+                        </div>
+                        <div>
+                            <strong>Clima:</strong> ${cs.weather || 'TBD'}
+                        </div>
+                    </div>
+                    
+                    <div class="call-sheet-section">
+                        <h3>LOCAÇÃO</h3>
+                        <p>${cs.location}</p>
+                    </div>
+                    
+                    <div class="call-sheet-section">
+                        <h3>CENAS</h3>
+                        <p>${cs.scenes.join(', ')}</p>
+                    </div>
+                    
+                    <div class="call-sheet-section">
+                        <h3>EQUIPE</h3>
+                        <ul>
+                            ${cs.crew.map(member => `<li>${member}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="call-sheet-section">
+                        <h3>NOTAS</h3>
+                        <p>${cs.notes || 'Nenhuma nota adicional.'}</p>
+                    </div>
+                    
+                    <div style="margin-top: 30px; text-align: center;" class="no-print">
+                        <button class="btn" onclick="loadCallSheets()">Voltar</button>
+                        <button class="btn btn-info" onclick="window.print()">🖨️ Imprimir</button>
+                        <button class="btn btn-success" onclick="exportCallSheetPDF('${cs.id}')">📄 Exportar PDF</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function printCallSheet(id) {
+            viewCallSheet(id);
+            setTimeout(() => window.print(), 100);
+        }
+
+        function sendCallSheet(id) {
+            const cs = appState.callSheets.find(c => c.id === id);
+            showNotification(`Call Sheet "${cs.project}" enviada por email!`, 'success');
+        }
+
+        function deleteCallSheet(id) {
+            if (confirm('Tem certeza que deseja excluir esta Call Sheet?')) {
+                appState.callSheets = appState.callSheets.filter(cs => cs.id !== id);
+                saveToLocalStorage();
+                loadCallSheets();
+                showNotification('Call Sheet excluída', 'success');
+            }
+        }
+
+        function exportCallSheetPDF(id) {
+            const cs = appState.callSheets.find(c => c.id === id);
+            if (!cs) return;
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Header
+            doc.setFontSize(20);
+            doc.text('CALL SHEET', 105, 20, { align: 'center' });
+            doc.setFontSize(16);
+            doc.text(cs.project, 105, 30, { align: 'center' });
+            
+            // Info
+            doc.setFontSize(12);
+            doc.text(`Data: ${formatDate(cs.date)}`, 20, 50);
+            doc.text(`Call Time: ${cs.callTime}`, 20, 60);
+            doc.text(`Wrap: ${cs.wrap || 'TBD'}`, 20, 70);
+            doc.text(`Locação: ${cs.location}`, 20, 80);
+            doc.text(`Clima: ${cs.weather || 'TBD'}`, 20, 90);
+            
+            // Cenas
+            doc.text('CENAS:', 20, 110);
+            doc.text(cs.scenes.join(', '), 20, 120);
+            
+            // Equipe
+            doc.text('EQUIPE:', 20, 140);
+            let yPos = 150;
+            cs.crew.forEach(member => {
+                doc.text(`• ${member}`, 25, yPos);
+                yPos += 10;
+            });
+            
+            // Save
+            doc.save(`CallSheet_${cs.project}_${cs.date}.pdf`);
+            showNotification('PDF exportado com sucesso!', 'success');
+        }
+
+        // ========================================
+        // DOCUMENTOS
+        // ========================================
+        function loadDocuments() {
+            const content = document.getElementById('contentArea');
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Documentos</h2>
+                        <button class="btn btn-success" onclick="document.getElementById('fileInput').click()">
+                            📤 Upload
+                        </button>
+                    </div>
+                    
+                    <div class="upload-area" id="uploadArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📁</div>
+                        <p>Arraste arquivos aqui ou clique para fazer upload</p>
+                        <input type="file" id="fileInput" multiple style="display: none;" onchange="handleFileSelect(event)">
+                        <button class="btn btn-sm" onclick="document.getElementById('fileInput').click()">
+                            Selecionar Arquivos
+                        </button>
+                    </div>
+                    
+                    <div class="file-list">
+                        ${appState.documents.length === 0 ? `
+                            <p style="text-align: center; padding: 20px; color: var(--gray-600);">
+                                Nenhum documento enviado
+                            </p>
+                        ` : appState.documents.map(doc => `
+                            <div class="file-item">
+                                <div class="file-info">
+                                    <div class="file-icon">${getFileIcon(doc.type)}</div>
+                                    <div>
+                                        <strong>${doc.name}</strong><br>
+                                        <small style="color: var(--gray-600);">${doc.size} • ${formatDate(doc.uploadedAt)}</small>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm" onclick="downloadDocument('${doc.id}')">⬇️</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteDocument('${doc.id}')">🗑️</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.remove('dragover');
+        }
+
+        function handleFileSelect(e) {
+            handleFiles(e.target.files);
+        }
+
+        function handleFiles(files) {
+            for (let file of files) {
+                const doc = {
+                    id: generateId('doc'),
+                    name: file.name,
+                    type: file.type || 'application/octet-stream',
+                    size: formatFileSize(file.size),
+                    uploadedAt: new Date().toISOString(),
+                    data: null // In real app, would upload to server
+                };
+                
+                appState.documents.push(doc);
+            }
+            
+            saveToLocalStorage();
+            loadDocuments();
+            showNotification(`${files.length} arquivo(s) enviado(s) com sucesso!`, 'success');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function getFileIcon(type) {
+            if (type.includes('pdf')) return '📄';
+            if (type.includes('image')) return '🖼️';
+            if (type.includes('video')) return '🎥';
+            if (type.includes('audio')) return '🎵';
+            if (type.includes('text')) return '📝';
+            if (type.includes('spreadsheet') || type.includes('excel')) return '📊';
+            if (type.includes('presentation') || type.includes('powerpoint')) return '📽️';
+            if (type.includes('word')) return '📃';
+            return '📎';
+        }
+
+        function downloadDocument(id) {
+            const doc = appState.documents.find(d => d.id === id);
+            showNotification(`Download de "${doc.name}" iniciado!`, 'success');
+        }
+
+        function deleteDocument(id) {
+            if (confirm('Tem certeza que deseja excluir este documento?')) {
+                appState.documents = appState.documents.filter(d => d.id !== id);
+                saveToLocalStorage();
+                loadDocuments();
+                showNotification('Documento excluído', 'success');
+            }
+        }
+
+        // ========================================
+        // CRONOGRAMA / CALENDÁRIO
+        // ========================================
+        function loadSchedule() {
+            const content = document.getElementById('contentArea');
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Cronograma - ${getMonthName(currentMonth)} ${currentYear}</h2>
+                        <button class="btn btn-success" onclick="addScheduleEvent()">
+                            + Novo Evento
+                        </button>
+                    </div>
+                    
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <button class="btn btn-sm" onclick="changeMonth(-1)">◀</button>
+                            <h3>${getMonthName(currentMonth)} ${currentYear}</h3>
+                            <button class="btn btn-sm" onclick="changeMonth(1)">▶</button>
+                        </div>
+                        
+                        <div class="calendar-grid">
+                            <div class="calendar-day-header">Dom</div>
+                            <div class="calendar-day-header">Seg</div>
+                            <div class="calendar-day-header">Ter</div>
+                            <div class="calendar-day-header">Qua</div>
+                            <div class="calendar-day-header">Qui</div>
+                            <div class="calendar-day-header">Sex</div>
+                            <div class="calendar-day-header">Sáb</div>
+                            
+                            ${generateCalendarDays(currentYear, currentMonth)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        let currentCalendarMonth = new Date().getMonth();
+        let currentCalendarYear = new Date().getFullYear();
+
+        function changeMonth(direction) {
+            currentCalendarMonth += direction;
+            if (currentCalendarMonth > 11) {
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            } else if (currentCalendarMonth < 0) {
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            }
+            loadSchedule();
+        }
+
+        function generateCalendarDays(year, month) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let html = '';
+            
+            // Empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div class="calendar-day" style="background: var(--gray-50);"></div>';
+            }
+            
+            // Days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const events = getEventsForDay(year, month, day);
+                const isToday = isDateToday(year, month, day);
+                
+                html += `
+                    <div class="calendar-day ${isToday ? 'today' : ''}" style="${isToday ? 'background: rgba(102, 126, 234, 0.1);' : ''}">
+                        <div class="calendar-day-number" style="${isToday ? 'font-weight: bold; color: var(--primary);' : ''}">${day}</div>
+                        ${events.map(e => `
+                            <div class="calendar-event" onclick="viewEvent('${e.id}')">${e.title}</div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            return html;
+        }
+
+        function isDateToday(year, month, day) {
+            const today = new Date();
+            return year === today.getFullYear() && 
+                   month === today.getMonth() && 
+                   day === today.getDate();
+        }
+
+        function getMonthName(month) {
+            const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            return months[month];
+        }
+
+        function getEventsForDay(year, month, day) {
+            // Filter events for specific day
+            return appState.schedule.filter(event => {
+                const eventDate = new Date(event.date);
+                return eventDate.getFullYear() === year &&
+                       eventDate.getMonth() === month &&
+                       eventDate.getDate() === day;
+            });
+        }
+
+        function addScheduleEvent() {
+            openModal('Novo Evento', `
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label class="required">Título</label>
+                        <input type="text" name="title" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="required">Data</label>
+                            <input type="date" name="date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Horário</label>
+                            <input type="time" name="time">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select name="type">
+                            <option value="filming">Filmagem</option>
+                            <option value="meeting">Reunião</option>
+                            <option value="deadline">Deadline</option>
+                            <option value="event">Evento</option>
+                            <option value="other">Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <textarea name="description" rows="3"></textarea>
+                    </div>
+                </form>
+            `, [
+                { text: 'Cancelar', onclick: 'closeModal()', class: 'btn-secondary' },
+                { text: 'Salvar', onclick: 'saveScheduleEvent()', class: 'btn-success' }
+            ]);
+        }
+
+        function saveScheduleEvent() {
+            const form = document.getElementById('eventForm');
+            const formData = new FormData(form);
+            
+            const event = {
+                id: generateId('event'),
+                title: formData.get('title'),
+                date: formData.get('date'),
+                time: formData.get('time'),
+                type: formData.get('type'),
+                description: formData.get('description')
+            };
+            
+            appState.schedule.push(event);
+            saveToLocalStorage();
+            closeModal();
+            loadSchedule();
+            showNotification('Evento adicionado ao cronograma!', 'success');
+        }
+
+        function viewEvent(id) {
+            const event = appState.schedule.find(e => e.id === id);
+            if (!event) return;
+            
+            showNotification(`Evento: ${event.title} - ${formatDate(event.date)}`, 'info');
+        }
+
+        // ========================================
+        // RELATÓRIOS
+        // ========================================
+        function loadReports() {
+            const content = document.getElementById('contentArea');
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Relatórios</h2>
+                        <div class="btn-group">
+                            <button class="btn btn-info" onclick="exportAllToExcel()">
+                                📊 Exportar Excel Completo
+                            </button>
+                            <button class="btn btn-danger" onclick="exportCompletePDF()">
+                                📄 Relatório PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tabs">
+                        <button class="tab active" onclick="showReportTab('overview')">Visão Geral</button>
+                        <button class="tab" onclick="showReportTab('financial')">Financeiro</button>
+                        <button class="tab" onclick="showReportTab('production')">Produção</button>
+                        <button class="tab" onclick="showReportTab('crew')">Equipe</button>
+                    </div>
+                    
+                    <div id="reportContent">
+                        ${generateOverviewReport()}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateOverviewReport() {
+            const totalBudget = appState.projects.reduce((sum, p) => sum + (p.budget || 0), 0);
+            const totalSpent = appState.projects.reduce((sum, p) => sum + (p.spent || 0), 0);
+            const activeProjects = appState.projects.filter(p => p.status === 'Em Produção').length;
+            const completedProjects = appState.projects.filter(p => p.status === 'Concluído').length;
+            
+            return `
+                <div style="padding: 20px;">
+                    <h3>Resumo Executivo</h3>
+                    
+                    <div class="grid grid-cols-2" style="margin-top: 20px;">
+                        <div>
+                            <h4>Projetos</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>📊 Total de Projetos: <strong>${appState.projects.length}</strong></li>
+                                <li>🎬 Em Produção: <strong>${activeProjects}</strong></li>
+                                <li>✅ Concluídos: <strong>${completedProjects}</strong></li>
+                                <li>📋 Call Sheets: <strong>${appState.callSheets.length}</strong></li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4>Recursos</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>👥 Equipe Total: <strong>${appState.crew.length}</strong></li>
+                                <li>📷 Equipamentos: <strong>${appState.equipment.length}</strong></li>
+                                <li>📍 Locações: <strong>${appState.locations.length}</strong></li>
+                                <li>📁 Documentos: <strong>${appState.documents.length}</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Status Financeiro</h4>
+                        <div class="grid grid-cols-3" style="margin-top: 15px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; font-weight: bold; color: var(--primary);">
+                                    ${formatCurrency(totalBudget)}
+                                </div>
+                                <div style="font-size: 12px; color: var(--gray-600);">Orçamento Total</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; font-weight: bold; color: var(--warning);">
+                                    ${formatCurrency(totalSpent)}
+                                </div>
+                                <div style="font-size: 12px; color: var(--gray-600);">Total Gasto</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 24px; font-weight: bold; color: ${totalBudget - totalSpent >= 0 ? 'var(--success)' : 'var(--danger)'};">
+                                    ${formatCurrency(totalBudget - totalSpent)}
+                                </div>
+                                <div style="font-size: 12px; color: var(--gray-600);">Saldo Disponível</div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress" style="height: 30px; margin-top: 20px;">
+                            <div class="progress-bar" style="width: ${(totalSpent / totalBudget * 100).toFixed(1)}%; line-height: 30px; text-align: center; color: white;">
+                                ${(totalSpent / totalBudget * 100).toFixed(1)}% Utilizado
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Análise de Performance</h4>
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showReportTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const content = document.getElementById('reportContent');
+            
+            switch(tab) {
+                case 'financial':
+                    content.innerHTML = generateFinancialReport();
+                    break;
+                case 'production':
+                    content.innerHTML = generateProductionReport();
+                    break;
+                case 'crew':
+                    content.innerHTML = generateCrewReport();
+                    break;
+                default:
+                    content.innerHTML = generateOverviewReport();
+                    setTimeout(() => renderPerformanceChart(), 100);
+            }
+        }
+
+        function generateFinancialReport() {
+            const budgetByProject = {};
+            appState.projects.forEach(p => {
+                budgetByProject[p.name] = {
+                    budget: p.budget || 0,
+                    spent: p.spent || 0,
+                    remaining: (p.budget || 0) - (p.spent || 0)
+                };
+            });
+            
+            return `
+                <div style="padding: 20px;">
+                    <h3>Relatório Financeiro Detalhado</h3>
+                    
+                    <table style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>Projeto</th>
+                                <th>Orçamento</th>
+                                <th>Gasto</th>
+                                <th>Saldo</th>
+                                <th>% Utilizado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.entries(budgetByProject).map(([name, data]) => `
+                                <tr>
+                                    <td>${name}</td>
+                                    <td>${formatCurrency(data.budget)}</td>
+                                    <td>${formatCurrency(data.spent)}</td>
+                                    <td style="color: ${data.remaining >= 0 ? 'var(--success)' : 'var(--danger)'}">
+                                        ${formatCurrency(data.remaining)}
+                                    </td>
+                                    <td>${((data.spent / data.budget) * 100).toFixed(1)}%</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function generateProductionReport() {
+            return `
+                <div style="padding: 20px;">
+                    <h3>Relatório de Produção</h3>
+                    
+                    <div class="grid grid-cols-2" style="margin-top: 20px;">
+                        <div>
+                            <h4>Status dos Projetos</h4>
+                            <canvas id="projectStatusChart"></canvas>
+                        </div>
+                        
+                        <div>
+                            <h4>Próximas Filmagens</h4>
+                            ${appState.callSheets.slice(0, 5).map(cs => `
+                                <div style="padding: 10px; border-bottom: 1px solid var(--gray-200);">
+                                    <strong>${cs.project}</strong><br>
+                                    📅 ${formatDate(cs.date)} • ⏰ ${cs.callTime}<br>
+                                    📍 ${cs.location}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateCrewReport() {
+            const crewByDepartment = {};
+            appState.crew.forEach(member => {
+                if (!crewByDepartment[member.department]) {
+                    crewByDepartment[member.department] = [];
+                }
+                crewByDepartment[member.department].push(member);
+            });
+            
+            return `
+                <div style="padding: 20px;">
+                    <h3>Relatório de Equipe</h3>
+                    
+                    ${Object.entries(crewByDepartment).map(([dept, members]) => `
+                        <div style="margin-top: 20px;">
+                            <h4>${dept} (${members.length} membros)</h4>
+                            <table style="margin-top: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Função</th>
+                                        <th>Status</th>
+                                        <th>Diária</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${members.map(m => `
+                                        <tr>
+                                            <td>${m.name}</td>
+                                            <td>${m.role}</td>
+                                            <td><span class="badge badge-${m.status === 'Ativo' ? 'success' : 'warning'}">${m.status}</span></td>
+                                            <td>${formatCurrency(m.dailyRate)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderPerformanceChart() {
+            const ctx = document.getElementById('performanceChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Orçamento',
+                        data: [1000000, 1500000, 2000000, 2500000, 3000000, 3500000],
+                        borderColor: '#667eea',
+                        tension: 0.1
+                    }, {
+                        label: 'Gasto',
+                        data: [500000, 900000, 1400000, 1800000, 2200000, 2800000],
+                        borderColor: '#f59e0b',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function exportAllToExcel() {
+            const wb = XLSX.utils.book_new();
+            
+            // Projetos
+            if (appState.projects.length > 0) {
+                const projectsData = appState.projects.map(p => ({
+                    'Nome': p.name,
+                    'Tipo': p.type,
+                    'Status': p.status,
+                    'Diretor': p.director,
+                    'Produtor': p.producer,
+                    'Orçamento': p.budget,
+                    'Gasto': p.spent,
+                    'Início': p.startDate,
+                    'Término': p.endDate
+                }));
+                const ws1 = XLSX.utils.json_to_sheet(projectsData);
+                XLSX.utils.book_append_sheet(wb, ws1, "Projetos");
+            }
+            
+            // Equipe
+            if (appState.crew.length > 0) {
+                const crewData = appState.crew.map(c => ({
+                    'Nome': c.name,
+                    'Função': c.role,
+                    'Departamento': c.department,
+                    'Email': c.email,
+                    'Telefone': c.phone,
+                    'Diária': c.dailyRate,
+                    'Status': c.status
+                }));
+                const ws2 = XLSX.utils.json_to_sheet(crewData);
+                XLSX.utils.book_append_sheet(wb, ws2, "Equipe");
+            }
+            
+            // Equipamentos
+            if (appState.equipment.length > 0) {
+                const equipmentData = appState.equipment.map(e => ({
+                    'Nome': e.name,
+                    'Categoria': e.category,
+                    'Marca': e.brand,
+                    'Modelo': e.model,
+                    'Número de Série': e.serialNumber,
+                    'Status': e.status,
+                    'Diária': e.dailyRate,
+                    'Localização': e.location
+                }));
+                const ws3 = XLSX.utils.json_to_sheet(equipmentData);
+                XLSX.utils.book_append_sheet(wb, ws3, "Equipamentos");
+            }
+            
+            // Download
+            XLSX.writeFile(wb, `CineProd_Completo_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showNotification('Relatório Excel completo exportado!', 'success');
+        }
+
+        function exportCompletePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Cover
+            doc.setFontSize(24);
+            doc.text('RELATÓRIO CINEPROD', 105, 40, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text('Sistema de Gestão Cinematográfica', 105, 50, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text(new Date().toLocaleDateString('pt-BR'), 105, 60, { align: 'center' });
+            
+            // Summary
+            doc.setFontSize(16);
+            doc.text('RESUMO EXECUTIVO', 20, 90);
+            
+            doc.setFontSize(10);
+            let yPos = 100;
+            
+            doc.text(`Total de Projetos: ${appState.projects.length}`, 30, yPos);
+            yPos += 8;
+            doc.text(`Equipe Total: ${appState.crew.length} membros`, 30, yPos);
+            yPos += 8;
+            doc.text(`Equipamentos: ${appState.equipment.length} itens`, 30, yPos);
+            yPos += 8;
+            doc.text(`Locações: ${appState.locations.length} locais`, 30, yPos);
+            
+            // Save
+            doc.save(`Relatorio_CineProd_${new Date().toISOString().split('T')[0]}.pdf`);
+            showNotification('Relatório PDF exportado!', 'success');
+        }
+
+        // ========================================
+        // WORKFLOW
+        // ========================================
+        function loadWorkflow() {
+            const content = document.getElementById('contentArea');
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Workflow de Produção</h2>
+                    </div>
+                    
+                    <div class="workflow-status">
+                        <div class="workflow-step completed">
+                            <div class="workflow-icon">✅</div>
+                            <div>Desenvolvimento</div>
+                        </div>
+                        <div class="workflow-step completed">
+                            <div class="workflow-icon">✅</div>
+                            <div>Pré-Produção</div>
+                        </div>
+                        <div class="workflow-step active">
+                            <div class="workflow-icon">🎬</div>
+                            <div>Produção</div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="workflow-icon">✏️</div>
+                            <div>Pós-Produção</div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="workflow-icon">📦</div>
+                            <div>Distribuição</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 40px;">
+                        <h3>Tarefas Pendentes</h3>
+                        <div style="margin-top: 20px;">
+                            ${generateWorkflowTasks()}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateWorkflowTasks() {
+            const tasks = [
+                { title: 'Revisar roteiro final', status: 'pending', priority: 'high', assignee: 'Sofia Luz' },
+                { title: 'Confirmar locações', status: 'in-progress', priority: 'medium', assignee: 'Marcus Terra' },
+                { title: 'Contratar equipe adicional', status: 'pending', priority: 'low', assignee: 'RH' },
+                { title: 'Aprovar orçamento adicional', status: 'pending', priority: 'high', assignee: 'Produção' }
+            ];
+            
+            return tasks.map(task => `
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px; background: var(--gray-50); border-radius: var(--radius); margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <input type="checkbox" ${task.status === 'completed' ? 'checked' : ''}>
+                        <div>
+                            <div style="font-weight: 600;">${task.title}</div>
+                            <div style="font-size: 12px; color: var(--gray-600);">
+                                Responsável: ${task.assignee}
+                            </div>
+                        </div>
+                    </div>
+                    <span class="badge badge-${task.priority === 'high' ? 'danger' : task.priority === 'medium' ? 'warning' : 'info'}">
+                        ${task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Média' : 'Baixa'}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        // ========================================
+        // FUNÇÕES AUXILIARES
+        // ========================================
+        function renderList(module, title, columns, editFunc, deleteFunc) {
+            const content = document.getElementById('contentArea');
+            const data = appState[module] || [];
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">${title}</h2>
+                        <button class="btn btn-success" onclick="${editFunc.name}()">
+                            + Novo
+                        </button>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    ${columns.map(col => `<th>${col.label}</th>`).join('')}
+                                    <th width="120">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.length === 0 ? `
+                                    <tr>
+                                        <td colspan="${columns.length + 1}" style="text-align: center; padding: 40px; color: var(--gray-600);">
+                                            Nenhum registro encontrado
+                                        </td>
+                                    </tr>
+                                ` : data.map(item => `
+                                    <tr>
+                                        ${columns.map(col => {
+                                            let value = item[col.key] || '-';
+                                            if (col.type === 'currency' && value !== '-') {
+                                                value = formatCurrency(value);
+                                            } else if (col.type === 'badge' && value !== '-') {
+                                                const badgeClass = value === 'Ativo' || value === 'Disponível' || value === 'Em Produção' ? 'success' :
+                                                                  value === 'Inativo' || value === 'Indisponível' || value === 'Concluído' ? 'danger' :
+                                                                  'warning';
+                                                value = `<span class="badge badge-${badgeClass}">${value}</span>`;
+                                            }
+                                            return `<td>${value}</td>`;
+                                        }).join('')}
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm" onclick="${editFunc.name}('${item.id}')">✏️</button>
+                                                <button class="btn btn-sm btn-danger" onclick="${deleteFunc.name}('${item.id}')">🗑️</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openModal(title, body, buttons = []) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = body;
+            
+            const footer = document.getElementById('modalFooter');
+            footer.innerHTML = '';
+            
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = `btn ${btn.class || ''}`;
+                button.textContent = btn.text;
+                button.onclick = () => eval(btn.onclick);
+                footer.appendChild(button);
+            });
+            
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // ========================================
+        // BUSCA GLOBAL
+        // ========================================
+        function performGlobalSearch(query) {
+            if (!query || query.length < 2) return;
+            
+            const results = [];
+            
+            // Search projects
+            appState.projects.forEach(p => {
+                if (p.name.toLowerCase().includes(query.toLowerCase()) ||
+                    p.director?.toLowerCase().includes(query.toLowerCase())) {
+                    results.push({ type: 'Projeto', name: p.name, module: 'projects' });
+                }
+            });
+            
+            // Search crew
+            appState.crew.forEach(c => {
+                if (c.name.toLowerCase().includes(query.toLowerCase()) ||
+                    c.role?.toLowerCase().includes(query.toLowerCase())) {
+                    results.push({ type: 'Equipe', name: c.name, module: 'crew' });
+                }
+            });
+            
+            console.log(`Encontrados ${results.length} resultados para "${query}"`);
+        }
+
+        // ========================================
+        // PERFIL E CONFIGURAÇÕES
+        // ========================================
+        function viewProfile() {
+            showNotification('Perfil do usuário em desenvolvimento', 'info');
+        }
+
+        function openSettings() {
+            showNotification('Configurações em desenvolvimento', 'info');
+        }
+
+        function showHelp() {
+            showNotification('Central de ajuda em desenvolvimento', 'info');
+        }
+    </script>
+</body>
+</html> 30, { align: 'center' });
+            
+            // Info
+            doc.setFontSize(12);
+            doc.text(`Data: ${cs.date}`, 20, 50);
+            doc.text(`Call Time: ${cs.callTime}`, 20, 60);
+            doc.text(`Wrap: ${cs.wrap || 'TBD'}`, 20, 70);
+            doc.text(`Locação: ${cs.location}`, 20, 80);
+            
+            // Save
+            doc.save(`CallSheet_${cs.project}_${cs.date}.pdf`);
+            showNotification('PDF exportado com sucesso!', 'success');
+        }
+
+        // ========================================
+        // DOCUMENTOS
+        // ========================================
+        function loadDocuments() {
+            const content = document.getElementById('contentArea');
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Documentos</h2>
+                        <button class="btn btn-success" onclick="showUploadModal()">
+                            📤 Upload
+                        </button>
+                    </div>
+                    
+                    <div class="upload-area" id="uploadArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📁</div>
+                        <p>Arraste arquivos aqui ou clique para fazer upload</p>
+                        <input type="file" id="fileInput" multiple style="display: none;" onchange="handleFileSelect(event)">
+                        <button class="btn btn-sm" onclick="document.getElementById('fileInput').click()">
+                            Selecionar Arquivos
+                        </button>
+                    </div>
+                    
+                    <div class="file-list">
+                        ${appState.documents.map(doc => `
+                            <div class="file-item">
+                                <div class="file-info">
+                                    <div class="file-icon">${getFileIcon(doc.type)}</div>
+                                    <div>
+                                        <strong>${doc.name}</strong><br>
+                                        <small style="color: var(--gray-600);">${doc.size} • ${doc.uploadedAt}</small>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm" onclick="downloadDocument('${doc.id}')">⬇️</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteDocument('${doc.id}')">🗑️</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('uploadArea').classList.remove('dragover');
+        }
+
+        function handleFileSelect(e) {
+            handleFiles(e.target.files);
+        }
+
+        function handleFiles(files) {
+            for (let file of files) {
+                const doc = {
+                    id: `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                    name: file.name,
+                    type: file.type || 'application/octet-stream',
+                    size: formatFileSize(file.size),
+                    uploadedAt: new Date().toLocaleString('pt-BR'),
+                    data: null // In real app, would upload to server
+                };
+                
+                appState.documents.push(doc);
+            }
+            
+            saveToLocalStorage();
+            loadDocuments();
+            showNotification(`${files.length} arquivo(s) enviado(s) com sucesso!`, 'success');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function getFileIcon(type) {
+            if (type.includes('pdf')) return '📄';
+            if (type.includes('image')) return '🖼️';
+            if (type.includes('video')) return '🎥';
+            if (type.includes('audio')) return '🎵';
+            if (type.includes('text')) return '📝';
+            if (type.includes('spreadsheet') || type.includes('excel')) return '📊';
+            if (type.includes('presentation') || type.includes('powerpoint')) return '📽️';
+            return '📎';
+        }
+
+        function downloadDocument(id) {
+            const doc = appState.documents.find(d => d.id === id);
+            showNotification(`Download de "${doc.name}" iniciado!`, 'success');
+        }
+
+        function deleteDocument(id) {
+            if (confirm('Tem certeza que deseja excluir este documento?')) {
+                appState.documents = appState.documents.filter(d => d.id !== id);
+                saveToLocalStorage();
+                loadDocuments();
+                showNotification('Documento excluído', 'success');
+            }
+        }
+
+        // ========================================
+        // CRONOGRAMA / CALENDÁRIO
+        // ========================================
+        function loadSchedule() {
+            const content = document.getElementById('contentArea');
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Cronograma - ${getMonthName(currentMonth)} ${currentYear}</h2>
+                        <button class="btn btn-success" onclick="addScheduleEvent()">
+                            + Novo Evento
+                        </button>
+                    </div>
+                    
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <button class="btn btn-sm" onclick="changeMonth(-1)">◀</button>
+                            <h3>${getMonthName(currentMonth)} ${currentYear}</h3>
+                            <button class="btn btn-sm" onclick="changeMonth(1)">▶</button>
+                        </div>
+                        
+                        <div class="calendar-grid">
+                            <div class="calendar-day-header">Dom</div>
+                            <div class="calendar-day-header">Seg</div>
+                            <div class="calendar-day-header">Ter</div>
+                            <div class="calendar-day-header">Qua</div>
+                            <div class="calendar-day-header">Qui</div>
+                            <div class="calendar-day-header">Sex</div>
+                            <div class="calendar-day-header">Sáb</div>
+                            
+                            ${generateCalendarDays(currentYear, currentMonth)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateCalendarDays(year, month) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let html = '';
+            
+            // Empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div class="calendar-day" style="background: var(--gray-50);"></div>';
+            }
+            
+            // Days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const events = getEventsForDay(year, month, day);
+                html += `
+                    <div class="calendar-day">
+                        <div class="calendar-day-number">${day}</div>
+                        ${events.map(e => `
+                            <div class="calendar-event" onclick="viewEvent('${e.id}')">${e.title}</div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            return html;
+        }
+
+        function getMonthName(month) {
+            const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            return months[month];
+        }
+
+        function getEventsForDay(year, month, day) {
+            // Filter events for specific day
+            return appState.schedule.filter(event => {
+                const eventDate = new Date(event.date);
+                return eventDate.getFullYear() === year &&
+                       eventDate.getMonth() === month &&
+                       eventDate.getDate() === day;
+            });
+        }
+
+        // ========================================
+        // RELATÓRIOS
+        // ========================================
+        function loadReports() {
+            const content = document.getElementById('contentArea');
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Relatórios</h2>
+                        <div>
+                            <button class="btn btn-info" onclick="exportToExcel()">
+                                📊 Exportar Excel
+                            </button>
+                            <button class="btn btn-danger" onclick="exportToPDF()">
+                                📄 Exportar PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tabs">
+                        <button class="tab active" onclick="showReportTab('overview')">Visão Geral</button>
+                        <button class="tab" onclick="showReportTab('financial')">Financeiro</button>
+                        <button class="tab" onclick="showReportTab('production')">Produção</button>
+                        <button class="tab" onclick="showReportTab('crew')">Equipe</button>
+                    </div>
+                    
+                    <div id="reportContent">
+                        ${generateOverviewReport()}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateOverviewReport() {
+            const totalBudget = appState.projects.reduce((sum, p) => sum + (p.budget || 0), 0);
+            const totalSpent = appState.projects.reduce((sum, p) => sum + (p.spent || 0), 0);
+            
+            return `
+                <div style="padding: 20px;">
+                    <h3>Resumo Executivo</h3>
+                    
+                    <div class="grid grid-cols-2" style="margin-top: 20px;">
+                        <div>
+                            <h4>Projetos</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>Total de Projetos: ${appState.projects.length}</li>
+                                <li>Em Produção: ${appState.projects.filter(p => p.status === 'Em Produção').length}</li>
+                                <li>Concluídos: ${appState.projects.filter(p => p.status === 'Concluído').length}</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4>Finanças</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>Orçamento Total: R$ ${(totalBudget / 1000000).toFixed(2)}M</li>
+                                <li>Total Gasto: R$ ${(totalSpent / 1000000).toFixed(2)}M</li>
+                                <li>Disponível: R$ ${((totalBudget - totalSpent) / 1000000).toFixed(2)}M</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Gráfico de Utilização do Orçamento</h4>
+                        <div class="progress" style="height: 30px;">
+                            <div class="progress-bar" style="width: ${(totalSpent / totalBudget * 100).toFixed(1)}%">
+                                ${(totalSpent / totalBudget * 100).toFixed(1)}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function exportToExcel() {
+            // Preparar dados
+            const wb = XLSX.utils.book_new();
+            
+            // Projetos
+            const projectsData = appState.projects.map(p => ({
+                'Nome': p.name,
+                'Tipo': p.type,
+                'Status': p.status,
+                'Diretor': p.director,
+                'Produtor': p.producer,
+                'Orçamento': p.budget,
+                'Gasto': p.spent
+            }));
+            const ws1 = XLSX.utils.json_to_sheet(projectsData);
+            XLSX.utils.book_append_sheet(wb, ws1, "Projetos");
+            
+            // Call Sheets
+            const callSheetsData = appState.callSheets.map(cs => ({
+                'Projeto': cs.project,
+                'Data': cs.date,
+                'Call Time': cs.callTime,
+                'Wrap': cs.wrap,
+                'Locação': cs.location
+            }));
+            const ws2 = XLSX.utils.json_to_sheet(callSheetsData);
+            XLSX.utils.book_append_sheet(wb, ws2, "Call Sheets");
+            
+            // Download
+            XLSX.writeFile(wb, "CineProd_Report_" + new Date().toISOString().split('T')[0] + ".xlsx");
+            showNotification('Relatório Excel exportado com sucesso!', 'success');
+        }
+
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Header
+            doc.setFontSize(20);
+            doc.text('RELATÓRIO CINEPROD', 105, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text(new Date().toLocaleDateString('pt-BR'), 105, 30, { align: 'center' });
+            
+            // Content
+            let yPos = 50;
+            doc.setFontSize(14);
+            doc.text('RESUMO DE PROJETOS', 20, yPos);
+            yPos += 10;
+            
+            doc.setFontSize(10);
+            appState.projects.forEach(p => {
+                doc.text(`• ${p.name} - ${p.status}`, 30, yPos);
+                yPos += 7;
+            });
+            
+            // Save
+            doc.save('CineProd_Report_' + new Date().toISOString().split('T')[0] + '.pdf');
+            showNotification('Relatório PDF exportado com sucesso!', 'success');
+        }
+
+        // ========================================
+        // OUTROS MÓDULOS (simplificados)
+        // ========================================
+        function loadProjects() {
+            renderList('projects', 'Projetos', [
+                { key: 'name', label: 'Nome' },
+                { key: 'type', label: 'Tipo' },
+                { key: 'status', label: 'Status' },
+                { key: 'director', label: 'Diretor' }
+            ]);
+        }
+
+        function loadCrew() {
+            renderList('crew', 'Equipe', [
+                { key: 'name', label: 'Nome' },
+                { key: 'role', label: 'Função' },
+                { key: 'department', label: 'Departamento' },
+                { key: 'status', label: 'Status' }
+            ]);
+        }
+
+        function loadEquipment() {
+            renderList('equipment', 'Equipamentos', [
+                { key: 'name', label: 'Nome' },
+                { key: 'category', label: 'Categoria' },
+                { key: 'status', label: 'Status' }
+            ]);
+        }
+
+        function loadLocations() {
+            renderList('locations', 'Locações', [
+                { key: 'name', label: 'Nome' },
+                { key: 'type', label: 'Tipo' },
+                { key: 'address', label: 'Endereço' }
+            ]);
+        }
+
+        function loadBudget() {
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `
+                <div class="card">
+                    <h2>Módulo de Orçamento em desenvolvimento</h2>
+                </div>
+            `;
+        }
+
+        // ========================================
+        // FUNÇÕES AUXILIARES
+        // ========================================
+        function renderList(module, title, columns) {
+            const content = document.getElementById('contentArea');
+            const data = appState[module] || [];
+            
+            content.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">${title}</h2>
+                        <button class="btn btn-success">+ Novo</button>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                ${columns.map(col => `<th>${col.label}</th>`).join('')}
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.length === 0 ? `
+                                <tr>
+                                    <td colspan="${columns.length + 1}" style="text-align: center; padding: 40px;">
+                                        Nenhum registro encontrado
+                                    </td>
+                                </tr>
+                            ` : data.map(item => `
+                                <tr>
+                                    ${columns.map(col => `<td>${item[col.key] || '-'}</td>`).join('')}
+                                    <td>
+                                        <button class="btn btn-sm">✏️</button>
+                                        <button class="btn btn-sm btn-danger">🗑️</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function openModal(title, body, buttons = []) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = body;
+            
+            const footer = document.getElementById('modalFooter');
+            footer.innerHTML = '';
+            
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = `btn ${btn.class || ''}`;
+                button.textContent = btn.text;
+                button.onclick = () => eval(btn.onclick);
+                footer.appendChild(button);
+            });
+            
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type} animate-slideIn`;
+            notification.innerHTML = `
+                <strong>${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}</strong>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notificationsDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function performGlobalSearch(query) {
+            if (query.length < 2) return;
+            
+            // Search implementation
+            console.log('Searching for:', query);
+        }
+
+        // Utility functions that were missing
+        function formatDate(date) {
+            if (!date) return '';
+            return new Date(date).toLocaleDateString('pt-BR');
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        function generateId(prefix) {
+            return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        }
+
+        // Toggle Dark Mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('darkModeIcon');
+            if (icon) {
+                icon.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            }
+        }
+
+        // Update Weather
+        function updateWeather() {
+            const weatherInfo = document.getElementById('weatherInfo');
+            if (weatherInfo) {
+                const temp = Math.round(18 + Math.random() * 12);
+                weatherInfo.textContent = `São Paulo • ${temp}°C`;
+            }
+        }
+
+        // Profile and Settings functions
+        function viewProfile() {
+            showNotification('Perfil em desenvolvimento', 'info');
+        }
+
+        function openSettings() {
+            showNotification('Configurações em desenvolvimento', 'info');
+        }
+
+        function showHelp() {
+            showNotification('Ajuda em desenvolvimento', 'info');
+        }
+
+        // Check mobile view
+        function checkMobileView() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            if (mobileBtn) {
+                mobileBtn.style.display = window.innerWidth <= 768 ? 'block' : 'none';
+            }
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        }
+
+        // Load Notifications
+        function loadNotifications() {
+            const list = document.getElementById('notificationsList');
+            if (!list) return;
+            
+            list.innerHTML = '';
+            
+            const notifications = [
+                { message: 'Nova call sheet disponível', time: 'Há 5 minutos' },
+                { message: 'Orçamento atualizado', time: 'Há 1 hora' },
+                { message: 'Reunião agendada', time: 'Há 2 horas' }
+            ];
+            
+            notifications.forEach(notif => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.innerHTML = `
+                    <div style="font-size: 13px;">${notif.message}</div>
+                    <div style="font-size: 11px; color: var(--gray-600); margin-top: 4px;">${notif.time}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // Initialize charts (placeholder for when needed)
+        function initializeCharts() {
+            // This will be called when charts are needed
+            console.log('Charts initialized');
+        }
+
+        // Auto-save function
+        setInterval(() => {
+            if (appState.currentUser) {
+                saveToLocalStorage();
+            }
+        }, 60000); // Auto-save every minute
+
+        // Check for window resize
+        window.addEventListener('resize', checkMobileView);
+    </script>
+</body>
+</html>
