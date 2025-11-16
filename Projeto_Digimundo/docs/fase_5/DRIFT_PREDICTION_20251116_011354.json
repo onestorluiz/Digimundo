@@ -1,0 +1,44 @@
+{
+  "timestamp": "2025-11-16T01:13:54.142417",
+  "prediction": {
+    "probability": 100,
+    "estimated_days": 2,
+    "urgency": "HIGH",
+    "factors": [
+      [
+        "Moderate refactoring",
+        0.2
+      ],
+      [
+        "Many service changes",
+        0.3
+      ],
+      [
+        "Model layer changes",
+        0.2
+      ],
+      [
+        "High code churn",
+        0.25
+      ],
+      [
+        "High dev velocity",
+        0.15
+      ]
+    ],
+    "recommendations": [
+      "\ud83d\udea8 Run validation NOW: python3 scripts/phase5/validate_documentation.py",
+      "\ud83d\udd04 Consider auto-update: python3 scripts/phase5/validate_documentation.py --auto-update",
+      "\u2699\ufe0f Service layer heavily modified - architectural patterns may have changed",
+      "\ud83d\udcc8 High churn period - code structure likely changed significantly"
+    ]
+  },
+  "patterns": {
+    "refactoring_commits": 5,
+    "service_changes": 165,
+    "model_changes": 152,
+    "test_changes": 348,
+    "high_churn_events": 60,
+    "velocity": 5.32
+  }
+}

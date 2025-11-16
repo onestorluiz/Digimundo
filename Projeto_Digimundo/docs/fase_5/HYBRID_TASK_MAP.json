@@ -1,0 +1,117 @@
+{
+  "generated_at": "2025-11-16T12:03:29.746010",
+  "analysis": {
+    "systems_operational": 3,
+    "systems_created_not_tested": 4,
+    "systems_architectural": 1,
+    "test_coverage_actual": 37.13,
+    "tests_failing": 0,
+    "documentation_aligned": false,
+    "drift_probability": 100.0,
+    "venv_exists": true,
+    "venv_python": "python3"
+  },
+  "total_tasks": 9,
+  "offline_tasks": 7,
+  "online_tasks": 2,
+  "estimated_total_minutes": 145,
+  "tasks": [
+    {
+      "id": "T001",
+      "category": "testing",
+      "priority": "HIGH",
+      "type": "offline",
+      "description": "Test pre-commit hook installation",
+      "command": "cd cineprod-flask && bash ../scripts/phase5/install_validation_hook.sh --auto-update",
+      "estimated_minutes": 5,
+      "validation": "Hook exists in .git/hooks/pre-commit and contains validate_documentation"
+    },
+    {
+      "id": "T002",
+      "category": "testing",
+      "priority": "HIGH",
+      "type": "offline",
+      "description": "Test dashboard startup",
+      "command": "timeout 10 python3 scripts/phase5/docs_dashboard.py &",
+      "estimated_minutes": 3,
+      "validation": "Flask app starts on port 3000"
+    },
+    {
+      "id": "T003",
+      "category": "documentation",
+      "priority": "HIGH",
+      "type": "online",
+      "description": "Update all docs to reflect reality: 3/8 operational not 8/8",
+      "files_to_update": [
+        "docs/fase_5/README.md",
+        "docs/fase_5/BEYOND_SILICON_VALLEY_SYSTEMS.md",
+        "docs/fase_5/BEYOND_SILICON_VALLEY_REPORT.md",
+        "docs/fase_5/ULTRA_ADVANCED_SYSTEMS_REPORT.md"
+      ],
+      "estimated_minutes": 20,
+      "validation": "Docs accurately reflect 3 operational, 5 pending systems"
+    },
+    {
+      "id": "T004",
+      "category": "documentation",
+      "priority": "HIGH",
+      "type": "online",
+      "description": "Address 100% drift probability - sync docs with codebase",
+      "files_to_update": [
+        "docs/fase_5/*.md"
+      ],
+      "estimated_minutes": 30,
+      "validation": "Drift probability drops below 50%"
+    },
+    {
+      "id": "T005",
+      "category": "infrastructure",
+      "priority": "MEDIUM",
+      "type": "offline",
+      "description": "Initialize multi-agent system with real tasks",
+      "command": "python3 scripts/phase5/coordinator.py init --tasks 10",
+      "estimated_minutes": 2,
+      "validation": "Task queue has 10 pending tasks"
+    },
+    {
+      "id": "T006",
+      "category": "infrastructure",
+      "priority": "MEDIUM",
+      "type": "offline",
+      "description": "Test multi-agent runner with 2 agents",
+      "command": "timeout 300 python3 scripts/phase5/multi_agent_runner.py --agents 2 --max-concurrent 2",
+      "estimated_minutes": 60,
+      "validation": "At least 2 tasks completed successfully"
+    },
+    {
+      "id": "T007",
+      "category": "testing",
+      "priority": "MEDIUM",
+      "type": "offline",
+      "description": "Run test suite to verify baseline coverage",
+      "command": "cd cineprod-flask && venv/bin/python3 -m pytest tests/ --cov=app --cov-report=json --cov-report=term -q",
+      "estimated_minutes": 15,
+      "validation": "coverage.json generated with actual percentage"
+    },
+    {
+      "id": "T008",
+      "category": "deployment",
+      "priority": "LOW",
+      "type": "offline",
+      "description": "Push GitHub Actions workflow to repository",
+      "command": "git add .github/workflows/validate-docs.yml && git commit -m 'Add validation workflow' && git push",
+      "estimated_minutes": 5,
+      "validation": "Workflow visible on GitHub"
+    },
+    {
+      "id": "T009",
+      "category": "deployment",
+      "priority": "LOW",
+      "type": "offline",
+      "description": "Commit Phase 5 systems and documentation",
+      "command": "git add scripts/phase5/ docs/fase_5/ && git commit -m 'Phase 5: AI-Powered Documentation Systems' && git push",
+      "estimated_minutes": 5,
+      "validation": "Phase 5 files committed and pushed"
+    }
+  ]
+}

@@ -1,0 +1,696 @@
+# 🗂️ FILE MANIFEST - CineProd Fase 5
+# Sistema de Rastreamento Completo de Arquivos
+# Versão: 1.0 | Data: 2025-11-16
+
+metadata:
+  project: CineProd
+  phase: "Fase 5 - Platform Evolution"
+  total_files_tracked: 157
+  states:
+    - planned        # Arquivo planejado mas não criado
+    - staged         # Arquivo criado mas não testado
+    - implemented    # Arquivo implementado com testes
+    - validated      # Testes passando + code review
+    - finalized      # Merged + deployed
+    - deprecated     # Marcado para remoção
+    - archived       # Movido para _archived/
+
+# ============================================================================
+# FASE 5.1: FOUNDATION (Semanas 1-4)
+# ============================================================================
+
+fase_5_1_foundation:
+
+  # --- WEEK 1-2: Test Correction ---
+
+  tests_corrections:
+
+    - path: tests/unit/test_event_store_service.py
+      state: planned
+      type: new_file
+      phase: 5.1
+      week: 3
+      priority: critical
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - app/services/event_store_service.py
+      tests_for: app/services/event_store_service.py
+      estimated_loc: 150
+      description: "Testes completos para Event Store (append, retrieve, timeline, replay)"
+      validation_criteria:
+        - "10+ test functions"
+        - "Coverage > 90%"
+        - "All tests passing"
+
+    - path: tests/unit/test_storyboard_system_complete.py
+      state: deprecated
+      type: existing_file
+      phase: 5.1
+      week: 1
+      priority: high
+      previous_version: tests/unit/test_storyboard_system_complete.py
+      migration_required: true
+      migration_to: tests/unit/test_storyboard_service.py
+      migration_reason: "430 import errors - needs refactoring"
+      archive_path: tests/_archived/duplicates/test_storyboard_system_complete.py
+      validation_criteria:
+        - "All tests migrated to new file"
+        - "No import errors"
+        - "Archive confirmed"
+
+    - path: tests/unit/test_storyboard_service.py
+      state: planned
+      type: new_file
+      phase: 5.1
+      week: 1
+      priority: high
+      previous_version: tests/unit/test_storyboard_system_complete.py
+      migration_required: true
+      depends_on:
+        - app/services/storyboard_service.py
+      estimated_loc: 200
+      description: "Refactored storyboard tests with SQLAlchemy 2.0 patterns"
+      validation_criteria:
+        - "All original tests migrated"
+        - "SQLAlchemy 2.0 mocks (db.session.get)"
+        - "0 import errors"
+        - "Coverage > 80%"
+
+  # --- WEEK 3-4: Event Sourcing MVP ---
+
+  event_sourcing_mvp:
+
+    - path: app/models/event.py
+      state: planned
+      type: new_file
+      phase: 5.1
+      week: 3
+      priority: critical
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - app/models/__init__.py
+      estimated_loc: 80
+      description: "Event, EventSnapshot, EventSubscription models"
+      validation_criteria:
+        - "3 models defined"
+        - "Proper indexes (aggregate_type, aggregate_id, timestamp)"
+        - "Relationships configured"
+        - "to_dict() methods"
+      code_template: |
+        from app.models import db
+        from sqlalchemy import Index
+
+        class Event(db.Model):
+            __tablename__ = 'events'
+            id = db.Column(db.Integer, primary_key=True)
+            aggregate_type = db.Column(db.String(50), nullable=False)
+            aggregate_id = db.Column(db.Integer, nullable=False)
+            event_type = db.Column(db.String(100), nullable=False)
+            payload = db.Column(db.JSON, nullable=False)
+            timestamp = db.Column(db.DateTime, nullable=False, server_default=db.func.now())
+            user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+            sequence_number = db.Column(db.Integer, nullable=False)
+
+            __table_args__ = (
+                Index('idx_aggregate', 'aggregate_type', 'aggregate_id'),
+                Index('idx_timestamp', 'timestamp'),
+            )
+
+    - path: app/services/event_store_service.py
+      state: planned
+      type: new_file
+      phase: 5.1
+      week: 3
+      priority: critical
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - app/models/event.py
+      estimated_loc: 200
+      description: "EventStoreService - append, retrieve, timeline, replay"
+      validation_criteria:
+        - "append_event() method"
+        - "get_events() with filtering"
+        - "get_timeline() for UI"
+        - "replay_events() for debugging"
+        - "Unit tests > 90% coverage"
+      imports_to_add:
+        - "from app.models.event import Event, EventSnapshot"
+        - "from dataclasses import dataclass"
+        - "from typing import List, Dict, Any"
+
+    - path: app/migrations/versions/xxx_add_event_store.py
+      state: planned
+      type: migration
+      phase: 5.1
+      week: 3
+      priority: critical
+      previous_version: null
+      migration_required: false
+      estimated_loc: 100
+      description: "Migration: Create events, event_snapshots, event_subscriptions tables"
+      validation_criteria:
+        - "3 tables created"
+        - "Indexes added"
+        - "Foreign keys configured"
+        - "Migration applies cleanly (flask db upgrade)"
+        - "Downgrade works (flask db downgrade)"
+      command: "flask db migrate -m 'Add Event Store tables'"
+
+    - path: app/services/scene_service.py
+      state: existing_file
+      type: modification
+      phase: 5.1
+      week: 3
+      priority: high
+      previous_version: app/services/scene_service.py
+      migration_required: true
+      backup_path: app/services/_backup/scene_service_pre_event_sourcing.py
+      changes_required:
+        - "Import EventStoreService"
+        - "Add event logging to update() method"
+        - "Capture old_values before changes"
+        - "Append SceneUpdated event after commit"
+      validation_criteria:
+        - "Events logged on scene updates"
+        - "No breaking changes to existing API"
+        - "Tests still passing"
+        - "Manual validation: psql query shows events"
+
+  # --- Infrastructure ---
+
+  infrastructure:
+
+    - path: app/cache/redis_client.py
+      state: planned
+      type: new_file
+      phase: 5.1
+      week: 2
+      priority: high
+      previous_version: null
+      migration_required: false
+      estimated_loc: 50
+      description: "Redis client wrapper"
+      validation_criteria:
+        - "Redis connection pool configured"
+        - "get/set/delete methods"
+        - "TTL support"
+        - "Graceful fallback if Redis down"
+
+    - path: celery_app.py
+      state: existing_file
+      type: modification
+      phase: 5.1
+      week: 2
+      priority: high
+      previous_version: celery_app.py
+      migration_required: true
+      changes_required:
+        - "Add Celery Beat schedule for ML retraining"
+        - "Configure Redis as broker"
+        - "Add task routes for ML tasks"
+      validation_criteria:
+        - "Celery worker starts successfully"
+        - "Beat scheduler running"
+        - "Test task executes"
+
+# ============================================================================
+# FASE 5.2: CONFLICT DETECTION (Semanas 5-7)
+# ============================================================================
+
+fase_5_2_conflict_detection:
+
+  conflict_engine:
+
+    - path: app/services/conflict_detection_service.py
+      state: planned
+      type: new_file
+      phase: 5.2
+      week: 1
+      priority: critical
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - app/services/event_store_service.py
+        - app/models/scene.py
+        - app/models/resource.py
+      estimated_loc: 300
+      description: "Conflict Detection Engine - BIM-inspired clash detection"
+      validation_criteria:
+        - "check_actor_conflicts() method"
+        - "check_location_conflicts() method"
+        - "check_equipment_conflicts() method"
+        - "Uses Event Store for historical analysis"
+        - "Returns conflict severity (low/medium/high/critical)"
+        - "Suggests conflict resolution"
+      algorithm: "BIM Clash Detection adapted for scheduling"
+
+    - path: app/models/conflict.py
+      state: planned
+      type: new_file
+      phase: 5.2
+      week: 1
+      priority: critical
+      previous_version: null
+      migration_required: false
+      estimated_loc: 100
+      description: "Conflict model - stores detected conflicts"
+      validation_criteria:
+        - "conflict_type field (actor/location/equipment)"
+        - "severity field (low/medium/high/critical)"
+        - "status field (detected/acknowledged/resolved)"
+        - "resolution_suggestion field (JSON)"
+        - "Relationships to Scene, Resource, User"
+
+    - path: app/routes/conflicts.py
+      state: planned
+      type: new_file
+      phase: 5.2
+      week: 2
+      priority: high
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - app/services/conflict_detection_service.py
+      estimated_loc: 150
+      description: "Conflict API routes"
+      endpoints:
+        - "GET /api/v1/projects/{id}/conflicts - List conflicts"
+        - "POST /api/v1/conflicts/detect - Run conflict detection"
+        - "PATCH /api/v1/conflicts/{id}/resolve - Resolve conflict"
+        - "GET /api/v1/conflicts/{id} - Get conflict details"
+      validation_criteria:
+        - "All endpoints tested"
+        - "Permissions enforced"
+        - "Pagination supported"
+
+    - path: app/websocket/conflict_events.py
+      state: planned
+      type: new_file
+      phase: 5.2
+      week: 3
+      priority: medium
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - app/services/conflict_detection_service.py
+      estimated_loc: 80
+      description: "WebSocket real-time conflict alerts"
+      validation_criteria:
+        - "Emit 'conflict_detected' event"
+        - "Emit 'conflict_resolved' event"
+        - "Room-based broadcasting (project-level)"
+        - "Manual test with SocketIO client"
+
+# ============================================================================
+# FASE 5.3: SCHEDULE OPTIMIZER (Semanas 8-12)
+# ============================================================================
+
+fase_5_3_schedule_optimizer:
+
+  optimization_engine:
+
+    - path: app/services/schedule_optimizer_service.py
+      state: planned
+      type: new_file
+      phase: 5.3
+      week: 1
+      priority: critical
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - app/models/scene.py
+        - app/models/resource.py
+      estimated_loc: 400
+      description: "Schedule Optimizer - Greedy algorithm + CP Solver"
+      validation_criteria:
+        - "optimize_greedy() method (baseline)"
+        - "optimize_cp_solver() method (OR-Tools)"
+        - "Minimize company moves metric"
+        - "Minimize shooting days metric"
+        - "Constraint satisfaction (actor availability, location permits)"
+        - "Performance: <5s for 100 scenes"
+      algorithms:
+        - "Greedy: Group by location first"
+        - "CP Solver: Google OR-Tools constraint programming"
+
+    - path: app/ml/optimization/cp_solver.py
+      state: planned
+      type: new_file
+      phase: 5.3
+      week: 2
+      priority: high
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - "ortools (pip package)"
+      estimated_loc: 250
+      description: "OR-Tools CP Solver wrapper"
+      validation_criteria:
+        - "Define variables (scene assignments to days)"
+        - "Add constraints (actor availability, location permits)"
+        - "Objective function (minimize company moves + days)"
+        - "Solve and return optimized schedule"
+        - "Fallback to greedy if solver times out"
+
+    - path: app/routes/schedule_optimization.py
+      state: planned
+      type: new_file
+      phase: 5.3
+      week: 3
+      priority: high
+      previous_version: null
+      migration_required: false
+      estimated_loc: 120
+      description: "Schedule optimization API routes"
+      endpoints:
+        - "POST /api/v1/projects/{id}/optimize - Run optimization"
+        - "GET /api/v1/projects/{id}/optimization-history - Get past runs"
+        - "POST /api/v1/projects/{id}/apply-optimization - Apply suggested schedule"
+      validation_criteria:
+        - "Async task support (Celery)"
+        - "Progress tracking"
+        - "Result comparison (before/after metrics)"
+
+# ============================================================================
+# FASE 5.4: PREDICTIVE ANALYTICS (Semanas 13-16)
+# ============================================================================
+
+fase_5_4_predictive_analytics:
+
+  ml_infrastructure:
+
+    - path: app/ml/__init__.py
+      state: planned
+      type: new_file
+      phase: 5.4
+      week: 1
+      priority: critical
+      previous_version: null
+      migration_required: false
+      estimated_loc: 10
+      description: "ML module initialization"
+      validation_criteria:
+        - "Imports all submodules"
+        - "Exports main classes"
+
+    - path: app/ml/models/budget_predictor.py
+      state: planned
+      type: new_file
+      phase: 5.4
+      week: 2
+      priority: critical
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - "scikit-learn"
+        - "pandas"
+      estimated_loc: 200
+      description: "Budget prediction model (Random Forest)"
+      validation_criteria:
+        - "BudgetPredictor class"
+        - "train() method"
+        - "predict() method with confidence interval"
+        - "MAPE < 10% on test set"
+        - "Model serialization (.pkl)"
+
+    - path: app/ml/features/budget_features.py
+      state: planned
+      type: new_file
+      phase: 5.4
+      week: 1
+      priority: high
+      previous_version: null
+      migration_required: false
+      estimated_loc: 150
+      description: "Budget feature extraction and preprocessing"
+      validation_criteria:
+        - "extract_training_data() method"
+        - "preprocess() method (one-hot encoding, scaling)"
+        - "Feature columns documented"
+
+    - path: app/ml/serving/predictor.py
+      state: planned
+      type: new_file
+      phase: 5.4
+      week: 3
+      priority: critical
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - app/ml/models/budget_predictor.py
+      estimated_loc: 100
+      description: "ML prediction service (loads .pkl models)"
+      validation_criteria:
+        - "Load model with caching"
+        - "predict() method"
+        - "Prometheus metrics (latency, errors)"
+        - "Graceful fallback if model missing"
+
+    - path: app/services/ml_service.py
+      state: planned
+      type: new_file
+      phase: 5.4
+      week: 3
+      priority: high
+      previous_version: null
+      migration_required: false
+      depends_on:
+        - app/ml/serving/predictor.py
+      estimated_loc: 80
+      description: "ML service layer (API abstraction)"
+      validation_criteria:
+        - "predict_budget() method"
+        - "predict_schedule_delay() method"
+        - "predict_resource_demand() method"
+
+    - path: app/routes/ml_predictions.py
+      state: planned
+      type: new_file
+      phase: 5.4
+      week: 3
+      priority: high
+      previous_version: null
+      migration_required: false
+      estimated_loc: 120
+      description: "ML prediction API routes"
+      endpoints:
+        - "POST /api/v1/predictions/budget - Predict budget"
+        - "POST /api/v1/predictions/schedule-delay - Predict delay risk"
+        - "POST /api/v1/predictions/resource-demand - Forecast resource needs"
+      validation_criteria:
+        - "Input validation"
+        - "Response includes confidence intervals"
+        - "Cached predictions"
+
+    - path: celery_tasks/ml_tasks.py
+      state: planned
+      type: new_file
+      phase: 5.4
+      week: 2
+      priority: high
+      previous_version: null
+      migration_required: false
+      estimated_loc: 150
+      description: "ML training tasks (async)"
+      tasks:
+        - "train_budget_predictor_task"
+        - "train_schedule_predictor_task"
+        - "check_model_drift"
+      validation_criteria:
+        - "Tasks run successfully"
+        - "Models saved to ml_models/"
+        - "Celery Beat schedule configured (monthly retraining)"
+
+    - path: ml_models/metadata.json
+      state: planned
+      type: config
+      phase: 5.4
+      week: 2
+      priority: medium
+      previous_version: null
+      migration_required: false
+      estimated_loc: 50
+      description: "Model version tracking metadata"
+      validation_criteria:
+        - "Tracks all model versions"
+        - "Includes MAPE, training date, n_samples"
+        - "Points to current version"
+
+# ============================================================================
+# MIGRATIONS & CLEANUP
+# ============================================================================
+
+migrations_and_cleanup:
+
+  files_to_deprecate:
+
+    - path: tests/unit/test_scene_service_old.py
+      state: deprecated
+      action: archive
+      archive_path: tests/_archived/pre_phase5/test_scene_service_old.py
+      reason: "Replaced by test_scene_service.py with SQLAlchemy 2.0"
+      validation: "All tests migrated to new file"
+
+    - path: app/services/old_scene_service.py
+      state: deprecated
+      action: archive
+      archive_path: app/services/_archived/old_scene_service.py
+      reason: "Refactored with Event Sourcing support"
+      validation: "No imports pointing to this file"
+
+  imports_to_update:
+
+    - file: app/routes/scenes.py
+      old_import: "from app.services.old_scene_service import SceneService"
+      new_import: "from app.services.scene_service import SceneService"
+      validation: "Route tests passing"
+
+    - file: tests/unit/test_scene_routes.py
+      old_import: "from app.services.old_scene_service import SceneService"
+      new_import: "from app.services.scene_service import SceneService"
+      validation: "Unit tests passing"
+
+# ============================================================================
+# VALIDATION SCRIPTS
+# ============================================================================
+
+validation_scripts:
+
+  - path: scripts/phase5/check_file_exists.py
+    state: planned
+    type: script
+    priority: critical
+    description: "Check if file exists before creating (prevent duplicates)"
+    usage: "python scripts/phase5/check_file_exists.py app/services/new_service.py"
+    validation_criteria:
+      - "Returns exit code 0 if file doesn't exist"
+      - "Returns exit code 1 if file exists"
+      - "Suggests similar files if found"
+
+  - path: scripts/phase5/migrate_file.py
+    state: planned
+    type: script
+    priority: high
+    description: "Migrate old file to new location, update imports"
+    usage: "python scripts/phase5/migrate_file.py old_file.py new_file.py"
+    validation_criteria:
+      - "Copies file to new location"
+      - "Updates all imports in codebase"
+      - "Archives old file"
+      - "Runs tests to verify no breakage"
+
+  - path: scripts/phase5/validate_imports.py
+    state: planned
+    type: script
+    priority: high
+    description: "Validate all imports are correct after refactoring"
+    usage: "python scripts/phase5/validate_imports.py"
+    validation_criteria:
+      - "Scans all .py files"
+      - "Detects broken imports"
+      - "Suggests fixes"
+
+  - path: scripts/phase5/archive_old_files.py
+    state: planned
+    type: script
+    priority: medium
+    description: "Archive deprecated files"
+    usage: "python scripts/phase5/archive_old_files.py --dry-run"
+    validation_criteria:
+      - "Moves files to _archived/"
+      - "Creates archive manifest"
+      - "Dry-run mode for safety"
+
+  - path: scripts/phase5/sync_manifest.py
+    state: planned
+    type: script
+    priority: critical
+    description: "Update FILE_MANIFEST.yaml with actual file states"
+    usage: "python scripts/phase5/sync_manifest.py"
+    validation_criteria:
+      - "Scans filesystem"
+      - "Updates state fields in manifest"
+      - "Detects untracked files"
+      - "Warns about missing planned files"
+
+# ============================================================================
+# TOTALS & METRICS
+# ============================================================================
+
+totals:
+  fase_5_1:
+    new_files: 12
+    modified_files: 3
+    deprecated_files: 2
+    migrations: 1
+    total_estimated_loc: 1280
+
+  fase_5_2:
+    new_files: 4
+    modified_files: 0
+    deprecated_files: 0
+    migrations: 1
+    total_estimated_loc: 630
+
+  fase_5_3:
+    new_files: 3
+    modified_files: 0
+    deprecated_files: 0
+    migrations: 0
+    total_estimated_loc: 770
+
+  fase_5_4:
+    new_files: 10
+    modified_files: 1
+    deprecated_files: 0
+    migrations: 0
+    total_estimated_loc: 1160
+
+  scripts:
+    validation_scripts: 5
+    estimated_loc: 500
+
+  grand_total:
+    new_files: 29
+    modified_files: 4
+    deprecated_files: 2
+    migrations: 2
+    validation_scripts: 5
+    total_estimated_loc: 4340
+
+# ============================================================================
+# DEPENDENCIES GRAPH
+# ============================================================================
+
+dependency_graph:
+  # Event Sourcing depends on nothing (foundational)
+  event_sourcing:
+    - app/models/event.py
+    - app/services/event_store_service.py
+
+  # Conflict Detection depends on Event Sourcing
+  conflict_detection:
+    depends_on:
+      - app/services/event_store_service.py
+    files:
+      - app/services/conflict_detection_service.py
+      - app/models/conflict.py
+
+  # Schedule Optimizer depends on Conflict Detection (for constraints)
+  schedule_optimizer:
+    depends_on:
+      - app/services/conflict_detection_service.py
+    files:
+      - app/services/schedule_optimizer_service.py
+      - app/ml/optimization/cp_solver.py
+
+  # Predictive Analytics independent (can run in parallel)
+  predictive_analytics:
+    depends_on: []
+    files:
+      - app/ml/models/budget_predictor.py
+      - app/ml/serving/predictor.py
+      - app/services/ml_service.py

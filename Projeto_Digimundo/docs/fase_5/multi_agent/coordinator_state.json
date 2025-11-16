@@ -1,0 +1,10 @@
+{
+  "status": "initialized",
+  "agents": {},
+  "statistics": {
+    "tasks_completed": 0,
+    "tasks_failed": 0,
+    "total_time_saved": 0,
+    "average_task_duration": 0
+  }
+}
